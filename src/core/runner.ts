@@ -15,7 +15,7 @@ export const runner = async (config: ConfigT, openAPIFile: OpenAPIFileT, logger:
         }
 
         await ruleProcessor({
-            
+
         });
     }
 
