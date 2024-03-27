@@ -1,0 +1,12 @@
+{
+    rules: {
+        components: {
+            schemas: {
+
+            }
+        },
+        paths: {
+
+        }
+    }
+}
