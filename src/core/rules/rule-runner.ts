@@ -1,16 +1,17 @@
 import {LoggerI} from "../../logger/interface";
 import path from "path";
-import {RuleProcessorT} from "./models";
+import {RuleProcessorT} from "./processor-models";
 import {OpenAPIFileT} from "../../openapi";
+import {z} from "zod";
 
-type RuleAnyConfigT = {};
+type RuleAnyConfigT = z.ZodObject<any>;
 
 class RuleRunner {
     private name: string;
 
     private logger: LoggerI;
 
-    private config: RuleAnyConfigT | null = null;
+    private config: z.infer<RuleAnyConfigT> | null = null;
 
     private processor: RuleProcessorT<RuleAnyConfigT> | null = null;
 
