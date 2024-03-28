@@ -1,0 +1,9 @@
+{
+    "input": "",
+    "output": "./examples/example-1/output.yml",
+    "rules": [
+        {
+            "name": "remove-operation-id"
+        }
+    ]
+}

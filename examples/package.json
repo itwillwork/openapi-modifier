@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "kekw": "../bin/openapi-modifier.js --foo=99 --bar=33 --input-path=sdf",
+    "example-1": "../bin/openapi-modifier.js --input=./example-1/input.yml --output=./example-1/output.yml --config=./example-1/config.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
