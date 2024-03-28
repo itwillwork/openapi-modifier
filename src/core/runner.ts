@@ -1,22 +1,33 @@
 import {ConfigT} from "../config";
 import {LoggerI} from "../logger/interface";
-import {OpenAPI, OpenAPIFileT} from "../openapi";
+import {OpenAPIFileT} from "../openapi";
+import {RuleRunner} from "./rules/rule-runner";
 
-export const runner = async (config: ConfigT, openAPIFile: OpenAPIFileT, logger: LoggerI): Promise<OpenAPIFileT> => {
-    const ruleEntries = Object.entries(config.rules);
 
-    for (const ruleEntry of ruleEntries) {
-        const [ruleName, ruleConfig] = ruleEntry;
+export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, baseLogger: LoggerI): Promise<OpenAPIFileT> => {
+    const logger = baseLogger.clone('runner');
 
-        const processor = await import(`./rules/${ruleName}`);
-        const ruleProcessor = processor.default as RuleProcessorT<any>;
-        if (!ruleProcessor) {
-            throw new Error(`not found rule processor for rule: "${ruleName}"`);
-        }
+    let openAPIFile = sourceOpenAPIFile;
 
-        await ruleProcessor({
-
-        });
+    const ruleEntries = config.rules || [];
+    if (!ruleEntries?.length) {
+        logger.warning(`Empty rules!`);
     }
 
+    for (const ruleEntry of ruleEntries) {
+        try {
+            const ruleRunner = new RuleRunner(ruleEntry.name, logger);
+            await ruleRunner.init();
+            await ruleRunner.applyConfig(ruleEntry.config);
+            openAPIFile = await ruleRunner.processDocument(openAPIFile);
+        } catch (error) {
+            if (error instanceof Error) {
+                logger.error(error, `Failed to process rule ${ruleEntry.name}`)
+            }
+
+            throw error;
+        }
+    }
+
+    return openAPIFile;
 }

@@ -1,8 +1,7 @@
 import argv, {Arguments} from 'yargs-parser';
 import {ConsoleLogger} from './logger/console';
-import {checkIsValidConfig, defaultConfig, findConfigFile, mergeConfigs} from "./config";
-import {readInputFile, writeOutputFile} from "./openapi";
-import {runner} from "./core/runner";
+import {findConfigFile, mergeConfigs} from "./config";
+import {openapiModifier} from "./index";
 
 type ParamsT = Arguments & {
     config?: string;
@@ -11,7 +10,8 @@ type ParamsT = Arguments & {
 }
 
 const logger = new ConsoleLogger({
-    debugPostfix: 'cli'
+    debugPostfix: 'cli',
+    minLevel: ConsoleLogger.typeLevelMap.warning,
 });
 
 const cli = async (params: ParamsT) => {
@@ -22,31 +22,24 @@ const cli = async (params: ParamsT) => {
     logger.trace('Trying find config file...');
     const config = findConfigFile(logger, params.config);
 
-    const finalConfig = mergeConfigs(logger, defaultConfig, config);
-    if (!checkIsValidConfig(logger, finalConfig)) {
-        return;
-    }
-
-    const inputPath = params?.input || finalConfig?.input || null;
+    const inputPath = params?.input || null;
     if (!inputPath) {
         throw new Error('Required --input param!');
     }
 
-    const outputPath = params?.output || finalConfig?.output || null;
+    const outputPath = params?.output || null;
     if (!outputPath) {
         throw new Error('Required --output param!');
     }
 
-    logger.trace('Reading input file...');
-    const inputOpenAPIFile = readInputFile(logger, inputPath)
+    logger.trace('Merging config with cli params...');
+    const finalConfig = mergeConfigs(logger, config, {
+        input: inputPath,
+        output: outputPath,
+    })
 
-    logger.trace('Running...');
-    const outputOpenAPIFile = await runner(finalConfig, inputOpenAPIFile, logger);
-
-    logger.trace('Writing output file...');
-    writeOutputFile(logger, outputPath, outputOpenAPIFile);
-
-    logger.success('OK!');
+    logger.trace('Trying run openapi modifier...');
+    await openapiModifier(finalConfig);
 }
 
 const parsedArguments = argv(process.argv);
