@@ -1,5 +1,7 @@
 # openapi-modifier
 
+TODO что это и мотивация создания
+
 ### Использование как CLI
 
 ```bash
@@ -13,13 +15,17 @@ openapi-modifier --input=example-1/input.yml --output=example-1/output.yml --con
 Пример конфигурации в `.js`
 ```js
 module.exports = {
-    "input": "",
-    "output": "",
+    "logger": {
+        "minLevel": 1,
+    },
+    "input": "./openapi.yaml",
+    "output": "./openapi.yaml",
     "rules": [
         {
             "name": "remove-operation-id",
             "disabled": true,
-        }
+        },
+        // ...
     ]
 }
 ```
