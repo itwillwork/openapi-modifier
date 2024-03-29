@@ -1,8 +1,44 @@
 # openapi-modifier
 
-### Текущие правила
+### Использование как CLI
 
-remove-operation-id
+```bash
+openapi-modifier --input=example-1/input.yml --output=example-1/output.yml --config=example-1/openapi-modifier-config.js
+```
+
+### Пример конфигурации
+
+Можно использовать конфиги в след. расширениях: `.js`, `.yaml`, `.yml`, `.json`
+
+Пример конфигурации в `.js`
+```js
+module.exports = {
+    "input": "",
+    "output": "",
+    "rules": [
+        {
+            "name": "remove-operation-id",
+            "disabled": true,
+        }
+    ]
+}
+```
+
+### Использование как npm пакет/модуль
+
+```js
+await openapiModifier({
+    input: '',
+    output: '',
+})
+```
+
+### Существующие правила
+
+- [remove-operation-id][1]
+
+[1]: ./src/rules/remove-operation-id/README.md
+
 remove-min-items
 patch-response-content-type
 patch-request-content-type
@@ -18,22 +54,20 @@ patch-endpoints
 - `index.ts` сама логика правила
 - `README.md` файл с описанием работы правила
 
-# Debug
+Про отладку конкретного правила, см. пункт "Отладка" ниже.
 
-Verbose logs:
+### Отладка
+
+Внутри используется для детального логирования [debug](https://www.npmjs.com/package/debug)
+
+Для вывода всех debug логов:
 
 ```bash
-openapi-modifier --verbose
+DEBUG=openapi-modifier:* openapi-modifier
 ```
 
-For all:
+Для вывода debug логов по правилу, например по правилу `remove-operation-id`: 
 
 ```bash
-DEBUG=openapi-modifier openapi-modifier
-```
-
-For rule:
-
-```bash
-DEBUG=openapi-modifier:... openapi-modifier
+DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 ```
