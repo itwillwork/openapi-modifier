@@ -14,6 +14,7 @@ const configSchema = z.object({
     rules: z.array(
         z.object({
             name: z.string(),
+            disabled: z.boolean().optional(),
             config: z.any().optional(),
         }),
     ).optional(),

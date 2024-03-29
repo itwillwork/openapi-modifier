@@ -3,7 +3,6 @@ import {LoggerI} from "../logger/interface";
 import {OpenAPIFileT} from "../openapi";
 import {RuleRunner} from "./rules/rule-runner";
 
-
 export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, baseLogger: LoggerI): Promise<OpenAPIFileT> => {
     const logger = baseLogger.clone('runner');
 
@@ -19,7 +18,9 @@ export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, b
             const ruleRunner = new RuleRunner(ruleEntry.name, logger);
             await ruleRunner.init();
             await ruleRunner.applyConfig(ruleEntry.config);
-            openAPIFile = await ruleRunner.processDocument(openAPIFile);
+            if (!ruleEntry.disabled) {
+                openAPIFile = await ruleRunner.processDocument(openAPIFile);
+            }
         } catch (error) {
             if (error instanceof Error) {
                 logger.error(error, `Failed to process rule ${ruleEntry.name}`)
