@@ -4,7 +4,7 @@ interface LoggerI {
     warning: (message: string) => void;
     error: (error: Error, message?: string) => void;
     success: (message: string) => void;
-    clone: (debugPostfix: string) => LoggerI;
+    clone: (name: string) => LoggerI;
 }
 
 export {LoggerI}

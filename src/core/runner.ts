@@ -23,7 +23,7 @@ export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, b
             }
         } catch (error) {
             if (error instanceof Error) {
-                logger.error(error, `Failed to process rule ${ruleEntry.name}`)
+                logger.error(error, `Failed to process rule "${ruleEntry.name}"`)
             }
 
             throw error;

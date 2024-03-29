@@ -1,7 +1,10 @@
 module.exports = {
     "rules": [
         {
-            "name": "remove-operation-id"
+            "name": "remove-operation-id",
+            config: {
+                ignore: []
+            }
         }
     ]
 }

@@ -17,15 +17,21 @@ class ConsoleLogger implements LoggerI {
 
     private debug: Debugger;
 
-    constructor({minLevel, debugPostfix}: {
+    private logsPrefix: string;
+
+    constructor({
+                    minLevel,
+                    name,
+                }: {
         minLevel?: number;
-        debugPostfix?: string;
+        name?: string;
     }) {
         if (minLevel !== undefined) {
             this.minLevel = minLevel;
         }
 
-        this.debug = debug(`${ConsoleLogger.debugPrefix}:${debugPostfix}`);
+        this.debug = debug(`${ConsoleLogger.debugPrefix}:${name}`);
+        this.logsPrefix = name ? `${name}: ` : '';
     }
 
     private checkIsAllowed = (level: keyof typeof ConsoleLogger.typeLevelMap): boolean => {
@@ -38,10 +44,10 @@ class ConsoleLogger implements LoggerI {
         }
     }
 
-    clone = (debugPostfix: string): ConsoleLogger => {
+    clone = (name: string): ConsoleLogger => {
         return new ConsoleLogger({
             minLevel: this.minLevel,
-            debugPostfix,
+            name,
         })
     }
 
@@ -52,7 +58,7 @@ class ConsoleLogger implements LoggerI {
             return;
         }
 
-        console.log(message);
+        console.log(this.logsPrefix + message);
     }
 
     info = (message: string) => {
@@ -62,7 +68,7 @@ class ConsoleLogger implements LoggerI {
             return;
         }
 
-        console.info(message);
+        console.info(this.logsPrefix + message);
     }
 
     error = (error: Error, message?: string) => {
@@ -75,13 +81,12 @@ class ConsoleLogger implements LoggerI {
             return;
         }
 
-        console.log(chalk.bold.red('Error'));
-
         if (message) {
-            console.log(chalk.bold.red(message));
+            console.log(chalk.bold.red(this.logsPrefix + message));
             this.debugTrace(message);
         }
 
+        console.log(chalk.bold.red('Error details:'));
         console.error(error);
     }
 
@@ -92,7 +97,7 @@ class ConsoleLogger implements LoggerI {
             return;
         }
 
-        console.log(chalk.bold.yellow(message));
+        console.log(chalk.bold.yellow(this.logsPrefix + message));
     }
 
     success = (message: string) => {
@@ -102,7 +107,7 @@ class ConsoleLogger implements LoggerI {
             return;
         }
 
-        console.log(chalk.bold.green(message));
+        console.log(chalk.bold.green(this.logsPrefix + message));
     }
 }
 

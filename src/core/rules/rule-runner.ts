@@ -29,7 +29,7 @@ class RuleRunner {
         const processor = processorImport.default as RuleProcessorT<RuleAnyConfigT>;
         if (!processor) {
             const error = new Error();
-            logger.error(error, `Failed to init rule, not found rule processor: "${name}"`);
+            logger.error(error, `Failed to init rule "${this.name}", not found rule processor: "${name}"`);
             throw error;
         }
 
@@ -40,7 +40,7 @@ class RuleRunner {
         const {logger, processor} = this;
 
         if (!processor) {
-            logger.warning(`Failed to apply rule config, empty processor!`);
+            logger.warning(`Failed to apply rule "${this.name}" config, empty processor!`);
             return;
         }
 
@@ -52,7 +52,7 @@ class RuleRunner {
             };
         } catch (error) {
             if (error instanceof Error) {
-                logger.error(error, `Failed to init rule, failed merge default and "${JSON.stringify(config || {})}"`);
+                logger.error(error, `Failed to init rule "${this.name}", failed merge default and "${JSON.stringify(config || {})}"`);
             }
 
             throw error;

@@ -5,7 +5,7 @@ import {runner} from "./core/runner";
 
 export const openapiModifier = async (config: Partial<ConfigT>) => {
     const logger = new ConsoleLogger({
-        debugPostfix: 'main',
+        name: 'openapi-modifier',
         minLevel: config.logger?.minLevel,
     });
 

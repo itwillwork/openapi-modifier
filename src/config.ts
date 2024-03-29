@@ -3,7 +3,6 @@ import fs from 'fs';
 import {LoggerI} from "./logger/interface";
 import path from "path";
 import YAML from "yaml";
-import {RuleProcessorT} from "./core/rules/processor-models";
 
 const configSchema = z.object({
     logger: z.object({

@@ -10,7 +10,7 @@ type ParamsT = Arguments & {
 }
 
 const logger = new ConsoleLogger({
-    debugPostfix: 'cli',
+    name: 'openapi-modifier-cli',
     minLevel: ConsoleLogger.typeLevelMap.warning,
 });
 
