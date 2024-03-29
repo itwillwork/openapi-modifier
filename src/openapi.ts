@@ -6,6 +6,7 @@ import path from "path";
 
 type OpenAPIDocumentT = OpenAPIV2.Document | OpenAPIV3.Document | OpenAPIV3_1.Document;
 type OpenAPIFileContextT = {
+    sourcePath: string;
     sourceExtension: '.json' | '.yaml' | '.yml';
 }
 type OpenAPIFileT = {
@@ -70,6 +71,7 @@ const readInputFile = (baseLogger: LoggerI, inputPath: string): OpenAPIFileT => 
 
     return {
         context: {
+            sourcePath: inputPath,
             sourceExtension: inputFileExtension,
         },
         document,
