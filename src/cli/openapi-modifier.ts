@@ -1,7 +1,7 @@
 import argv, {Arguments} from 'yargs-parser';
-import {ConsoleLogger} from './logger/console';
-import {findConfigFile, mergeConfigs} from "./config";
-import {openapiModifier} from "./index";
+import {ConsoleLogger} from '../logger/console';
+import {findConfigFile, mergeConfigs} from "../config";
+import {openapiModifier} from "../index";
 
 type ParamsT = Arguments & {
     config?: string;
