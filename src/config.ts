@@ -18,7 +18,7 @@ const configSchema = z.object({
             config: z.any().optional(),
         }),
     ).optional(),
-});
+}).strict();
 
 type ConfigT = z.infer<typeof configSchema>;
 

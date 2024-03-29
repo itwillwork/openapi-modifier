@@ -59,7 +59,7 @@ class RuleRunner {
         }
 
         try {
-            processor.configSchema.parse(mergedConfig);
+            processor.configSchema.strict().parse(mergedConfig);
         } catch (error) {
             if (error instanceof Error) {
                 logger.error(error, `Failed to init rule, not valid rule config: ${JSON.stringify(mergedConfig || {})}`);
