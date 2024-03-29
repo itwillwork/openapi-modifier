@@ -16,6 +16,8 @@ export const openapiModifier = async (config: Partial<ConfigT>) => {
         return;
     }
 
+    logger.trace(`Final openapi modifier config: ${JSON.stringify(finalConfig)}`);
+
     const inputPath = finalConfig?.input || null;
     if (!inputPath) {
         throw new Error('Required input field config!');

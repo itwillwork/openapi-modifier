@@ -1,6 +1,4 @@
-{
-    "input": "",
-    "output": "./examples/example-1/output.yml",
+module.exports = {
     "rules": [
         {
             "name": "remove-operation-id"

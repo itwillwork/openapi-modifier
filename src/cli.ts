@@ -20,7 +20,7 @@ const cli = async (params: ParamsT) => {
     }
 
     logger.trace('Trying find config file...');
-    const config = findConfigFile(logger, params.config);
+    const config = await findConfigFile(logger, params.config);
 
     const inputPath = params?.input || null;
     if (!inputPath) {
@@ -38,6 +38,7 @@ const cli = async (params: ParamsT) => {
         output: outputPath,
     })
 
+    logger.trace(`Final CLI config: ${JSON.stringify(finalConfig)}`);
     logger.trace('Trying run openapi modifier...');
     await openapiModifier(finalConfig);
 }

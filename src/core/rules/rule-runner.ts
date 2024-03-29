@@ -23,7 +23,7 @@ class RuleRunner {
     init = async () => {
         const {logger, name} = this;
 
-        const processorPath = path.resolve(__dirname, `../rules/${name}`);
+        const processorPath = path.resolve(__dirname, `../../rules/${name}`);
         const processorImport = await import(processorPath);
 
         const processor = processorImport.default as RuleProcessorT<RuleAnyConfigT>;
