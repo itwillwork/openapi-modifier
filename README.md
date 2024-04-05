@@ -2,6 +2,15 @@
 
 TODO что это и мотивация создания
 
+- Бекендер просит проверить используется ли поле в какой-то сущности
+- Бекендер просит проверить используется ли параметр в какой-то ручке
+- Бекендер создает задачу перестать пользоваться endpoint'ом
+- Бекендер написал новое API в разработке но его нет в документации
+- Бекендер просит больше не использовать какой-то параметр в endpoint'е
+- Не валидное OpenAPI (Например, бекендеры использовали не существующий тип int)
+- Нужно оставить знания по модификации (коллеге важно знать почему какое-то поле заблокировано)
+- Нужно наблюдать за изменениями API и вовремя корректировать конфиг (убрали использование ручки)
+
 ### Использование как CLI
 
 ```bash
@@ -48,6 +57,7 @@ await openapiModifier({
 - [change-content-type][5]
 - [filter-by-content-type][6]
 - [filter-endpoints][7]
+- [patch-schemas][8]
 
 [1]: ./src/rules/remove-operation-id/README.md
 [2]: ./src/rules/remove-min-items/README.md
@@ -56,13 +66,10 @@ await openapiModifier({
 [5]: ./src/rules/change-content-type/README.md
 [6]: ./src/rules/filter-by-content-type/README.md
 [7]: ./src/rules/filter-endpoints/README.md
+[8]: ./src/rules/patch-schemas/README.md
 
-patch-component-schemas
-patch-endpoints-schemas
 make-required-parameter
-make-required-component-object-schema-field
 remove-parameter
-remove-component-object-schema-field
 merge-openapi-spec
 remove-unused-component-schemas
 
@@ -91,3 +98,5 @@ DEBUG=openapi-modifier:* openapi-modifier
 ```bash
 DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 ```
+
+Для последовательного преобразования вывод
