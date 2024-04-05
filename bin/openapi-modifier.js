@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-require('../dist/cli/openapi-modifier.js');
+require('../dist/src/cli/openapi-modifier.js');

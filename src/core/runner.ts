@@ -8,22 +8,24 @@ export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, b
 
     let openAPIFile = sourceOpenAPIFile;
 
-    const ruleEntries = config.rules || [];
-    if (!ruleEntries?.length) {
-        logger.warning(`Empty rules!`);
+
+    const pipeline = config.pipeline || [];
+    if (!pipeline?.length) {
+        logger.warning(`Empty pipeline!`);
     }
 
-    for (const ruleEntry of ruleEntries) {
-        try {
-            const ruleRunner = new RuleRunner(ruleEntry.name, logger);
+    for (const pipelineItem of pipeline) {
+        try {    
+            const ruleName = pipelineItem.rule;
+            const ruleRunner = new RuleRunner(ruleName, logger);
             await ruleRunner.init();
-            await ruleRunner.applyConfig(ruleEntry.config);
-            if (!ruleEntry.disabled) {
+            await ruleRunner.applyConfig(pipelineItem.config);
+            if (!pipelineItem.disabled) {
                 openAPIFile = await ruleRunner.processDocument(openAPIFile);
             }
         } catch (error) {
             if (error instanceof Error) {
-                logger.error(error, `Failed to process rule "${ruleEntry.name}"`)
+                logger.error(error, `Failed to process pipeline item "${JSON.stringify(pipelineItem)}"`)
             }
 
             throw error;

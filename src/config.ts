@@ -10,9 +10,9 @@ const configSchema = z.object({
     }).optional(),
     input: z.string().optional(),
     output: z.string().optional(),
-    rules: z.array(
+    pipeline: z.array(
         z.object({
-            name: z.string(),
+            rule: z.string(),
             disabled: z.boolean().optional(),
             config: z.any().optional(),
         }),
@@ -131,9 +131,9 @@ const mergeConfigs = (baseLogger: LoggerI, ...configs: Array<Partial<ConfigT>>):
             return {
                 ...acc,
                 ...config,
-                rules: [
-                    ...(acc.rules || []),
-                    ...(config.rules || []),
+                pipeline: [
+                    ...(acc.pipeline || []),
+                    ...(config.pipeline || []),
                 ],
             }
         }, {})
