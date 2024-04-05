@@ -4,7 +4,7 @@ describe('change-endpoints-basepath rule', () => {
     test('regular', () => {
         const fakeLogger = global.createFakeLogger();
         const fakeOpenAPIFile = global.createFakeOpenAPIFile({
-           paths: {
+            paths: {
                 "/api/v1/pets": {
                     "get": {
                         summary: "",
@@ -16,22 +16,22 @@ describe('change-endpoints-basepath rule', () => {
         });
 
         expect(processor.processDocument(fakeOpenAPIFile, {
-            fromPrefix: '/api/v1',
-        },
+                map: {'/api/v1': ''},
+            },
             fakeLogger,
         )).toEqual({
             ...fakeOpenAPIFile,
             document: {
                 ...fakeOpenAPIFile.document,
                 paths: {
-                "/pets": {
-                    "get": {
-                        summary: "",
-                        tags: [],
-                        responses: {},
-                    }
+                    "/pets": {
+                        "get": {
+                            summary: "",
+                            tags: [],
+                            responses: {},
+                        }
+                    },
                 },
-            },
             }
         });
 
@@ -41,7 +41,7 @@ describe('change-endpoints-basepath rule', () => {
     test('regular, logger warning', () => {
         const fakeLogger = global.createFakeLogger();
         const fakeOpenAPIFile = global.createFakeOpenAPIFile({
-           paths: {
+            paths: {
                 "/api/v1/pets": {
                     "get": {
                         summary: "",
@@ -53,20 +53,20 @@ describe('change-endpoints-basepath rule', () => {
         });
 
         expect(processor.processDocument(fakeOpenAPIFile, {
-            fromPrefix: '/api/v2',
-        },
+                map: {'/api/v2': ''},
+            },
             fakeLogger,
         )).toEqual({
             ...fakeOpenAPIFile,
         });
 
-          expect(fakeLogger.warning).toBeCalledLoggerMethod(/Not found endpoints with prefix/, 1);
+        expect(fakeLogger.warning).toBeCalledLoggerMethod(/Not found endpoints with prefix/, 1);
     });
 
     test('usage option: toPrefix', () => {
         const fakeLogger = global.createFakeLogger();
         const fakeOpenAPIFile = global.createFakeOpenAPIFile({
-             paths: {
+            paths: {
                 "/api/v1/pets": {
                     "get": {
                         summary: "",
@@ -78,8 +78,7 @@ describe('change-endpoints-basepath rule', () => {
         });
 
         expect(processor.processDocument(fakeOpenAPIFile, {
-            fromPrefix: '/api/v1',
-                toPrefix: "/proxy"
+                map: {'/api/v1': "/proxy"}
             },
             fakeLogger,
         )).toEqual({

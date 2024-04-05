@@ -9,44 +9,50 @@ import {
 } from '../base/utils';
 
 const configSchema = z.object({
-    fromPrefix: z.string(),
-    toPrefix: z.string().optional(),
+    map: z.object({}),
 });
 
 const processor: RuleProcessorT < typeof configSchema > = {
     configSchema,
     defaultConfig: {
-        fromPrefix: '',
+        map: {},
     },
     processDocument: (openAPIFile, config, logger) => {
-        const {
-            fromPrefix,
-        } = config;
-        const toPrefix = config.toPrefix || '';
+        // TODO improve zod validation
+        const map: Record<string, string> = config.map;
 
-        let usageCount = 0;
+        let usageCount: Record<string, number> = {};
+        const increaseUsageCount = (fromPrefix: string) => {
+            usageCount[fromPrefix] = (usageCount[fromPrefix] || 0) + 1;
+        }
 
         const paths = openAPIFile.document?.paths;
 
         Object.keys(paths || {}).forEach((pathKey) => {
-            const path = paths?.[pathKey];
+            Object.keys(map).forEach((fromPrefix) => {
+                const toPrefix = map[fromPrefix] || '';
 
-            if (pathKey.startsWith(fromPrefix)) {
-                usageCount++;
+                const path = paths?.[pathKey];
 
-                const preparedPath = pathKey.replace(fromPrefix, toPrefix);
+                if (pathKey.startsWith(fromPrefix)) {
+                    increaseUsageCount(fromPrefix);
 
-                // TODO refactoring
-                if (paths) {
-                    paths[preparedPath] = paths[pathKey];
-                    delete paths[pathKey];
+                    const preparedPath = pathKey.replace(fromPrefix, toPrefix);
+
+                    // TODO refactoring
+                    if (paths) {
+                        paths[preparedPath] = paths[pathKey];
+                        delete paths[pathKey];
+                    }
                 }
-            }
+            })
         });
 
-        if (!usageCount) {
-            logger.warning(`Not found endpoints with prefix "${fromPrefix}"`);
-        }
+        Object.keys(map).forEach(fromPrefix => {
+            if (!usageCount[fromPrefix]) {
+                logger.warning(`Not found endpoints with prefix "${fromPrefix}"`);
+            }
+        });
 
         return openAPIFile;
     }

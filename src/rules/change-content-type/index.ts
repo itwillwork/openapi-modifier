@@ -18,7 +18,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
         map: {}
     },
     processDocument: (openAPIFile, config, logger) => {
-        // TODO refactoring improve zod validation
+        // TODO improve zod validation
         const map: Record<string, string> = config.map;
 
         let usageCount: Record<string, number> = {};

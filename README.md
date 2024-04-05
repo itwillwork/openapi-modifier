@@ -53,9 +53,7 @@ await openapiModifier({
 [4]: ./src/rules/change-endpoints-basepath/README.md
 [5]: ./src/rules/change-response-content-type/README.md
 
-change-request-content-type
 filter-content-type
-remove-unused-component-schemas
 endpoints-filter
 
 patch-component-schemas
@@ -64,6 +62,8 @@ make-required-parameter
 make-required-component-object-schema-field
 remove-component-object-schema-field
 merge-openapi-spec
+
+remove-unused-component-schemas
 
 ### Добавление нового правила
 
