@@ -63,7 +63,7 @@ describe('change-endpoints-basepath rule', () => {
         expect(fakeLogger.warning).toBeCalledLoggerMethod(/Not found endpoints with prefix/, 1);
     });
 
-    test('usage option: toPrefix', () => {
+    test('usage option: map', () => {
         const fakeLogger = global.createFakeLogger();
         const fakeOpenAPIFile = global.createFakeOpenAPIFile({
             paths: {

@@ -97,6 +97,6 @@ describe('change-content-type rule', () => {
             ...fakeOpenAPIFile,
         });
 
-        expect(fakeLogger.warning).toBeCalledLoggerMethod(/Not usaged contentType/, 1);
+        expect(fakeLogger.warning).toBeCalledLoggerMethod(/Not usage contentType/, 1);
     });
 });

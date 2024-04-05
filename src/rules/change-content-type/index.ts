@@ -61,7 +61,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
         Object.keys(map).forEach(contentType => {
             if (!usageCount[contentType]) {
-                logger.warning(`Not usaged contentType "${contentType}"`);
+                logger.warning(`Not usage contentType "${contentType}"`);
             }
         });
 

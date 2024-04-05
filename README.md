@@ -46,15 +46,16 @@ await openapiModifier({
 - [remove-max-items][3]
 - [change-endpoints-basepath][4]
 - [change-content-type][5]
+- [filter-by-content-type][6]
 
 [1]: ./src/rules/remove-operation-id/README.md
 [2]: ./src/rules/remove-min-items/README.md
 [3]: ./src/rules/remove-max-items/README.md
 [4]: ./src/rules/change-endpoints-basepath/README.md
 [5]: ./src/rules/change-content-type/README.md
+[6]: ./src/rules/filter-by-content-type/README.md
 
-filter-content-type
-endpoints-filter
+filter-endpoints
 
 patch-component-schemas
 patch-endpoints-schemas
@@ -64,6 +65,8 @@ remove-component-object-schema-field
 merge-openapi-spec
 
 remove-unused-component-schemas
+
+Все названия функций должны начинаться с обозначения действия
 
 ### Добавление нового правила
 
