@@ -1,6 +1,6 @@
 ## filter-by-content-type
 
-Изменяет content-type в соответствии со словарем.
+Фильтрует ответы, requestBody по типу контента
 
 ### Конфигурация
 
@@ -12,8 +12,7 @@
 Пример конфигурации:
 ```js
 {
-  enabled: [],
-  disabled: [],
+  enabled: ["application/json"],
 }
 ```
 
