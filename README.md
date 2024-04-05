@@ -45,13 +45,13 @@ await openapiModifier({
 - [remove-min-items][2]
 - [remove-max-items][3]
 - [change-endpoints-basepath][4]
-- [change-response-content-type][5]
+- [change-content-type][5]
 
 [1]: ./src/rules/remove-operation-id/README.md
 [2]: ./src/rules/remove-min-items/README.md
 [3]: ./src/rules/remove-max-items/README.md
 [4]: ./src/rules/change-endpoints-basepath/README.md
-[5]: ./src/rules/change-response-content-type/README.md
+[5]: ./src/rules/change-content-type/README.md
 
 filter-content-type
 endpoints-filter
