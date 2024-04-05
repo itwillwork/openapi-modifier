@@ -4,7 +4,7 @@ import YAML from 'yaml'
 import fs from "fs";
 import path from "path";
 
-type OpenAPIDocumentT = OpenAPIV2.Document | OpenAPIV3.Document | OpenAPIV3_1.Document;
+type OpenAPIDocumentT = OpenAPIV3.Document | OpenAPIV3_1.Document;
 type OpenAPIFileContextT = {
     sourcePath: string;
     sourceExtension: '.json' | '.yaml' | '.yml';

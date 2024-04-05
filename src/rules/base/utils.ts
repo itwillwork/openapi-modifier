@@ -1,122 +1,102 @@
-import {
-	OpenAPIFileT
-} from '../../openapi';
+import {OpenAPIFileT} from '../../openapi';
 
+// TODO remove any
+type AnySchemaObject = any;
+type OperationSchema = any;
 
-// TODO OperationObject
-type SchemaCallbackT = (schema: any) => void;
+type SchemaCallbackT = (schema: AnySchemaObject) => void;
 
-// TODO remove any OpenAPIFileT
-export const forEachSchemas = (openAPIFile: any, callback: SchemaCallbackT) => {
-	// TODO add types
-	const stack: Array<any> = [];
+export const forEachSchemas = (openAPIFile: OpenAPIFileT, callback: SchemaCallbackT) => {
+    const stack: Array<AnySchemaObject | null | undefined> = [];
 
-	// forEach - components.schemas[name]
-	Object.keys(openAPIFile.document?.components?.schemas || {}).forEach(name => {
-		stack.push(openAPIFile.document?.components?.schemas?.[name]);
-	});
+    // forEach - components.schemas[name]
+    Object.keys(openAPIFile.document?.components?.schemas || {}).forEach(name => {
+        const schema = openAPIFile.document?.components?.schemas?.[name];
+        stack.push(schema);
+    });
 
-	Object.keys(openAPIFile.document?.paths || {}).forEach(pathName => {
-		Object.keys(openAPIFile.document?.paths?.[pathName] || {}).forEach(method => {
-			const methodSchema = openAPIFile.document?.paths?.[pathName]?.[method];
+    Object.keys(openAPIFile.document?.paths || {}).forEach(pathName => {
+        Object.keys(openAPIFile.document?.paths?.[pathName] || {}).forEach(method => {
+            // @ts-expect-error bad openapi types
+            const methodSchema: PathItemObject = openAPIFile.document?.paths?.[pathName]?.[method];
 
-			// forEach - paths[name][method].parameters[].schema
-			const parameters = methodSchema?.parameters || [];
-			// TODO remove any
-			parameters.forEach((parameter: any) => {
-				stack.push(parameter?.schema);
-			});
+            // forEach - paths[name][method].parameters[].schema
+            const parameters = methodSchema?.parameters || [];
 
-			// forEach - paths[name][method].responses[code].content[contentType].schema
-			const responses = methodSchema?.responses || {};
-			Object.keys(responses).forEach(code => {
-				const responseSchema = responses[code];
+            // TODO remove any
+            parameters.forEach((parameter: any) => {
+                stack.push(parameter?.schema);
+            });
 
-				Object.keys(responseSchema?.content).forEach(contentType => {
-					const responseContentSchema = responseSchema?.content?.[contentType]?.schema;
+            // forEach - paths[name][method].responses[code].content[contentType].schema
+            const responses = methodSchema?.responses || {};
+            Object.keys(responses).forEach(code => {
+                const responseSchema = responses[code];
 
-					stack.push(responseContentSchema);
-				});
-			});
+                Object.keys(responseSchema?.content).forEach(contentType => {
+                    const responseContentSchema = responseSchema?.content?.[contentType]?.schema;
 
-			// forEach - paths[name][method].requestBody.content[contentType].schema
-			const requestBody = methodSchema?.requestBody;
-			Object.keys(requestBody?.content || {}).forEach(contentType => {
-				const requestBodyContentSchema = requestBody?.content?.[contentType]?.schema;
+                    stack.push(responseContentSchema);
+                });
+            });
 
-				stack.push(requestBodyContentSchema);
-			});
-		});
-	});
+            // forEach - paths[name][method].requestBody.content[contentType].schema
+            const requestBody = methodSchema?.requestBody;
+            Object.keys(requestBody?.content || {}).forEach(contentType => {
+                const requestBodyContentSchema = requestBody?.content?.[contentType]?.schema;
 
-	// forEach - components.parameters[name].schema
-	Object.keys(openAPIFile.document?.parameters || {}).forEach(name => {
-		stack.push(openAPIFile.document?.parameters?.[name]?.schema);
-	});
+                stack.push(requestBodyContentSchema);
+            });
+        });
+    });
 
-	// forEach - components.responses[name].content[contentType].schema
-	Object.keys(openAPIFile.document?.responses || {}).forEach(name => {
-		const responseSchema = openAPIFile.document?.responses?.[name];
+    while (stack.length) {
+        const item = stack.pop();
 
-		Object.keys(responseSchema?.content || {}).forEach(contentType => {
-			const responseContentSchema = responseSchema?.content?.[contentType]?.schema;
+        if (item) {
+            callback(item);
+        }
 
-			stack.push(responseContentSchema);
-		});
-	});
+        if (item.type === "array" && item.items) {
+            stack.push(item.items);
+        }
 
+        if (item.type === "object" && item.properties) {
+            Object.keys(item.properties).forEach(propertyKey => {
+                stack.push(item.properties[propertyKey]);
+            })
+        }
 
-	// forEach - components.requestBodies[name].content[contentType].schema
-	Object.keys(openAPIFile.document?.requestBodies || {}).forEach(name => {
-		const requestBodySchema = openAPIFile.document?.requestBodies?.[name];
+		// TODO remove any
+        item.oneOf?.forEach((schema: any) => {
+            stack.push(schema);
+        });
 
-		Object.keys(requestBodySchema?.content || {}).forEach(contentType => {
-			const responseContentSchema = requestBodySchema?.content?.[contentType]?.schema;
+		// TODO remove any
+		item.allOf?.forEach((schema: any) => {
+            stack.push(schema);
+        });
 
-			stack.push(responseContentSchema);
-		});
-	});
-
-
-	while (stack.length) {
-		const item = stack.pop();
-
-		if (item) {
-			callback(item);
-		}
-
-		if (item.type === "array") {
-			// TODO items
-		}
-
-		if (item.type === "object") {
-			// TODO properties
-		}
-
-
-		if (item.type === "oneOf") {
-			// TODO ??
-		}
-
-		// allOf ???
-	}
-
+		// TODO remove any
+		item.anyOf?.forEach((schema: any) => {
+            stack.push(schema);
+        });
+    }
 }
 
-// TODO remove any OperationObject
-type OperationCallbackT = (operationSchema: any) => void;
+type OperationCallbackT = (operationSchema: OperationSchema) => void;
 
 export const forEachOperation = (openAPIFile: OpenAPIFileT, callback: OperationCallbackT) => {
-	const paths = openAPIFile.document?.paths;
+    const paths = openAPIFile.document?.paths;
 
-	Object.keys(paths || {}).forEach((pathKey) => {
-		const path = paths?.[pathKey];
+    Object.keys(paths || {}).forEach((pathKey) => {
+        const path = paths?.[pathKey];
 
-		Object.keys(path || {}).forEach((method) => {
-			// @ts-expect-error bad OpenAPI types!
-			const operation = path?.[method];
+        Object.keys(path || {}).forEach((method) => {
+            // @ts-expect-error bad OpenAPI types!
+            const operation = path?.[method];
 
-			callback(operation);
-		});
-	});
+            callback(operation);
+        });
+    });
 }

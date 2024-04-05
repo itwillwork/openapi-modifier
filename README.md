@@ -45,22 +45,24 @@ await openapiModifier({
 - [remove-min-items][2]
 - [remove-max-items][3]
 - [change-endpoints-basepath][4]
+- [change-response-content-type][5]
 
 [1]: ./src/rules/remove-operation-id/README.md
 [2]: ./src/rules/remove-min-items/README.md
 [3]: ./src/rules/remove-max-items/README.md
 [4]: ./src/rules/change-endpoints-basepath/README.md
+[5]: ./src/rules/change-response-content-type/README.md
 
-change-response-content-type
 change-request-content-type
 filter-content-type
 remove-unused-component-schemas
 endpoints-filter
 
 patch-component-schemas
-change-endpoints
+patch-endpoints-schemas
 make-required-parameter
 make-required-component-object-schema-field
+remove-component-object-schema-field
 merge-openapi-spec
 
 ### Добавление нового правила
