@@ -1,7 +1,7 @@
 import processor from './index';
 
 describe('patch-schemas rule', () => {
-    test('regular', () => {
+    test('regular, component', () => {
         const fakeLogger = global.createFakeLogger();
         const fakeOpenAPIFile = global.createFakeOpenAPIFile({
             components: {
@@ -22,16 +22,16 @@ describe('patch-schemas rule', () => {
         expect(processor.processDocument(fakeOpenAPIFile, [{
                 method: "merge",
                 descriptor: {
-                    type: "component",
+                    type: "component-schema",
                     componentName: "TestSchemaDTO",
                 },
                 schemaDiff: {
-                    enum: [ "1", "2"],
+                    enum: ["1", "2"],
                 }
             }, {
                 method: "replace",
                 descriptor: {
-                    type: "component",
+                    type: "component-schema",
                     componentName: "TestArraySchemaDTO",
                 },
                 schemaDiff: {
@@ -50,7 +50,7 @@ describe('patch-schemas rule', () => {
                     schemas: {
                         TestSchemaDTO: {
                             type: "string",
-                            enum: [ "1", "2"],
+                            enum: ["1", "2"],
                         },
                         TestArraySchemaDTO: {
                             type: "array",
@@ -58,6 +58,475 @@ describe('patch-schemas rule', () => {
                                 type: "string"
                             }
                         },
+                    }
+                }
+            }
+        });
+
+        expect(fakeLogger.warning).toBeCalledTimes(0);
+    });
+
+    test('regular, endpoint', () => {
+        const fakeLogger = global.createFakeLogger();
+        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+            "paths": {
+                "/pets": {
+                    "get": {
+                        "summary": "",
+                        "responses": {
+                            "401": {
+                                "description": "Test 401",
+                                "content": {
+                                    "*/*": {
+                                        "schema": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                },
+                "/all-pets": {
+                    "get": {
+                        "summary": "",
+                        "responses": {
+                            "401": {
+                                "description": "Test 401",
+                                "content": {
+                                    "*/*": {
+                                        "schema": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                }
+            }
+        });
+
+        expect(processor.processDocument(fakeOpenAPIFile, [{
+                method: "merge",
+                descriptor: {
+                    type: "endpoint",
+                    path: '/pets',
+                    method: 'GET',
+                },
+                schemaDiff: {
+                    "responses": {
+                        "200": {
+                            "description": "Test 200",
+                            "content": {
+                                "*/*": {
+                                    "schema": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }, {
+                method: "replace",
+                descriptor: {
+                    type: "endpoint",
+                    path: '/all-pets',
+                    method: 'GET',
+                },
+                schemaDiff: {
+                    "responses": {
+                        "200": {
+                            "description": "Test 200",
+                            "content": {
+                                "*/*": {
+                                    "schema": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }],
+            fakeLogger,
+        )).toEqual({
+            ...fakeOpenAPIFile,
+            document: {
+                ...fakeOpenAPIFile.document,
+                "paths": {
+                    "/pets": {
+                        "get": {
+                            "summary": "",
+                            "responses": {
+                                "200": {
+                                    "description": "Test 200",
+                                    "content": {
+                                        "*/*": {
+                                            "schema": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    }
+                                },
+                                "401": {
+                                    "description": "Test 401",
+                                    "content": {
+                                        "*/*": {
+                                            "schema": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    "/all-pets": {
+                        "get": {
+                            "summary": "",
+                            "responses": {
+                                "200": {
+                                    "description": "Test 200",
+                                    "content": {
+                                        "*/*": {
+                                            "schema": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                    }
+                }
+            }
+        });
+
+        expect(fakeLogger.warning).toBeCalledTimes(0);
+    });
+
+
+    test('regular, endpoint-response', () => {
+        const fakeLogger = global.createFakeLogger();
+        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+            "paths": {
+                "/pets": {
+                    "get": {
+                        "summary": "",
+                        "responses": {
+                            "401": {
+                                "description": "Test 401",
+                                "content": {
+                                    "*/*": {
+                                        "schema": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                },
+                "/all-pets": {
+                    "get": {
+                        "summary": "",
+                        "responses": {
+                            "401": {
+                                "description": "Test 401",
+                                "content": {
+                                    "*/*": {
+                                        "schema": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                }
+            }
+        });
+
+        expect(processor.processDocument(fakeOpenAPIFile, [{
+                method: "merge",
+                descriptor: {
+                    type: "endpoint-response",
+                    path: '/pets',
+                    method: 'GET',
+                    code: "401",
+                    contentType: "*/*"
+                },
+                schemaDiff: {
+                    "type": "string"
+                }
+            }, {
+                method: "replace",
+                descriptor: {
+                    type: "endpoint-response",
+                    path: '/all-pets',
+                    method: 'GET',
+                    code: "401",
+                    contentType: "*/*"
+                },
+                schemaDiff: {
+                    "type": "string"
+                }
+
+            }],
+            fakeLogger,
+        )).toEqual({
+            ...fakeOpenAPIFile,
+            document: {
+                ...fakeOpenAPIFile.document,
+                "paths": {
+                    "/pets": {
+                        "get": {
+                            "summary": "",
+                            "responses": {
+                                "401": {
+                                    "description": "Test 401",
+                                    "content": {
+                                        "*/*": {
+                                            "schema": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    "/all-pets": {
+                        "get": {
+                            "summary": "",
+                            "responses": {
+                                "401": {
+                                    "description": "Test 401",
+                                    "content": {
+                                        "*/*": {
+                                            "schema": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                    }
+                }
+            }
+        });
+
+        expect(fakeLogger.warning).toBeCalledTimes(0);
+    });
+
+    test('regular, endpoint-request-body', () => {
+        const fakeLogger = global.createFakeLogger();
+        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+            "paths": {
+                "/pets": {
+                    post: {
+                        description: "",
+                        requestBody: {
+                            content: {
+                                '*/*': {
+                                    schema: {
+                                        type: "string"
+                                    }
+                                }
+                            }
+                        },
+                        responses: {},
+                    }
+                },
+                "/all-pets": {
+                    post: {
+                        description: "",
+                        requestBody: {
+                            content: {
+                                '*/*': {
+                                    schema: {
+                                        type: "object"
+                                    }
+                                }
+                            }
+                        },
+                        responses: {},
+                    }
+                }
+            }
+        });
+
+        expect(processor.processDocument(fakeOpenAPIFile, [{
+                method: "merge",
+                descriptor: {
+                    type: "endpoint-request-body",
+                    path: '/pets',
+                    method: 'POST',
+                    contentType: "*/*"
+                },
+                schemaDiff: {
+                    enum: ["1", "2"],
+                }
+            }, {
+                method: "replace",
+                descriptor: {
+                    type: "endpoint-request-body",
+                    path: '/all-pets',
+                    method: 'POST',
+                    contentType: "*/*"
+                },
+                schemaDiff: {
+                    "type": "string"
+                }
+
+            }],
+            fakeLogger,
+        )).toEqual({
+            ...fakeOpenAPIFile,
+            document: {
+                ...fakeOpenAPIFile.document,
+                "paths": {
+                    "/pets": {
+                        post: {
+                            description: "",
+                            requestBody: {
+                                content: {
+                                    '*/*': {
+                                        schema: {
+                                            type: "string",
+                                            enum: ["1", "2"],
+                                        }
+                                    }
+                                }
+                            },
+                            responses: {},
+                        }
+                    },
+                    "/all-pets": {
+                        post: {
+                            description: "",
+                            requestBody: {
+                                content: {
+                                    '*/*': {
+                                        schema: {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            responses: {},
+                        }
+                    }
+                }
+            }
+        });
+
+        expect(fakeLogger.warning).toBeCalledTimes(0);
+    });
+
+    test('regular, endpoint-parameter', () => {
+        const fakeLogger = global.createFakeLogger();
+        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+            "paths": {
+                "/pets": {
+                    post: {
+                        description: "",
+                        parameters: [
+                            {
+                                "in": "query",
+                                "name": "filter",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                        ],
+                        responses: {},
+                    }
+                },
+                "/all-pets": {
+                    post: {
+                        description: "",
+                        parameters: [
+                            {
+                                "in": "query",
+                                "name": "filter",
+                                "schema": {
+                                    "type": "number"
+                                }
+                            },
+                        ],
+                        responses: {},
+                    }
+                }
+            }
+        });
+
+        expect(processor.processDocument(fakeOpenAPIFile, [{
+                method: "merge",
+                descriptor: {
+                    type: "endpoint-parameter",
+                    path: '/pets',
+                    method: 'POST',
+                    parameterName: "filter",
+                    parameterIn: "query",
+                },
+                schemaDiff: {
+                    enum: ["1", "2"],
+                }
+            }, {
+                method: "replace",
+                descriptor: {
+                    type: "endpoint-parameter",
+                    path: '/all-pets',
+                    method: 'POST',
+                    parameterName: "filter",
+                    parameterIn: "query",
+                },
+                schemaDiff: {
+                    "type": "string"
+                }
+
+            }],
+            fakeLogger,
+        )).toEqual({
+            ...fakeOpenAPIFile,
+            document: {
+                ...fakeOpenAPIFile.document,
+                "paths": {
+                    "/pets": {
+                        post: {
+                            description: "",
+                            parameters: [
+                                {
+                                    "in": "query",
+                                    "name": "filter",
+                                    "schema": {
+                                        "type": "string",
+                                        enum: ["1", "2"],
+                                    }
+                                },
+                            ],
+                            responses: {},
+                        }
+                    },
+                    "/all-pets": {
+                        post: {
+                            description: "",
+                            parameters: [
+                                {
+                                    "in": "query",
+                                    "name": "filter",
+                                    "schema": {
+                                        "type": "string"
+                                    }
+                                },
+                            ],
+                            responses: {},
+                        }
                     }
                 }
             }
