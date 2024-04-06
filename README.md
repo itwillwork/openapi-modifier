@@ -61,6 +61,7 @@ await openapiModifier({
 - [make-required-parameter][9]
 - [remove-parameter][10]
 - [merge-openapi-spec][11]
+- [remove-unused-component-schemas][12]
 
 [1]: ./src/rules/remove-operation-id/README.md
 [2]: ./src/rules/remove-min-items/README.md
@@ -73,8 +74,7 @@ await openapiModifier({
 [9]: ./src/rules/make-required-parameter/README.md
 [10]: ./src/rules/remove-parameter/README.md
 [11]: ./src/rules/merge-openapi-spec/README.md
-
-remove-unused-component-schemas
+[12]: ./src/rules/remove-unused-component-schemas/README.md
 
 ### Добавление нового правила
 
