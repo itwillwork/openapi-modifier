@@ -60,6 +60,7 @@ await openapiModifier({
 - [patch-schemas][8]
 - [make-required-parameter][9]
 - [remove-parameter][10]
+- [merge-openapi-spec][11]
 
 [1]: ./src/rules/remove-operation-id/README.md
 [2]: ./src/rules/remove-min-items/README.md
@@ -71,11 +72,9 @@ await openapiModifier({
 [8]: ./src/rules/patch-schemas/README.md
 [9]: ./src/rules/make-required-parameter/README.md
 [10]: ./src/rules/remove-parameter/README.md
+[11]: ./src/rules/merge-openapi-spec/README.md
 
-merge-openapi-spec
 remove-unused-component-schemas
-
-Все названия функций должны начинаться с обозначения действия
 
 ### Добавление нового правила
 
@@ -84,6 +83,8 @@ remove-unused-component-schemas
 - `README.md` файл с описанием работы правила
 
 Про отладку конкретного правила, см. пункт "Отладка" ниже.
+
+Все названия функций должны начинаться с обозначения действия.
 
 ### Отладка
 
