@@ -59,6 +59,7 @@ await openapiModifier({
 - [filter-endpoints][7]
 - [patch-schemas][8]
 - [make-required-parameter][9]
+- [remove-parameter][10]
 
 [1]: ./src/rules/remove-operation-id/README.md
 [2]: ./src/rules/remove-min-items/README.md
@@ -69,8 +70,8 @@ await openapiModifier({
 [7]: ./src/rules/filter-endpoints/README.md
 [8]: ./src/rules/patch-schemas/README.md
 [9]: ./src/rules/make-required-parameter/README.md
+[10]: ./src/rules/remove-parameter/README.md
 
-remove-parameter
 merge-openapi-spec
 remove-unused-component-schemas
 
