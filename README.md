@@ -104,4 +104,6 @@ DEBUG=openapi-modifier:* openapi-modifier
 DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 ```
 
-Для последовательного преобразования вывод
+TODO
+Для последовательного преобразования вывод 
+???
