@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { forEachSchemas } from '../base/utils';
 
 const configSchema = z.object({
-  map: z.object({}),
+  map: z.record(z.string(), z.string()),
 });
 
 const processor: RuleProcessorT<typeof configSchema> = {
@@ -12,8 +12,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
     map: {},
   },
   processDocument: (openAPIFile, config, logger) => {
-    // TODO improve zod validation
-    const map: Record<string, string> = config.map;
+    const { map } = config;
 
     let usageCount: Record<string, number> = {};
     const increaseUsageCount = (contentType: string) => {
