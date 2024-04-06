@@ -10,15 +10,15 @@
 
 ### Конфигурация
 
-| Параметр                 |                                     Описание                                     |
-|--------------------------|:--------------------------------------------------------------------------------:|
-| path                     | path до openapi файла (*.json, *.yaml, *.yml), который нужно добавить к текущему |
+| Параметр |                                     Описание                                      |
+| -------- | :-------------------------------------------------------------------------------: |
+| path     | path до openapi файла (_.json, _.yaml, \*.yml), который нужно добавить к текущему |
 
 Пример конфигурации:
 
 ```js
 {
-    path: "./src/new-api-for-new-feature.yaml"
+  path: './src/new-api-for-new-feature.yaml';
 }
 ```
 
@@ -35,6 +35,7 @@ module.exports = {
 В `new-api-for-new-feature.yaml` пишем yaml который нужно добавить к существующему.
 
 **Файл `new-api-for-new-feature.yaml`**, следующую:
+
 ```
 components:
   schemas:
@@ -73,9 +74,9 @@ paths:
       responses:
         200:
           content:
-            "*/*":
+            '*/*':
               schema:
-                type: "object"
+                type: 'object'
 ```
 
 **После применения правила**, файл `openapi.yaml` выглядит так:
@@ -101,18 +102,18 @@ paths:
       responses:
         200:
           content:
-            "*/*":
+            '*/*':
               schema:
-                type: "array"
+                type: 'array'
                 items:
-                  $ref: "#/components/schemas/Pet"
+                  $ref: '#/components/schemas/Pet'
   /pets:
     get:
       summary: List all pets
       responses:
         200:
           content:
-            "*/*":
+            '*/*':
               schema:
-                type: "object"
+                type: 'object'
 ```

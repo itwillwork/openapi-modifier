@@ -22,30 +22,31 @@ openapi-modifier --input=example-1/input.yml --output=example-1/output.yml --con
 Можно использовать конфиги в след. расширениях: `.js`, `.yaml`, `.yml`, `.json`
 
 Пример конфигурации в `.js`
+
 ```js
 module.exports = {
-    "logger": {
-        "minLevel": 1,
+  logger: {
+    minLevel: 1,
+  },
+  input: './openapi.yaml',
+  output: './openapi.yaml',
+  rules: [
+    {
+      name: 'remove-operation-id',
+      disabled: true,
     },
-    "input": "./openapi.yaml",
-    "output": "./openapi.yaml",
-    "rules": [
-        {
-            "name": "remove-operation-id",
-            "disabled": true,
-        },
-        // ...
-    ]
-}
+    // ...
+  ],
+};
 ```
 
 ### Использование как npm пакет/модуль
 
 ```js
 await openapiModifier({
-    input: '',
-    output: '',
-})
+  input: '',
+  output: '',
+});
 ```
 
 ### Существующие правила
@@ -79,6 +80,7 @@ await openapiModifier({
 ### Добавление нового правила
 
 Необходимо в папку `rules` добавить папку с именем вновь созданного правила с 2 файлами:
+
 - `index.ts` сама логика правила
 - `README.md` файл с описанием работы правила
 
@@ -96,7 +98,7 @@ await openapiModifier({
 DEBUG=openapi-modifier:* openapi-modifier
 ```
 
-Для вывода debug логов по правилу, например по правилу `remove-operation-id`: 
+Для вывода debug логов по правилу, например по правилу `remove-operation-id`:
 
 ```bash
 DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier

@@ -18,8 +18,8 @@ paths:
       responses:
         200:
           content:
-            "*/*":
+            '*/*':
               schema:
-                type: "array"
+                type: 'array'
                 items:
-                  $ref: "#/components/schemas/Pet"
+                  $ref: '#/components/schemas/Pet'

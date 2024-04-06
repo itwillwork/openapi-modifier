@@ -5,11 +5,12 @@
 ### Конфигурация
 
 | Параметр |                    Описание                     |
-|----------|:-----------------------------------------------:|
+| -------- | :---------------------------------------------: |
 | enabled  | Включенные content-type которые нужно сохранить |
 | disabled | Выключенные content-type которые нужно удалить  |
 
 Пример конфигурации:
+
 ```js
 {
   enabled: ["application/json"],
@@ -19,6 +20,7 @@
 ### Пример использования
 
 **В конфиге** `openapi-modifier-config.js` добавьте правило `remove-max-items`:
+
 ```json
 module.exports = {
     "rules": [
@@ -33,23 +35,7 @@ module.exports = {
 ```
 
 **До применения правила**, файл `openapi.yaml` выглядит так:
-```yaml
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      responses:
-        403: 
-          content:
-            "multipart/form-data":
-              schema:
-                type: "number"
-            "*/*":
-              schema:
-                type: "object"
-```
 
-**После применения правила**, файл `openapi.yaml` выглядит так:
 ```yaml
 paths:
   /pets:
@@ -58,7 +44,25 @@ paths:
       responses:
         403:
           content:
-            "*/*":
+            'multipart/form-data':
               schema:
-                type: "object"
+                type: 'number'
+            '*/*':
+              schema:
+                type: 'object'
+```
+
+**После применения правила**, файл `openapi.yaml` выглядит так:
+
+```yaml
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      responses:
+        403:
+          content:
+            '*/*':
+              schema:
+                type: 'object'
 ```

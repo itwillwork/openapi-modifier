@@ -4,19 +4,20 @@
 
 ### Конфигурация
 
-| Параметр |                 Описание                 |
-|----------|:----------------------------------------:|
+| Параметр | Описание |
+| -------- | :------: |
 
 Пример конфигурации:
+
 ```js
 {
-
 }
 ```
 
 ### Пример использования
 
 **В конфиге** `openapi-modifier-config.js` добавьте правило `remove-min-items`:
+
 ```json
 module.exports = {
     "rules": [
@@ -28,6 +29,7 @@ module.exports = {
 ```
 
 **До применения правила**, файл `openapi.yaml` выглядит так:
+
 ```yaml
 components:
   schemas:
@@ -36,10 +38,10 @@ components:
       minItems: 1
       items:
         type: number
-
 ```
 
 **После применения правила**, файл `openapi.yaml` выглядит так:
+
 ```yaml
 components:
   schemas:

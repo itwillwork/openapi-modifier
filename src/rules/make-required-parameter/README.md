@@ -5,7 +5,7 @@
 ### Конфигурация
 
 | Параметр                 |                       Описание                        |
-|--------------------------|:-----------------------------------------------------:|
+| ------------------------ | :---------------------------------------------------: |
 | descriptor.path          |               Path целевого endpoint'а                |
 | descriptor.method        |               Метод целевого endpoint'а               |
 | parameterDescriptor.name | Название параметра которым нужно сделать обязательным |
@@ -56,12 +56,12 @@ paths:
       tags:
         - pets
       parameters:
-        - in: "query"
-          name: "filter"
+        - in: 'query'
+          name: 'filter'
           required: false
           schema:
-            format: "int64"
-            type: "integer"
+            format: 'int64'
+            type: 'integer'
 ```
 
 **После применения правила**, файл `openapi.yaml` выглядит так:
@@ -74,10 +74,10 @@ paths:
       tags:
         - pets
       parameters:
-        - in: "query"
-          name: "filter"
+        - in: 'query'
+          name: 'filter'
           required: true
           schema:
-            format: "int64"
-            type: "integer"
+            format: 'int64'
+            type: 'integer'
 ```

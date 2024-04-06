@@ -4,11 +4,12 @@
 
 ### Конфигурация
 
-| Параметр |                 Описание                 |
-|----------|:----------------------------------------:|
-| map      | Словарь замены                           |
+| Параметр |    Описание    |
+| -------- | :------------: |
+| map      | Словарь замены |
 
 Пример конфигурации:
+
 ```js
 {
   map: {
@@ -20,6 +21,7 @@
 ### Пример использования
 
 **В конфиге** `openapi-modifier-config.js` добавьте правило `remove-max-items`:
+
 ```json
 module.exports = {
   "rules": [
@@ -36,19 +38,21 @@ module.exports = {
 ```
 
 **До применения правила**, файл `openapi.yaml` выглядит так:
+
 ```yaml
 paths:
   /api/v1/pets:
     get:
       responses:
-        200: 
+        200:
           content:
-            "*/*":
+            '*/*':
               schema:
-                type: "object"
+                type: 'object'
 ```
 
 **После применения правила**, файл `openapi.yaml` выглядит так:
+
 ```yaml
 paths:
   /proxy/pets:
@@ -56,7 +60,7 @@ paths:
       responses:
         200:
           content:
-            "*/*":
+            '*/*':
               schema:
-                type: "object"
+                type: 'object'
 ```

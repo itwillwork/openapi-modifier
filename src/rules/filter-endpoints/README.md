@@ -4,12 +4,13 @@
 
 ### Конфигурация
 
-| Параметр        |                           Описание                            |
-|-----------------|:-------------------------------------------------------------:|
-| enabled         |        Включенные endpoint'ы, которые нужно сохранить         |
-| disabled        |         Выключенные endpoint'ы, которые нужно удалить         |
+| Параметр |                    Описание                    |
+| -------- | :--------------------------------------------: |
+| enabled  | Включенные endpoint'ы, которые нужно сохранить |
+| disabled | Выключенные endpoint'ы, которые нужно удалить  |
 
 Пример конфигурации:
+
 ```js
 {
   enabled: [
@@ -24,6 +25,7 @@
 ### Пример использования
 
 **В конфиге** `openapi-modifier-config.js` добавьте правило `remove-max-items`:
+
 ```json
 module.exports = {
     "rules": [
@@ -43,29 +45,7 @@ module.exports = {
 ```
 
 **До применения правила**, файл `openapi.yaml` выглядит так:
-```yaml
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      responses:
-        200: 
-          content:
-            "*/*":
-              schema:
-                type: "object"
-  /test/pets:
-    get:
-      summary: Test endpoint
-      responses:
-        200: 
-          content:
-            "*/*":
-              schema:
-                type: "object"
-```
 
-**После применения правила**, файл `openapi.yaml` выглядит так:
 ```yaml
 paths:
   /pets:
@@ -74,7 +54,31 @@ paths:
       responses:
         200:
           content:
-            "*/*":
+            '*/*':
               schema:
-                type: "object"
+                type: 'object'
+  /test/pets:
+    get:
+      summary: Test endpoint
+      responses:
+        200:
+          content:
+            '*/*':
+              schema:
+                type: 'object'
+```
+
+**После применения правила**, файл `openapi.yaml` выглядит так:
+
+```yaml
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      responses:
+        200:
+          content:
+            '*/*':
+              schema:
+                type: 'object'
 ```

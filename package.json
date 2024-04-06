@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
-    "build:types": "tsc --declaration"
+    "build:types": "tsc --declaration",
+    "format": "npx prettier --single-quote --print-width 200 --trailing-comma es5 --write ."
   },
   "bin": {
     "openapi-modifier": "./cli/openapi-modifier.js"
