@@ -1,6 +1,7 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
 import { forEachSchema } from '../common/utils/iterators/each-schema';
+import {checkIsRefSchema} from "../common/utils/refs";
 
 const configSchema = z.object({});
 
@@ -9,7 +10,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
   defaultConfig: {},
   processDocument: (openAPIFile, config, logger) => {
     forEachSchema(openAPIFile, (schema) => {
-      if (schema?.maxItems !== undefined) {
+      if (!checkIsRefSchema(schema) && schema?.maxItems !== undefined) {
         delete schema.maxItems;
       }
     });
