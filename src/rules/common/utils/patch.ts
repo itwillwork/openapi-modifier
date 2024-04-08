@@ -1,11 +1,7 @@
 import {z} from "zod";
 import deepmerge from "deepmerge";
 import {LoggerI} from "../../../logger/interface";
-
-export const patchMethodConfigSchema = z.union([z.literal('merge'), z.literal('replace')]).optional();
-
-// TODO renaming
-export const openAPISchemaConfigSchema = z.any();
+import { patchMethodConfigSchema, openAPISchemaConfigSchema } from '../config';
 
 type PatchMethod = z.infer<typeof patchMethodConfigSchema>;
 type OpenAPISchema = z.infer<typeof openAPISchemaConfigSchema>;

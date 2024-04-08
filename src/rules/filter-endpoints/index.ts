@@ -1,6 +1,6 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
-import {normalizeMethod} from "../base/utils/normilizers";
+import {normalizeMethod} from "../common/utils/normilizers";
 
 const configSchema = z.object({
   enabled: z

@@ -1,16 +1,18 @@
 import {RuleProcessorT} from '../../core/rules/processor-models';
 import {string, z} from 'zod';
-import {forEachOperation} from '../base/utils/iterators';
+import {forEachOperation} from '../common/utils/iterators';
 import deepmerge from 'deepmerge';
 import {OpenAPIFileT} from '../../openapi';
 import {OpenAPIV3, OpenAPIV3_1} from 'openapi-types';
-import {openAPISchemaConfigSchema, patchMethodConfigSchema, patchSchema} from "../base/utils/patch";
-import {normalizeMethod} from '../base/utils/normilizers';
+import {patchSchema} from "../common/utils/patch";
 import {
+    openAPISchemaConfigSchema,
+    patchMethodConfigSchema,
+    parameterInConfigSchema,
     endpointDescriptorConfigSchema,
     parameterDescriptorConfigSchema,
-    parameterInConfigSchema
-} from "../base/utils/descriptors";
+} from '../common/config';
+import {normalizeMethod} from '../common/utils/normilizers';
 
 type PathItemObject = OpenAPIV3.PathItemObject | OpenAPIV3_1.PathItemObject;
 type HttpMethods = OpenAPIV3.HttpMethods | OpenAPIV3_1.HttpMethods;
@@ -29,8 +31,7 @@ const configSchema = z.object({
 
 const processor: RuleProcessorT<typeof configSchema> = {
     configSchema,
-    defaultConfig: {
-    },
+    defaultConfig: {},
     processDocument: (openAPIFile, config, logger) => {
         const {endpointDescriptor, parameterDescriptor, patchMethod, schemaDiff, objectDiff} = config;
 

@@ -1,6 +1,6 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
-import { forEachSchemas } from '../base/utils/iterators';
+import { forEachSchemas } from '../common/utils/iterators';
 
 const configSchema = z.object({
   enabled: z.array(z.string()).optional(),

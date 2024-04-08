@@ -1,8 +1,8 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
 import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
-import {endpointDescriptorConfigSchema, parameterDescriptorConfigSchema} from "../base/utils/descriptors";
-import { normalizeMethod} from '../base/utils/normilizers';
+import {endpointDescriptorConfigSchema, parameterDescriptorConfigSchema} from "../common/config";
+import { normalizeMethod} from '../common/utils/normilizers';
 
 type PathItemObject = OpenAPIV3.PathItemObject | OpenAPIV3_1.PathItemObject;
 type HttpMethods = OpenAPIV3.HttpMethods | OpenAPIV3_1.HttpMethods;

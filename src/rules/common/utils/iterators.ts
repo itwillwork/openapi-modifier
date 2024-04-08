@@ -1,7 +1,10 @@
 import { OpenAPIFileT } from '../../../openapi';
+import { z } from 'zod';
+import {openAPISchemaConfigSchema} from "../config";
+
+type AnySchemaObject = z.infer<typeof openAPISchemaConfigSchema>;
 
 // TODO remove any
-type AnySchemaObject = any;
 type OperationSchema = any;
 
 type SchemaCallbackT = (schema: AnySchemaObject) => void;

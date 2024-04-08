@@ -1,7 +1,7 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
 import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
-import { forEachSchemas } from '../base/utils/iterators';
+import { forEachSchemas } from '../common/utils/iterators';
 
 type ComponentsObject = OpenAPIV3.ComponentsObject | OpenAPIV3_1.ComponentsObject;
 

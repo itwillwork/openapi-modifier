@@ -1,11 +1,12 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { string, z } from 'zod';
-import { forEachOperation } from '../base/utils/iterators';
+import { forEachOperation } from '../common/utils/iterators';
 import deepmerge from 'deepmerge';
 import { OpenAPIFileT } from '../../openapi';
 import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
-import { normalizeMethod, normalizeParameterIn } from '../base/utils/normilizers';
-import {patchSchema, patchMethodConfigSchema, openAPISchemaConfigSchema} from '../base/utils/patch';
+import { normalizeMethod, normalizeParameterIn } from '../common/utils/normilizers';
+import {patchSchema} from '../common/utils/patch';
+import { patchMethodConfigSchema, openAPISchemaConfigSchema } from '../common/config';
 
 const descriptorSchema = z
   .object({
