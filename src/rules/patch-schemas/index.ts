@@ -68,8 +68,8 @@ paths[name][method]
  */
 
 const findPathMethod = (openAPIFile: OpenAPIFileT, path: string, method: string): HttpMethods | null => {
-  const pathObj = openAPIFile?.document?.paths?.[path];
-  const methods = Object.keys(pathObj || {}) as Array<HttpMethods>;
+  const pathObjSchema = openAPIFile?.document?.paths?.[path];
+  const methods = Object.keys(pathObjSchema || {}) as Array<HttpMethods>;
 
   const targetMethod = methods.find((pathMethod) => {
     return normalizeMethod(pathMethod) === normalizeMethod(method);
@@ -113,11 +113,11 @@ const processor: RuleProcessorT<typeof configSchema> = {
             break;
           }
 
-          const pathObj = openAPIFile?.document?.paths?.[descriptor.path];
+          const pathObjSchema = openAPIFile?.document?.paths?.[descriptor.path];
 
-          const endpointSchema = pathObj?.[targetMethod];
+          const endpointSchema = pathObjSchema?.[targetMethod];
           if (endpointSchema) {
-            pathObj[targetMethod] = patchSchema(logger, endpointSchema, patchMethod, schemaDiff);
+            pathObjSchema[targetMethod] = patchSchema(logger, endpointSchema, patchMethod, schemaDiff);
           } else {
             logger.warning(`Not found endpoint (same method) with descriptor: ${JSON.stringify(descriptor)}!`);
           }
@@ -131,9 +131,9 @@ const processor: RuleProcessorT<typeof configSchema> = {
             break;
           }
 
-          const pathObj = openAPIFile?.document?.paths?.[descriptor.path];
+          const pathObjSchema = openAPIFile?.document?.paths?.[descriptor.path];
 
-          const endpointSchema = pathObj?.[targetMethod];
+          const endpointSchema = pathObjSchema?.[targetMethod];
           if (!endpointSchema) {
             logger.warning(`Not found endpoint (same path) with descriptor: ${JSON.stringify(descriptor)}!`);
             break;
@@ -164,9 +164,9 @@ const processor: RuleProcessorT<typeof configSchema> = {
             break;
           }
 
-          const pathObj = openAPIFile?.document?.paths?.[descriptor.path];
+          const pathObjSchema = openAPIFile?.document?.paths?.[descriptor.path];
 
-          const endpointSchema = pathObj?.[targetMethod];
+          const endpointSchema = pathObjSchema?.[targetMethod];
           if (!endpointSchema) {
             logger.warning(`Not found endpoint (same method) with descriptor: ${JSON.stringify(descriptor)}!`);
             break;
@@ -195,9 +195,9 @@ const processor: RuleProcessorT<typeof configSchema> = {
             break;
           }
 
-          const pathObj = openAPIFile?.document?.paths?.[descriptor.path];
+          const pathObjSchema = openAPIFile?.document?.paths?.[descriptor.path];
 
-          const endpointSchema = pathObj?.[targetMethod];
+          const endpointSchema = pathObjSchema?.[targetMethod];
           if (!endpointSchema) {
             logger.warning(`Not found endpoint (same path) with descriptor: ${JSON.stringify(descriptor)}!`);
             break;

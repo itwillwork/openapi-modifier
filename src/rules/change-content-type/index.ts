@@ -23,8 +23,8 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
     // TODO use iterator
     Object.keys(openAPIFile.document?.paths || {}).forEach((pathName) => {
-      const pathObj = openAPIFile?.document?.paths?.[pathName];
-      const methods = Object.keys(pathObj || {}) as Array<HttpMethods>;
+      const pathObjSchema = openAPIFile?.document?.paths?.[pathName];
+      const methods = Object.keys(pathObjSchema || {}) as Array<HttpMethods>;
 
       methods.forEach((method) => {
         const methodSchema = openAPIFile.document?.paths?.[pathName]?.[method];

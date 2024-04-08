@@ -65,8 +65,8 @@ const processor: RuleProcessorT<typeof configSchema> = {
     };
 
     Object.keys(openAPIFile.document?.paths || {}).forEach((pathName) => {
-      const pathObj = openAPIFile?.document?.paths?.[pathName];
-      const methods = Object.keys(pathObj || {}) as Array<HttpMethods>;
+      const pathObjSchema = openAPIFile?.document?.paths?.[pathName];
+      const methods = Object.keys(pathObjSchema || {}) as Array<HttpMethods>;
 
       methods.forEach((method) => {
         const endpoint = normalizeEndpoint({
@@ -76,10 +76,10 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
         increaseUsageCount(endpoint);
 
-        const pathObj = openAPIFile?.document?.paths?.[pathName];
+        const pathObjSchema = openAPIFile?.document?.paths?.[pathName];
 
-        if (!checkIsEnabledEndpoint(endpoint) && pathObj) {
-          delete pathObj[method];
+        if (!checkIsEnabledEndpoint(endpoint) && pathObjSchema) {
+          delete pathObjSchema[method];
         }
       });
     });
