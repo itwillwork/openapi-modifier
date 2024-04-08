@@ -28,7 +28,7 @@ describe('patch-parameter rule', () => {
       processor.processDocument(
         fakeOpenAPIFile,
         {
-          descriptor: {
+          endpointDescriptor: {
             path: '/pets',
             method: 'GET',
           },

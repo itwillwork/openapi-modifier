@@ -1,6 +1,6 @@
 ## patch-parameter
 
-Делает параметр обязательным в endpoint'е
+Патчит параметр в endpoint'е через сливание или замену.
 
 ### Конфигурация
 
@@ -23,8 +23,8 @@
     parameterDescriptor: {
         name: "filter",
         in: "query",
-    }
-    patchMethod: 
+    },
+    
 }
 ```
 

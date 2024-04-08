@@ -6,24 +6,18 @@ import {OpenAPIFileT} from '../../openapi';
 import {OpenAPIV3, OpenAPIV3_1} from 'openapi-types';
 import {openAPISchemaConfigSchema, patchMethodConfigSchema, patchSchema} from "../base/utils/patch";
 import {normalizeMethod} from '../base/utils/normilizers';
-import {parameterInConfigSchema} from "../base/utils/descriptors";
+import {
+    endpointDescriptorConfigSchema,
+    parameterDescriptorConfigSchema,
+    parameterInConfigSchema
+} from "../base/utils/descriptors";
 
 type PathItemObject = OpenAPIV3.PathItemObject | OpenAPIV3_1.PathItemObject;
 type HttpMethods = OpenAPIV3.HttpMethods | OpenAPIV3_1.HttpMethods;
 
 const configSchema = z.object({
-    descriptor: z
-        .object({
-            path: z.string(),
-            method: z.string(),
-        })
-        .optional(),
-    parameterDescriptor: z
-        .object({
-            name: z.string(),
-            in: z.string(),
-        })
-        .optional(),
+    endpointDescriptor: endpointDescriptorConfigSchema.optional(),
+    parameterDescriptor: parameterDescriptorConfigSchema.optional(),
     patchMethod: patchMethodConfigSchema.optional(),
     schemaDiff: openAPISchemaConfigSchema.optional(),
     objectDiff: z.object({
@@ -38,23 +32,23 @@ const processor: RuleProcessorT<typeof configSchema> = {
     defaultConfig: {
     },
     processDocument: (openAPIFile, config, logger) => {
-        const {descriptor, parameterDescriptor, patchMethod, schemaDiff, objectDiff} = config;
+        const {endpointDescriptor, parameterDescriptor, patchMethod, schemaDiff, objectDiff} = config;
 
-        if (!descriptor) {
-            logger.warning(`Empty descriptor: ${JSON.stringify(descriptor)}`);
+        if (!endpointDescriptor) {
+            logger.warning(`Empty descriptor: ${JSON.stringify(endpointDescriptor)}`);
             return openAPIFile;
         }
 
         // @ts-expect-error bad OpenApi types
-        const pathObj: PathItemObject = openAPIFile?.document?.paths?.[descriptor.path];
+        const pathObj: PathItemObject = openAPIFile?.document?.paths?.[endpointDescriptor.path];
 
         const targetMethod = Object.keys(pathObj || {}).find((pathMethod) => {
-            return normalizeMethod(pathMethod) === normalizeMethod(descriptor.method);
+            return normalizeMethod(pathMethod) === normalizeMethod(endpointDescriptor.method);
         });
 
         const endpointSchema = pathObj[targetMethod as HttpMethods];
         if (!endpointSchema) {
-            logger.warning(`Not found endpoint: ${JSON.stringify(descriptor)}`);
+            logger.warning(`Not found endpoint: ${JSON.stringify(endpointDescriptor)}`);
             return openAPIFile;
         }
 
@@ -68,12 +62,12 @@ const processor: RuleProcessorT<typeof configSchema> = {
         });
 
         if (!targetParameter) {
-            logger.warning(`Not found parameter: ${JSON.stringify(descriptor)}`);
+            logger.warning(`Not found parameter: ${JSON.stringify(endpointDescriptor)}`);
             return openAPIFile;
         }
 
         if ('$ref' in targetParameter) {
-            logger.warning(`Descriptor should not refer to links: ${JSON.stringify(descriptor)}`);
+            logger.warning(`Descriptor should not refer to links: ${JSON.stringify(endpointDescriptor)}`);
             return openAPIFile;
         }
 
