@@ -1,5 +1,6 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
+import {normalizeMethod} from "../base/utils/normilizers";
 
 const configSchema = z.object({
   enabled: z
@@ -28,7 +29,7 @@ type EndpointT = {
 const normalizeEndpoint = (endpoint: EndpointT): EndpointT => {
   return {
     ...endpoint,
-    method: endpoint.method.toLowerCase(),
+    method: normalizeMethod(endpoint.method),
   };
 };
 

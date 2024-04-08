@@ -1,4 +1,3 @@
-// TODO refactoring, move to utils
-import {string} from "zod";
-
 export const normalizeMethod = (rawMethod: string): string => rawMethod.toLowerCase();
+
+export const normalizeParameterIn = (parameterIn: string): string => parameterIn.toLowerCase();

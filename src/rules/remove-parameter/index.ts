@@ -1,49 +1,38 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
 import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
+import {endpointDescriptorConfigSchema, parameterDescriptorConfigSchema} from "../base/utils/descriptors";
+import { normalizeMethod} from '../base/utils/normilizers';
 
 type PathItemObject = OpenAPIV3.PathItemObject | OpenAPIV3_1.PathItemObject;
 type HttpMethods = OpenAPIV3.HttpMethods | OpenAPIV3_1.HttpMethods;
 
 const configSchema = z.object({
-  descriptor: z
-    .object({
-      path: z.string(),
-      method: z.string(),
-    })
-    .optional(),
-  parameterDescriptor: z
-    .object({
-      name: z.string(),
-      in: z.string(),
-    })
-    .optional(),
+  endpointDescriptor: endpointDescriptorConfigSchema.optional(),
+  parameterDescriptor: parameterDescriptorConfigSchema.optional(),
 });
-
-// TODO refactoring, move to utils
-const normalizeMethod = (rawMethod: string): string => rawMethod.toLowerCase();
 
 const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: {},
   processDocument: (openAPIFile, config, logger) => {
-    const { descriptor, parameterDescriptor } = config;
+    const { endpointDescriptor, parameterDescriptor } = config;
 
-    if (!descriptor) {
-      logger.warning(`Empty descriptor: ${JSON.stringify(descriptor)}`);
+    if (!endpointDescriptor) {
+      logger.warning(`Empty endpointDescriptor: ${JSON.stringify(endpointDescriptor)}`);
       return openAPIFile;
     }
 
     // @ts-expect-error bad OpenApi types
-    const pathObj: PathItemObject = openAPIFile?.document?.paths?.[descriptor.path];
+    const pathObj: PathItemObject = openAPIFile?.document?.paths?.[endpointDescriptor.path];
 
     const targetMethod = Object.keys(pathObj || {}).find((pathMethod) => {
-      return normalizeMethod(pathMethod) === normalizeMethod(descriptor.method);
+      return normalizeMethod(pathMethod) === normalizeMethod(endpointDescriptor.method);
     });
 
     const endpointSchema = pathObj[targetMethod as HttpMethods];
     if (!endpointSchema) {
-      logger.warning(`Not found endpoint: ${JSON.stringify(descriptor)}`);
+      logger.warning(`Not found endpoint: ${JSON.stringify(endpointDescriptor)}`);
       return openAPIFile;
     }
 
@@ -57,7 +46,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
     });
 
     if (targetParameterIndex === -1 || typeof targetParameterIndex !== 'number') {
-      logger.warning(`Not found parameter: ${JSON.stringify(descriptor)}`);
+      logger.warning(`Not found parameter: ${JSON.stringify(endpointDescriptor)}`);
       return openAPIFile;
     }
 

@@ -4,7 +4,7 @@ import { forEachOperation } from '../base/utils/iterators';
 import deepmerge from 'deepmerge';
 import { OpenAPIFileT } from '../../openapi';
 import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
-import { normalizeMethod } from '../base/utils/normilizers';
+import { normalizeMethod, normalizeParameterIn } from '../base/utils/normilizers';
 import {patchSchema, patchMethodConfigSchema, openAPISchemaConfigSchema} from '../base/utils/patch';
 
 const descriptorSchema = z
@@ -78,8 +78,6 @@ const findPathMethod = (openAPIFile: OpenAPIFileT, path: string, method: string)
 
   return (targetMethod as HttpMethods) || null;
 };
-
-const normalizeParameterIn = (parameterIn: string): string => parameterIn.toLowerCase();
 
 const findParameterIndex = (parameters: PathItemObject['parameters'], parameterName: string, parameterIn: string): number | null => {
   const index = parameters?.findIndex((parameter) => {
