@@ -6,6 +6,7 @@ type AnySchemaObject = z.infer<typeof openAPISchemaConfigSchema>;
 
 type SchemaCallbackT = (schema: AnySchemaObject) => void;
 
+// TODO iterator creator
 export const forEachSchema = (openAPIFile: OpenAPIFileT, callback: SchemaCallbackT) => {
   const stack: Array<AnySchemaObject | null | undefined> = [];
 

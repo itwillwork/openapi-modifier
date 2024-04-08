@@ -6,9 +6,6 @@ import fs from 'fs';
 import YAML from 'yaml';
 import deepmerge from 'deepmerge';
 
-type PathItemObject = OpenAPIV3.PathItemObject | OpenAPIV3_1.PathItemObject;
-type HttpMethods = OpenAPIV3.HttpMethods | OpenAPIV3_1.HttpMethods;
-
 const configSchema = z.object({
   path: z.string().optional(),
 });

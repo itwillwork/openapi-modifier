@@ -13,9 +13,7 @@ import {
     parameterDescriptorConfigSchema,
 } from '../common/config';
 import {normalizeMethod} from '../common/utils/normilizers';
-
-type PathItemObject = OpenAPIV3.PathItemObject | OpenAPIV3_1.PathItemObject;
-type HttpMethods = OpenAPIV3.HttpMethods | OpenAPIV3_1.HttpMethods;
+import {HttpMethods, PathItemObject} from "../common/openapi-models";
 
 const configSchema = z.object({
     endpointDescriptor: endpointDescriptorConfigSchema.optional(),
@@ -43,18 +41,25 @@ const processor: RuleProcessorT<typeof configSchema> = {
         // @ts-expect-error bad OpenApi types
         const pathObj: PathItemObject = openAPIFile?.document?.paths?.[endpointDescriptor.path];
 
-        const targetMethod = Object.keys(pathObj || {}).find((pathMethod) => {
+        const methods = Object.keys(pathObj || {}) as Array<HttpMethods>;
+
+        const targetMethod = methods.find((pathMethod) => {
             return normalizeMethod(pathMethod) === normalizeMethod(endpointDescriptor.method);
         });
 
-        const endpointSchema = pathObj[targetMethod as HttpMethods];
+        if (!targetMethod) {
+            logger.warning(`Empty targetMethod, not found endpoint: ${JSON.stringify(endpointDescriptor)}`);
+            return openAPIFile;
+        }
+
+        const endpointSchema = pathObj[targetMethod];
         if (!endpointSchema) {
-            logger.warning(`Not found endpoint: ${JSON.stringify(endpointDescriptor)}`);
+            logger.warning(`Empty endpointSchema, not found endpoint: ${JSON.stringify(endpointDescriptor)}`);
             return openAPIFile;
         }
 
         if (!parameterDescriptor) {
-            logger.warning(`Empty parameterDescriptor: ${JSON.stringify(parameterDescriptor)}`);
+            logger.warning(`Empty parameterDescriptor, not found endpoint: ${JSON.stringify(parameterDescriptor)}`);
             return openAPIFile;
         }
 

@@ -1,11 +1,9 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
-import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
+import {OpenAPIV2, OpenAPIV3, OpenAPIV3_1} from 'openapi-types';
 import {endpointDescriptorConfigSchema, parameterDescriptorConfigSchema} from "../common/config";
 import { normalizeMethod} from '../common/utils/normilizers';
-
-type PathItemObject = OpenAPIV3.PathItemObject | OpenAPIV3_1.PathItemObject;
-type HttpMethods = OpenAPIV3.HttpMethods | OpenAPIV3_1.HttpMethods;
+import {HttpMethods, PathItemObject} from "../common/openapi-models";
 
 const configSchema = z.object({
   endpointDescriptor: endpointDescriptorConfigSchema.optional(),
@@ -26,11 +24,19 @@ const processor: RuleProcessorT<typeof configSchema> = {
     // @ts-expect-error bad OpenApi types
     const pathObj: PathItemObject = openAPIFile?.document?.paths?.[endpointDescriptor.path];
 
-    const targetMethod = Object.keys(pathObj || {}).find((pathMethod) => {
+    const methods = Object.keys(pathObj || {}) as Array<HttpMethods>
+    const targetMethod = methods.find((pathMethod) => {
       return normalizeMethod(pathMethod) === normalizeMethod(endpointDescriptor.method);
     });
 
-    const endpointSchema = pathObj[targetMethod as HttpMethods];
+    if (!targetMethod) {
+      logger.warning(`Not found method: ${JSON.stringify(endpointDescriptor)}`);
+      return openAPIFile;
+    } else {
+      logger.trace(`targetMethod: ${targetMethod}`);
+    }
+
+    const endpointSchema = pathObj[targetMethod];
     if (!endpointSchema) {
       logger.warning(`Not found endpoint: ${JSON.stringify(endpointDescriptor)}`);
       return openAPIFile;

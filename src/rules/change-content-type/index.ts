@@ -19,6 +19,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
       usageCount[contentType] = (usageCount[contentType] || 0) + 1;
     };
 
+    // TODO use iterator
     Object.keys(openAPIFile.document?.paths || {}).forEach((pathName) => {
       Object.keys(openAPIFile.document?.paths?.[pathName] || {}).forEach((method) => {
         // @ts-expect-error bad open api types
