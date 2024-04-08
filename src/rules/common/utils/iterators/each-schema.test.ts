@@ -1,6 +1,6 @@
-import { forEachSchemas, forEachOperation } from './iterators';
+import { forEachSchema } from './each-schema';
 
-describe('forEachSchemas', () => {
+describe('forEachSchema', () => {
   test('regular', () => {
     const fakeLogger = global.createFakeLogger();
     const callback = jest.fn(() => {});
@@ -79,29 +79,9 @@ describe('forEachSchemas', () => {
       },
     });
 
-    forEachSchemas(fakeOpenAPIFile, callback);
+    forEachSchema(fakeOpenAPIFile, callback);
 
     expect(callback).toBeCalledTimes(12);
   });
 });
 
-describe('forEachOperation', () => {
-  test('regular', () => {
-    const fakeLogger = global.createFakeLogger();
-    const callback = jest.fn(() => {});
-    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
-      paths: {
-        '/api/v1/pets': {
-          post: {
-            description: '',
-            responses: {},
-          },
-        },
-      },
-    });
-
-    forEachOperation(fakeOpenAPIFile, callback);
-
-    expect(callback).toBeCalledTimes(1);
-  });
-});

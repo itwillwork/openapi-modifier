@@ -1,15 +1,12 @@
-import { OpenAPIFileT } from '../../../openapi';
+import { OpenAPIFileT } from '../../../../openapi';
 import { z } from 'zod';
-import {openAPISchemaConfigSchema} from "../config";
+import {openAPISchemaConfigSchema} from "../../config";
 
 type AnySchemaObject = z.infer<typeof openAPISchemaConfigSchema>;
 
-// TODO remove any
-type OperationSchema = any;
-
 type SchemaCallbackT = (schema: AnySchemaObject) => void;
 
-export const forEachSchemas = (openAPIFile: OpenAPIFileT, callback: SchemaCallbackT) => {
+export const forEachSchema = (openAPIFile: OpenAPIFileT, callback: SchemaCallbackT) => {
   const stack: Array<AnySchemaObject | null | undefined> = [];
 
   // forEach - components.schemas[name]
@@ -87,19 +84,3 @@ export const forEachSchemas = (openAPIFile: OpenAPIFileT, callback: SchemaCallba
   }
 };
 
-type OperationCallbackT = (operationSchema: OperationSchema) => void;
-
-export const forEachOperation = (openAPIFile: OpenAPIFileT, callback: OperationCallbackT) => {
-  const paths = openAPIFile.document?.paths;
-
-  Object.keys(paths || {}).forEach((pathKey) => {
-    const path = paths?.[pathKey];
-
-    Object.keys(path || {}).forEach((method) => {
-      // @ts-expect-error bad OpenAPI types!
-      const operation = path?.[method];
-
-      callback(operation);
-    });
-  });
-};

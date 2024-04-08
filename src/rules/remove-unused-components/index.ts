@@ -1,7 +1,7 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
 import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
-import { forEachSchemas } from '../common/utils/iterators';
+import { forEachSchema } from '../common/utils/iterators/each-schema';
 
 type ComponentsObject = OpenAPIV3.ComponentsObject | OpenAPIV3_1.ComponentsObject;
 
@@ -29,7 +29,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
         });
       });
 
-      forEachSchemas(openAPIFile, (schema) => {
+      forEachSchema(openAPIFile, (schema) => {
         if ('$ref' in schema) {
           const shortenedRef = shortenRef(schema['$ref']);
 

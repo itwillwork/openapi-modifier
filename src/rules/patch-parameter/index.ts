@@ -1,6 +1,6 @@
 import {RuleProcessorT} from '../../core/rules/processor-models';
 import {string, z} from 'zod';
-import {forEachOperation} from '../common/utils/iterators';
+import {forEachOperation} from '../common/utils/iterators/each-operation';
 import deepmerge from 'deepmerge';
 import {OpenAPIFileT} from '../../openapi';
 import {OpenAPIV3, OpenAPIV3_1} from 'openapi-types';
