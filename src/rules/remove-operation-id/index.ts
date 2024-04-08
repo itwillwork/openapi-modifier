@@ -15,11 +15,11 @@ const processor: RuleProcessorT<typeof configSchema> = {
     const ignoreOperationIds = config.ignore;
     const usageIgnoreOperationIds: Array<number> = [];
 
-    forEachOperation(openAPIFile, (operation) => {
-      if (operation?.operationId) {
-        const ignoreOperationIdIndex = ignoreOperationIds.indexOf(operation.operationId);
+    forEachOperation(openAPIFile, ({ operationSchema }) => {
+      if (operationSchema?.operationId) {
+        const ignoreOperationIdIndex = ignoreOperationIds.indexOf(operationSchema.operationId);
         if (ignoreOperationIdIndex === -1) {
-          delete operation.operationId;
+          delete operationSchema.operationId;
         } else {
           usageIgnoreOperationIds[ignoreOperationIdIndex] = (usageIgnoreOperationIds[ignoreOperationIdIndex] || 0) + 1;
         }

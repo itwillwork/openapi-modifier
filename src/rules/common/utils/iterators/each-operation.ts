@@ -3,7 +3,13 @@ import {HttpMethods, OperationObject} from "../../openapi-models";
 
 type OperationSchema = OperationObject;
 
-type OperationCallbackT = (operationSchema: OperationSchema) => void;
+type OperationCallbackParamsT = {
+    operationSchema: OperationSchema;
+    method: HttpMethods;
+    path: string;
+}
+
+type OperationCallbackT = (params: OperationCallbackParamsT) => void;
 
 // TODO iterator creator
 export const forEachOperation = (openAPIFile: OpenAPIFileT, callback: OperationCallbackT) => {
@@ -14,10 +20,14 @@ export const forEachOperation = (openAPIFile: OpenAPIFileT, callback: OperationC
 
         const methods = Object.keys(path || {}) as Array<HttpMethods>
         methods.forEach((method) => {
-            const operation = path?.[method];
+            const operationSchema = path?.[method];
 
-            if (operation) {
-                callback(operation);
+            if (operationSchema) {
+                callback({
+                    operationSchema,
+                    method,
+                    path: pathKey,
+                });
             }
         });
     });
