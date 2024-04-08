@@ -4,6 +4,7 @@ import {OpenAPIV2, OpenAPIV3, OpenAPIV3_1} from 'openapi-types';
 import {endpointDescriptorConfigSchema, parameterDescriptorConfigSchema} from "../common/config";
 import { normalizeMethod} from '../common/utils/normilizers';
 import {HttpMethods, PathItemObject} from "../common/openapi-models";
+import {getOperationSchema} from "../common/utils/get-operation-schema";
 
 const configSchema = z.object({
   endpointDescriptor: endpointDescriptorConfigSchema.optional(),
@@ -21,22 +22,9 @@ const processor: RuleProcessorT<typeof configSchema> = {
       return openAPIFile;
     }
 
-    const pathObjSchema = openAPIFile?.document?.paths?.[endpointDescriptor.path];
-    const methods = Object.keys(pathObjSchema || {}) as Array<HttpMethods>
-    const targetMethod = methods.find((pathMethod) => {
-      return normalizeMethod(pathMethod) === normalizeMethod(endpointDescriptor.method);
-    });
-
-    if (!targetMethod) {
-      logger.warning(`Not found method: ${JSON.stringify(endpointDescriptor)}`);
-      return openAPIFile;
-    } else {
-      logger.trace(`targetMethod: ${targetMethod}`);
-    }
-
-    const endpointSchema = pathObjSchema?.[targetMethod];
-    if (!endpointSchema) {
-      logger.warning(`Not found endpoint: ${JSON.stringify(endpointDescriptor)}`);
+    const operationSchema = getOperationSchema(openAPIFile, endpointDescriptor.path, endpointDescriptor.method);
+    if (!operationSchema) {
+      logger.warning(`Not found operation: ${JSON.stringify(endpointDescriptor)}`);
       return openAPIFile;
     }
 
@@ -45,7 +33,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
       return openAPIFile;
     }
 
-    const targetParameterIndex = endpointSchema.parameters?.findIndex((parameter) => {
+    const targetParameterIndex = operationSchema.parameters?.findIndex((parameter) => {
       return 'name' in parameter && parameter.name === parameterDescriptor?.name && parameter.in === parameterDescriptor?.in;
     });
 
@@ -54,7 +42,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
       return openAPIFile;
     }
 
-    endpointSchema.parameters?.splice(targetParameterIndex, 1);
+    operationSchema.parameters?.splice(targetParameterIndex, 1);
 
     return openAPIFile;
   },

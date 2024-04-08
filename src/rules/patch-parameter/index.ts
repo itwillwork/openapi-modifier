@@ -14,6 +14,9 @@ import {
 } from '../common/config';
 import {normalizeMethod} from '../common/utils/normilizers';
 import {HttpMethods, PathItemObject} from "../common/openapi-models";
+import {getOperationSchema} from "../common/utils/get-operation-schema";
+import {findParameterIndex} from "../common/utils/find-parameter-index";
+import {checkIsRefSchema} from "../common/utils/refs";
 
 const configSchema = z.object({
     endpointDescriptor: endpointDescriptorConfigSchema.optional(),
@@ -38,21 +41,9 @@ const processor: RuleProcessorT<typeof configSchema> = {
             return openAPIFile;
         }
 
-        const pathObjSchema = openAPIFile?.document?.paths?.[endpointDescriptor.path];
-        const methods = Object.keys(pathObjSchema || {}) as Array<HttpMethods>;
-
-        const targetMethod = methods.find((pathMethod) => {
-            return normalizeMethod(pathMethod) === normalizeMethod(endpointDescriptor.method);
-        });
-
-        if (!targetMethod) {
-            logger.warning(`Empty targetMethod, not found endpoint: ${JSON.stringify(endpointDescriptor)}`);
-            return openAPIFile;
-        }
-
-        const endpointSchema = pathObjSchema?.[targetMethod];
-        if (!endpointSchema) {
-            logger.warning(`Empty endpointSchema, not found endpoint: ${JSON.stringify(endpointDescriptor)}`);
+        const operationSchema = getOperationSchema(openAPIFile, endpointDescriptor.path, endpointDescriptor.method);
+        if (!operationSchema) {
+            logger.warning(`Empty operationSchema, not found endpoint: ${JSON.stringify(endpointDescriptor)}`);
             return openAPIFile;
         }
 
@@ -61,37 +52,40 @@ const processor: RuleProcessorT<typeof configSchema> = {
             return openAPIFile;
         }
 
-        const targetParameter = endpointSchema.parameters?.find((parameter) => {
-            return 'name' in parameter && parameter.name === parameterDescriptor?.name && parameter.in === parameterDescriptor?.in;
-        });
-
-        if (!targetParameter) {
+        const targetParameterIndex = findParameterIndex(operationSchema.parameters, parameterDescriptor?.name, parameterDescriptor?.in);
+        if (targetParameterIndex === null) {
             logger.warning(`Not found parameter: ${JSON.stringify(endpointDescriptor)}`);
             return openAPIFile;
         }
 
-        if ('$ref' in targetParameter) {
+        const targetParameterSchema = operationSchema.parameters?.[targetParameterIndex]
+        if (!targetParameterSchema) {
+            logger.warning(`Not found parameter: ${JSON.stringify(endpointDescriptor)}`);
+            return openAPIFile;
+        }
+
+        if (checkIsRefSchema(targetParameterSchema)) {
             logger.warning(`Descriptor should not refer to links: ${JSON.stringify(endpointDescriptor)}`);
             return openAPIFile;
         }
 
-        targetParameter.schema = patchSchema(
+        targetParameterSchema.schema = patchSchema(
             logger,
-            targetParameter.schema,
+            targetParameterSchema.schema,
             patchMethod,
             schemaDiff,
         );
 
         if (objectDiff?.name !== undefined) {
-            targetParameter.name = objectDiff.name;
+            targetParameterSchema.name = objectDiff.name;
         }
 
         if (objectDiff?.in !== undefined) {
-            targetParameter.in = objectDiff.in;
+            targetParameterSchema.in = objectDiff.in;
         }
 
         if (objectDiff?.required !== undefined) {
-            targetParameter.required = objectDiff.required;
+            targetParameterSchema.required = objectDiff.required;
         }
 
         return openAPIFile;

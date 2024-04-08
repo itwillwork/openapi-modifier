@@ -19,23 +19,20 @@ const processor: RuleProcessorT<typeof configSchema> = {
       usageCount[fromPrefix] = (usageCount[fromPrefix] || 0) + 1;
     };
 
-    const paths = openAPIFile.document?.paths;
+    const pathsSchema = openAPIFile.document?.paths;
 
-    Object.keys(paths || {}).forEach((pathKey) => {
+    Object.keys(pathsSchema || {}).forEach((pathKey) => {
       Object.keys(map).forEach((fromPrefix) => {
         const toPrefix = map[fromPrefix] || '';
-
-        const path = paths?.[pathKey];
 
         if (pathKey.startsWith(fromPrefix)) {
           increaseUsageCount(fromPrefix);
 
           const preparedPath = pathKey.replace(fromPrefix, toPrefix);
 
-          // TODO refactoring
-          if (paths) {
-            paths[preparedPath] = paths[pathKey];
-            delete paths[pathKey];
+          if (pathsSchema) {
+            pathsSchema[preparedPath] = pathsSchema[pathKey];
+            delete pathsSchema[pathKey];
           }
         }
       });
