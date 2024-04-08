@@ -1,6 +1,6 @@
 import processor from './index';
 
-describe('make-required-parameter rule', () => {
+describe('remove-parameter rule', () => {
   test('regular', () => {
     const fakeLogger = global.createFakeLogger();
     const fakeOpenAPIFile = global.createFakeOpenAPIFile({

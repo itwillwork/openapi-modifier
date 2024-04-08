@@ -1,4 +1,4 @@
-## make-required-parameter
+## patch-parameter
 
 Делает параметр обязательным в endpoint'е
 
@@ -24,24 +24,27 @@
         name: "filter",
         in: "query",
     }
+    patchMethod: 
 }
 ```
 
 ### Пример использования
 
-**В конфиге** `openapi-modifier-config.js` добавьте правило `make-required-parameter`:
+**В конфиге** `openapi-modifier-config.js` добавьте правило `patch-parameter`:
 
 ```json
 module.exports = {
   "rule": {
     descriptor: {
       path: "/pets",
-      method: "GET",
+      method: "GET"
     },
     parameterDescriptor: {
       name: "filter",
-      in: "query",
+      in: "query"
     },
+    "patchMethod": "",
+    "scr"
   }
 }
 ```

@@ -1,4 +1,4 @@
-import { forEachSchemas, forEachOperation } from './utils';
+import { forEachSchemas, forEachOperation } from './iterators';
 
 describe('forEachSchemas', () => {
   test('regular', () => {

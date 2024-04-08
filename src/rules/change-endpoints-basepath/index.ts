@@ -1,6 +1,6 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
-import { forEachSchemas } from '../base/utils';
+import { forEachSchemas } from '../base/utils/iterators';
 
 const configSchema = z.object({
   map: z.record(z.string(), z.string()),

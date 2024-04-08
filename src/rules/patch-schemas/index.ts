@@ -1,9 +1,11 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { string, z } from 'zod';
-import { forEachOperation } from '../base/utils';
+import { forEachOperation } from '../base/utils/iterators';
 import deepmerge from 'deepmerge';
 import { OpenAPIFileT } from '../../openapi';
 import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
+import { normalizeMethod } from '../base/utils/normilizers';
+import {patchSchema, patchMethodConfigSchema, openAPISchemaConfigSchema} from '../base/utils/patch';
 
 const descriptorSchema = z
   .object({
@@ -46,15 +48,11 @@ const descriptorSchema = z
 
 type Descriptor = z.infer<typeof descriptorSchema>;
 
-const methodSchema = z.union([z.literal('merge'), z.literal('replace')]).optional();
-
-type Method = z.infer<typeof methodSchema>;
-
 const configSchema = z.array(
   z.object({
-    method: methodSchema,
+    patchMethod: patchMethodConfigSchema,
     descriptor: descriptorSchema,
-    schemaDiff: z.any(),
+    schemaDiff: openAPISchemaConfigSchema,
   })
 );
 
@@ -69,8 +67,6 @@ paths[name][method]
 type Schema = any;
 type PathItemObject = OpenAPIV3.PathItemObject | OpenAPIV3_1.PathItemObject;
 type HttpMethods = OpenAPIV3.HttpMethods | OpenAPIV3_1.HttpMethods;
-
-const normalizeMethod = (rawMethod: string): string => rawMethod.toLowerCase();
 
 const findPathMethod = (openAPIFile: OpenAPIFileT, path: string, method: string): HttpMethods | null => {
   // @ts-expect-error bad OpenApi types
@@ -98,36 +94,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
   defaultConfig: [],
   processDocument: (openAPIFile, config, logger) => {
     config.forEach((configItem) => {
-      const { descriptor, method, schemaDiff } = configItem;
-
-      const patchSchema = (sourceSchema: Schema, method: Method, ...otherSchemas: Array<Schema>) => {
-        if (!otherSchemas?.length) {
-          return sourceSchema;
-        }
-
-        return otherSchemas.reduce((acc, otherSchema) => {
-          switch (method) {
-            case 'merge': {
-              return deepmerge(sourceSchema, otherSchema);
-              break;
-            }
-            case 'replace': {
-              return {
-                ...acc,
-                ...otherSchema,
-              };
-              break;
-            }
-            default: {
-              logger.warning(`Unknown method type: ${method}`);
-              return acc;
-              break;
-            }
-          }
-
-          return acc;
-        }, sourceSchema);
-      };
+      const { descriptor, patchMethod, schemaDiff } = configItem;
 
       switch (descriptor.type) {
         case 'component-schema': {
@@ -135,7 +102,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
           const componentSchemas = openAPIFile?.document?.components?.schemas;
           if (componentSchemas?.[componentName]) {
-            componentSchemas[componentName] = patchSchema(componentSchemas[componentName], method, schemaDiff);
+            componentSchemas[componentName] = patchSchema(logger, componentSchemas[componentName], patchMethod, schemaDiff);
           } else {
             logger.warning(`Not found component with descriptor: ${JSON.stringify(descriptor)}!`);
           }
@@ -154,7 +121,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
           const endpointSchema = pathObj[targetMethod];
           if (endpointSchema) {
-            pathObj[targetMethod] = patchSchema(endpointSchema, method, schemaDiff);
+            pathObj[targetMethod] = patchSchema(logger, endpointSchema, patchMethod, schemaDiff);
           } else {
             logger.warning(`Not found endpoint (same method) with descriptor: ${JSON.stringify(descriptor)}!`);
           }
@@ -185,9 +152,10 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
           // @ts-expect-error bad open api types
           endpointSchema.parameters[parameterIndex].schema = patchSchema(
+              logger,
             // @ts-expect-error bad open api types
             endpointSchema.parameters[parameterIndex].schema,
-            method,
+              patchMethod,
             schemaDiff
           );
 
@@ -216,7 +184,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
             break;
           }
 
-          responseContentSchema.schema = patchSchema(responseContentSchema.schema, method, schemaDiff);
+          responseContentSchema.schema = patchSchema(logger, responseContentSchema.schema, patchMethod, schemaDiff);
 
           break;
         }
@@ -243,7 +211,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
             break;
           }
 
-          requestBodyContentSchema.schema = patchSchema(requestBodyContentSchema.schema, method, schemaDiff);
+          requestBodyContentSchema.schema = patchSchema(logger, requestBodyContentSchema.schema, patchMethod, schemaDiff);
 
           break;
         }

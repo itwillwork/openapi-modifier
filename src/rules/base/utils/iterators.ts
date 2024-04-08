@@ -1,4 +1,4 @@
-import { OpenAPIFileT } from '../../openapi';
+import { OpenAPIFileT } from '../../../openapi';
 
 // TODO remove any
 type AnySchemaObject = any;

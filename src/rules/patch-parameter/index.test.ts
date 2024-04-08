@@ -1,6 +1,6 @@
 import processor from './index';
 
-describe('make-required-parameter rule', () => {
+describe('patch-parameter rule', () => {
   test('regular', () => {
     const fakeLogger = global.createFakeLogger();
     const fakeOpenAPIFile = global.createFakeOpenAPIFile({
@@ -36,6 +36,14 @@ describe('make-required-parameter rule', () => {
             name: 'filter',
             in: 'query',
           },
+          patchMethod: 'merge',
+          schemaDiff: {
+            format: "double"
+          },
+          objectDiff: {
+            in: 'path',
+            required: true,
+          }
         },
         fakeLogger
       )
@@ -49,11 +57,11 @@ describe('make-required-parameter rule', () => {
               summary: 'List all pets',
               parameters: [
                 {
-                  in: 'query',
+                  in: 'path',
                   name: 'filter',
                   required: true,
                   schema: {
-                    format: 'int64',
+                    format: 'double',
                     type: 'integer',
                   },
                 },
