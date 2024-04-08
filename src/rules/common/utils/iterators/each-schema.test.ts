@@ -6,6 +6,38 @@ describe('forEachSchema', () => {
     const callback = jest.fn(() => {});
     const fakeOpenAPIFile = global.createFakeOpenAPIFile({
       components: {
+        requestBodies: {
+          TestRequestBody: {
+            content: {
+              'multipart/form-data': {
+                schema: {
+                  type: 'number',
+                },
+              },
+            }
+          }
+        },
+        parameters: {
+          TestParameter: {
+            name: "test",
+            in: "path",
+            schema: {
+              type: 'number',
+            }
+          }
+        },
+        responses: {
+          '200': {
+            description: '',
+            content: {
+              'multipart/form-data': {
+                schema: {
+                  type: 'number',
+                },
+              },
+            }
+          }
+        },
         schemas: {
           TestSchemaDTO: {
             type: 'string',
@@ -81,7 +113,7 @@ describe('forEachSchema', () => {
 
     forEachSchema(fakeOpenAPIFile, callback);
 
-    expect(callback).toBeCalledTimes(12);
+    expect(callback).toBeCalledTimes(15);
   });
 });
 

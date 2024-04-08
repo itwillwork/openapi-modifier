@@ -18,6 +18,46 @@ export const forEachSchema = (openAPIFile: OpenAPIFileT, callback: SchemaCallbac
         stack.push(schema);
     });
 
+    // forEach - components.parameters[name].schema
+    Object.keys(openAPIFile.document?.components?.parameters || {}).forEach((name) => {
+        const parameterSchema = openAPIFile.document?.components?.parameters?.[name];
+        if (checkIsRefSchema(parameterSchema)) {
+            stack.push(parameterSchema);
+        } else {
+            stack.push(parameterSchema?.schema);
+        }
+    });
+
+    // forEach - components.requestBodies[name].content.[contentType].schema
+    Object.keys(openAPIFile.document?.components?.requestBodies || {}).forEach((name) => {
+        const requestBodySchema = openAPIFile.document?.components?.requestBodies?.[name];
+
+        if (checkIsRefSchema(requestBodySchema)) {
+            stack.push(requestBodySchema);
+        } else {
+            Object.keys(requestBodySchema?.content || {}).forEach((contentType) => {
+                const responseContentSchema = requestBodySchema?.content?.[contentType]?.schema;
+
+                stack.push(responseContentSchema);
+            });
+        }
+    });
+
+    // forEach - components.responses[code].content.[contentType].schema
+    Object.keys(openAPIFile.document?.components?.responses || {}).forEach((code) => {
+        const responsesCodeSchema = openAPIFile.document?.components?.responses?.[code];
+
+        if (checkIsRefSchema(responsesCodeSchema)) {
+            stack.push(responsesCodeSchema);
+        } else {
+            Object.keys(responsesCodeSchema?.content || {}).forEach((contentType) => {
+                const responseContentSchema = responsesCodeSchema?.content?.[contentType]?.schema;
+
+                stack.push(responseContentSchema);
+            });
+        }
+    });
+
     Object.keys(openAPIFile.document?.paths || {}).forEach((pathName) => {
         const pathObjSchema = openAPIFile.document?.paths?.[pathName];
         const methods = Object.keys(pathObjSchema || {}) as Array<HttpMethods>;
