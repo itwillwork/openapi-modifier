@@ -7,6 +7,8 @@ import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
 import { normalizeMethod, normalizeParameterIn } from '../common/utils/normilizers';
 import {patchSchema} from '../common/utils/patch';
 import { patchMethodConfigSchema, openAPISchemaConfigSchema } from '../common/config';
+import {HttpMethods, PathItemObject, SchemaObject, ReferenceObject} from "../common/openapi-models";
+import {checkIsRefSchema} from "../common/utils/refs";
 
 const descriptorSchema = z
   .object({
@@ -65,19 +67,15 @@ paths[name][method].requestBody.content[contentType].schema
 paths[name][method]
  */
 
-type Schema = any;
-type PathItemObject = OpenAPIV3.PathItemObject | OpenAPIV3_1.PathItemObject;
-type HttpMethods = OpenAPIV3.HttpMethods | OpenAPIV3_1.HttpMethods;
-
 const findPathMethod = (openAPIFile: OpenAPIFileT, path: string, method: string): HttpMethods | null => {
-  // @ts-expect-error bad OpenApi types
-  const pathObj: PathItemObject = openAPIFile?.document?.paths?.[path];
+  const pathObj = openAPIFile?.document?.paths?.[path];
+  const methods = Object.keys(pathObj || {}) as Array<HttpMethods>;
 
-  const targetMethod = Object.keys(pathObj || {}).find((pathMethod) => {
+  const targetMethod = methods.find((pathMethod) => {
     return normalizeMethod(pathMethod) === normalizeMethod(method);
   });
 
-  return (targetMethod as HttpMethods) || null;
+  return targetMethod || null;
 };
 
 const findParameterIndex = (parameters: PathItemObject['parameters'], parameterName: string, parameterIn: string): number | null => {
@@ -115,10 +113,9 @@ const processor: RuleProcessorT<typeof configSchema> = {
             break;
           }
 
-          // @ts-expect-error bad OpenApi types
-          const pathObj: PathItemObject = openAPIFile?.document?.paths?.[descriptor.path];
+          const pathObj = openAPIFile?.document?.paths?.[descriptor.path];
 
-          const endpointSchema = pathObj[targetMethod];
+          const endpointSchema = pathObj?.[targetMethod];
           if (endpointSchema) {
             pathObj[targetMethod] = patchSchema(logger, endpointSchema, patchMethod, schemaDiff);
           } else {
@@ -134,10 +131,9 @@ const processor: RuleProcessorT<typeof configSchema> = {
             break;
           }
 
-          // @ts-expect-error bad OpenApi types
-          const pathObj: PathItemObject = openAPIFile?.document?.paths?.[descriptor.path];
+          const pathObj = openAPIFile?.document?.paths?.[descriptor.path];
 
-          const endpointSchema = pathObj[targetMethod];
+          const endpointSchema = pathObj?.[targetMethod];
           if (!endpointSchema) {
             logger.warning(`Not found endpoint (same path) with descriptor: ${JSON.stringify(descriptor)}!`);
             break;
@@ -149,14 +145,15 @@ const processor: RuleProcessorT<typeof configSchema> = {
             break;
           }
 
-          // @ts-expect-error bad open api types
-          endpointSchema.parameters[parameterIndex].schema = patchSchema(
-              logger,
-            // @ts-expect-error bad open api types
-            endpointSchema.parameters[parameterIndex].schema,
-              patchMethod,
-            schemaDiff
-          );
+          const paramater = endpointSchema.parameters?.[parameterIndex];
+          if (paramater && !checkIsRefSchema(paramater)) {
+            paramater.schema = patchSchema(
+                logger,
+                paramater.schema,
+                patchMethod,
+                schemaDiff
+            );
+          }
 
           break;
         }
@@ -167,17 +164,21 @@ const processor: RuleProcessorT<typeof configSchema> = {
             break;
           }
 
-          // @ts-expect-error bad OpenApi types
-          const pathObj: PathItemObject = openAPIFile?.document?.paths?.[descriptor.path];
+          const pathObj = openAPIFile?.document?.paths?.[descriptor.path];
 
-          const endpointSchema = pathObj[targetMethod];
+          const endpointSchema = pathObj?.[targetMethod];
           if (!endpointSchema) {
             logger.warning(`Not found endpoint (same method) with descriptor: ${JSON.stringify(descriptor)}!`);
             break;
           }
 
-          // @ts-expect-error bad OpenApi types
-          const responseContentSchema = endpointSchema.responses[descriptor.code]?.content?.[descriptor.contentType] || null;
+          const responseSchema = endpointSchema.responses[descriptor.code];
+          if (checkIsRefSchema(responseSchema)) {
+            logger.warning(`responseSchema is ref: ${JSON.stringify(descriptor)}!`);
+            break;
+          }
+
+          const responseContentSchema = responseSchema?.content?.[descriptor.contentType] || null;
           if (!responseContentSchema) {
             logger.warning(`Not found endpoint (same code and contentType) with descriptor: ${JSON.stringify(descriptor)}!`);
             break;
@@ -194,17 +195,20 @@ const processor: RuleProcessorT<typeof configSchema> = {
             break;
           }
 
-          // @ts-expect-error bad OpenApi types
-          const pathObj: PathItemObject = openAPIFile?.document?.paths?.[descriptor.path];
+          const pathObj = openAPIFile?.document?.paths?.[descriptor.path];
 
-          const endpointSchema = pathObj[targetMethod];
+          const endpointSchema = pathObj?.[targetMethod];
           if (!endpointSchema) {
             logger.warning(`Not found endpoint (same path) with descriptor: ${JSON.stringify(descriptor)}!`);
             break;
           }
 
-          // @ts-expect-error bad OpenApi types
-          const requestBodyContentSchema = endpointSchema?.requestBody?.content?.[descriptor.contentType] || null;
+          const requestBodySchema = endpointSchema?.requestBody;
+          if (checkIsRefSchema(requestBodySchema)) {
+            logger.warning(`requestBodySchema is ref: ${JSON.stringify(descriptor)}!`);
+            break;
+          }
+          const requestBodyContentSchema = requestBodySchema?.content?.[descriptor.contentType] || null;
           if (!requestBodyContentSchema) {
             logger.warning(`Not found endpoint (same requestBody) with descriptor: ${JSON.stringify(descriptor)}!`);
             break;

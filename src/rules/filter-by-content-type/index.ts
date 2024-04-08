@@ -1,6 +1,8 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
 import { forEachSchema } from '../common/utils/iterators/each-schema';
+import {HttpMethods} from "../common/openapi-models";
+import {checkIsRefSchema} from "../common/utils/refs";
 
 const configSchema = z.object({
   enabled: z.array(z.string()).optional(),
@@ -25,33 +27,37 @@ const processor: RuleProcessorT<typeof configSchema> = {
       usageCount[contentType] = (usageCount[contentType] || 0) + 1;
     };
 
-    // kekw each endpoint
     Object.keys(openAPIFile.document?.paths || {}).forEach((pathName) => {
-      Object.keys(openAPIFile.document?.paths?.[pathName] || {}).forEach((method) => {
-        // @ts-expect-error bad open api types
+      const pathObj = openAPIFile?.document?.paths?.[pathName];
+      const methods = Object.keys(pathObj || {}) as Array<HttpMethods>;
+
+      methods.forEach((method) => {
         const methodSchema = openAPIFile.document?.paths?.[pathName]?.[method];
 
         // forEach - paths[name][method].responses[code].content[contentType].schema
         const responses = methodSchema?.responses || {};
         Object.keys(responses).forEach((code) => {
           const responseSchema = responses[code];
-
-          Object.keys(responseSchema?.content).forEach((contentType) => {
-            if (responseSchema?.content?.[contentType] && !checkIsEnabledContentType(contentType)) {
-              delete responseSchema?.content?.[contentType];
-              increaseUsageCount(contentType);
-            }
-          });
+          if (!checkIsRefSchema(responseSchema)) {
+            Object.keys(responseSchema?.content || {}).forEach((contentType) => {
+              if (responseSchema?.content?.[contentType] && !checkIsEnabledContentType(contentType)) {
+                delete responseSchema?.content?.[contentType];
+                increaseUsageCount(contentType);
+              }
+            });
+          }
         });
 
         // forEach - paths[name][method].requestBody.content[contentType].schema
         const requestBody = methodSchema?.requestBody;
-        Object.keys(requestBody?.content || {}).forEach((contentType) => {
-          if (requestBody?.content?.[contentType] && !checkIsEnabledContentType(contentType)) {
-            delete requestBody?.content?.[contentType];
-            increaseUsageCount(contentType);
-          }
-        });
+        if (!checkIsRefSchema(requestBody)) {
+          Object.keys(requestBody?.content || {}).forEach((contentType) => {
+            if (requestBody?.content?.[contentType] && !checkIsEnabledContentType(contentType)) {
+              delete requestBody?.content?.[contentType];
+              increaseUsageCount(contentType);
+            }
+          });
+        }
       });
     });
 

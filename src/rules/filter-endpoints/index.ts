@@ -1,6 +1,7 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
 import {normalizeMethod} from "../common/utils/normilizers";
+import {HttpMethods} from "../common/openapi-models";
 
 const configSchema = z.object({
   enabled: z
@@ -64,7 +65,10 @@ const processor: RuleProcessorT<typeof configSchema> = {
     };
 
     Object.keys(openAPIFile.document?.paths || {}).forEach((pathName) => {
-      Object.keys(openAPIFile.document?.paths?.[pathName] || {}).forEach((method) => {
+      const pathObj = openAPIFile?.document?.paths?.[pathName];
+      const methods = Object.keys(pathObj || {}) as Array<HttpMethods>;
+
+      methods.forEach((method) => {
         const endpoint = normalizeEndpoint({
           path: pathName,
           method,
@@ -75,7 +79,6 @@ const processor: RuleProcessorT<typeof configSchema> = {
         const pathObj = openAPIFile?.document?.paths?.[pathName];
 
         if (!checkIsEnabledEndpoint(endpoint) && pathObj) {
-          // @ts-expect-error bad OpenAPI types!
           delete pathObj[method];
         }
       });

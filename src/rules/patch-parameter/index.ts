@@ -38,9 +38,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
             return openAPIFile;
         }
 
-        // @ts-expect-error bad OpenApi types
-        const pathObj: PathItemObject = openAPIFile?.document?.paths?.[endpointDescriptor.path];
-
+        const pathObj = openAPIFile?.document?.paths?.[endpointDescriptor.path];
         const methods = Object.keys(pathObj || {}) as Array<HttpMethods>;
 
         const targetMethod = methods.find((pathMethod) => {
@@ -52,7 +50,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
             return openAPIFile;
         }
 
-        const endpointSchema = pathObj[targetMethod];
+        const endpointSchema = pathObj?.[targetMethod];
         if (!endpointSchema) {
             logger.warning(`Empty endpointSchema, not found endpoint: ${JSON.stringify(endpointDescriptor)}`);
             return openAPIFile;
