@@ -77,9 +77,9 @@ describe('remove-parameter rule', () => {
             schema: {
               type: 'integer',
             },
-          }
+          },
         },
-      }
+      },
     });
 
     expect(
@@ -105,10 +105,10 @@ describe('remove-parameter rule', () => {
               schema: {
                 type: 'integer',
               },
-            }
+            },
           },
         },
-      }
+      },
     });
 
     expect(fakeLogger.warning).toBeCalledTimes(0);

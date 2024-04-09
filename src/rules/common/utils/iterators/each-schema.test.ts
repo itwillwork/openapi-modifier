@@ -14,17 +14,17 @@ describe('forEachSchema', () => {
                   type: 'number',
                 },
               },
-            }
-          }
+            },
+          },
         },
         parameters: {
           TestParameter: {
-            name: "test",
-            in: "path",
+            name: 'test',
+            in: 'path',
             schema: {
               type: 'number',
-            }
-          }
+            },
+          },
         },
         responses: {
           '200': {
@@ -35,8 +35,8 @@ describe('forEachSchema', () => {
                   type: 'number',
                 },
               },
-            }
-          }
+            },
+          },
         },
         schemas: {
           TestSchemaDTO: {
@@ -116,4 +116,3 @@ describe('forEachSchema', () => {
     expect(callback).toBeCalledTimes(15);
   });
 });
-

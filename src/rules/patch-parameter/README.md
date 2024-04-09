@@ -24,7 +24,7 @@
         name: "filter",
         in: "query",
     },
-    
+
 }
 ```
 

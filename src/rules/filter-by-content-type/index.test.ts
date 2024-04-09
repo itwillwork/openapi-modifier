@@ -84,20 +84,20 @@ describe('filter-by-content-type rule', () => {
                   type: 'object',
                 },
               },
-            }
-          }
+            },
+          },
         },
       },
     });
 
     expect(
-        processor.processDocument(
-            fakeOpenAPIFile,
-            {
-              disabled: ['multipart/form-data'],
-            },
-            fakeLogger
-        )
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          disabled: ['multipart/form-data'],
+        },
+        fakeLogger
+      )
     ).toEqual({
       ...fakeOpenAPIFile,
       document: {
@@ -111,8 +111,8 @@ describe('filter-by-content-type rule', () => {
                     type: 'object',
                   },
                 },
-              }
-            }
+              },
+            },
           },
         },
       },
@@ -146,13 +146,13 @@ describe('filter-by-content-type rule', () => {
     });
 
     expect(
-        processor.processDocument(
-            fakeOpenAPIFile,
-            {
-              disabled: ['multipart/form-data'],
-            },
-            fakeLogger
-        )
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          disabled: ['multipart/form-data'],
+        },
+        fakeLogger
+      )
     ).toEqual({
       ...fakeOpenAPIFile,
       document: {

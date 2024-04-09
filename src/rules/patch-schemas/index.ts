@@ -1,12 +1,12 @@
-import {RuleProcessorT} from '../../core/rules/processor-models';
-import {z} from 'zod';
-import {normalizeMethod} from '../common/utils/normilizers';
-import {patchSchema} from '../common/utils/patch';
-import {openAPISchemaConfigSchema, parameterInConfigSchema, patchMethodConfigSchema} from '../common/config';
-import {HttpMethods, PathItemObject} from "../common/openapi-models";
-import {checkIsRefSchema} from "../common/utils/refs";
-import {getOperationSchema} from "../common/utils/get-operation-schema";
-import {findParameterIndex} from "../common/utils/find-parameter-index";
+import { RuleProcessorT } from '../../core/rules/processor-models';
+import { z } from 'zod';
+import { normalizeMethod } from '../common/utils/normilizers';
+import { patchSchema } from '../common/utils/patch';
+import { openAPISchemaConfigSchema, parameterInConfigSchema, patchMethodConfigSchema } from '../common/config';
+import { HttpMethods, PathItemObject } from '../common/openapi-models';
+import { checkIsRefSchema } from '../common/utils/refs';
+import { getOperationSchema } from '../common/utils/get-operation-schema';
+import { findParameterIndex } from '../common/utils/find-parameter-index';
 
 const descriptorSchema = z
   .object({
@@ -113,12 +113,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
           const paramater = operationSchema.parameters?.[parameterIndex];
           if (paramater && !checkIsRefSchema(paramater)) {
-            paramater.schema = patchSchema(
-                logger,
-                paramater.schema,
-                patchMethod,
-                schemaDiff
-            );
+            paramater.schema = patchSchema(logger, paramater.schema, patchMethod, schemaDiff);
           }
 
           break;

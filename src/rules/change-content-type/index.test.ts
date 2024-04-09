@@ -78,22 +78,22 @@ describe('change-content-type rule', () => {
                   type: 'number',
                 },
               },
-            }
-          }
+            },
+          },
         },
-      }
+      },
     });
 
     expect(
-        processor.processDocument(
-            fakeOpenAPIFile,
-            {
-              map: {
-                '*/*': 'application/json',
-              },
-            },
-            fakeLogger
-        )
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          map: {
+            '*/*': 'application/json',
+          },
+        },
+        fakeLogger
+      )
     ).toEqual({
       ...fakeOpenAPIFile,
       document: {
@@ -107,10 +107,10 @@ describe('change-content-type rule', () => {
                     type: 'number',
                   },
                 },
-              }
-            }
+              },
+            },
           },
-        }
+        },
       },
     });
 
@@ -130,22 +130,22 @@ describe('change-content-type rule', () => {
                   type: 'number',
                 },
               },
-            }
-          }
+            },
+          },
         },
-      }
+      },
     });
 
     expect(
-        processor.processDocument(
-            fakeOpenAPIFile,
-            {
-              map: {
-                '*/*': 'application/json',
-              },
-            },
-            fakeLogger
-        )
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          map: {
+            '*/*': 'application/json',
+          },
+        },
+        fakeLogger
+      )
     ).toEqual({
       ...fakeOpenAPIFile,
       document: {
@@ -160,10 +160,10 @@ describe('change-content-type rule', () => {
                     type: 'number',
                   },
                 },
-              }
-            }
+              },
+            },
           },
-        }
+        },
       },
     });
 

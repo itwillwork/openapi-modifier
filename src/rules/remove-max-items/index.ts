@@ -1,7 +1,7 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
 import { forEachSchema } from '../common/utils/iterators/each-schema';
-import {checkIsRefSchema} from "../common/utils/refs";
+import { checkIsRefSchema } from '../common/utils/refs';
 
 const configSchema = z.object({});
 
