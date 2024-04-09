@@ -19,6 +19,8 @@ const processor: RuleProcessorT<typeof configSchema> = {
       usageCount[fromPrefix] = (usageCount[fromPrefix] || 0) + 1;
     };
 
+    logger.trace(`Check paths ..`);
+
     const pathsSchema = openAPIFile.document?.paths;
 
     Object.keys(pathsSchema || {}).forEach((pathKey) => {
@@ -26,6 +28,8 @@ const processor: RuleProcessorT<typeof configSchema> = {
         const toPrefix = map[fromPrefix] || '';
 
         if (pathKey.startsWith(fromPrefix)) {
+          logger.trace(`Matching "${pathKey}" with "${fromPrefix}"`);
+
           increaseUsageCount(fromPrefix);
 
           const preparedPath = pathKey.replace(fromPrefix, toPrefix);
@@ -37,6 +41,8 @@ const processor: RuleProcessorT<typeof configSchema> = {
         }
       });
     });
+
+    logger.trace(`Usage count: ${JSON.stringify(usageCount)}`);
 
     Object.keys(map).forEach((fromPrefix) => {
       if (!usageCount[fromPrefix]) {

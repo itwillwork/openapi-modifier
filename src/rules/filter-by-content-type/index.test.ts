@@ -67,6 +67,116 @@ describe('filter-by-content-type rule', () => {
     expect(fakeLogger.warning).toBeCalledTimes(0);
   });
 
+  test('regular, components.requestBodies', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      components: {
+        requestBodies: {
+          TestRequestBody: {
+            content: {
+              'multipart/form-data': {
+                schema: {
+                  type: 'number',
+                },
+              },
+              '*/*': {
+                schema: {
+                  type: 'object',
+                },
+              },
+            }
+          }
+        },
+      },
+    });
+
+    expect(
+        processor.processDocument(
+            fakeOpenAPIFile,
+            {
+              disabled: ['multipart/form-data'],
+            },
+            fakeLogger
+        )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        components: {
+          requestBodies: {
+            TestRequestBody: {
+              content: {
+                '*/*': {
+                  schema: {
+                    type: 'object',
+                  },
+                },
+              }
+            }
+          },
+        },
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+  });
+
+  test('regular, components.responses', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      components: {
+        responses: {
+          200: {
+            description: '',
+            content: {
+              'multipart/form-data': {
+                schema: {
+                  type: 'number',
+                },
+              },
+              '*/*': {
+                schema: {
+                  type: 'object',
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(
+        processor.processDocument(
+            fakeOpenAPIFile,
+            {
+              disabled: ['multipart/form-data'],
+            },
+            fakeLogger
+        )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        components: {
+          responses: {
+            200: {
+              description: '',
+              content: {
+                '*/*': {
+                  schema: {
+                    type: 'object',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+  });
+
   test('regular, logger warning', () => {
     const fakeLogger = global.createFakeLogger();
     const fakeOpenAPIFile = global.createFakeOpenAPIFile({

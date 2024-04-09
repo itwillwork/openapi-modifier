@@ -26,8 +26,38 @@ const processor: RuleProcessorT<typeof configSchema> = {
             usageCount[contentType] = (usageCount[contentType] || 0) + 1;
         };
 
+        // forEach - components.requestBodies[name].content.[contentType].schema
+        Object.keys(openAPIFile.document?.components?.requestBodies || {}).forEach((name) => {
+            const requestBodySchema = openAPIFile.document?.components?.requestBodies?.[name];
+            if (checkIsRefSchema(requestBodySchema)) {
+                return;
+            }
+
+            Object.keys(requestBodySchema?.content || {}).forEach((contentType) => {
+                if (requestBodySchema?.content?.[contentType] && !checkIsEnabledContentType(contentType)) {
+                    delete requestBodySchema?.content?.[contentType];
+                    increaseUsageCount(contentType);
+                }
+            });
+        });
+
+        // forEach - components.responses[code].content.[contentType].schema
+        Object.keys(openAPIFile.document?.components?.responses || {}).forEach((code) => {
+            const responsesCodeSchema = openAPIFile.document?.components?.responses?.[code];
+            if (checkIsRefSchema(responsesCodeSchema)) {
+                return;
+            }
+
+            Object.keys(responsesCodeSchema?.content || {}).forEach((contentType) => {
+                if (responsesCodeSchema?.content?.[contentType] && !checkIsEnabledContentType(contentType)) {
+                    delete responsesCodeSchema?.content?.[contentType];
+                    increaseUsageCount(contentType);
+                }
+            });
+        });
+
         forEachOperation(openAPIFile, ({operationSchema}) => {
-            // forEach - paths[name][method].responses[code].content[contentType].schema
+            // forEach - paths[path][method].responses[code].content[contentType].schema
             const responses = operationSchema?.responses || {};
             Object.keys(responses).forEach((code) => {
                 const responseSchema = responses[code];
@@ -41,7 +71,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
                 }
             });
 
-            // forEach - paths[name][method].requestBody.content[contentType].schema
+            // forEach - paths[path][method].requestBody.content[contentType].schema
             const requestBody = operationSchema?.requestBody;
             if (!checkIsRefSchema(requestBody)) {
                 Object.keys(requestBody?.content || {}).forEach((contentType) => {

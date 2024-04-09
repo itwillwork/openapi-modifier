@@ -37,7 +37,48 @@ const processor: RuleProcessorT<typeof configSchema> = {
         const {endpointDescriptor, parameterDescriptor, patchMethod, schemaDiff, objectDiff} = config;
 
         if (!endpointDescriptor) {
-            logger.warning(`Empty descriptor: ${JSON.stringify(endpointDescriptor)}`);
+            logger.trace(`Empty descriptor: ${JSON.stringify(endpointDescriptor)}`);
+
+            const componentParameterSchemas = openAPIFile?.document?.components?.parameters || {};
+            const targetComponentParameterKey = Object.keys(componentParameterSchemas || {}).find((key) => {
+                const componentParameterSchema = componentParameterSchemas[key];
+                if (checkIsRefSchema(componentParameterSchema)) {
+                    return false;
+                }
+
+                if (componentParameterSchema.name === parameterDescriptor?.name && componentParameterSchema.in === parameterDescriptor?.in) {
+                    return true;
+                }
+            });
+
+            if (!targetComponentParameterKey) {
+                return openAPIFile;
+            }
+
+            const targetComponentParameter = componentParameterSchemas[targetComponentParameterKey];
+            if (!targetComponentParameter || checkIsRefSchema(targetComponentParameter)) {
+                return openAPIFile;
+            }
+
+            targetComponentParameter.schema = patchSchema(
+                logger,
+                targetComponentParameter.schema,
+                patchMethod,
+                schemaDiff,
+            );
+
+            if (objectDiff?.name !== undefined) {
+                targetComponentParameter.name = objectDiff.name;
+            }
+
+            if (objectDiff?.in !== undefined) {
+                targetComponentParameter.in = objectDiff.in;
+            }
+
+            if (objectDiff?.required !== undefined) {
+                targetComponentParameter.required = objectDiff.required;
+            }
+
             return openAPIFile;
         }
 

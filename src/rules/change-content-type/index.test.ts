@@ -66,6 +66,110 @@ describe('change-content-type rule', () => {
     expect(fakeLogger.warning).toBeCalledTimes(0);
   });
 
+  test('regular, common requestBodies', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      components: {
+        requestBodies: {
+          TestRequestBody: {
+            content: {
+              '*/*': {
+                schema: {
+                  type: 'number',
+                },
+              },
+            }
+          }
+        },
+      }
+    });
+
+    expect(
+        processor.processDocument(
+            fakeOpenAPIFile,
+            {
+              map: {
+                '*/*': 'application/json',
+              },
+            },
+            fakeLogger
+        )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        components: {
+          requestBodies: {
+            TestRequestBody: {
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'number',
+                  },
+                },
+              }
+            }
+          },
+        }
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+  });
+
+  test('regular, common responses', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      components: {
+        responses: {
+          '200': {
+            description: '',
+            content: {
+              '*/*': {
+                schema: {
+                  type: 'number',
+                },
+              },
+            }
+          }
+        },
+      }
+    });
+
+    expect(
+        processor.processDocument(
+            fakeOpenAPIFile,
+            {
+              map: {
+                '*/*': 'application/json',
+              },
+            },
+            fakeLogger
+        )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        components: {
+          responses: {
+            '200': {
+              description: '',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'number',
+                  },
+                },
+              }
+            }
+          },
+        }
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+  });
+
   test('regular, logger warning', () => {
     const fakeLogger = global.createFakeLogger();
     const fakeOpenAPIFile = global.createFakeOpenAPIFile({

@@ -5,6 +5,7 @@ import {endpointDescriptorConfigSchema, parameterDescriptorConfigSchema} from ".
 import { normalizeMethod} from '../common/utils/normilizers';
 import {HttpMethods, PathItemObject} from "../common/openapi-models";
 import {getOperationSchema} from "../common/utils/get-operation-schema";
+import {checkIsRefSchema} from "../common/utils/refs";
 
 const configSchema = z.object({
   endpointDescriptor: endpointDescriptorConfigSchema.optional(),
@@ -18,7 +19,24 @@ const processor: RuleProcessorT<typeof configSchema> = {
     const { endpointDescriptor, parameterDescriptor } = config;
 
     if (!endpointDescriptor) {
-      logger.warning(`Empty endpointDescriptor: ${JSON.stringify(endpointDescriptor)}`);
+      logger.trace(`Empty endpointDescriptor: ${JSON.stringify(endpointDescriptor)}`);
+
+      const componentParameterSchemas = openAPIFile?.document?.components?.parameters || {};
+      const targetComponentParameterKey = Object.keys(componentParameterSchemas || {}).find((key) => {
+        const componentParameterSchema = componentParameterSchemas[key];
+        if (checkIsRefSchema(componentParameterSchema)) {
+          return false;
+        }
+
+        if (componentParameterSchema.name === parameterDescriptor?.name && componentParameterSchema.in === parameterDescriptor?.in) {
+          return true;
+        }
+      });
+
+      if (targetComponentParameterKey) {
+        delete componentParameterSchemas[targetComponentParameterKey];
+      }
+
       return openAPIFile;
     }
 

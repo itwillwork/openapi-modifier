@@ -57,14 +57,6 @@ const configSchema = z.array(
   })
 );
 
-/*
-components.schemas[name]
-paths[name][method].parameters[parameterIndex].schema
-paths[name][method].responses[code].content[contentType].schema
-paths[name][method].requestBody.content[contentType].schema
-paths[name][method]
- */
-
 const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: [],
