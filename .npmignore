@@ -1,7 +1,10 @@
 node_modules
 examples
-tests
 
+src
+!dist/src
+dist/src/**/*.test.js
+dist/src/**/*.test.d.ts
 dist/jest.config.d.ts
 dist/jest.config.ts
 dist/jest.setup.d.ts
