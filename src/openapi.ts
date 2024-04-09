@@ -3,6 +3,7 @@ import { LoggerI } from './logger/interface';
 import YAML from 'yaml';
 import fs from 'fs';
 import path from 'path';
+import jsonStringifyNice from 'json-stringify-nice';
 
 type OpenAPIDocumentT = OpenAPIV3.Document | OpenAPIV3_1.Document;
 type OpenAPIFileContextT = {
@@ -90,11 +91,13 @@ const writeOutputFile = (baseLogger: LoggerI, outputPath: string, file: OpenAPIF
     switch (outputFileExtension) {
       case '.yml':
       case '.yaml': {
-        content = YAML.stringify(file.document);
+        content = YAML.stringify(file.document, {
+          sortMapEntries: true,
+        });
         break;
       }
       case '.json': {
-        content = JSON.stringify(file.document, null, 4);
+        content = jsonStringifyNice(file.document, null, 4);
         break;
       }
     }
