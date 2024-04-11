@@ -202,6 +202,58 @@ describe('filter-endpoints rule', () => {
     });
   });
 
+  test('usage option: delete empty paths', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      paths: {
+        '/pets': {
+          parameters: [
+            {
+              name: 'subject',
+              in: 'query',
+              schema: {
+                type: 'string',
+              },
+            },
+          ],
+          get: {
+            summary: '',
+            responses: {},
+          },
+          delete: {
+            summary: '',
+            responses: {},
+          },
+        },
+      },
+    });
+
+    expect(
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          disabled: [
+            {
+              path: '/pets',
+              method: 'get',
+            },
+            {
+              path: '/pets',
+              method: 'delete',
+            },
+          ],
+        },
+        fakeLogger
+      )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        paths: {},
+      },
+    });
+  });
+
   test('usage option: disabled', () => {
     const fakeLogger = global.createFakeLogger();
     const fakeOpenAPIFile = global.createFakeOpenAPIFile({

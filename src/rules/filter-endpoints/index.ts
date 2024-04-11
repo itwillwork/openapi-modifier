@@ -2,6 +2,7 @@ import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
 import { normalizeMethod } from '../common/utils/normilizers';
 import { forEachOperation } from '../common/utils/iterators/each-operation';
+import { checkIsHttpMethod } from '../common/openapi-models';
 
 const configSchema = z
   .object({
@@ -82,6 +83,16 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
       if (!checkIsEnabledEndpoint(endpoint) && pathObjSchema) {
         delete pathObjSchema[method];
+      }
+    });
+
+    const paths = openAPIFile.document?.paths;
+    Object.keys(paths || {}).forEach((pathKey) => {
+      const path = paths?.[pathKey];
+
+      const methods = Object.keys(path || {}).filter(checkIsHttpMethod);
+      if (!methods?.length && paths?.[pathKey]) {
+        delete paths[pathKey];
       }
     });
 
