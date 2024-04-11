@@ -69,6 +69,14 @@ describe('forEachSchema', () => {
               },
             ],
           },
+          TestObjectDTO: {
+            type: "object",
+            properties: {
+              TestObjectField: {
+                type: "number"
+              }
+            }
+          }
         },
       },
       paths: {
@@ -113,6 +121,6 @@ describe('forEachSchema', () => {
 
     forEachSchema(fakeOpenAPIFile, callback);
 
-    expect(callback).toBeCalledTimes(15);
+    expect(callback).toBeCalledTimes(17);
   });
 });

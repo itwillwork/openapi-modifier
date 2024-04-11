@@ -120,9 +120,8 @@ export const forEachSchema = (openAPIFile: OpenAPIFileT, callback: SchemaCallbac
       if (item.type === 'object' && item.properties) {
         Object.keys(item.properties).forEach((propertyKey) => {
           const property = item.properties?.[propertyKey];
-          if (!checkIsRefSchema(property)) {
-            stack.push(property);
-          }
+
+          stack.push(property);
         });
       }
 

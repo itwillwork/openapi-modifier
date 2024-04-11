@@ -6,11 +6,24 @@ describe('remove-unused-components rule', () => {
     const fakeOpenAPIFile = global.createFakeOpenAPIFile({
       components: {
         schemas: {
+          Date: {
+            type: "string"
+          },
           Pet: {
-            type: 'string',
+            type: 'object',
+            properties: {
+              "date": {
+                $ref: '#/components/schemas/Date',
+              }
+            }
           },
           Notification: {
             type: 'object',
+            properties: {
+              "date": {
+                $ref: '#/components/schemas/Date',
+              }
+            }
           },
           Notifications: {
             type: 'array',
@@ -50,8 +63,16 @@ describe('remove-unused-components rule', () => {
         ...fakeOpenAPIFile.document,
         components: {
           schemas: {
+            Date: {
+              type: "string"
+            },
             Pet: {
-              type: 'string',
+              type: 'object',
+              properties: {
+                "date": {
+                  $ref: '#/components/schemas/Date',
+                }
+              }
             },
           },
         },
