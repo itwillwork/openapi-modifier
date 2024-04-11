@@ -1,7 +1,7 @@
 import { OpenAPIFileT } from '../../../../openapi';
 import { z } from 'zod';
 import { openAPISchemaConfigSchema } from '../../config';
-import { HttpMethods, ReferenceObject, SchemaObject } from '../../openapi-models';
+import { checkIsHttpMethod, HttpMethods, ReferenceObject, SchemaObject } from '../../openapi-models';
 import { checkIsRefSchema } from '../refs';
 
 type AnySchemaObject = ReferenceObject | SchemaObject;
@@ -60,8 +60,17 @@ export const forEachSchema = (openAPIFile: OpenAPIFileT, callback: SchemaCallbac
 
   Object.keys(openAPIFile.document?.paths || {}).forEach((pathName) => {
     const pathObjSchema = openAPIFile.document?.paths?.[pathName];
-    const methods = Object.keys(pathObjSchema || {}) as Array<HttpMethods>;
 
+    // forEach - paths[name].parameters[].schema
+    (pathObjSchema?.parameters || []).forEach((parameter) => {
+      if (checkIsRefSchema(parameter)) {
+        stack.push(parameter);
+      } else {
+        stack.push(parameter?.schema);
+      }
+    });
+
+    const methods = Object.keys(pathObjSchema || {}).filter(checkIsHttpMethod);
     methods.forEach((method) => {
       const methodSchema = openAPIFile.document?.paths?.[pathName]?.[method];
 

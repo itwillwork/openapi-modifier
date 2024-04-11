@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { normalizeMethod } from '../common/utils/normilizers';
 import { patchSchema } from '../common/utils/patch';
 import { openAPISchemaConfigSchema, parameterInConfigSchema, patchMethodConfigSchema } from '../common/config';
-import { HttpMethods, PathItemObject } from '../common/openapi-models';
+import { checkIsHttpMethod, HttpMethods, PathItemObject } from '../common/openapi-models';
 import { checkIsRefSchema } from '../common/utils/refs';
 import { getOperationSchema } from '../common/utils/get-operation-schema';
 import { findParameterIndex } from '../common/utils/find-parameter-index';
@@ -90,7 +90,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
         }
         case 'endpoint': {
           const pathObjSchema = openAPIFile?.document?.paths?.[descriptor.path];
-          const methods = Object.keys(pathObjSchema || {}) as Array<HttpMethods>;
+          const methods = Object.keys(pathObjSchema || {}).filter(checkIsHttpMethod);
 
           const targetMethod = methods.find((pathMethod) => {
             return normalizeMethod(pathMethod) === normalizeMethod(descriptor.method);

@@ -81,6 +81,15 @@ describe('forEachSchema', () => {
       },
       paths: {
         '/api/v1/pets': {
+          parameters: [
+            {
+              name: 'test',
+              in: 'query',
+              schema: {
+                type: 'number',
+              },
+            },
+          ],
           post: {
             description: '',
             requestBody: {
@@ -121,6 +130,6 @@ describe('forEachSchema', () => {
 
     forEachSchema(fakeOpenAPIFile, callback);
 
-    expect(callback).toBeCalledTimes(17);
+    expect(callback).toBeCalledTimes(18);
   });
 });

@@ -1,5 +1,5 @@
 import { OpenAPIFileT } from '../../../../openapi';
-import { HttpMethods, OperationObject } from '../../openapi-models';
+import { checkIsHttpMethod, HttpMethods, OperationObject } from '../../openapi-models';
 
 type OperationSchema = OperationObject;
 
@@ -18,7 +18,7 @@ export const forEachOperation = (openAPIFile: OpenAPIFileT, callback: OperationC
   Object.keys(paths || {}).forEach((pathKey) => {
     const path = paths?.[pathKey];
 
-    const methods = Object.keys(path || {}) as Array<HttpMethods>;
+    const methods = Object.keys(path || {}).filter(checkIsHttpMethod);
     methods.forEach((method) => {
       const operationSchema = path?.[method];
 

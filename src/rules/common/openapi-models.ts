@@ -8,3 +8,9 @@ export type OperationObject = OpenAPIV3.OperationObject | OpenAPIV3_1.OperationO
 export type PathItemObject = OpenAPIV3.PathItemObject | OpenAPIV3_1.PathItemObject;
 
 export type HttpMethods = OpenAPIV3.HttpMethods | OpenAPIV3_1.HttpMethods;
+
+const httpMethodsSet = new Set<string>(['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace']);
+
+export const checkIsHttpMethod = (method: any): method is HttpMethods => {
+  return httpMethodsSet.has(method);
+};
