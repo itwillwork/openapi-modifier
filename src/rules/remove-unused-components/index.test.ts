@@ -7,23 +7,23 @@ describe('remove-unused-components rule', () => {
       components: {
         schemas: {
           Date: {
-            type: "string"
+            type: 'string',
           },
           Pet: {
             type: 'object',
             properties: {
-              "date": {
+              date: {
                 $ref: '#/components/schemas/Date',
-              }
-            }
+              },
+            },
           },
           Notification: {
             type: 'object',
             properties: {
-              "date": {
+              date: {
                 $ref: '#/components/schemas/Date',
-              }
-            }
+              },
+            },
           },
           Notifications: {
             type: 'array',
@@ -64,15 +64,15 @@ describe('remove-unused-components rule', () => {
         components: {
           schemas: {
             Date: {
-              type: "string"
+              type: 'string',
             },
             Pet: {
               type: 'object',
               properties: {
-                "date": {
+                date: {
                   $ref: '#/components/schemas/Date',
-                }
-              }
+                },
+              },
             },
           },
         },

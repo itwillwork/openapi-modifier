@@ -70,13 +70,13 @@ describe('forEachSchema', () => {
             ],
           },
           TestObjectDTO: {
-            type: "object",
+            type: 'object',
             properties: {
               TestObjectField: {
-                type: "number"
-              }
-            }
-          }
+                type: 'number',
+              },
+            },
+          },
         },
       },
       paths: {
