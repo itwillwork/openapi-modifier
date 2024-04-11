@@ -12,20 +12,22 @@ import { getOperationSchema } from '../common/utils/get-operation-schema';
 import { findParameterIndex } from '../common/utils/find-parameter-index';
 import { checkIsRefSchema } from '../common/utils/refs';
 
-const configSchema = z.object({
-  endpointDescriptor: endpointDescriptorConfigSchema.optional(),
-  parameterDescriptor: parameterDescriptorConfigSchema.optional(),
-  patchMethod: patchMethodConfigSchema.optional(),
-  schemaDiff: openAPISchemaConfigSchema.optional(),
-  objectDiff: z
-    .object({
-      name: z.string().optional(),
-      in: parameterInConfigSchema.optional(),
-      required: z.boolean().optional(),
-    })
-    .strict()
-    .optional(),
-}).strict();
+const configSchema = z
+  .object({
+    endpointDescriptor: endpointDescriptorConfigSchema.optional(),
+    parameterDescriptor: parameterDescriptorConfigSchema.optional(),
+    patchMethod: patchMethodConfigSchema.optional(),
+    schemaDiff: openAPISchemaConfigSchema.optional(),
+    objectDiff: z
+      .object({
+        name: z.string().optional(),
+        in: parameterInConfigSchema.optional(),
+        required: z.boolean().optional(),
+      })
+      .strict()
+      .optional(),
+  })
+  .strict();
 
 const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,

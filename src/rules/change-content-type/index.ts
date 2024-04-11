@@ -3,9 +3,11 @@ import { z } from 'zod';
 import { checkIsRefSchema } from '../common/utils/refs';
 import { forEachOperation } from '../common/utils/iterators/each-operation';
 
-const configSchema = z.object({
-  map: z.record(z.string(), z.string()),
-}).strict();
+const configSchema = z
+  .object({
+    map: z.record(z.string(), z.string()),
+  })
+  .strict();
 
 const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,

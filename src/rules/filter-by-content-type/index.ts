@@ -3,10 +3,12 @@ import { z } from 'zod';
 import { checkIsRefSchema } from '../common/utils/refs';
 import { forEachOperation } from '../common/utils/iterators/each-operation';
 
-const configSchema = z.object({
-  enabled: z.array(z.string()).optional(),
-  disabled: z.array(z.string()).optional(),
-}).strict();
+const configSchema = z
+  .object({
+    enabled: z.array(z.string()).optional(),
+    disabled: z.array(z.string()).optional(),
+  })
+  .strict();
 
 const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,

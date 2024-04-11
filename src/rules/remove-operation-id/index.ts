@@ -2,9 +2,11 @@ import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
 import { forEachOperation } from '../common/utils/iterators/each-operation';
 
-const configSchema = z.object({
-  ignore: z.array(z.string()),
-}).strict();
+const configSchema = z
+  .object({
+    ignore: z.array(z.string()),
+  })
+  .strict();
 
 const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,

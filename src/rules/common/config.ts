@@ -6,12 +6,16 @@ export const openAPISchemaConfigSchema = z.any();
 
 export const parameterInConfigSchema = z.union([z.literal('query'), z.literal('header'), z.literal('path'), z.literal('cookie')]);
 
-export const parameterDescriptorConfigSchema = z.object({
-  name: z.string(),
-  in: parameterInConfigSchema,
-}).strict();
+export const parameterDescriptorConfigSchema = z
+  .object({
+    name: z.string(),
+    in: parameterInConfigSchema,
+  })
+  .strict();
 
-export const endpointDescriptorConfigSchema = z.object({
-  path: z.string(),
-  method: z.string(),
-}).strict();
+export const endpointDescriptorConfigSchema = z
+  .object({
+    path: z.string(),
+    method: z.string(),
+  })
+  .strict();

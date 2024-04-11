@@ -26,7 +26,7 @@ components:
       type: object
     Pets:
       items:
-        $ref: "#/components/schemas/Pet"
+        $ref: '#/components/schemas/Pet'
       maxItems: 100
       type: array
 info:
@@ -48,11 +48,11 @@ paths:
             maximum: 100
             type: integer
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Pets"
+                $ref: '#/components/schemas/Pets'
           description: A paged array of pets
           headers:
             x-next:
@@ -63,7 +63,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: unexpected error
       summary: List all pets
       tags:
@@ -73,16 +73,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Pet"
+              $ref: '#/components/schemas/Pet'
         required: true
       responses:
-        "201":
+        '201':
           description: Null response
         default:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: unexpected error
       summary: Create a pet
       tags:
@@ -97,17 +97,17 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Pet"
+                $ref: '#/components/schemas/Pet'
           description: Expected response to a valid request
         default:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: unexpected error
       summary: Info for a specific pet
       tags:

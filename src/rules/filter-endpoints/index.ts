@@ -3,24 +3,30 @@ import { z } from 'zod';
 import { normalizeMethod } from '../common/utils/normilizers';
 import { forEachOperation } from '../common/utils/iterators/each-operation';
 
-const configSchema = z.object({
-  enabled: z
-    .array(
-      z.object({
-        path: z.string(),
-        method: z.string(),
-      }).strict()
-    )
-    .optional(),
-  disabled: z
-    .array(
-      z.object({
-        path: z.string(),
-        method: z.string(),
-      }).strict()
-    )
-    .optional(),
-}).strict();
+const configSchema = z
+  .object({
+    enabled: z
+      .array(
+        z
+          .object({
+            path: z.string(),
+            method: z.string(),
+          })
+          .strict()
+      )
+      .optional(),
+    disabled: z
+      .array(
+        z
+          .object({
+            path: z.string(),
+            method: z.string(),
+          })
+          .strict()
+      )
+      .optional(),
+  })
+  .strict();
 
 type EndpointT = {
   path: string;

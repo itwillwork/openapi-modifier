@@ -16,11 +16,13 @@ const configSchema = z
     output: z.string().optional(),
     pipeline: z
       .array(
-        z.object({
-          rule: z.string(),
-          disabled: z.boolean().optional(),
-          config: z.any().optional(),
-        }).strict(),
+        z
+          .object({
+            rule: z.string(),
+            disabled: z.boolean().optional(),
+            config: z.any().optional(),
+          })
+          .strict()
       )
       .optional(),
   })

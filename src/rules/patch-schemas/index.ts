@@ -12,49 +12,60 @@ const descriptorSchema = z
   .object({
     type: z.literal('component-schema'),
     componentName: z.string(),
-  }).strict()
+  })
+  .strict()
   .or(
-    z.object({
-      type: z.literal('endpoint-response'),
-      path: z.string(),
-      method: z.string(),
-      code: z.string(),
-      contentType: z.string(),
-    }).strict()
+    z
+      .object({
+        type: z.literal('endpoint-response'),
+        path: z.string(),
+        method: z.string(),
+        code: z.string(),
+        contentType: z.string(),
+      })
+      .strict()
   )
   .or(
-    z.object({
-      type: z.literal('endpoint-parameter'),
-      path: z.string(),
-      method: z.string(),
-      parameterName: z.string(),
-      parameterIn: parameterInConfigSchema,
-    }).strict()
+    z
+      .object({
+        type: z.literal('endpoint-parameter'),
+        path: z.string(),
+        method: z.string(),
+        parameterName: z.string(),
+        parameterIn: parameterInConfigSchema,
+      })
+      .strict()
   )
   .or(
-    z.object({
-      type: z.literal('endpoint-request-body'),
-      path: z.string(),
-      method: z.string(),
-      contentType: z.string(),
-    }).strict()
+    z
+      .object({
+        type: z.literal('endpoint-request-body'),
+        path: z.string(),
+        method: z.string(),
+        contentType: z.string(),
+      })
+      .strict()
   )
   .or(
-    z.object({
-      type: z.literal('endpoint'),
-      path: z.string(),
-      method: z.string(),
-    }).strict()
+    z
+      .object({
+        type: z.literal('endpoint'),
+        path: z.string(),
+        method: z.string(),
+      })
+      .strict()
   );
 
 type Descriptor = z.infer<typeof descriptorSchema>;
 
 const configSchema = z.array(
-  z.object({
-    patchMethod: patchMethodConfigSchema,
-    descriptor: descriptorSchema,
-    schemaDiff: openAPISchemaConfigSchema,
-  }).strict()
+  z
+    .object({
+      patchMethod: patchMethodConfigSchema,
+      descriptor: descriptorSchema,
+      schemaDiff: openAPISchemaConfigSchema,
+    })
+    .strict()
 );
 
 const processor: RuleProcessorT<typeof configSchema> = {
