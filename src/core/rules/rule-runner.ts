@@ -46,10 +46,7 @@ class RuleRunner {
 
     let mergedConfig;
     try {
-      mergedConfig = {
-        ...processor.defaultConfig,
-        ...(config || {}),
-      };
+      mergedConfig = Object.assign(processor.defaultConfig, config);
     } catch (error) {
       if (error instanceof Error) {
         logger.error(error, `Failed to init rule "${this.name}", failed merge default and "${JSON.stringify(config || {})}"`);

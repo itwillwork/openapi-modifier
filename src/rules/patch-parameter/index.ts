@@ -59,6 +59,11 @@ const processor: RuleProcessorT<typeof configSchema> = {
         return openAPIFile;
       }
 
+      if (!patchMethod) {
+        logger.warning(`Required patchMethod!`);
+        return openAPIFile;
+      }
+
       targetComponentParameter.schema = patchSchema(logger, targetComponentParameter.schema, patchMethod, schemaDiff);
 
       if (objectDiff?.name !== undefined) {
@@ -101,6 +106,11 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
     if (checkIsRefSchema(targetParameterSchema)) {
       logger.warning(`Descriptor should not refer to links: ${JSON.stringify(endpointDescriptor)}`);
+      return openAPIFile;
+    }
+
+    if (!patchMethod) {
+      logger.warning(`Required patchMethod!`);
       return openAPIFile;
     }
 
