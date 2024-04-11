@@ -10,7 +10,7 @@ import { checkIsRefSchema } from '../common/utils/refs';
 const configSchema = z.object({
   endpointDescriptor: endpointDescriptorConfigSchema.optional(),
   parameterDescriptor: parameterDescriptorConfigSchema.optional(),
-});
+}).strict();
 
 const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,

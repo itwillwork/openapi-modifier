@@ -6,7 +6,7 @@ import { forEachOperation } from '../common/utils/iterators/each-operation';
 const configSchema = z.object({
   enabled: z.array(z.string()).optional(),
   disabled: z.array(z.string()).optional(),
-});
+}).strict();
 
 const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,

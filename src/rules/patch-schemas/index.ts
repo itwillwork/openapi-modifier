@@ -12,7 +12,7 @@ const descriptorSchema = z
   .object({
     type: z.literal('component-schema'),
     componentName: z.string(),
-  })
+  }).strict()
   .or(
     z.object({
       type: z.literal('endpoint-response'),
@@ -20,7 +20,7 @@ const descriptorSchema = z
       method: z.string(),
       code: z.string(),
       contentType: z.string(),
-    })
+    }).strict()
   )
   .or(
     z.object({
@@ -29,7 +29,7 @@ const descriptorSchema = z
       method: z.string(),
       parameterName: z.string(),
       parameterIn: parameterInConfigSchema,
-    })
+    }).strict()
   )
   .or(
     z.object({
@@ -37,14 +37,14 @@ const descriptorSchema = z
       path: z.string(),
       method: z.string(),
       contentType: z.string(),
-    })
+    }).strict()
   )
   .or(
     z.object({
       type: z.literal('endpoint'),
       path: z.string(),
       method: z.string(),
-    })
+    }).strict()
   );
 
 type Descriptor = z.infer<typeof descriptorSchema>;
@@ -54,7 +54,7 @@ const configSchema = z.array(
     patchMethod: patchMethodConfigSchema,
     descriptor: descriptorSchema,
     schemaDiff: openAPISchemaConfigSchema,
-  })
+  }).strict()
 );
 
 const processor: RuleProcessorT<typeof configSchema> = {

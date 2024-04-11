@@ -8,7 +8,7 @@ import deepmerge from 'deepmerge';
 
 const configSchema = z.object({
   path: z.string().optional(),
-});
+}).strict();
 
 const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,

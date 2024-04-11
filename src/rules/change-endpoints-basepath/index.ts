@@ -4,7 +4,7 @@ import { forEachSchema } from '../common/utils/iterators/each-schema';
 
 const configSchema = z.object({
   map: z.record(z.string(), z.string()),
-});
+}).strict();
 
 const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,

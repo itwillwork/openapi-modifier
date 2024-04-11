@@ -1,8 +1,12 @@
 {
   "name": "openapi-modifier",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
-  "main": "index.js",
+  "files": [
+    "dist",
+    "bin"
+  ],
+  "main": "./dist/src/index.js",
   "scripts": {
     "test": "jest",
     "build": "tsc",
@@ -10,7 +14,7 @@
     "format": "npx prettier --single-quote --print-width 200 --trailing-comma es5 --write ."
   },
   "bin": {
-    "openapi-modifier": "./cli/openapi-modifier.js"
+    "openapi-modifier": "./bin/openapi-modifier.js"
   },
   "author": "",
   "license": "ISC",

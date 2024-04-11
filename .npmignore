@@ -6,9 +6,9 @@ src
 dist/src/**/*.test.js
 dist/src/**/*.test.d.ts
 dist/jest.config.d.ts
-dist/jest.config.ts
+dist/jest.config.js
 dist/jest.setup.d.ts
-dist/jest.setup.ts
+dist/jest.setup.js
 
 .gitignore
 
@@ -19,3 +19,8 @@ jest.setup.ts
 package-lock.json
 
 tsconfig.json
+
+.idea
+.DS_Store
+packages.cache.json
+npm-debug.log

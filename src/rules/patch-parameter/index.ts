@@ -23,8 +23,9 @@ const configSchema = z.object({
       in: parameterInConfigSchema.optional(),
       required: z.boolean().optional(),
     })
+    .strict()
     .optional(),
-});
+}).strict();
 
 const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,

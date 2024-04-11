@@ -10,6 +10,7 @@ const configSchema = z
       .object({
         minLevel: z.number().optional(),
       })
+      .strict()
       .optional(),
     input: z.string().optional(),
     output: z.string().optional(),
@@ -19,7 +20,7 @@ const configSchema = z
           rule: z.string(),
           disabled: z.boolean().optional(),
           config: z.any().optional(),
-        })
+        }).strict(),
       )
       .optional(),
   })

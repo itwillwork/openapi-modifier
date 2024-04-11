@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { forEachSchema } from '../common/utils/iterators/each-schema';
 import { checkIsRefSchema } from '../common/utils/refs';
 
-const configSchema = z.object({});
+const configSchema = z.object({}).strict();
 
 const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,

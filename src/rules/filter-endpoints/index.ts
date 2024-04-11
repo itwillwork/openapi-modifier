@@ -9,7 +9,7 @@ const configSchema = z.object({
       z.object({
         path: z.string(),
         method: z.string(),
-      })
+      }).strict()
     )
     .optional(),
   disabled: z
@@ -17,10 +17,10 @@ const configSchema = z.object({
       z.object({
         path: z.string(),
         method: z.string(),
-      })
+      }).strict()
     )
     .optional(),
-});
+}).strict();
 
 type EndpointT = {
   path: string;
