@@ -106,7 +106,3 @@ DEBUG=openapi-modifier:* openapi-modifier
 ```bash
 DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 ```
-
-TODO
-Для последовательного преобразования вывод
-???
