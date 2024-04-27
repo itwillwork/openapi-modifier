@@ -93,7 +93,7 @@ await openapiModifier({
 
 ### Отладка
 
-Внутри используется для детального логирования [debug](https://www.npmjs.com/package/debug)
+Внутри используется для детального логирования npm-пакет - [debug](https://www.npmjs.com/package/debug)
 
 Для вывода всех debug логов:
 
