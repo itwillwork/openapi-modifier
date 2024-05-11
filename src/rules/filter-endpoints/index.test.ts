@@ -299,4 +299,93 @@ describe('filter-endpoints rule', () => {
       },
     });
   });
+
+  test('usage option: disabled regexp', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      paths: {
+        '/test/pets': {
+          get: {
+            summary: '',
+            responses: {},
+          },
+          delete: {
+            summary: '',
+            responses: {},
+          },
+        },
+      },
+    });
+
+    expect(
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          disabledPathRegExp: [/\/test\//],
+        },
+        fakeLogger
+      )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        paths: {},
+      },
+    });
+  });
+
+  test('usage option: enabled regexp', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      paths: {
+        '/pets/cats': {
+          get: {
+            summary: '',
+            responses: {},
+          },
+          delete: {
+            summary: '',
+            responses: {},
+          },
+        },
+        '/pets/dogs': {
+          get: {
+            summary: '',
+            responses: {},
+          },
+          delete: {
+            summary: '',
+            responses: {},
+          },
+        },
+      },
+    });
+
+    expect(
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          enabledPathRegExp: [/\/dogs/],
+        },
+        fakeLogger
+      )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        paths: {
+          '/pets/dogs': {
+            get: {
+              summary: '',
+              responses: {},
+            },
+            delete: {
+              summary: '',
+              responses: {},
+            },
+          },
+        },
+      },
+    });
+  });
 });

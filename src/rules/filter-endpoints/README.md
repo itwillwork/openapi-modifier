@@ -4,10 +4,16 @@
 
 ### Конфигурация
 
-| Параметр |                    Описание                    |
-| -------- | :--------------------------------------------: |
-| enabled  | Включенные endpoint'ы, которые нужно сохранить |
-| disabled | Выключенные endpoint'ы, которые нужно удалить  |
+| Параметр           |                     Описание                     |
+|--------------------|:------------------------------------------------:|
+| enabled            |  Включенные endpoint'ы, которые нужно сохранить  |
+| enabled.path       |  path endpoint'а     (например, /pets или т.п.)  |
+| enabled.method     | method endpoint'а (например, GET, POST или т.п.) |
+| enabledPathRegExp  |  Включенные endpoint'ы, которые нужно сохранить  |
+| disabled           |  Выключенные endpoint'ы, которые нужно удалить   |
+| disabled.path      |  path endpoint'а     (например, /pets или т.п.)  |
+| disabled.method    | method endpoint'а (например, GET, POST или т.п.) |
+| disabledPathRegExp |  Выключенные endpoint'ы, которые нужно удалить   |
 
 Пример конфигурации:
 

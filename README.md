@@ -110,6 +110,5 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 ### Road map
 
 - config на TS
-- regexp фильтрация для ручек
 - simple modifier
 - cli параметр чтобы выводить что-нибудь

@@ -16,6 +16,11 @@ const configSchema = z
           .strict()
       )
       .optional(),
+    enabledPathRegExp: z
+        .array(
+            z.instanceof( RegExp )
+        )
+        .optional(),
     disabled: z
       .array(
         z
@@ -26,6 +31,11 @@ const configSchema = z
           .strict()
       )
       .optional(),
+    disabledPathRegExp: z
+        .array(
+            z.instanceof( RegExp )
+        )
+        .optional(),
   })
   .strict();
 
@@ -51,17 +61,37 @@ const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: {},
   processDocument: (openAPIFile, config, logger) => {
-    const { enabled, disabled } = config;
+    const { enabled, enabledPathRegExp, disabled, disabledPathRegExp } = config;
 
     const normalizedEnabled = enabled ? enabled.map(normalizeEndpoint) : null;
-    const normalizedDisabled = disabled ? disabled.map(normalizeEndpoint) : null;
+    const normalizedEnabledPathRegExps = enabledPathRegExp || null;
 
-    const enabledEndpointHashSet = new Set((normalizedEnabled || []).map(getEndpointHash));
-    const disabledEndpointHashSet = new Set((normalizedDisabled || []).map(getEndpointHash));
+    const normalizedDisabled = disabled ? disabled.map(normalizeEndpoint) : null;
+    const normalizedDisabledPathRegExps = disabledPathRegExp || null;
+
+    const enabledEndpointHashSet = normalizedEnabled ? new Set((normalizedEnabled).map(getEndpointHash)) : null;
+    const disabledEndpointHashSet = normalizedDisabled ? new Set((normalizedDisabled).map(getEndpointHash)) : null;
 
     const checkIsEnabledEndpoint = (endpoint: EndpointT) => {
       const hash = getEndpointHash(endpoint);
-      return (enabledEndpointHashSet.size ? enabledEndpointHashSet.has(hash) : true) && !disabledEndpointHashSet.has(hash);
+
+      const isEnabled = (
+          enabledEndpointHashSet && enabledEndpointHashSet.has(hash)
+      ) || (
+          normalizedEnabledPathRegExps && normalizedEnabledPathRegExps.some(normalizedEnabledPathRegExp => {
+            return normalizedEnabledPathRegExp.test(endpoint.path);
+          })
+      ) || (!enabledEndpointHashSet && !normalizedEnabledPathRegExps);
+
+      const isDisabled = (
+          disabledEndpointHashSet && disabledEndpointHashSet.has(hash)
+      ) || (
+          normalizedDisabledPathRegExps && normalizedDisabledPathRegExps.some(normalizedDisabledPathRegExp => {
+            return normalizedDisabledPathRegExp.test(endpoint.path)
+          })
+      );
+
+      return isEnabled && !isDisabled;
     };
 
     let usageCount: Record<EndpointHash, number> = {};
