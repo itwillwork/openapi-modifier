@@ -16,11 +16,7 @@ const configSchema = z
           .strict()
       )
       .optional(),
-    enabledPathRegExp: z
-        .array(
-            z.instanceof( RegExp )
-        )
-        .optional(),
+    enabledPathRegExp: z.array(z.instanceof(RegExp)).optional(),
     disabled: z
       .array(
         z
@@ -31,11 +27,7 @@ const configSchema = z
           .strict()
       )
       .optional(),
-    disabledPathRegExp: z
-        .array(
-            z.instanceof( RegExp )
-        )
-        .optional(),
+    disabledPathRegExp: z.array(z.instanceof(RegExp)).optional(),
   })
   .strict();
 
@@ -69,27 +61,26 @@ const processor: RuleProcessorT<typeof configSchema> = {
     const normalizedDisabled = disabled ? disabled.map(normalizeEndpoint) : null;
     const normalizedDisabledPathRegExps = disabledPathRegExp || null;
 
-    const enabledEndpointHashSet = normalizedEnabled ? new Set((normalizedEnabled).map(getEndpointHash)) : null;
-    const disabledEndpointHashSet = normalizedDisabled ? new Set((normalizedDisabled).map(getEndpointHash)) : null;
+    const enabledEndpointHashSet = normalizedEnabled ? new Set(normalizedEnabled.map(getEndpointHash)) : null;
+    const disabledEndpointHashSet = normalizedDisabled ? new Set(normalizedDisabled.map(getEndpointHash)) : null;
 
     const checkIsEnabledEndpoint = (endpoint: EndpointT) => {
       const hash = getEndpointHash(endpoint);
 
-      const isEnabled = (
-          enabledEndpointHashSet && enabledEndpointHashSet.has(hash)
-      ) || (
-          normalizedEnabledPathRegExps && normalizedEnabledPathRegExps.some(normalizedEnabledPathRegExp => {
+      const isEnabled =
+        (enabledEndpointHashSet && enabledEndpointHashSet.has(hash)) ||
+        (normalizedEnabledPathRegExps &&
+          normalizedEnabledPathRegExps.some((normalizedEnabledPathRegExp) => {
             return normalizedEnabledPathRegExp.test(endpoint.path);
-          })
-      ) || (!enabledEndpointHashSet && !normalizedEnabledPathRegExps);
+          })) ||
+        (!enabledEndpointHashSet && !normalizedEnabledPathRegExps);
 
-      const isDisabled = (
-          disabledEndpointHashSet && disabledEndpointHashSet.has(hash)
-      ) || (
-          normalizedDisabledPathRegExps && normalizedDisabledPathRegExps.some(normalizedDisabledPathRegExp => {
-            return normalizedDisabledPathRegExp.test(endpoint.path)
-          })
-      );
+      const isDisabled =
+        (disabledEndpointHashSet && disabledEndpointHashSet.has(hash)) ||
+        (normalizedDisabledPathRegExps &&
+          normalizedDisabledPathRegExps.some((normalizedDisabledPathRegExp) => {
+            return normalizedDisabledPathRegExp.test(endpoint.path);
+          }));
 
       return isEnabled && !isDisabled;
     };
