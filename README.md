@@ -111,4 +111,3 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 - config на TS
 - simple modifier
-- cli параметр чтобы выводить что-нибудь

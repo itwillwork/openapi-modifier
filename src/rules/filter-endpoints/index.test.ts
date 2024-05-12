@@ -388,4 +388,53 @@ describe('filter-endpoints rule', () => {
       },
     });
   });
+
+  test('usage option: print ignored endpoints', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      paths: {
+        '/pets': {
+          get: {
+            summary: '',
+            responses: {},
+          },
+          delete: {
+            summary: '',
+            responses: {},
+          },
+        },
+      },
+    });
+
+    expect(
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          printIgnoredEndpoints: true,
+          disabled: [
+            {
+              path: '/pets',
+              method: 'delete',
+            },
+          ],
+        },
+        fakeLogger
+      )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        paths: {
+          '/pets': {
+            get: {
+              summary: '',
+              responses: {},
+            },
+          },
+        },
+      },
+    });
+
+    expect(fakeLogger.info).toBeCalledLoggerMethod(/Ignored endpoints/, 1);
+  });
 });

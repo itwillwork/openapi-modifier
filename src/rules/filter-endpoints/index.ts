@@ -28,6 +28,7 @@ const configSchema = z
       )
       .optional(),
     disabledPathRegExp: z.array(z.instanceof(RegExp)).optional(),
+    printIgnoredEndpoints: z.boolean().optional(),
   })
   .strict();
 
@@ -53,7 +54,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: {},
   processDocument: (openAPIFile, config, logger) => {
-    const { enabled, enabledPathRegExp, disabled, disabledPathRegExp } = config;
+    const { enabled, enabledPathRegExp, disabled, disabledPathRegExp, printIgnoredEndpoints } = config;
 
     const normalizedEnabled = enabled ? enabled.map(normalizeEndpoint) : null;
     const normalizedEnabledPathRegExps = enabledPathRegExp || null;
@@ -92,6 +93,8 @@ const processor: RuleProcessorT<typeof configSchema> = {
       usageCount[hash] = (usageCount[hash] || 0) + 1;
     };
 
+    const ignoredEndpoints: Array<EndpointT> = [];
+
     forEachOperation(openAPIFile, ({ operationSchema, method, path }) => {
       const endpoint = normalizeEndpoint({
         path,
@@ -104,6 +107,11 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
       if (!checkIsEnabledEndpoint(endpoint) && pathObjSchema) {
         delete pathObjSchema[method];
+
+        ignoredEndpoints.push({
+          path,
+          method,
+        });
       }
     });
 
@@ -116,6 +124,15 @@ const processor: RuleProcessorT<typeof configSchema> = {
         delete paths[pathKey];
       }
     });
+
+    if (printIgnoredEndpoints && ignoredEndpoints.length) {
+      logger.info(`Ignored endpoints: \n
+        ${ignoredEndpoints.map((endpoint) => {
+          const { method, path } = endpoint;
+
+          return `[${method}] - ${path} \n`;
+        })}\n`);
+    }
 
     if (normalizedEnabled) {
       normalizedEnabled.forEach((endpoint) => {
