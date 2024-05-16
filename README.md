@@ -107,7 +107,7 @@ DEBUG=openapi-modifier:* openapi-modifier
 DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 ```
 
-### Road map
+### TODO
 
-- config на TS
+- generate types for rules
 - simple modifier

@@ -109,7 +109,7 @@ const findConfigFile = async (baseLogger: LoggerI, configPath: string): Promise<
       let configContent: string = '';
       try {
         const configBuffer = fs.readFileSync(absoluteConfigPath);
-        const configContent = configBuffer.toString();
+        configContent = configBuffer.toString();
       } catch (error) {
         if (error instanceof Error) {
           logger.error(error, `Not found config file: ${absoluteConfigPath}`);
@@ -122,9 +122,9 @@ const findConfigFile = async (baseLogger: LoggerI, configPath: string): Promise<
 
       const ts = require('typescript');
       try {
-        let result = ts.transpileModule(configContent, { compilerOptions: { module: ts.ModuleKind.CommonJS }});
+        let result = ts.transpileModule(configContent, { compilerOptions: { module: ts.ModuleKind.CommonJS } });
 
-        fs.writeFileSync(absoluteCompiledConfigPath, JSON.stringify(result));
+        fs.writeFileSync(absoluteCompiledConfigPath, result.outputText);
 
         const processorImport = await import(absoluteCompiledConfigPath);
         return processorImport.default;
@@ -136,7 +136,7 @@ const findConfigFile = async (baseLogger: LoggerI, configPath: string): Promise<
         throw error;
       } finally {
         if (fs.existsSync(absoluteCompiledConfigPath)) {
-            await fs.unlinkSync(absoluteCompiledConfigPath);
+            fs.unlinkSync(absoluteCompiledConfigPath);
         }
       }
       break;

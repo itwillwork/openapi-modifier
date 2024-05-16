@@ -115,4 +115,10 @@ const processor: RuleProcessorT<typeof configSchema> = {
   },
 };
 
+// TODO generate
+type RuleConfig = z.infer<typeof configSchema>;
+
 export default processor;
+export type {
+  RuleConfig,
+}
