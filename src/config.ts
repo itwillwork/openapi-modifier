@@ -105,6 +105,42 @@ const findConfigFile = async (baseLogger: LoggerI, configPath: string): Promise<
       }
       break;
     }
+    case '.ts': {
+      let configContent: string = '';
+      try {
+        const configBuffer = fs.readFileSync(absoluteConfigPath);
+        const configContent = configBuffer.toString();
+      } catch (error) {
+        if (error instanceof Error) {
+          logger.error(error, `Not found config file: ${absoluteConfigPath}`);
+        }
+
+        throw error;
+      }
+
+      const absoluteCompiledConfigPath = `${absoluteConfigPath.slice(0, -2)}cjs`;
+
+      const ts = require('typescript');
+      try {
+        let result = ts.transpileModule(configContent, { compilerOptions: { module: ts.ModuleKind.CommonJS }});
+
+        fs.writeFileSync(absoluteCompiledConfigPath, JSON.stringify(result));
+
+        const processorImport = await import(absoluteCompiledConfigPath);
+        return processorImport.default;
+      } catch (error) {
+        if (error instanceof Error) {
+          logger.error(error, `Failed to proccess config file: ${absoluteConfigPath}`);
+        }
+
+        throw error;
+      } finally {
+        if (fs.existsSync(absoluteCompiledConfigPath)) {
+            await fs.unlinkSync(absoluteCompiledConfigPath);
+        }
+      }
+      break;
+    }
     default: {
       const error = new Error(`
                 Not processable config file extension! 
