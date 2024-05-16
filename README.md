@@ -22,7 +22,7 @@ openapi-modifier --input=example-1/input.yml --output=example-1/output.yml --con
 
 ### Пример конфигурации
 
-Можно использовать конфиги в след. расширениях: `.js`, `.yaml`, `.yml`, `.json`
+Можно использовать конфиги в след. расширениях: `.js`, `.yaml`, `.yml`, `.json`, `.ts`
 
 Пример конфигурации в `.js`
 
@@ -41,6 +41,29 @@ module.exports = {
     // ...
   ],
 };
+```
+
+Пример конфигурации в `.ts`
+
+```js
+import type { ConfigT } from 'openapi-modifier';
+
+const config: ConfigT = {
+  logger: {
+    minLevel: 1,
+  },
+  input: './openapi.yaml',
+  output: './openapi.yaml',
+  rules: [
+    {
+      name: 'remove-operation-id',
+      disabled: true,
+    },
+    // ...
+  ],
+};
+
+export default config;
 ```
 
 ### Использование как npm пакет/модуль
