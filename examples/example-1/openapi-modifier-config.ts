@@ -1,3 +1,4 @@
+// @ts-ignore TODO not compile example
 import {ConfigT, RuleConfig} from 'openapi-modifier';
 
 const typedPipeline: Array<RuleConfig> = [

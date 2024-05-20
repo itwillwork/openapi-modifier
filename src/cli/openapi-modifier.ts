@@ -1,6 +1,6 @@
 import argv, { Arguments } from 'yargs-parser';
 import { ConsoleLogger } from '../logger/console';
-import { findConfigFile, mergeConfigs } from '../config';
+import {ConfigT, findConfigFile, mergeConfigs} from '../config';
 import { openapiModifier } from '../index';
 
 type ParamsT = Arguments & {
@@ -20,7 +20,7 @@ const cli = async (params: ParamsT) => {
   }
 
   logger.trace('Trying find config file...');
-  const config = await findConfigFile(logger, params.config);
+  const config = await findConfigFile<Partial<ConfigT>>(logger, params.config);
 
   const inputPath = params?.input || null;
   if (!inputPath) {

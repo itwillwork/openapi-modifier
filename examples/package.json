@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "example-2": "simple-text-file-modifier --input=example-1/output.yml --output=example-1/output.yml --config=example-1/simple-text-file-modifier-config.ts",
     "example-1": "openapi-modifier --input=example-1/input.yml --output=example-1/output.yml --config=example-1/openapi-modifier-config.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

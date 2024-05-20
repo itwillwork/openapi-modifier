@@ -36,7 +36,7 @@ const createConfigLogger = (baseLogger: LoggerI): LoggerI => {
   return baseLogger.clone('config');
 };
 
-const findConfigFile = async (baseLogger: LoggerI, configPath: string): Promise<Partial<ConfigT>> => {
+const findConfigFile = async <T>(baseLogger: LoggerI, configPath: string): Promise<T> => {
   const logger = createConfigLogger(baseLogger);
 
   const absoluteConfigPath = path.isAbsolute(configPath) ? configPath : path.resolve(process.cwd(), configPath);

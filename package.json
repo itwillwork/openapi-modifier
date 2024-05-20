@@ -17,7 +17,8 @@
     "format": "npx prettier --single-quote --print-width 200 --trailing-comma es5 --write ."
   },
   "bin": {
-    "openapi-modifier": "./bin/openapi-modifier.js"
+    "openapi-modifier": "./bin/openapi-modifier.js",
+    "simple-text-file-modifier": "./bin/simple-text-file-modifier.js"
   },
   "author": "",
   "license": "ISC",

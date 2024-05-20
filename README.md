@@ -133,4 +133,4 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 ### TODO
 
 - generate types for rules
-- simple modifier
+- config почуму-то везде обязательный
