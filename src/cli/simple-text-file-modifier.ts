@@ -21,12 +21,10 @@ const logger = new ConsoleLogger({
 });
 
 const cli = async (params: ParamsT) => {
-  if (!params.config) {
-    throw new Error('Required --config param!');
-  }
+  const configPath = params.config || 'openapi-modifier.config.js';
 
   logger.trace('Trying find config file...');
-  const config = await findConfigFile<SimpleTextFileModifierConfigT>(logger, params.config);
+  const config = await findConfigFile<SimpleTextFileModifierConfigT>(logger, configPath);
 
   const inputPath = params?.input || null;
   if (!inputPath) {

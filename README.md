@@ -17,8 +17,13 @@ TODO что это и мотивация создания
 ### Использование как CLI
 
 ```bash
-openapi-modifier --input=example-1/input.yml --output=example-1/output.yml --config=example-1/openapi-modifier-config.js
+openapi-modifier --input=example-1/input.yml --output=example-1/output.yml --config=example-1/openapi-modifier.config.js
 ```
+
+Параметры:
+- input - [обязательный] входной файл для редакирования
+- ouput - [обязательный] вызодной файл
+- config - путь до конфига, по-умолчанию ссылается на `openapi-modifier.config.js`. Детальное описание конфигурации [см. ниже](#TODO)
 
 ### Пример конфигурации
 
@@ -65,6 +70,9 @@ const config: ConfigT = {
 
 export default config;
 ```
+
+Параметры:
+TODO
 
 ### Использование как npm пакет/модуль
 
@@ -133,4 +141,4 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 ### TODO
 
 - generate types for rules
-- config почуму-то везде обязательный
+- причесать документацию TODO
