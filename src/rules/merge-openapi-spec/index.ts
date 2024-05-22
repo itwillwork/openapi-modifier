@@ -72,3 +72,6 @@ const processor: RuleProcessorT<typeof configSchema> = {
 };
 
 export default processor;
+export {
+  configSchema,
+}

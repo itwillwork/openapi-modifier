@@ -1,10 +1,8 @@
-import {ConfigT} from './config';
+import {ConfigT as BaseConfigT} from './config';
+import {AnyPipelineRule} from './rules/generated-types';
 
-export { ConfigT };
+type ConfigT = Omit<BaseConfigT, 'pipeline'> | {
+    pipeline: Array<AnyPipelineRule>;
+};
 
-import { RuleConfig as RuleConfig1 } from './rules/change-content-type';
-import { RuleConfig as RuleConfig2 } from './rules/change-endpoints-basepath';
-
-type RuleConfig = RuleConfig1 | RuleConfig2;
-
-export { RuleConfig };
+export {AnyPipelineRule};

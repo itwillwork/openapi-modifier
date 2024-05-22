@@ -10,11 +10,14 @@
   "types": "dist/src/types.d.ts",
   "scripts": {
     "test": "jest",
+    "postinstall": "npm run tools:generate-rule-types",
+    "prebuild": "npm run tools:generate-rule-types",
     "build": "npm run clear && npm run build:types && npm run build:transpile",
     "clear": "rm -rf dist",
     "build:transpile": "tsc",
     "build:types": "tsc --declaration",
-    "format": "npx prettier --single-quote --print-width 200 --trailing-comma es5 --write ."
+    "format": "npx prettier --single-quote --print-width 200 --trailing-comma es5 --write .",
+    "tools:generate-rule-types": "ts-node tools/generate-rule-types.ts"
   },
   "bin": {
     "openapi-modifier": "./bin/openapi-modifier.js",
