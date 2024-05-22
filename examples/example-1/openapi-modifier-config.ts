@@ -1,16 +1,12 @@
-// @ts-ignore TODO not compile example
-import {ConfigT, RuleConfig} from 'openapi-modifier';
-
-const typedPipeline: Array<RuleConfig> = [
-    {
-        map: { },
-    },
-];
+import {ConfigT} from 'openapi-modifier';
 
 const config: ConfigT = {
     pipeline: [
         {
             rule: 'remove-operation-id',
+            config: {
+                map: {}
+            }
         },
     ],
 };

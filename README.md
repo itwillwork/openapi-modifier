@@ -140,5 +140,6 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 ### TODO
 
-- generate types for rules
+- eslint на export
+- eslint чтобы не было импортов
 - причесать документацию TODO

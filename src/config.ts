@@ -3,6 +3,7 @@ import fs from 'fs';
 import { LoggerI } from './logger/interface';
 import path from 'path';
 import YAML from 'yaml';
+import {AnyPipelineRule} from "./rules/generated-types";
 
 const configSchema = z
   .object({
@@ -28,7 +29,9 @@ const configSchema = z
   })
   .strict();
 
-type ConfigT = z.infer<typeof configSchema>;
+type ConfigT = Omit<z.infer<typeof configSchema>, 'pipeline'> & {
+  pipeline?: Array<AnyPipelineRule>;
+};
 
 const defaultConfig: ConfigT = {};
 

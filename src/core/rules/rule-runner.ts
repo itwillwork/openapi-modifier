@@ -36,7 +36,7 @@ class RuleRunner {
     this.processor = processor;
   };
 
-  applyConfig = (config: RuleAnyConfigT) => {
+  applyConfig = (config: z.infer<RuleAnyConfigT>) => {
     const { logger, processor } = this;
 
     if (!processor) {

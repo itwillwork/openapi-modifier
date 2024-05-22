@@ -1,4 +1,4 @@
-beforecomponents:
+components:
   schemas:
     Error:
       properties:
@@ -34,7 +34,7 @@ info:
     name: MIT
   title: Swagger Petstore
   version: 1.0.0
-openapi: 3.0.1
+openapi: 3.0.0
 paths:
   /pets:
     get:
@@ -114,4 +114,3 @@ paths:
         - pets
 servers:
   - url: http://petstore.swagger.io/v1
-after

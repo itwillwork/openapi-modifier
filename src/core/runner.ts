@@ -18,7 +18,9 @@ export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, b
       const ruleName = pipelineItem.rule;
       const ruleRunner = new RuleRunner(ruleName, logger);
       await ruleRunner.init();
-      await ruleRunner.applyConfig(pipelineItem.config);
+
+      await ruleRunner.applyConfig(pipelineItem.config || {});
+
       if (!pipelineItem.disabled) {
         openAPIFile = await ruleRunner.processDocument(openAPIFile);
       }

@@ -1,4 +1,5 @@
-import { checkIsValidConfig, ConfigT, defaultConfig, mergeConfigs } from './config';
+import { checkIsValidConfig, defaultConfig, mergeConfigs } from './config';
+import { ConfigT } from './types';
 import { ConsoleLogger } from './logger/console';
 import { readInputFile, writeOutputFile } from './openapi';
 import { runner } from './core/runner';
