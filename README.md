@@ -142,5 +142,5 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 ### TODO
 
-- почему examples учавтсвуют в билде? examples отдельной папками, НО со сссылкой
+- *.json -> *.json и *.yaml -> *.yaml и *.yaml -> *.json, и полный цикл с генерацией типов
 - причесать документацию TODO
