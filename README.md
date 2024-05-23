@@ -138,8 +138,9 @@ DEBUG=openapi-modifier:* openapi-modifier
 DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 ```
 
+### simple-text-file-modifier
+
 ### TODO
 
-- eslint на export
-- eslint чтобы не было импортов
+- почему examples учавтсвуют в билде? examples отдельной папками, НО со сссылкой
 - причесать документацию TODO
