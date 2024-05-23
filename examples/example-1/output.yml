@@ -34,7 +34,7 @@ info:
     name: MIT
   title: Swagger Petstore
   version: 1.0.0
-openapi: 3.0.0
+openapi: 3.0.1
 paths:
   /pets:
     get:

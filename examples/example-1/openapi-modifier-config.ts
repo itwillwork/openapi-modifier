@@ -5,7 +5,7 @@ const config: ConfigT = {
         {
             rule: 'remove-operation-id',
             config: {
-                map: {}
+                ignore: [],
             }
         },
     ],
