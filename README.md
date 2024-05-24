@@ -142,5 +142,5 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 ### TODO
 
-- *.json -> *.json и *.yaml -> *.yaml и *.yaml -> *.json, и полный цикл с генерацией типов
+- сделать главный пример со всеми правилами и комментариями в openapi-modifier-config.ts
 - причесать документацию TODO
