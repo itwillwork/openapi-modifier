@@ -1,0 +1,15 @@
+{
+  "name": "example-generate-api-types",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "scripts": {
+    "example-2": "simple-text-file-modifier --input=output/openapi.yaml --output=output/openapi.yaml --config=simple-text-file-modifier-config.ts",
+    "example-1": "openapi-modifier --input=input/openapi.yaml --output=output/openapi.yaml --config=openapi-modifier-config.ts"
+  },
+  "dependencies": {
+    "openapi-modifier": "file:../../"
+  },
+  "author": "",
+  "license": "ISC"
+}
