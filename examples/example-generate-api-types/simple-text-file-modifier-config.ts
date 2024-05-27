@@ -1,11 +1,18 @@
 const config = {
-    // addAfter: 'after',
-    // addBefore: 'before',
+    addBefore: '/**\n* WARNING! This file was auto-generated\n**/\n\n',
     replace: [
         {
-            searchValue: '3.0.0',
-            replaceValue: '3.0.1'
-        }
+            searchValue: 'declare namespace Components {',
+            replaceValue: 'declare namespace ApiComponents {'
+        },
+        {
+            searchValue: /\ Components\./g,
+            replaceValue: ' ApiComponents.'
+        },
+        {
+            searchValue: 'declare namespace Paths {',
+            replaceValue: 'declare namespace ApiPaths {'
+        },
     ]
 };
 
