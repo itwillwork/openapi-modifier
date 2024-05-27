@@ -17,7 +17,7 @@ declare namespace ApiComponents {
     }
 }
 declare namespace ApiPaths {
-    namespace ApiV1Pets {
+    namespace V1Pets {
         namespace Get {
             namespace Parameters {
                 export type Limit = number; // int32
@@ -39,7 +39,7 @@ declare namespace ApiPaths {
             }
         }
     }
-    namespace ApiV1Pets$PetId {
+    namespace V1Pets$PetId {
         namespace Get {
             namespace Parameters {
                 export type PetId = string;
