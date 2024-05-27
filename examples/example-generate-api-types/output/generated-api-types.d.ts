@@ -13,112 +13,11 @@ declare namespace ApiComponents {
             name: string;
             tag?: string;
         }
-        export type Pets = [
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?,
-            Pet?
-        ];
+        export type Pets = Pet[];
     }
 }
 declare namespace ApiPaths {
-    namespace Pets {
+    namespace ApiV1Pets {
         namespace Get {
             namespace Parameters {
                 export type Limit = number; // int32
@@ -140,7 +39,7 @@ declare namespace ApiPaths {
             }
         }
     }
-    namespace Pets$PetId {
+    namespace ApiV1Pets$PetId {
         namespace Get {
             namespace Parameters {
                 export type PetId = string;
