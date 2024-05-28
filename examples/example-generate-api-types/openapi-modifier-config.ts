@@ -1,5 +1,4 @@
 import {ConfigT} from 'openapi-modifier';
-import {z} from "zod";
 
 const config: ConfigT = {
     pipeline: [
