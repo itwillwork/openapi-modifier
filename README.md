@@ -142,6 +142,5 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 ### TODO
 
-- сделать главный пример со всеми правилами и комментариями в openapi-modifier-config.ts
 - починить багу с которой столкнулся
 - причесать документацию TODO
