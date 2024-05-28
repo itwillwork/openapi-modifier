@@ -13,16 +13,29 @@ declare namespace ApiComponents {
             name: string;
             tag?: string;
         }
+        export interface PetStatistics {
+            cat: number;
+            dog: number;
+        }
         export type Pets = Pet[];
     }
 }
 declare namespace ApiPaths {
+    namespace ApiExternalV1PetsStatistics {
+        namespace Post {
+            namespace Responses {
+                export type $200 = ApiComponents.Schemas.PetStatistics;
+            }
+        }
+    }
     namespace V1Pets {
         namespace Get {
             namespace Parameters {
                 export type Limit = number; // int32
+                export type Search = string;
             }
             export interface QueryParameters {
+                search: Parameters.Search;
                 limit?: Parameters.Limit /* int32 */;
             }
             namespace Responses {
@@ -50,6 +63,18 @@ declare namespace ApiPaths {
             namespace Responses {
                 export type $200 = ApiComponents.Schemas.Pet;
                 export type Default = ApiComponents.Schemas.Error;
+            }
+        }
+    }
+    namespace V1Tags {
+        namespace Post {
+            export interface RequestBody {
+                color: number;
+                name: string;
+            }
+            namespace Responses {
+                export interface $201 {
+                }
             }
         }
     }

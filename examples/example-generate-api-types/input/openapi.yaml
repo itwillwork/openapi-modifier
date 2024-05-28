@@ -24,6 +24,11 @@ paths:
       tags:
         - pets
       parameters:
+        - name: search
+          in: path
+          required: false
+          schema:
+            type: number
         - name: limit
           in: query
           description: How many items to return at one time (max 100)
@@ -32,6 +37,11 @@ paths:
             type: integer
             maximum: 100
             format: int32
+        - name: tag
+          in: query
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: A paged array of pets
@@ -76,6 +86,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /api/external/v1/tags:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - color
+              properties:
+                name:
+                  type: string
+                color:
+                  type: number
+        required: true
+      responses:
+        '201':
+          description: Null response
   /api/external/v1/pets/{petId}:
     get:
       summary: Info for a specific pet
@@ -102,6 +131,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - pets
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: "string"
 components:
   schemas:
     Pet:
