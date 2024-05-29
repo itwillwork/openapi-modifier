@@ -142,6 +142,5 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 ### TODO
 
-- починить багу с которой столкнулся `remove-unused-components`
 - починить не рабочий `patch-schemas` в примере `example-generate-api-types`
 - причесать документацию TODO

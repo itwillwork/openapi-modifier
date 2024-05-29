@@ -9,12 +9,21 @@ describe('remove-unused-components rule', () => {
           Date: {
             type: 'string',
           },
+          AttributesDTO: {
+            type: 'string'
+          },
           Pet: {
             type: 'object',
             properties: {
               date: {
                 $ref: '#/components/schemas/Date',
               },
+              attributes: {
+                type: 'object',
+                additionalProperties: {
+                  $ref: "#/components/schemas/AttributesDTO"
+                },
+              }
             },
           },
           Notification: {
@@ -66,12 +75,21 @@ describe('remove-unused-components rule', () => {
             Date: {
               type: 'string',
             },
+            AttributesDTO: {
+              type: 'string'
+            },
             Pet: {
               type: 'object',
               properties: {
                 date: {
                   $ref: '#/components/schemas/Date',
                 },
+                attributes: {
+                  type: 'object',
+                  additionalProperties: {
+                    $ref: "#/components/schemas/AttributesDTO"
+                  },
+                }
               },
             },
           },

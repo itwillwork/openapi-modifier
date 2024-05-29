@@ -134,6 +134,10 @@ export const forEachSchema = (openAPIFile: OpenAPIFileT, callback: SchemaCallbac
         });
       }
 
+      if (item.type === 'object' && item.additionalProperties && checkIsRefSchema(item.additionalProperties)) {
+        stack.push(item.additionalProperties);
+      }
+
       item.oneOf?.forEach((schema) => {
         stack.push(schema);
       });

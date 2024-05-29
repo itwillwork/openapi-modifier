@@ -71,6 +71,9 @@ describe('forEachSchema', () => {
           },
           TestObjectDTO: {
             type: 'object',
+            additionalProperties: {
+              $ref: "#/components/schemas/TestSchemaDTO"
+            },
             properties: {
               TestObjectField: {
                 type: 'number',
@@ -130,6 +133,6 @@ describe('forEachSchema', () => {
 
     forEachSchema(fakeOpenAPIFile, callback);
 
-    expect(callback).toBeCalledTimes(18);
+    expect(callback).toBeCalledTimes(19);
   });
 });
