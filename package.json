@@ -1,6 +1,6 @@
 {
   "name": "openapi-modifier",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "",
   "files": [
     "dist",
@@ -10,7 +10,6 @@
   "types": "dist/src/types.d.ts",
   "scripts": {
     "test": "jest",
-    "postinstall": "npm run tools:generate-rule-types",
     "prebuild": "npm run tools:generate-rule-types",
     "build": "npm run clear && npm run build:types && npm run build:transpile",
     "clear": "rm -rf dist",
