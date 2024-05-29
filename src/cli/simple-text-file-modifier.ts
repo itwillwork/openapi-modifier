@@ -1,6 +1,6 @@
-import argv, {Arguments} from 'yargs-parser';
-import {ConsoleLogger} from '../logger/console';
-import {findConfigFile} from '../config';
+import argv, { Arguments } from 'yargs-parser';
+import { ConsoleLogger } from '../logger/console';
+import { findConfigFile } from '../config';
 import fs from 'fs';
 
 type ParamsT = Arguments & {
@@ -12,8 +12,8 @@ type ParamsT = Arguments & {
 type SimpleTextFileModifierConfigT = {
   addAfter?: string;
   addBefore?: string;
-  replace?: Array<{searchValue: string | RegExp, replaceValue: string }>;
-}
+  replace?: Array<{ searchValue: string | RegExp; replaceValue: string }>;
+};
 
 const logger = new ConsoleLogger({
   name: 'simple-text-file-modifier',

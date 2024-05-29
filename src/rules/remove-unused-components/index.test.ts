@@ -10,7 +10,7 @@ describe('remove-unused-components rule', () => {
             type: 'string',
           },
           AttributesDTO: {
-            type: 'string'
+            type: 'string',
           },
           Pet: {
             type: 'object',
@@ -21,9 +21,9 @@ describe('remove-unused-components rule', () => {
               attributes: {
                 type: 'object',
                 additionalProperties: {
-                  $ref: "#/components/schemas/AttributesDTO"
+                  $ref: '#/components/schemas/AttributesDTO',
                 },
-              }
+              },
             },
           },
           Notification: {
@@ -76,7 +76,7 @@ describe('remove-unused-components rule', () => {
               type: 'string',
             },
             AttributesDTO: {
-              type: 'string'
+              type: 'string',
             },
             Pet: {
               type: 'object',
@@ -87,9 +87,9 @@ describe('remove-unused-components rule', () => {
                 attributes: {
                   type: 'object',
                   additionalProperties: {
-                    $ref: "#/components/schemas/AttributesDTO"
+                    $ref: '#/components/schemas/AttributesDTO',
                   },
-                }
+                },
               },
             },
           },

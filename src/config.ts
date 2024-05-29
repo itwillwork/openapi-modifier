@@ -3,7 +3,7 @@ import fs from 'fs';
 import { LoggerI } from './logger/interface';
 import path from 'path';
 import YAML from 'yaml';
-import {AnyPipelineRule} from "./rules/generated-types";
+import { AnyPipelineRule } from './rules/generated-types';
 
 const configSchema = z
   .object({
@@ -139,7 +139,7 @@ const findConfigFile = async <T>(baseLogger: LoggerI, configPath: string): Promi
         throw error;
       } finally {
         if (fs.existsSync(absoluteCompiledConfigPath)) {
-            fs.unlinkSync(absoluteCompiledConfigPath);
+          fs.unlinkSync(absoluteCompiledConfigPath);
         }
       }
       break;

@@ -21,6 +21,7 @@ openapi-modifier --input=example-1/input.yml --output=example-1/output.yml --con
 ```
 
 Параметры:
+
 - input - [обязательный] входной файл для редакирования
 - ouput - [обязательный] вызодной файл
 - config - путь до конфига, по-умолчанию ссылается на `openapi-modifier.config.js`. Детальное описание конфигурации [см. ниже](#TODO)

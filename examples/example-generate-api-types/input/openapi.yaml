@@ -145,7 +145,7 @@ paths:
           content:
             application/json:
               schema:
-                type: "string"
+                type: 'string'
 components:
   schemas:
     Pet:

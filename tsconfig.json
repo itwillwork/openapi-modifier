@@ -7,8 +7,5 @@
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "exclude": [
-    "examples",
-    "tools"
-  ]
+  "exclude": ["examples", "tools"]
 }

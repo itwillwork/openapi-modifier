@@ -1,4 +1,4 @@
-import {ConfigT } from './config';
-import {AnyPipelineRule} from './rules/generated-types';
+import { ConfigT } from './config';
+import { AnyPipelineRule } from './rules/generated-types';
 
-export {AnyPipelineRule, ConfigT};
+export { AnyPipelineRule, ConfigT };

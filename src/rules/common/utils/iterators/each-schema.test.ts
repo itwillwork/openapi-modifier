@@ -72,7 +72,7 @@ describe('forEachSchema', () => {
           TestObjectDTO: {
             type: 'object',
             additionalProperties: {
-              $ref: "#/components/schemas/TestSchemaDTO"
+              $ref: '#/components/schemas/TestSchemaDTO',
             },
             properties: {
               TestObjectField: {
