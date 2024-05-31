@@ -72,11 +72,12 @@ const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: [],
   processDocument: (openAPIFile, config, logger) => {
-      // additional validation
-      if (!Array.isArray(config)) {
-          logger.error(new Error('Config should be array!'), 'Config should be array!');
-          return openAPIFile;
-      }
+    // after the merge with the default value of the object, you will get an array,
+    // so it is better to additionally check for the length of the array
+    if (!Array.isArray(config) || !config?.length) {
+      logger.error(new Error('Config should be not empty array!'), 'Config should be not empty array!');
+      return openAPIFile;
+    }
 
     config.forEach((configItem) => {
       const { descriptor, patchMethod, schemaDiff } = configItem;

@@ -571,28 +571,28 @@ describe('patch-schemas rule', () => {
     });
 
     expect(
-        processor.processDocument(
-            fakeOpenAPIFile,
-              {
-                // @ts-expect-error
-                patchMethod: 'merge',
-                descriptor: {
-                  type: 'endpoint-request-body',
-                  path: '/pets',
-                  method: 'POST',
-                  contentType: '*/*',
-                },
-                schemaDiff: {
-                  enum: ['1', '2'],
-                },
-              },
-            fakeLogger
-        )
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          // @ts-expect-error
+          patchMethod: 'merge',
+          descriptor: {
+            type: 'endpoint-request-body',
+            path: '/pets',
+            method: 'POST',
+            contentType: '*/*',
+          },
+          schemaDiff: {
+            enum: ['1', '2'],
+          },
+        },
+        fakeLogger
+      )
     ).toEqual({
       ...fakeOpenAPIFile,
     });
 
     expect(fakeLogger.warning).toBeCalledTimes(0);
-    expect(fakeLogger.error).toBeCalledLoggerMethod(/Config should be array/, 1);
+    expect(fakeLogger.error).toBeCalledLoggerMethod(/Config should be not empty array/, 1);
   });
 });
