@@ -1,4 +1,4 @@
-import {OpenAPIV3, OpenAPIV3_1} from 'openapi-types';
+import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
 
 export type ReferenceObject = OpenAPIV3.ReferenceObject | OpenAPIV3_1.ReferenceObject;
 export type SchemaObject = OpenAPIV3.SchemaObject | OpenAPIV3_1.SchemaObject;

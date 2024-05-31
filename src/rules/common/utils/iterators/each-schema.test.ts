@@ -96,10 +96,10 @@ describe('forEachSchema', () => {
               },
             },
             additionalProperties: {
-              type: "array",
+              type: 'array',
               items: {
-                "$ref": "#/components/schemas/DictAdditionalServiceDto"
-              }
+                $ref: '#/components/schemas/DictAdditionalServiceDto',
+              },
             },
           },
         },

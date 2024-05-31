@@ -1,5 +1,5 @@
-import {SchemaObject} from '../openapi-models';
+import { SchemaObject } from '../openapi-models';
 
 export const checkIsObjectSchema = (schema: any): schema is SchemaObject => {
-    return !!schema && typeof schema === 'object' && 'type' in schema && schema.type === 'object';
+  return !!schema && typeof schema === 'object' && 'type' in schema && schema.type === 'object';
 };

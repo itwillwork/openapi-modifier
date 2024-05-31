@@ -3,8 +3,8 @@ import { z } from 'zod';
 import { openAPISchemaConfigSchema } from '../../config';
 import { checkIsHttpMethod, HttpMethods, ReferenceObject, SchemaObject } from '../../openapi-models';
 import { checkIsRefSchema } from '../refs';
-import {checkIsArraySchema} from "../array-schema";
-import {checkIsObjectSchema} from "../object-schema";
+import { checkIsArraySchema } from '../array-schema';
+import { checkIsObjectSchema } from '../object-schema';
 
 type AnySchemaObject = ReferenceObject | SchemaObject;
 

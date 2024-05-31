@@ -64,41 +64,45 @@ const config: ConfigT = {
     // JIRA-2319 - wrong body, waiting JIRABACKEND-12323
     {
       rule: 'patch-schemas',
-      config: {
-        patchMethod: 'merge',
-        descriptor: {
-          type: 'endpoint-request-body',
-          path: '/v1/tags',
-          method: 'post',
-          contentType: 'application/json',
-        },
-        schemaDiff: {
-          properties: {
-            color: {
-              type: 'string',
+      config: [
+        {
+          patchMethod: 'merge',
+          descriptor: {
+            type: 'endpoint-request-body',
+            path: '/v1/tags',
+            method: 'post',
+            contentType: 'application/json',
+          },
+          schemaDiff: {
+            properties: {
+              color: {
+                type: 'string',
+              },
             },
           },
         },
-      },
+      ],
     },
     // JIRA-10212 - wrong docs, waiting JIRABACKEND-8752
     {
       rule: 'patch-schemas',
-      config: {
-        descriptor: {
-          type: 'component-schema',
-          componentName: 'Pet',
-        },
-        patchMethod: 'replace',
-        schemaDiff: {
-          properties: {
-            id: {
-              type: 'string',
-              format: 'uuid',
+      config: [
+        {
+          descriptor: {
+            type: 'component-schema',
+            componentName: 'Pet',
+          },
+          patchMethod: 'merge',
+          schemaDiff: {
+            properties: {
+              id: {
+                type: 'string',
+                format: 'uuid',
+              },
             },
           },
         },
-      },
+      ],
     },
     // JIRA-11236 - removed deprecated endpoint, waiting JIRABACKEND-3641
     {

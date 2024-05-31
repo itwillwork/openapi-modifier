@@ -14,8 +14,8 @@ components:
     Pet:
       properties:
         id:
-          format: int64
-          type: integer
+          format: uuid
+          type: string
         name:
           type: string
         tag:
@@ -148,7 +148,7 @@ paths:
             schema:
               properties:
                 color:
-                  type: number
+                  type: string
                 name:
                   type: string
               required:

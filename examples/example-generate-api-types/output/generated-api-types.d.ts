@@ -9,7 +9,7 @@ declare namespace ApiComponents {
       message: string;
     }
     export interface Pet {
-      id: number; // int64
+      id: string; // uuid
       name: string;
       tag?: string;
     }
@@ -68,7 +68,7 @@ declare namespace ApiPaths {
   namespace V1Tags {
     namespace Post {
       export interface RequestBody {
-        color: number;
+        color: string;
         name: string;
       }
       namespace Responses {
