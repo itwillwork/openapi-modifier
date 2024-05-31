@@ -72,6 +72,12 @@ const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: [],
   processDocument: (openAPIFile, config, logger) => {
+      // additional validation
+      if (!Array.isArray(config)) {
+          logger.error(new Error('Config should be array!'), 'Config should be array!');
+          return openAPIFile;
+      }
+
     config.forEach((configItem) => {
       const { descriptor, patchMethod, schemaDiff } = configItem;
 

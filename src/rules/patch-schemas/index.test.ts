@@ -563,4 +563,36 @@ describe('patch-schemas rule', () => {
 
     expect(fakeLogger.warning).toBeCalledTimes(0);
   });
+
+  test('config is not array', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      paths: {},
+    });
+
+    expect(
+        processor.processDocument(
+            fakeOpenAPIFile,
+              {
+                // @ts-expect-error
+                patchMethod: 'merge',
+                descriptor: {
+                  type: 'endpoint-request-body',
+                  path: '/pets',
+                  method: 'POST',
+                  contentType: '*/*',
+                },
+                schemaDiff: {
+                  enum: ['1', '2'],
+                },
+              },
+            fakeLogger
+        )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+    expect(fakeLogger.error).toBeCalledLoggerMethod(/Config should be array/, 1);
+  });
 });

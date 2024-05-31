@@ -143,5 +143,4 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 ### TODO
 
-- починить не рабочий `patch-schemas` в примере `example-generate-api-types`
 - причесать документацию TODO
