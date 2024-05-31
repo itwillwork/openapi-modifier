@@ -71,13 +71,35 @@ describe('forEachSchema', () => {
           },
           TestObjectDTO: {
             type: 'object',
-            additionalProperties: {
-              $ref: '#/components/schemas/TestSchemaDTO',
-            },
             properties: {
               TestObjectField: {
                 type: 'number',
               },
+            },
+          },
+          TestObjectWithRefAdditionalPropertiesDTO: {
+            type: 'object',
+            properties: {
+              TestObjectField: {
+                type: 'number',
+              },
+            },
+            additionalProperties: {
+              $ref: '#/components/schemas/TestSchemaDTO',
+            },
+          },
+          TestObjectWithSchemaAdditionalPropertiesDTO: {
+            type: 'object',
+            properties: {
+              TestObjectField: {
+                type: 'number',
+              },
+            },
+            additionalProperties: {
+              type: "array",
+              items: {
+                "$ref": "#/components/schemas/DictAdditionalServiceDto"
+              }
             },
           },
         },
@@ -133,6 +155,6 @@ describe('forEachSchema', () => {
 
     forEachSchema(fakeOpenAPIFile, callback);
 
-    expect(callback).toBeCalledTimes(19);
+    expect(callback).toBeCalledTimes(25);
   });
 });

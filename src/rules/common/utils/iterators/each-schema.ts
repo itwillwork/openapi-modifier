@@ -3,6 +3,8 @@ import { z } from 'zod';
 import { openAPISchemaConfigSchema } from '../../config';
 import { checkIsHttpMethod, HttpMethods, ReferenceObject, SchemaObject } from '../../openapi-models';
 import { checkIsRefSchema } from '../refs';
+import {checkIsArraySchema} from "../array-schema";
+import {checkIsObjectSchema} from "../object-schema";
 
 type AnySchemaObject = ReferenceObject | SchemaObject;
 
@@ -122,7 +124,7 @@ export const forEachSchema = (openAPIFile: OpenAPIFileT, callback: SchemaCallbac
     }
 
     if (!checkIsRefSchema(item) && item) {
-      if (item.type === 'array' && item.items) {
+      if (checkIsArraySchema(item)) {
         stack.push(item.items);
       }
 
@@ -134,8 +136,19 @@ export const forEachSchema = (openAPIFile: OpenAPIFileT, callback: SchemaCallbac
         });
       }
 
-      if (item.type === 'object' && item.additionalProperties && checkIsRefSchema(item.additionalProperties)) {
-        stack.push(item.additionalProperties);
+      if (item.type === 'object' && item.additionalProperties) {
+        if (checkIsRefSchema(item.additionalProperties)) {
+          stack.push(item.additionalProperties);
+        }
+
+        if (checkIsArraySchema(item.additionalProperties)) {
+          stack.push(item.additionalProperties);
+        }
+
+        // TODO check need?
+        // if (checkIsObjectSchema(item.additionalProperties)) {
+        //   stack.push(item.additionalProperties);
+        // }
       }
 
       item.oneOf?.forEach((schema) => {
