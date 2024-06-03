@@ -140,7 +140,74 @@ describe('merge-openapi-spec rule', () => {
     expect(fakeLogger.warning).toBeCalledTimes(0);
     expect(fakeLogger.error).toBeCalledLoggerMethod(/operaion conflicts/, 1);
   });
-  
+
+  test('collision operations/paths, ignoreOperarionCollisions', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      paths: {
+        '/notifications': {
+          get: {
+            summary: 'List all pets',
+            responses: {
+              '200': {
+                description: '',
+                content: {
+                  '*/*': {
+                    schema: {
+                      type: 'object',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(
+        processor.processDocument(
+            fakeOpenAPIFile,
+            {
+              path: __dirname + '/__mocks__/collision/paths.yaml',
+              ignoreOperarionCollisions: true,
+            },
+            fakeLogger
+        )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+          "paths": {
+              ...fakeOpenAPIFile.document.paths,
+            "/notifications": {
+              "get": {
+                "summary": "Get all notifications",
+                "responses": {
+                  "200": {
+                    "content": {
+                      "*/*": {
+                        "schema": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Pet"
+                          }
+                        }
+                      }
+                    },
+                      "description": "",
+                  }
+                }
+              }
+            }
+          }
+        },
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+    expect(fakeLogger.error).toBeCalledTimes(0);
+  });
+
   test('collision components', () => {
     const fakeLogger = global.createFakeLogger();
     const fakeOpenAPIFile = global.createFakeOpenAPIFile({
