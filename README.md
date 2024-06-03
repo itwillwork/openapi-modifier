@@ -143,6 +143,4 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 ### TODO
 
-- `change-endpoints-basepath` чтобы проверял тоже коллизии
-- ignore для `remove-unused-components`
 - причесать документацию TODO

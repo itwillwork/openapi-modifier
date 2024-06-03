@@ -5,7 +5,9 @@ import { forEachSchema } from '../common/utils/iterators/each-schema';
 
 type ComponentsObject = OpenAPIV3.ComponentsObject | OpenAPIV3_1.ComponentsObject;
 
-const configSchema = z.object({}).strict();
+const configSchema = z.object({
+  ignore: z.array(z.string()).optional(),
+}).strict();
 
 const REF_SEPARATOR = '/';
 
@@ -17,6 +19,8 @@ const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: {},
   processDocument: (openAPIFile, config, logger) => {
+    const { ignore } = config;
+
     const components: ComponentsObject = openAPIFile.document.components || {};
 
     let hasUnusedComponents = true;
@@ -25,6 +29,10 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
       Object.keys(components).forEach((component) => {
         Object.keys(components[component as keyof ComponentsObject] || {}).forEach((key) => {
+          if (ignore?.includes(key)) {
+            return;
+          }
+
           usagedCount[`#/components/${component}/${key}`] = 0;
         });
       });
