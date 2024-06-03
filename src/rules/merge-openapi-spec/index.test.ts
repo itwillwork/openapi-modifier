@@ -98,7 +98,7 @@ describe('merge-openapi-spec rule', () => {
     expect(fakeLogger.warning).toBeCalledTimes(0);
   });
 
-  test('collision paths', () => {
+  test('collision operations/paths', () => {
     const fakeLogger = global.createFakeLogger();
     const fakeOpenAPIFile = global.createFakeOpenAPIFile({
       paths: {
@@ -139,5 +139,36 @@ describe('merge-openapi-spec rule', () => {
 
     expect(fakeLogger.warning).toBeCalledTimes(0);
     expect(fakeLogger.error).toBeCalledLoggerMethod(/operaion conflicts/, 1);
+  });
+  
+  test('collision components', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      components: {
+        schemas: {
+          Pet: {
+            type: "string"
+          }
+        },
+      },
+    });
+
+    expect(
+        processor.processDocument(
+            fakeOpenAPIFile,
+            {
+              path: __dirname + '/__mocks__/collision/components.yaml',
+            },
+            fakeLogger
+        )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+    expect(fakeLogger.error).toBeCalledLoggerMethod(/component conflicts/, 1);
   });
 });

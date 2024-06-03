@@ -8,13 +8,23 @@ import deepmerge from 'deepmerge';
 import {forEachOperation} from "../common/utils/iterators/each-operation";
 import {HttpMethods} from "../common/openapi-models";
 import {OpenAPIFileT} from "../../openapi";
+import {forEachComponent} from "../common/utils/iterators/each-component";
 
 const configSchema = z
   .object({
     path: z.string().optional(),
     ignoreOperarionCollisions: z.boolean().optional(),
+    ignoreComponentCollisions: z.boolean().optional(),
   })
   .strict();
+
+type ComponentHashT = string;
+
+const getComponentHash = ({
+                            name,
+                          }: {
+  name: string;
+}): ComponentHashT => `${name}`;
 
 type OperationHashT = string;
 
@@ -30,7 +40,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: {},
   processDocument: (openAPIFile, config, logger) => {
-    const { path: openAPIFilePath, ignoreOperarionCollisions } = config;
+    const { path: openAPIFilePath, ignoreOperarionCollisions, ignoreComponentCollisions } = config;
 
     if (!openAPIFilePath) {
       logger.warning(`Empty path: ${path}`);
@@ -106,6 +116,36 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
       if (operationHashCollisions?.length) {
         const errorMessage = `Failed to merge openapi's, operaion conflicts: \n ${operationHashCollisions.join('\n')}`;
+        logger.error(new Error(errorMessage), errorMessage);
+        return openAPIFile;
+      }
+    }
+
+    if (!ignoreComponentCollisions) {
+      const sourceFileComponentHashes: Array<ComponentHashT> = [];
+
+      forEachComponent(openAPIFile, ({name}) => {
+        const componentHash = getComponentHash({
+          name,
+        });
+
+        sourceFileComponentHashes.push(componentHash);
+      });
+
+      let componentHashCollisions: Array<ComponentHashT> = [];
+
+      forEachComponent({ document } as OpenAPIFileT, ({name}) => {
+        const componentHash = getComponentHash({
+          name,
+        });
+
+        if (sourceFileComponentHashes.includes(componentHash)) {
+          componentHashCollisions.push(componentHash);
+        }
+      });
+
+      if (componentHashCollisions?.length) {
+        const errorMessage = `Failed to merge openapi's, component conflicts: \n ${componentHashCollisions.join('\n')}`;
         logger.error(new Error(errorMessage), errorMessage);
         return openAPIFile;
       }
