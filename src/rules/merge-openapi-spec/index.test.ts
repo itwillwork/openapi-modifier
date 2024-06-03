@@ -141,7 +141,7 @@ describe('merge-openapi-spec rule', () => {
     expect(fakeLogger.error).toBeCalledLoggerMethod(/operaion conflicts/, 1);
   });
 
-  test('collision operations/paths, ignoreOperarionCollisions', () => {
+  test('collision operations/paths, usage config.ignoreOperarionCollisions', () => {
     const fakeLogger = global.createFakeLogger();
     const fakeOpenAPIFile = global.createFakeOpenAPIFile({
       paths: {
@@ -239,7 +239,7 @@ describe('merge-openapi-spec rule', () => {
     expect(fakeLogger.error).toBeCalledLoggerMethod(/component conflicts/, 1);
   });
 
-  test('collision components, ignoreComponentCollisions', () => {
+  test('collision components, usage config.ignoreComponentCollisions', () => {
     const fakeLogger = global.createFakeLogger();
     const fakeOpenAPIFile = global.createFakeOpenAPIFile({
       components: {

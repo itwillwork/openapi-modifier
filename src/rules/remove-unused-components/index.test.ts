@@ -122,7 +122,7 @@ describe('remove-unused-components rule', () => {
     expect(fakeLogger.warning).toBeCalledTimes(0);
   });
 
-  test('regular config.ignore', () => {
+  test('regular, usage config.ignore', () => {
     const fakeLogger = global.createFakeLogger();
     const fakeOpenAPIFile = global.createFakeOpenAPIFile({
       components: {
