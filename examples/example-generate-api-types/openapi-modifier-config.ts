@@ -2,6 +2,13 @@ import { ConfigT } from 'openapi-modifier';
 
 const config: ConfigT = {
   pipeline: [
+    // JIRA-10207 - new feature API for epic JIRA-232
+    {
+      rule: 'merge-openapi-spec',
+      config: {
+        path: 'input/feature-openapi-JIRA-232.yaml',
+      },
+    },
     // remove basepath
     {
       rule: 'change-endpoints-basepath',
@@ -16,13 +23,6 @@ const config: ConfigT = {
       rule: 'filter-endpoints',
       config: {
         disabledPathRegExp: [/\internal/],
-      },
-    },
-    // JIRA-10207 - new feature API for epic JIRA-232
-    {
-      rule: 'merge-openapi-spec',
-      config: {
-        path: 'input/feature-openapi-JIRA-232.yaml',
       },
     },
     // JIRA-10209 - remove deprecated endpoint parameter, waiting JIRABACKEND-1235

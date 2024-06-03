@@ -11,7 +11,7 @@ const config = {
     },
     {
       searchValue: 'declare namespace Paths {',
-      replaceValue: 'declare namespace ApiPaths {',
+      replaceValue: 'declare namespace ApiEndpoints {',
     },
   ],
 };

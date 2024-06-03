@@ -143,4 +143,6 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 ### TODO
 
+- merge чтобы проверял пересечение сущностей
+- basepath чтобы проверял тоже коллизии
 - причесать документацию TODO
