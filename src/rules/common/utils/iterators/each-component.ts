@@ -1,12 +1,5 @@
 import { OpenAPIFileT } from '../../../../openapi';
-import {
-  checkIsHttpMethod,
-  ComponentsObject,
-  HttpMethods,
-  OperationObject,
-  ReferenceObject,
-  SchemaObject
-} from '../../openapi-models';
+import { checkIsHttpMethod, ComponentsObject, HttpMethods, OperationObject, ReferenceObject, SchemaObject } from '../../openapi-models';
 
 type ComponentCallbackParamsT = {
   schema: SchemaObject | ReferenceObject | null;

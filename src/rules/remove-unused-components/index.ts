@@ -5,9 +5,11 @@ import { forEachSchema } from '../common/utils/iterators/each-schema';
 
 type ComponentsObject = OpenAPIV3.ComponentsObject | OpenAPIV3_1.ComponentsObject;
 
-const configSchema = z.object({
-  ignore: z.array(z.string()).optional(),
-}).strict();
+const configSchema = z
+  .object({
+    ignore: z.array(z.string()).optional(),
+  })
+  .strict();
 
 const REF_SEPARATOR = '/';
 

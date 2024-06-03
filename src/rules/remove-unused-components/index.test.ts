@@ -187,9 +187,15 @@ describe('remove-unused-components rule', () => {
       },
     });
 
-    expect(processor.processDocument(fakeOpenAPIFile, {
-      ignore: ['Notifications'],
-    }, fakeLogger)).toEqual({
+    expect(
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          ignore: ['Notifications'],
+        },
+        fakeLogger
+      )
+    ).toEqual({
       ...fakeOpenAPIFile,
       document: {
         ...fakeOpenAPIFile.document,
@@ -201,5 +207,4 @@ describe('remove-unused-components rule', () => {
 
     expect(fakeLogger.warning).toBeCalledTimes(0);
   });
-
 });

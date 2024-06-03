@@ -1,204 +1,204 @@
 import processor from './index';
 
 describe('change-endpoints-basepath rule', () => {
-    test('regular', () => {
-        const fakeLogger = global.createFakeLogger();
-        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
-            paths: {
-                '/api/v1/pets': {
-                    get: {
-                        summary: '',
-                        tags: [],
-                        responses: {},
-                    },
-                },
-            },
-        });
-
-        expect(
-            processor.processDocument(
-                fakeOpenAPIFile,
-                {
-                    map: {'/api/v1': ''},
-                },
-                fakeLogger
-            )
-        ).toEqual({
-            ...fakeOpenAPIFile,
-            document: {
-                ...fakeOpenAPIFile.document,
-                paths: {
-                    '/pets': {
-                        get: {
-                            summary: '',
-                            tags: [],
-                            responses: {},
-                        },
-                    },
-                },
-            },
-        });
-
-        expect(fakeLogger.warning).toBeCalledTimes(0);
+  test('regular', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      paths: {
+        '/api/v1/pets': {
+          get: {
+            summary: '',
+            tags: [],
+            responses: {},
+          },
+        },
+      },
     });
 
-    test('regular, logger warning', () => {
-        const fakeLogger = global.createFakeLogger();
-        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
-            paths: {
-                '/api/v1/pets': {
-                    get: {
-                        summary: '',
-                        tags: [],
-                        responses: {},
-                    },
-                },
+    expect(
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          map: { '/api/v1': '' },
+        },
+        fakeLogger
+      )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        paths: {
+          '/pets': {
+            get: {
+              summary: '',
+              tags: [],
+              responses: {},
             },
-        });
-
-        expect(
-            processor.processDocument(
-                fakeOpenAPIFile,
-                {
-                    map: {'/api/v2': ''},
-                },
-                fakeLogger
-            )
-        ).toEqual({
-            ...fakeOpenAPIFile,
-        });
-
-        expect(fakeLogger.warning).toBeCalledLoggerMethod(/Not found endpoints with prefix/, 1);
+          },
+        },
+      },
     });
 
-    test('usage option: map', () => {
-        const fakeLogger = global.createFakeLogger();
-        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
-            paths: {
-                '/api/v1/pets': {
-                    get: {
-                        summary: '',
-                        tags: [],
-                        responses: {},
-                    },
-                },
-            },
-        });
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+  });
 
-        expect(
-            processor.processDocument(
-                fakeOpenAPIFile,
-                {
-                    map: {'/api/v1': '/proxy'},
-                },
-                fakeLogger
-            )
-        ).toEqual({
-            ...fakeOpenAPIFile,
-            document: {
-                ...fakeOpenAPIFile.document,
-                paths: {
-                    '/proxy/pets': {
-                        get: {
-                            summary: '',
-                            tags: [],
-                            responses: {},
-                        },
-                    },
-                },
-            },
-        });
-
-        expect(fakeLogger.warning).toBeCalledTimes(0);
+  test('regular, logger warning', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      paths: {
+        '/api/v1/pets': {
+          get: {
+            summary: '',
+            tags: [],
+            responses: {},
+          },
+        },
+      },
     });
 
-    test('operations collision', () => {
-        const fakeLogger = global.createFakeLogger();
-        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
-            paths: {
-                '/proxy/pets': {
-                    get: {
-                        summary: '',
-                        tags: [],
-                        responses: {},
-                    },
-                },
-                '/api/v1/pets': {
-                    get: {
-                        summary: '',
-                        tags: [],
-                        responses: {},
-                    },
-                },
-            },
-        });
-
-        expect(
-            processor.processDocument(
-                fakeOpenAPIFile,
-                {
-                    map: {'/api/v1': '/proxy'},
-                },
-                fakeLogger
-            )
-        ).toEqual({
-            ...fakeOpenAPIFile,
-            document: {
-                ...fakeOpenAPIFile.document,
-            },
-        });
-
-        expect(fakeLogger.warning).toBeCalledTimes(0);
-        expect(fakeLogger.error).toBeCalledLoggerMethod(/operaion conflicts/, 1);
+    expect(
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          map: { '/api/v2': '' },
+        },
+        fakeLogger
+      )
+    ).toEqual({
+      ...fakeOpenAPIFile,
     });
 
-    test('operations collision, usage config.ignoreOperarionCollisions', () => {
-        const fakeLogger = global.createFakeLogger();
-        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
-            paths: {
-                '/proxy/pets': {
-                    get: {
-                        summary: '',
-                        tags: [],
-                        responses: {},
-                    },
-                },
-                '/api/v1/pets': {
-                    get: {
-                        summary: '',
-                        tags: [],
-                        responses: {},
-                    },
-                },
-            },
-        });
+    expect(fakeLogger.warning).toBeCalledLoggerMethod(/Not found endpoints with prefix/, 1);
+  });
 
-        expect(
-            processor.processDocument(
-                fakeOpenAPIFile,
-                {
-                    map: {'/api/v1': '/proxy'},
-                    ignoreOperarionCollisions: true,
-                },
-                fakeLogger
-            )
-        ).toEqual({
-            ...fakeOpenAPIFile,
-            document: {
-                ...fakeOpenAPIFile.document,
-                paths: {
-                    '/proxy/pets': {
-                        get: {
-                            summary: '',
-                            tags: [],
-                            responses: {},
-                        },
-                    },
-                }
-            },
-        });
-
-        expect(fakeLogger.warning).toBeCalledTimes(0);
-        expect(fakeLogger.error).toBeCalledTimes(0);
+  test('usage option: map', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      paths: {
+        '/api/v1/pets': {
+          get: {
+            summary: '',
+            tags: [],
+            responses: {},
+          },
+        },
+      },
     });
+
+    expect(
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          map: { '/api/v1': '/proxy' },
+        },
+        fakeLogger
+      )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        paths: {
+          '/proxy/pets': {
+            get: {
+              summary: '',
+              tags: [],
+              responses: {},
+            },
+          },
+        },
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+  });
+
+  test('operations collision', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      paths: {
+        '/proxy/pets': {
+          get: {
+            summary: '',
+            tags: [],
+            responses: {},
+          },
+        },
+        '/api/v1/pets': {
+          get: {
+            summary: '',
+            tags: [],
+            responses: {},
+          },
+        },
+      },
+    });
+
+    expect(
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          map: { '/api/v1': '/proxy' },
+        },
+        fakeLogger
+      )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+    expect(fakeLogger.error).toBeCalledLoggerMethod(/operaion conflicts/, 1);
+  });
+
+  test('operations collision, usage config.ignoreOperarionCollisions', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      paths: {
+        '/proxy/pets': {
+          get: {
+            summary: '',
+            tags: [],
+            responses: {},
+          },
+        },
+        '/api/v1/pets': {
+          get: {
+            summary: '',
+            tags: [],
+            responses: {},
+          },
+        },
+      },
+    });
+
+    expect(
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          map: { '/api/v1': '/proxy' },
+          ignoreOperarionCollisions: true,
+        },
+        fakeLogger
+      )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        paths: {
+          '/proxy/pets': {
+            get: {
+              summary: '',
+              tags: [],
+              responses: {},
+            },
+          },
+        },
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+    expect(fakeLogger.error).toBeCalledTimes(0);
+  });
 });

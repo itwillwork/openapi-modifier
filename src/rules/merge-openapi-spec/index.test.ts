@@ -123,13 +123,13 @@ describe('merge-openapi-spec rule', () => {
     });
 
     expect(
-        processor.processDocument(
-            fakeOpenAPIFile,
-            {
-              path: __dirname + '/__mocks__/collision/paths.yaml',
-            },
-            fakeLogger
-        )
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          path: __dirname + '/__mocks__/collision/paths.yaml',
+        },
+        fakeLogger
+      )
     ).toEqual({
       ...fakeOpenAPIFile,
       document: {
@@ -166,42 +166,42 @@ describe('merge-openapi-spec rule', () => {
     });
 
     expect(
-        processor.processDocument(
-            fakeOpenAPIFile,
-            {
-              path: __dirname + '/__mocks__/collision/paths.yaml',
-              ignoreOperarionCollisions: true,
-            },
-            fakeLogger
-        )
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          path: __dirname + '/__mocks__/collision/paths.yaml',
+          ignoreOperarionCollisions: true,
+        },
+        fakeLogger
+      )
     ).toEqual({
       ...fakeOpenAPIFile,
       document: {
         ...fakeOpenAPIFile.document,
-          "paths": {
-              ...fakeOpenAPIFile.document.paths,
-            "/notifications": {
-              "get": {
-                "summary": "Get all notifications",
-                "responses": {
-                  "200": {
-                    "content": {
-                      "*/*": {
-                        "schema": {
-                          "type": "array",
-                          "items": {
-                            "$ref": "#/components/schemas/Pet"
-                          }
-                        }
-                      }
+        paths: {
+          ...fakeOpenAPIFile.document.paths,
+          '/notifications': {
+            get: {
+              summary: 'Get all notifications',
+              responses: {
+                '200': {
+                  content: {
+                    '*/*': {
+                      schema: {
+                        type: 'array',
+                        items: {
+                          $ref: '#/components/schemas/Pet',
+                        },
+                      },
                     },
-                      "description": "",
-                  }
-                }
-              }
-            }
-          }
+                  },
+                  description: '',
+                },
+              },
+            },
+          },
         },
+      },
     });
 
     expect(fakeLogger.warning).toBeCalledTimes(0);
@@ -214,20 +214,20 @@ describe('merge-openapi-spec rule', () => {
       components: {
         schemas: {
           Pet: {
-            type: "string"
-          }
+            type: 'string',
+          },
         },
       },
     });
 
     expect(
-        processor.processDocument(
-            fakeOpenAPIFile,
-            {
-              path: __dirname + '/__mocks__/collision/components.yaml',
-            },
-            fakeLogger
-        )
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          path: __dirname + '/__mocks__/collision/components.yaml',
+        },
+        fakeLogger
+      )
     ).toEqual({
       ...fakeOpenAPIFile,
       document: {
@@ -245,44 +245,42 @@ describe('merge-openapi-spec rule', () => {
       components: {
         schemas: {
           Pet: {
-            type: "string"
-          }
+            type: 'string',
+          },
         },
       },
     });
 
     expect(
-        processor.processDocument(
-            fakeOpenAPIFile,
-            {
-              path: __dirname + '/__mocks__/collision/components.yaml',
-              ignoreComponentCollisions: true,
-            },
-            fakeLogger
-        )
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          path: __dirname + '/__mocks__/collision/components.yaml',
+          ignoreComponentCollisions: true,
+        },
+        fakeLogger
+      )
     ).toEqual({
       ...fakeOpenAPIFile,
-        document: {
-          ...fakeOpenAPIFile.document,
-            components: {
-                ...fakeOpenAPIFile.document.components,
-                schemas: {
-                    ...fakeOpenAPIFile.document.components?.schemas,
-                    "Pet": {
-                        "type": "object",
-                        "required": [
-                            "id"
-                        ],
-                        "properties": {
-                            "id": {
-                                "type": "integer",
-                                "format": "int64"
-                            }
-                        }
-                    }
-                }
+      document: {
+        ...fakeOpenAPIFile.document,
+        components: {
+          ...fakeOpenAPIFile.document.components,
+          schemas: {
+            ...fakeOpenAPIFile.document.components?.schemas,
+            Pet: {
+              type: 'object',
+              required: ['id'],
+              properties: {
+                id: {
+                  type: 'integer',
+                  format: 'int64',
+                },
+              },
             },
-        }
+          },
+        },
+      },
     });
 
     expect(fakeLogger.warning).toBeCalledTimes(0);

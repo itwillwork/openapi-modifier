@@ -8,9 +8,9 @@ describe('forEachComponent', () => {
       components: {
         schemas: {
           TestComponent: {
-            type: "string"
-          }
-        }
+            type: 'string',
+          },
+        },
       },
     });
 

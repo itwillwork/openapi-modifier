@@ -5,10 +5,10 @@ import path from 'path';
 import fs from 'fs';
 import YAML from 'yaml';
 import deepmerge from 'deepmerge';
-import {forEachOperation} from "../common/utils/iterators/each-operation";
-import {HttpMethods} from "../common/openapi-models";
-import {OpenAPIFileT} from "../../openapi";
-import {forEachComponent} from "../common/utils/iterators/each-component";
+import { forEachOperation } from '../common/utils/iterators/each-operation';
+import { HttpMethods } from '../common/openapi-models';
+import { OpenAPIFileT } from '../../openapi';
+import { forEachComponent } from '../common/utils/iterators/each-component';
 
 const configSchema = z
   .object({
@@ -20,21 +20,11 @@ const configSchema = z
 
 type ComponentHashT = string;
 
-const getComponentHash = ({
-                            name,
-                          }: {
-  name: string;
-}): ComponentHashT => `${name}`;
+const getComponentHash = ({ name }: { name: string }): ComponentHashT => `${name}`;
 
 type OperationHashT = string;
 
-const getOperationHash = ({
-    method,
-    path,
-                          }: {
-  method: HttpMethods;
-  path: string;
-}): OperationHashT => `[${method}] - ${path}`;
+const getOperationHash = ({ method, path }: { method: HttpMethods; path: string }): OperationHashT => `[${method}] - ${path}`;
 
 const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
@@ -92,7 +82,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
     if (!ignoreOperarionCollisions) {
       const sourceFileOperationsHashes: Array<OperationHashT> = [];
 
-      forEachOperation(openAPIFile, ({method, path}) => {
+      forEachOperation(openAPIFile, ({ method, path }) => {
         const operationHash = getOperationHash({
           method,
           path,
@@ -103,7 +93,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
       let operationHashCollisions: Array<OperationHashT> = [];
 
-      forEachOperation({ document } as OpenAPIFileT, ({method, path}) => {
+      forEachOperation({ document } as OpenAPIFileT, ({ method, path }) => {
         const operationHash = getOperationHash({
           method,
           path,
@@ -124,7 +114,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
     if (!ignoreComponentCollisions) {
       const sourceFileComponentHashes: Array<ComponentHashT> = [];
 
-      forEachComponent(openAPIFile, ({name}) => {
+      forEachComponent(openAPIFile, ({ name }) => {
         const componentHash = getComponentHash({
           name,
         });
@@ -134,7 +124,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
       let componentHashCollisions: Array<ComponentHashT> = [];
 
-      forEachComponent({ document } as OpenAPIFileT, ({name}) => {
+      forEachComponent({ document } as OpenAPIFileT, ({ name }) => {
         const componentHash = getComponentHash({
           name,
         });
