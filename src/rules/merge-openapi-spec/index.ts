@@ -5,18 +5,32 @@ import path from 'path';
 import fs from 'fs';
 import YAML from 'yaml';
 import deepmerge from 'deepmerge';
+import {forEachOperation} from "../common/utils/iterators/each-operation";
+import {HttpMethods} from "../common/openapi-models";
+import {OpenAPIFileT} from "../../openapi";
 
 const configSchema = z
   .object({
     path: z.string().optional(),
+    ignoreOperarionCollisions: z.boolean().optional(),
   })
   .strict();
+
+type OperationHashT = string;
+
+const getOperationHash = ({
+    method,
+    path,
+                          }: {
+  method: HttpMethods;
+  path: string;
+}): OperationHashT => `[${method}] - ${path}`;
 
 const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: {},
   processDocument: (openAPIFile, config, logger) => {
-    const { path: openAPIFilePath } = config;
+    const { path: openAPIFilePath, ignoreOperarionCollisions } = config;
 
     if (!openAPIFilePath) {
       logger.warning(`Empty path: ${path}`);
@@ -63,6 +77,38 @@ const processor: RuleProcessorT<typeof configSchema> = {
       }
 
       return openAPIFile;
+    }
+
+    if (!ignoreOperarionCollisions) {
+      const sourceFileOperationsHashes: Array<OperationHashT> = [];
+
+      forEachOperation(openAPIFile, ({method, path}) => {
+        const operationHash = getOperationHash({
+          method,
+          path,
+        });
+
+        sourceFileOperationsHashes.push(operationHash);
+      });
+
+      let operationHashCollisions: Array<OperationHashT> = [];
+
+      forEachOperation({ document } as OpenAPIFileT, ({method, path}) => {
+        const operationHash = getOperationHash({
+          method,
+          path,
+        });
+
+        if (sourceFileOperationsHashes.includes(operationHash)) {
+          operationHashCollisions.push(operationHash);
+        }
+      });
+
+      if (operationHashCollisions?.length) {
+        const errorMessage = `Failed to merge openapi's, operaion conflicts: \n ${operationHashCollisions.join('\n')}`;
+        logger.error(new Error(errorMessage), errorMessage);
+        return openAPIFile;
+      }
     }
 
     openAPIFile.document = deepmerge(openAPIFile.document as any, document);

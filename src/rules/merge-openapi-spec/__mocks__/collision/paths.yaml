@@ -1,0 +1,12 @@
+paths:
+  /notifications:
+    get:
+      summary: Get all notifications
+      responses:
+        200:
+          content:
+            '*/*':
+              schema:
+                type: 'array'
+                items:
+                  $ref: '#/components/schemas/Pet'
