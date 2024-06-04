@@ -1,0 +1,14 @@
+{
+  "name": "example-cli-openapi-yaml",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "scripts": {
+    "start": "openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=openapi-modifier-config.ts"
+  },
+  "dependencies": {
+    "openapi-modifier": "file:../../"
+  },
+  "author": "",
+  "license": "ISC"
+}
