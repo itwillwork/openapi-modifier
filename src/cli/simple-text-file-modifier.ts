@@ -2,6 +2,7 @@ import argv, { Arguments } from 'yargs-parser';
 import { ConsoleLogger } from '../logger/console';
 import { findConfigFile } from '../config';
 import fs from 'fs';
+import path from 'path';
 
 type ParamsT = Arguments & {
   config?: string;
@@ -52,6 +53,7 @@ const cli = async (params: ParamsT) => {
     fileContent = fileContent + config.addAfter;
   }
 
+  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
   fs.writeFileSync(outputPath, fileContent);
 
   logger.success('OK');

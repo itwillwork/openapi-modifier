@@ -116,6 +116,8 @@ const writeOutputFile = (baseLogger: LoggerI, outputPath: string, file: OpenAPIF
   try {
     const absoluteOutputPath = path.isAbsolute(outputPath) ? outputPath : path.resolve(process.cwd(), outputPath);
     logger.trace(`Absolute output path: ${absoluteOutputPath}`);
+
+    fs.mkdirSync(path.dirname(absoluteOutputPath), { recursive: true });
     fs.writeFileSync(absoluteOutputPath, content);
   } catch (error) {
     if (error instanceof Error) {

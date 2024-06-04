@@ -1,0 +1,15 @@
+{
+  "name": "example-package-openapi-yaml",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "scripts": {
+    "start": "ts-node ./generate.ts"
+  },
+  "dependencies": {
+    "openapi-modifier": "file:../../",
+    "ts-node": "^10.9.2"
+  },
+  "author": "",
+  "license": "ISC"
+}
