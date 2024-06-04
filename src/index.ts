@@ -1,8 +1,8 @@
-import { checkIsValidConfig, defaultConfig, mergeConfigs } from './config';
-import { ConfigT } from './types';
+import { checkIsValidConfig, defaultConfig, mergeConfigs, ConfigT } from './config';
 import { ConsoleLogger } from './logger/console';
 import { readInputFile, writeOutputFile } from './openapi';
 import { runner } from './core/runner';
+import { AnyPipelineRule } from './rules/generated-types';
 
 export const openapiModifier = async (config: Partial<ConfigT>) => {
   const logger = new ConsoleLogger({
@@ -40,3 +40,5 @@ export const openapiModifier = async (config: Partial<ConfigT>) => {
 
   logger.success('OK!');
 };
+
+export { AnyPipelineRule, ConfigT };

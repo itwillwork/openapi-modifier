@@ -1,20 +1,21 @@
 {
   "name": "openapi-modifier",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "",
   "files": [
+    "dist-types",
     "dist",
     "bin"
   ],
   "main": "dist/src/index.js",
-  "types": "dist/src/types.d.ts",
+  "types": "dist-types/src/index.d.ts",
   "scripts": {
     "test": "jest",
-    "prebuild": "npm run tools:generate-rule-types",
-    "build": "npm run clear && npm run build:types && npm run build:transpile",
-    "clear": "rm -rf dist",
+    "clear": "rm -rf dist && rm -rf dist-types",
+    "prebuild": "npm run clear && npm run tools:generate-rule-types",
+    "build": "npm run build:types && npm run build:transpile",
     "build:transpile": "tsc",
-    "build:types": "tsc --declaration",
+    "build:types": "tsc --declaration --declarationDir dist-types",
     "format": "npx prettier --single-quote --print-width 200 --trailing-comma es5 --write .",
     "tools:generate-rule-types": "ts-node tools/generate-rule-types.ts"
   },

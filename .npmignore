@@ -2,15 +2,14 @@ node_modules
 examples
 
 src
-!dist/src
+
 dist/src/**/*.test.js
-dist/src/**/*.test.d.ts
-dist/jest.config.d.ts
 dist/jest.config.js
-dist/jest.setup.d.ts
 dist/jest.setup.js
-dist/examples
-dist/tools
+
+dist-types/jest.setup.d.ts
+dist-types/jest.config.d.ts
+dist-types/src/**/*.test.d.ts
 
 .gitignore
 
