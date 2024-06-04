@@ -39,6 +39,28 @@ const createConfigLogger = (baseLogger: LoggerI): LoggerI => {
   return baseLogger.clone('config');
 };
 
+function diagnosticTSFile(logger: LoggerI, fileNames: string[], options: any): boolean {
+  // see: https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API#a-minimal-compiler
+  const ts = require('typescript');
+
+  let program = ts.createProgram(fileNames, { ...options, noEmit: true });
+  let emitResult = program.emit();
+
+  let allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
+
+  allDiagnostics.forEach((diagnostic: any) => {
+    if (diagnostic.file) {
+      let { line, character } = ts.getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start!);
+      let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+      logger.warning(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
+    } else {
+      logger.warning(ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n'));
+    }
+  });
+
+  return !allDiagnostics?.length;
+}
+
 const findConfigFile = async <T>(baseLogger: LoggerI, configPath: string): Promise<T> => {
   const logger = createConfigLogger(baseLogger);
 
@@ -109,6 +131,13 @@ const findConfigFile = async <T>(baseLogger: LoggerI, configPath: string): Promi
       break;
     }
     case '.ts': {
+      const isValidTSFile = diagnosticTSFile(logger, [absoluteConfigPath], {});
+      if (!isValidTSFile) {
+        const error = new Error('Not valid TS config file!');
+        logger.error(error, `Failed to proccess config file: ${absoluteConfigPath}`);
+        throw error;
+      }
+
       let configContent: string = '';
       try {
         const configBuffer = fs.readFileSync(absoluteConfigPath);
@@ -125,6 +154,7 @@ const findConfigFile = async <T>(baseLogger: LoggerI, configPath: string): Promi
 
       const ts = require('typescript');
       try {
+        // see: https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API#a-simple-transform-function
         let result = ts.transpileModule(configContent, { compilerOptions: { module: ts.ModuleKind.CommonJS } });
 
         fs.writeFileSync(absoluteCompiledConfigPath, result.outputText);
