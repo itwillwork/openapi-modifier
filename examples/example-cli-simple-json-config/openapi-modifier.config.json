@@ -1,0 +1,7 @@
+{
+  "pipeline": [
+    {
+      "rule": "remove-operation-id"
+    }
+  ]
+}

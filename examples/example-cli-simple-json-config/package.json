@@ -1,0 +1,13 @@
+{
+  "name": "example-cli-simple-json-config",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=openapi-modifier.config.json"
+  },
+  "dependencies": {
+    "openapi-modifier": "file:../../"
+  },
+  "author": "",
+  "license": "ISC"
+}
