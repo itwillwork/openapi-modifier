@@ -17,11 +17,61 @@ TODO что это и мотивация создания
 
 ### Демонстрация использования
 
-Имеем [входной файл спецификации/документации](./examples/example-cli-generate-api-types/input/openapi.yaml) от бекенд разработчиков. Например, [скачен через curl cli из github](./examples/example-cli-generate-api-types/package.json#L11).
+Например имеем [входной файл спецификации/документации api](./examples/example-cli-generate-api-types/input/openapi.yaml) от бекенд разработчиков. Например, [скачен через curl cli из github](./examples/example-cli-generate-api-types/package.json#L11).
 
 Пишем [файл конфигурации](./examples/example-cli-generate-api-types/openapi-modifier.config.ts), описывающий все что нужно поменять в исходной спецификации/документации с пояснительными комментариями:
 ```ts
+const config: ConfigT = {
+    pipeline: [
+        // JIRA-10207 - new feature API for epic JIRA-232
+        {
+            rule: 'merge-openapi-spec',
+            config: {
+                path: 'input/feature-openapi-JIRA-232.yaml',
+            },
+        },
+        
+        // ...
 
+        // JIRA-10212 - wrong docs, waiting JIRABACKEND-8752
+        {
+            rule: 'patch-schemas',
+            config: [
+                {
+                    descriptor: {
+                        type: 'component-schema',
+                        componentName: 'Pet',
+                    },
+                    patchMethod: 'merge',
+                    schemaDiff: {
+                        properties: {
+                            id: {
+                                type: 'string',
+                                format: 'uuid',
+                            },
+                        },
+                    },
+                },
+            ],
+        },
+
+        // ...
+        
+        // JIRA-11236 - removed deprecated endpoint, waiting JIRABACKEND-3641
+        {
+            rule: 'filter-endpoints',
+            config: {
+                disabled: [
+                    {
+                        path: '/v1/pets/{petId}',
+                        method: 'delete',
+                    },
+                ],
+            },
+        },
+
+        // ...
+}
 ```
 
 Далее [при помощи этого файла конфигурации и cli openapi-modifier](./examples/example-cli-generate-api-types/package.json#L7), изменяем исходный файл спецификации/документации и получается [модифицированная спецификация/документация](./examples/example-cli-generate-api-types/output/openapi.yaml).
