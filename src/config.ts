@@ -73,7 +73,7 @@ const findConfigFile = async <T>(baseLogger: LoggerI, configPath: string): Promi
       let configContent: string = '';
       try {
         const configBuffer = fs.readFileSync(absoluteConfigPath);
-        const configContent = configBuffer.toString();
+        configContent = configBuffer.toString();
       } catch (error) {
         if (error instanceof Error) {
           logger.error(error, `Not found config file: ${absoluteConfigPath}`);
@@ -97,7 +97,7 @@ const findConfigFile = async <T>(baseLogger: LoggerI, configPath: string): Promi
       let configContent: string = '';
       try {
         const configBuffer = fs.readFileSync(absoluteConfigPath);
-        const configContent = configBuffer.toString();
+        configContent = configBuffer.toString();
       } catch (error) {
         if (error instanceof Error) {
           logger.error(error, `Not found config file: ${absoluteConfigPath}`);
