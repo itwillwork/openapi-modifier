@@ -26,22 +26,22 @@ TODO что это и мотивация создания
 
 Далее [при помощи этого файла конфигурации и cli openapi-modifier](./examples/example-cli-generate-api-types/package.json#L7), изменяем исходный файл спецификации/документации и получается [модифицированная спецификация/документация](./examples/example-cli-generate-api-types/output/openapi.yaml).
 
-Далее при помощи, к примеру cli `dtsgenerator`, генерируем из модифицированной спецификации/документаци - [типизацию для api](./examples/example-cli-generate-api-types/output/generated-api-types.d.ts), которую уже используем в коде проекта.
+Далее при помощи, к примеру cli [dtsgenerator](https://github.com/horiuchi/dtsgenerator), генерируем из модифицированной спецификации/документаци [файл типизации для api](./examples/example-cli-generate-api-types/output/generated-api-types.d.ts), которую уже используем в коде проекта.
 
 [Полный код примера](./examples/example-cli-generate-api-types)
 
-Примеры как можно использовать сгенерированную типизацию для api можно в отдельном [репозитории с примерами применения](#).
+Примеры как можно использовать сгенерированную типизацию для api можно в отдельном [репозитории с примерами применения](https://github.com/itwillwork/openapi-use-cases).
 
 ### Использование как CLI
 
-При помощи npx
+При помощи `npx`
 
 ```shell
 npx openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=openapi-modifier.config.js
 ```
 [на примере использования](./examples/example-cli-simple-npx/package.json#L6)
 
-или при помощи npm
+или при помощи `npm`
 
 ```shell
 npm i --save-dev openapi-modifier
