@@ -4,7 +4,7 @@
   "description": "",
   "private": true,
   "scripts": {
-    "start": "openapi-modifier --input=input/openapi.yml --output=output/openapi.json --config=openapi-modifier-config.ts"
+    "start": "openapi-modifier --input=input/openapi.yml --output=output/openapi.json --config=openapi-modifier.config.ts"
   },
   "dependencies": {
     "openapi-modifier": "file:../../"
