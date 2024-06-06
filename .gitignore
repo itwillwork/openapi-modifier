@@ -134,3 +134,5 @@ src/rules/generated-types.ts
 
 dist
 dist-types
+
+.DS_Store

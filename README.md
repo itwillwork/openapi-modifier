@@ -14,17 +14,47 @@ TODO что это и мотивация создания
 > [!IMPORTANT]  
 > Поддерживает OpenAPI 3.1, 3.0. Мы не проверяли поддержку OpenAPI 2, так как формат является устаревшим и рекомендуем мигрировать вашу документацию на OpenAPI 3.0.
 
+
+### Демонстрация использования
+
+Имеем входной файл спецификации/документации от бекенд разработчиков. Например, скачен через curl cli из github.
+
+Пишем файл конфигурации, описывающий все что нужно поменять в исходной спецификации/документации с пояснительными комментариями:
+```ts
+
+```
+
+Далее при помощи этого файла конфигурации и cli openapi-modifier, изменяем исходный файл спецификации/документации и получается модифицированная спецификация/документация.
+
+Далее при помощи, к примеру cli `dtsgenerator`, генерируем из модифицированной спецификации/документаци - типизацию для api, которую уже используем в коде проекта.
+
+[Полный код примера](./examples/example-cli-generate-api-types)
+
 ### Использование как CLI
 
-```bash
-openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=openapi-modifier.config.ts
+При помощи npx
+
+```shell
+npx openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=openapi-modifier.config.js
 ```
+[на примере использования](./examples/example-cli-simple-npx/package.json#L6)
+
+или при помощи npm
+
+```shell
+npm i --save-dev openapi-modifier
+
+openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=openapi-modifier.config.js
+```
+[на примере использования](./examples/example-cli-openapi-yaml/package.json#L7)
 
 Параметры:
 
-- input - [обязательный] входной файл для редакирования
-- ouput - [обязательный] выходной файл
-- config - путь до конфига, по-умолчанию ссылается на `openapi-modifier.config.js`. Детальное описание конфигурации [см. ниже](#TODO)
+| Опция    | Описание                                                                                                 | Пример                       | Дефолтное                                                                                                                                                  |
+|----------|----------------------------------------------------------------------------------------------------------|------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `input`  | [**обязательный**] входной файл, специфиакция/документация в формате openapi                             | `input/openapi.yml`          |                                                                                                                                                            |
+| `output` | [**обязательный**] выходной файл, специфиакция/документация в формате opeanpi                            | `output/openapi.yml`         |                                                                                                                                                            |
+| `config` | путь до файла конфигурации. Детальное описание конфигурации [см. ниже](#custom_anchor_config_parameters) | `openapi-modifier.config.js` | `openapi-modifier.config.json`, но если не нашлось ищем `openapi-modifier.config.js` и если не все равное не получилось найти `openapi-modifier.config.ts` |
 
 [Демонстрация на примере использования](./examples/example-cli-openapi-yaml/package.json#L7)
 
@@ -71,10 +101,30 @@ module.exports = {
 };
 ```
 
+<a name="custom_anchor_config_parameters"></a>
 ### Параметры конфигурации
 
 Параметры:
-TODO
+
+| Опция   | Описание                                                                                                                                         | Дефолтное                                                         |
+|---------|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
+| `logger.minLevel` | [**обязательный**] входной файл, специфиакция/документация в формате openapi                                                                     |                                                                   |
+| `input` | [**обязательный**] выходной файл, специфиакция/документация в формате opeanpi                                                                    |                                                                   |
+| `output` | [**обязательный**] выходной файл, специфиакция/документация в формате opeanpi                                                                    |                                                                   |
+| `pipeline` | последовательность применяемых правил модификации к входному файлу. Детальное описание конфигурации [см. ниже](#custom_anchor_config_parameters) | `./openapi-modifier.config.js` или `./openapi-modifier.config.ts` |
+
+Простой пример конфигурации, например файл `openapi-modifier.config.json`:
+```json
+{
+  "pipeline": [
+    {
+      "rule": "remove-operation-id"
+    }
+  ]
+}
+```
+
+[Пример использования](./examples/example-cli-simple-npx/openapi-modifier.config.json)
 
 ### Использование как npm пакет/модуль
 
@@ -194,4 +244,8 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 ### TODO
 
-- причесать документацию TODO
+- дефолтный путь до конфигов (./openapi-modifier.config.js or ./openapi-modifier.config.ts)
+- скрипт генерации README.md для всех правил
+- причесать README.md правил
+- причесать README.md примеров
+- причесать главный README.md
