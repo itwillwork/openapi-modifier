@@ -301,3 +301,4 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 - причесать README.md правил
 - причесать README.md примеров
 - причесать главный README.md
+- возможно ли сделать правило на удаление deprecated полей?
