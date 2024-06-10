@@ -294,6 +294,16 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 ### simple-text-file-modifier
 
+Простой инструмент для постобработки файлов как с текстовым документом.
+
+Возможное применение:
+- заменить текст, например, переименовать сущность. [Применение в коде примера](./examples/example-cli-generate-api-types/simple-text-file-modifier-config.ts#L3-L15)
+- написать что-то в начало файла. [Применение в коде примера](./examples/example-cli-generate-api-types/simple-text-file-modifier-config.ts#L2)
+- написать что-то в конец файла.
+
+[Использование simple-text-file-modifier как CLI](./docs/simple-text-file-modifier.md#cli)
+[Параметры конфигурации simple-text-file-modifier](./docs/simple-text-file-modifier.md#config_description)
+
 ### TODO
 
 - дефолтный путь до конфигов (./openapi-modifier.config.js or ./openapi-modifier.config.ts)

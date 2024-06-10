@@ -22,7 +22,7 @@ const logger = new ConsoleLogger({
 });
 
 const cli = async (params: ParamsT) => {
-  const configPath = params.config || 'openapi-modifier.config.js';
+  const configPath = params.config || 'simple-text-file-modifier.js';
 
   logger.trace('Trying find config file...');
   const config = await findConfigFile<SimpleTextFileModifierConfigT>(logger, configPath);
