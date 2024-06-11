@@ -102,11 +102,11 @@ openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=
 
 Параметры:
 
-| Опция    | Описание                                                                                                 | Пример                       | Дефолтное                                                                                                                                                  |
-|----------|----------------------------------------------------------------------------------------------------------|------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `input`  | [**обязательный**] входной файл, специфиакция/документация в формате openapi                             | `input/openapi.yml`          |                                                                                                                                                            |
-| `output` | [**обязательный**] выходной файл, специфиакция/документация в формате opeanpi                            | `output/openapi.yml`         |                                                                                                                                                            |
-| `config` | путь до файла конфигурации. Детальное описание конфигурации [см. ниже](#custom_anchor_config_parameters) | `openapi-modifier.config.js` | `openapi-modifier.config.json`, но если не нашлось ищем `openapi-modifier.config.js` и если не все равное не получилось найти `openapi-modifier.config.ts` |
+| Опция    | Описание                                                                                                 | Пример                       | Дефолтное                                                                                                                                                    |
+|----------|----------------------------------------------------------------------------------------------------------|------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `input`  | [**обязательный**] входной файл, специфиакция/документация в формате openapi                             | `input/openapi.yml`          |                                                                                                                                                              |
+| `output` | [**обязательный**] выходной файл, специфиакция/документация в формате opeanpi                            | `output/openapi.yml`         |                                                                                                                                                              |
+| `config` | путь до файла конфигурации. Детальное описание конфигурации [см. ниже](#custom_anchor_config_parameters) | `openapi-modifier.config.js` | `openapi-modifier.config.(json|js|ts)`                                                        |
 
 [Демонстрация на примере использования](./examples/example-cli-openapi-yaml/package.json#L7)
 
@@ -306,7 +306,7 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 ### TODO
 
-- дефолтный путь до конфигов (./openapi-modifier.config.js or ./openapi-modifier.config.ts)
+- дефолтный путь до конфигов (./openapi-modifier.config.js or ./openapi-modifier.config.ts) и (simple-text-file-modifier.config.js и simple-text-file-modifier.config.ts)
 - скрипт генерации README.md для всех правил
 - причесать README.md правил
 - причесать README.md примеров

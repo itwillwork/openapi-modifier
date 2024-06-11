@@ -6,7 +6,7 @@
   "scripts": {
     "prepare-input-openapi": "openapi-modifier --input=input/openapi.yaml --output=output/openapi.yaml --config=openapi-modifier.config.ts",
     "generate-api-types": "dtsgen output/openapi.yaml -o output/generated-api-types.d.ts",
-    "patch-api-types": "simple-text-file-modifier --input=output/generated-api-types.d.ts --output=output/generated-api-types.d.ts --config=simple-text-file-modifier-config.ts",
+    "patch-api-types": "simple-text-file-modifier --input=output/generated-api-types.d.ts --output=output/generated-api-types.d.ts --config=simple-text-file-modifier.config.ts",
     "start": "npm run prepare-input-openapi && npm run generate-api-types && npm run patch-api-types",
     "download-input-openapi": "curl https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/examples/v3.0/api-with-examples.yaml > input/openapi.yaml"
   },
