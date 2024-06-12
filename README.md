@@ -241,6 +241,7 @@ await openapiModifier({
 - [remove-parameter][10]
 - [merge-openapi-spec][11]
 - [remove-unused-components][12]
+- [remove-deprecated][13]
 
 [1]: ./src/rules/remove-operation-id/README.md
 [2]: ./src/rules/remove-min-items/README.md
@@ -254,6 +255,7 @@ await openapiModifier({
 [10]: ./src/rules/remove-parameter/README.md
 [11]: ./src/rules/merge-openapi-spec/README.md
 [12]: ./src/rules/remove-unused-components/README.md
+[13]: ./src/rules/remove-deprecated/README.md
 
 ### Добавление нового правила
 
