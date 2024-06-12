@@ -7,18 +7,6 @@ import {forEachOperation} from "../common/utils/iterators/each-operation";
 import {forEachSchema} from "../common/utils/iterators/each-schema";
 import {checkIsObjectSchema} from "../common/utils/object-schema";
 
-type EndpointT = {
-    path: string;
-    method: string;
-};
-
-const normalizeEndpoint = (endpoint: EndpointT): EndpointT => {
-    return {
-        ...endpoint,
-        method: normalizeMethod(endpoint.method),
-    };
-};
-
 const descriptorSchema = z
     .object({
         type: z.literal('component-schema'),
@@ -28,32 +16,11 @@ const descriptorSchema = z
     .or(
         z
             .object({
-                type: z.literal('endpoint-response'),
-                path: z.string(),
-                method: z.string(),
-                code: z.string(),
-                contentType: z.string(),
-            })
-            .strict()
-    )
-    .or(
-        z
-            .object({
                 type: z.literal('endpoint-parameter'),
                 path: z.string(),
                 method: z.string(),
                 parameterName: z.string(),
                 parameterIn: parameterInConfigSchema,
-            })
-            .strict()
-    )
-    .or(
-        z
-            .object({
-                type: z.literal('endpoint-request-body'),
-                path: z.string(),
-                method: z.string(),
-                contentType: z.string(),
             })
             .strict()
     )
@@ -88,9 +55,93 @@ const processor: RuleProcessorT<typeof configSchema> = {
                 return;
             }
 
-            if (schema?.deprecated && componentSchemas) {
+            const checkIsIgnoredComponent = ({
+                                                 name,
+                                             }: {
+                name: string
+            }): boolean => {
+                if (!ignore) {
+                    return false;
+                }
+
+                return ignore.some((item) => {
+                    return item.type === "component-schema" && item.componentName === name;
+                })
+            }
+
+            if (schema?.deprecated && !checkIsIgnoredComponent({ name }) && componentSchemas) {
                 logger.trace(`Deleted component - "${name}"`);
                 delete componentSchemas[name];
+            }
+        });
+
+        forEachOperation(openAPIFile, ({operationSchema, method, path}) => {
+            const pathObjSchema = openAPIFile?.document?.paths?.[path];
+
+            const checkIsIgnoredEndpoint = ({
+                                                path,
+                                                method,
+                                            }: {
+                path: string, method: string
+            }): boolean => {
+                if (!ignore) {
+                    return false;
+                }
+
+                return ignore.some((item) => {
+                    return item.type === "endpoint" && item.path === path && normalizeMethod(item.method) === normalizeMethod(method);
+                })
+            }
+
+            if (operationSchema.deprecated && pathObjSchema && !checkIsIgnoredEndpoint({
+                path,
+                method,
+            })) {
+                logger.trace(`Deleted endpoint - "${JSON.stringify({path, method})}"`);
+                delete pathObjSchema[method];
+            }
+
+            if (operationSchema?.parameters) {
+                operationSchema.parameters = operationSchema.parameters.filter((parameter) => {
+                    const checkIsIgnoredEndpointParameter = ({
+                                                                 path,
+                                                                 method,
+                                                                 parameterName,
+                                                                 parameterIn,
+                                                             }: {
+                        path: string,
+                        method: string,
+                        parameterName: string,
+                        parameterIn: string,
+                    }): boolean => {
+                        if (!ignore) {
+                            return false;
+                        }
+
+                        return ignore.some((item) => {
+                            return (
+                                item.type === "endpoint-parameter" &&
+                                item.path === path &&
+                                normalizeMethod(item.method) === normalizeMethod(method) &&
+                                item.parameterName === parameterName &&
+                                item.parameterIn === parameterIn
+                            );
+                        })
+                    }
+
+
+                    if (!checkIsRefSchema(parameter) && parameter?.deprecated && !checkIsIgnoredEndpointParameter({
+                        path,
+                        method,
+                        parameterName: parameter.name,
+                        parameterIn: parameter.in,
+                    })) {
+                        logger.trace(`Deleted parameter - "${JSON.stringify(parameter)}"`);
+                        return false;
+                    }
+
+                    return true;
+                })
             }
         });
 
@@ -105,31 +156,6 @@ const processor: RuleProcessorT<typeof configSchema> = {
                         delete properties[propertyKey];
                     }
                 });
-            }
-        });
-
-        forEachOperation(openAPIFile, ({operationSchema, method, path}) => {
-            const endpoint = normalizeEndpoint({
-                path,
-                method,
-            });
-
-            const pathObjSchema = openAPIFile?.document?.paths?.[path];
-
-            if (operationSchema.deprecated && pathObjSchema) {
-                logger.trace(`Deleted endpoint - "${JSON.stringify(endpoint)}"`);
-                delete pathObjSchema[method];
-            }
-
-            if (operationSchema?.parameters) {
-                operationSchema.parameters = operationSchema.parameters.filter((parameter) => {
-                    if (!checkIsRefSchema(parameter) && parameter?.deprecated) {
-                        logger.trace(`Deleted parameter - "${JSON.stringify(parameter)}"`);
-                        return false;
-                    }
-
-                    return true;
-                })
             }
         });
 

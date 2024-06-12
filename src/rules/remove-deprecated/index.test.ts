@@ -1,7 +1,9 @@
 import processor from './index';
+import {z} from "zod";
+import {parameterInConfigSchema} from "../common/config";
 
 describe('remove-deprecated rule', () => {
-    test('regular, component', () => {
+    test('regular', () => {
         const fakeLogger = global.createFakeLogger();
         const fakeOpenAPIFile = global.createFakeOpenAPIFile({
             components: {
@@ -212,4 +214,135 @@ describe('remove-deprecated rule', () => {
         expect(fakeLogger.warning).toBeCalledTimes(0);
         expect(fakeLogger.error).toBeCalledTimes(0);
     });
+
+    test('regular, with ignores', () => {
+        const fakeLogger = global.createFakeLogger();
+        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+            components: {
+                schemas: {
+                    TestDeprecatedSchemaDTO: {
+                        deprecated: true,
+                        type: 'string',
+                    },
+                },
+            },
+            paths: {
+                '/deprecated-endpoint': {
+                    get: {
+                        deprecated: true,
+                        summary: '',
+                        responses: {},
+                    },
+                    post: {
+                        summary: '',
+                        responses: {},
+                    }
+                },
+                '/deprecated-parameter': {
+                    post: {
+                        parameters: [
+                            {
+                                in: 'query',
+                                name: 'filter',
+                                schema: {
+                                    type: 'integer',
+                                },
+                            },
+                            {
+                                in: 'query',
+                                name: 'deprecated-filter',
+                                deprecated: true,
+                                schema: {
+                                    type: 'string',
+                                },
+                            },
+                        ],
+                        summary: '',
+                        responses: {},
+                    }
+                },
+            },
+        });
+
+        expect(
+            processor.processDocument(
+                fakeOpenAPIFile,
+                {
+                    ignore: [
+                        {
+                            type: 'endpoint',
+                            path: '/deprecated-endpoint',
+                            method: 'get',
+                        },
+                        {
+                            type: 'endpoint-parameter',
+                            path: '/deprecated-parameter',
+                            method: 'post',
+                            parameterName: 'deprecated-filter',
+                            parameterIn: 'query',
+                        },
+                        {
+                            type: 'component-schema',
+                            componentName: 'TestDeprecatedSchemaDTO',
+                        },
+
+                    ]
+                },
+                fakeLogger
+            )
+        ).toEqual({
+            ...fakeOpenAPIFile,
+            document: {
+                ...fakeOpenAPIFile.document,
+                components: {
+                    schemas: {
+                        TestDeprecatedSchemaDTO: {
+                            deprecated: true,
+                            type: 'string',
+                        },
+                    },
+                },
+                paths: {
+                    '/deprecated-endpoint': {
+                        get: {
+                            deprecated: true,
+                            summary: '',
+                            responses: {},
+                        },
+                        post: {
+                            summary: '',
+                            responses: {},
+                        }
+                    },
+                    '/deprecated-parameter': {
+                        post: {
+                            parameters: [
+                                {
+                                    in: 'query',
+                                    name: 'filter',
+                                    schema: {
+                                        type: 'integer',
+                                    },
+                                },
+                                {
+                                    in: 'query',
+                                    name: 'deprecated-filter',
+                                    deprecated: true,
+                                    schema: {
+                                        type: 'string',
+                                    },
+                                },
+                            ],
+                            summary: '',
+                            responses: {},
+                        }
+                    },
+                },
+            },
+        });
+
+        expect(fakeLogger.warning).toBeCalledTimes(0);
+        expect(fakeLogger.error).toBeCalledTimes(0);
+    });
+
 });
