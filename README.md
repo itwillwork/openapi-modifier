@@ -321,9 +321,7 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 ### TODO
 
-- дефолтный путь до конфигов (./openapi-modifier.config.js or ./openapi-modifier.config.ts) и (simple-text-file-modifier.config.js и simple-text-file-modifier.config.ts)
 - скрипт генерации README.md для всех правил (склейка ссылок на readme из папок)
 - причесать README.md правил
 - причесать README.md примеров
 - причесать главный README.md
-- возможно ли сделать правило на удаление deprecated полей?
