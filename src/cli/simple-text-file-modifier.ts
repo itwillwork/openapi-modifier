@@ -21,11 +21,40 @@ const logger = new ConsoleLogger({
   minLevel: ConsoleLogger.typeLevelMap.warning,
 });
 
-const cli = async (params: ParamsT) => {
-  const configPath = params.config || 'simple-text-file-modifier.js';
+const DEFAULT_CONFIG_PATHS = [
+  'simple-text-file-modifier.config.js',
+  'simple-text-file-modifier.config.ts',
+  'simple-text-file-modifier.config.json',
+  'simple-text-file-modifier.config.yaml',
+  'simple-text-file-modifier.config.yml',
+] as const;
 
-  logger.trace('Trying find config file...');
-  const config = await findConfigFile<SimpleTextFileModifierConfigT>(logger, configPath);
+const cli = async (params: ParamsT) => {
+  const configPath = params.config;
+
+  let config: Partial<SimpleTextFileModifierConfigT> | null = null;
+  if (configPath) {
+    logger.trace(`Trying find config file... ${configPath}`);
+    config = await findConfigFile<Partial<SimpleTextFileModifierConfigT>>(logger, configPath);
+  } else {
+    for (const defaultConfigPath of DEFAULT_CONFIG_PATHS) {
+      if (config) {
+        // the configuration file has already been found
+        continue;
+      }
+
+      logger.trace(`Trying find config file... ${defaultConfigPath}`);
+      try {
+        config = await findConfigFile<Partial<SimpleTextFileModifierConfigT>>(logger, defaultConfigPath);
+      } catch (error) {
+        logger.trace(`Failed attempt to find the configuration file using the default path: "${defaultConfigPath}"`);
+      }
+    }
+  }
+
+  if (!config) {
+    throw new Error(`The configuration file was not found, set the path to it (via the --config parameter) or create one of the configuration files: ${DEFAULT_CONFIG_PATHS.join(', ')}`);
+  }
 
   const inputPath = params?.input || null;
   if (!inputPath) {
