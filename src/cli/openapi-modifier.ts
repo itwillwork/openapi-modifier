@@ -1,7 +1,8 @@
 import argv, { Arguments } from 'yargs-parser';
 import { ConsoleLogger } from '../logger/console';
-import { ConfigT, findConfigFile, mergeConfigs } from '../config';
+import { ConfigT, findConfigFile, getAbsoluteConfigPath, mergeConfigs } from '../config';
 import { openapiModifier } from '../index';
+import fs from 'fs';
 
 type ParamsT = Arguments & {
   config?: string;
@@ -14,13 +15,7 @@ const logger = new ConsoleLogger({
   minLevel: ConsoleLogger.typeLevelMap.warning,
 });
 
-const DEFAULT_CONFIG_PATHS = [
-  'openapi-modifier.config.js',
-  'openapi-modifier.config.ts',
-  'openapi-modifier.config.json',
-  'openapi-modifier.config.yaml',
-  'openapi-modifier.config.yml',
-] as const;
+const DEFAULT_CONFIG_PATHS = ['openapi-modifier.config.js', 'openapi-modifier.config.ts', 'openapi-modifier.config.json', 'openapi-modifier.config.yaml', 'openapi-modifier.config.yml'] as const;
 
 const cli = async (params: ParamsT) => {
   const configPath = params.config;
@@ -36,11 +31,10 @@ const cli = async (params: ParamsT) => {
         continue;
       }
 
-      logger.trace(`Trying find config file... ${defaultConfigPath}`);
-      try {
+      const absoluteDefaultConfigPath = getAbsoluteConfigPath(defaultConfigPath);
+      if (fs.existsSync(absoluteDefaultConfigPath)) {
+        logger.trace(`Trying find config file... ${absoluteDefaultConfigPath}`);
         config = await findConfigFile<Partial<ConfigT>>(logger, defaultConfigPath);
-      } catch (error) {
-        logger.trace(`Failed attempt to find the configuration file using the default path: "${defaultConfigPath}"`);
       }
     }
   }

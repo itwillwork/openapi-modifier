@@ -1,6 +1,6 @@
 import argv, { Arguments } from 'yargs-parser';
 import { ConsoleLogger } from '../logger/console';
-import { findConfigFile } from '../config';
+import { findConfigFile, getAbsoluteConfigPath } from '../config';
 import fs from 'fs';
 import path from 'path';
 
@@ -43,11 +43,10 @@ const cli = async (params: ParamsT) => {
         continue;
       }
 
-      logger.trace(`Trying find config file... ${defaultConfigPath}`);
-      try {
+      const absoluteDefaultConfigPath = getAbsoluteConfigPath(defaultConfigPath);
+      if (fs.existsSync(absoluteDefaultConfigPath)) {
+        logger.trace(`Trying find config file... ${absoluteDefaultConfigPath}`);
         config = await findConfigFile<Partial<SimpleTextFileModifierConfigT>>(logger, defaultConfigPath);
-      } catch (error) {
-        logger.trace(`Failed attempt to find the configuration file using the default path: "${defaultConfigPath}"`);
       }
     }
   }

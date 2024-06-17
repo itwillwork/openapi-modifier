@@ -61,10 +61,14 @@ function diagnosticTSFile(logger: LoggerI, fileNames: string[], options: any): b
   return !allDiagnostics?.length;
 }
 
+const getAbsoluteConfigPath = (configPath: string): string => {
+  return path.isAbsolute(configPath) ? configPath : path.resolve(process.cwd(), configPath);
+};
+
 const findConfigFile = async <T>(baseLogger: LoggerI, configPath: string): Promise<T> => {
   const logger = createConfigLogger(baseLogger);
 
-  const absoluteConfigPath = path.isAbsolute(configPath) ? configPath : path.resolve(process.cwd(), configPath);
+  const absoluteConfigPath = getAbsoluteConfigPath(configPath);
 
   const configFileExtension = path.extname(configPath) || null;
   switch (configFileExtension) {
@@ -221,4 +225,4 @@ const mergeConfigs = (baseLogger: LoggerI, ...configs: Array<Partial<ConfigT>>):
   }
 };
 
-export { defaultConfig, findConfigFile, checkIsValidConfig, mergeConfigs, ConfigT };
+export { defaultConfig, findConfigFile, getAbsoluteConfigPath, checkIsValidConfig, mergeConfigs, ConfigT };

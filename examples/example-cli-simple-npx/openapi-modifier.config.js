@@ -1,7 +1,7 @@
 module.exports = {
-  "pipeline": [
+  pipeline: [
     {
-      "rule": "remove-operation-id"
-    }
-  ]
-}
+      rule: 'remove-operation-id',
+    },
+  ],
+};

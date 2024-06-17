@@ -6,11 +6,13 @@ TODO что это и мотивация создания
   <summary>-Бекендер просит проверить используется ли поле в какой-то сущности</summary>
 
 При помощи правила можно убрать из сущности поле, и сгенерировать типизацию без нее, и если запустить проверку типизации в проекте TS поможет найти все места использования.
+
 ```js
 {
     "rule": "patch-schemas"
 }
 ```
+
 </details>
 
 - Бекендер просит проверить используется ли параметр в какой-то ручке
@@ -25,12 +27,12 @@ TODO что это и мотивация создания
 > [!IMPORTANT]  
 > Поддерживает OpenAPI 3.1, 3.0. Мы не проверяли поддержку OpenAPI 2, так как формат является устаревшим и рекомендуем мигрировать вашу документацию на OpenAPI 3.0.
 
-
 ### Демонстрация использования
 
 Например имеем [входной файл спецификации/документации api](./examples/example-cli-generate-api-types/input/openapi.yaml) от бекенд разработчиков. Например, [скачен через curl cli из github](./examples/example-cli-generate-api-types/package.json#L11).
 
 Пишем [файл конфигурации](./examples/example-cli-generate-api-types/openapi-modifier.config.ts), описывающий все что нужно поменять в исходной спецификации/документации с пояснительными комментариями:
+
 ```ts
 const config: ConfigT = {
     pipeline: [
@@ -41,7 +43,7 @@ const config: ConfigT = {
                 path: 'input/feature-openapi-JIRA-232.yaml',
             },
         },
-        
+
         // ...
 
         // JIRA-10212 - wrong docs, waiting JIRABACKEND-8752
@@ -67,7 +69,7 @@ const config: ConfigT = {
         },
 
         // ...
-        
+
         // JIRA-11236 - removed deprecated endpoint, waiting JIRABACKEND-3641
         {
             rule: 'filter-endpoints',
@@ -100,6 +102,7 @@ const config: ConfigT = {
 ```shell
 npx openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=openapi-modifier.config.js
 ```
+
 [на примере использования](./examples/example-cli-simple-npx/package.json#L6)
 
 или при помощи `npm`
@@ -109,15 +112,16 @@ npm i --save-dev openapi-modifier
 
 openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=openapi-modifier.config.js
 ```
+
 [на примере использования](./examples/example-cli-openapi-yaml/package.json#L7)
 
 Параметры:
 
-| Опция    | Описание                                                                                                 | Пример                       | Дефолтное                                                                                                                                                    |
-|----------|----------------------------------------------------------------------------------------------------------|------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `input`  | [**обязательный**] входной файл, специфиакция/документация в формате openapi                             | `input/openapi.yml`          |                                                                                                                                                              |
-| `output` | [**обязательный**] выходной файл, специфиакция/документация в формате opeanpi                            | `output/openapi.yml`         |                                                                                                                                                              |
-| `config` | путь до файла конфигурации. Детальное описание конфигурации [см. ниже](#custom_anchor_config_parameters) | `openapi-modifier.config.js` | `openapi-modifier.config.(json|js|ts)`                                                        |
+| Опция    | Описание                                                                                                 | Пример                       | Дефолтное                      |
+| -------- | -------------------------------------------------------------------------------------------------------- | ---------------------------- | ------------------------------ | --- | ---- |
+| `input`  | [**обязательный**] входной файл, специфиакция/документация в формате openapi                             | `input/openapi.yml`          |                                |
+| `output` | [**обязательный**] выходной файл, специфиакция/документация в формате opeanpi                            | `output/openapi.yml`         |                                |
+| `config` | путь до файла конфигурации. Детальное описание конфигурации [см. ниже](#custom_anchor_config_parameters) | `openapi-modifier.config.js` | `openapi-modifier.config.(json | js  | ts)` |
 
 [Демонстрация на примере использования](./examples/example-cli-openapi-yaml/package.json#L7)
 
@@ -152,8 +156,8 @@ export default config;
 
 ```js
 module.exports = {
-    input: './input/openapi.yaml',
-    output: './output/openapi.yaml',
+  input: './input/openapi.yaml',
+  output: './output/openapi.yaml',
   rules: [
     {
       name: 'remove-operation-id',
@@ -165,18 +169,20 @@ module.exports = {
 ```
 
 <a name="custom_anchor_config_parameters"></a>
+
 ### Параметры конфигурации
 
 Параметры:
 
-| Опция   | Описание                                                                                                                                         | Дефолтное                                                         |
-|---------|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
+| Опция             | Описание                                                                                                                                         | Дефолтное                                                         |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
 | `logger.minLevel` | [**обязательный**] входной файл, специфиакция/документация в формате openapi                                                                     |                                                                   |
-| `input` | [**обязательный**] выходной файл, специфиакция/документация в формате opeanpi                                                                    |                                                                   |
-| `output` | [**обязательный**] выходной файл, специфиакция/документация в формате opeanpi                                                                    |                                                                   |
-| `pipeline` | последовательность применяемых правил модификации к входному файлу. Детальное описание конфигурации [см. ниже](#custom_anchor_config_parameters) | `./openapi-modifier.config.js` или `./openapi-modifier.config.ts` |
+| `input`           | [**обязательный**] выходной файл, специфиакция/документация в формате opeanpi                                                                    |                                                                   |
+| `output`          | [**обязательный**] выходной файл, специфиакция/документация в формате opeanpi                                                                    |                                                                   |
+| `pipeline`        | последовательность применяемых правил модификации к входному файлу. Детальное описание конфигурации [см. ниже](#custom_anchor_config_parameters) | `./openapi-modifier.config.js` или `./openapi-modifier.config.ts` |
 
 Простой пример конфигурации, например файл `openapi-modifier.config.json`:
+
 ```json
 {
   "pipeline": [
@@ -197,20 +203,21 @@ import { openapiModifier } from 'openapi-modifier';
 // ...
 
 await openapiModifier({
-    input: 'input/openapi.yml',
-    output: 'output/openapi.yml',
-    pipeline: [
-        // ... more rules
-        {
-            rule: 'remove-operation-id',
-            config: {
-                ignore: [],
-            },
-        },
-        // ... more rules
-    ],
+  input: 'input/openapi.yml',
+  output: 'output/openapi.yml',
+  pipeline: [
+    // ... more rules
+    {
+      rule: 'remove-operation-id',
+      config: {
+        ignore: [],
+      },
+    },
+    // ... more rules
+  ],
 });
 ```
+
 [Демонстрация на примере использования](./examples/example-package-openapi-yaml/generate.ts)
 
 или используя отдельный файл конфигурации
@@ -221,9 +228,9 @@ import { openapiModifier } from 'openapi-modifier';
 // ...
 
 await openapiModifier({
-    input: 'input/openapi.yml',
-    output: 'output/openapi.yml',
-    config: 'openapi-modifier.config.ts',
+  input: 'input/openapi.yml',
+  output: 'output/openapi.yml',
+  config: 'openapi-modifier.config.ts',
 });
 ```
 
@@ -287,23 +294,26 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 ### Примеры использования
 
 Наиболее приближенный к реальному использованию [пример](./examples/example-cli-generate-api-types) в нем отражено:
-- модификация openapi.yaml с комментариями для комманды разработчиков (см. [файл конфигурации](./examples/example-cli-generate-api-types/openapi-modifier-config.ts) и [полученный файл](./examples/example-cli-generate-api-types/output/openapi.yaml)). В нем помечены в каких задачах (JIRA-*) будут исправлены правки, пример ???
+
+- модификация openapi.yaml с комментариями для комманды разработчиков (см. [файл конфигурации](./examples/example-cli-generate-api-types/openapi-modifier-config.ts) и [полученный файл](./examples/example-cli-generate-api-types/output/openapi.yaml)). В нем помечены в каких задачах (JIRA-\*) будут исправлены правки, пример ???
 - способ генерации типизации из API по openapi (см. [комманду генерирующую типизацию API](./examples/example-cli-generate-api-types/package.json#L8))
-- пост-обработка сгенерированной типизации (см. [файл конфигурации](./examples/example-cli-generate-api-types/simple-text-file-modifier-config.ts) и [полученный файл типизации API](./examples/example-cli-generate-api-types/output/generated-api-types.d.ts)). Проставляется warning для комманды разработки, переименовываются сущности (для удобства использования). 
+- пост-обработка сгенерированной типизации (см. [файл конфигурации](./examples/example-cli-generate-api-types/simple-text-file-modifier-config.ts) и [полученный файл типизации API](./examples/example-cli-generate-api-types/output/generated-api-types.d.ts)). Проставляется warning для комманды разработки, переименовываются сущности (для удобства использования).
 
 Его конфиг:
 
 [Полный код примера](./examples/example-cli-generate-api-types)
 
 Другие примеры:
-- Использование как npm пакет в скриптах 
+
+- Использование как npm пакет в скриптах
 
 ### Полезные ссылки
 
 Больше примеров как можно использовать openapi:
+
 - для ...
 - для ...
-Подробная [статья на habr](./examples/example-cli-generate-api-types)
+  Подробная [статья на habr](./examples/example-cli-generate-api-types)
 
 ### simple-text-file-modifier
 
