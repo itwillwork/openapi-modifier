@@ -35,7 +35,7 @@ simple-text-file-modifier --input=input/openapi.yml --output=output/openapi.yml 
 | ---------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------- | ----------------------------------------------- |
 | **input**  | [**обязательный**] входной файл, специфиакция/документация в формате openapi                             | `input/openapi.yml`                   |                                                 |
 | **output** | [**обязательный**] выходной файл, специфиакция/документация в формате opeanpi                            | `output/openapi.yml`                  |                                                 |
-| **config** | путь до файла конфигурации. Детальное описание конфигурации [см. ниже](#custom_anchor_config_parameters) | `simple-text-file-modifier.config.js` | `simple-text-file-modifier.config.(json\js\ts)` |
+| **config** | путь до файла конфигурации. Детальное описание конфигурации [см. ниже](#custom_anchor_config_parameters) | `simple-text-file-modifier.config.js` | `simple-text-file-modifier.config.(js\ts\json\yaml\yml)` |
 
 <a name="config_description"></a>
 
