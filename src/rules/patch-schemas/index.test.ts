@@ -595,4 +595,71 @@ describe('patch-schemas rule', () => {
     expect(fakeLogger.warning).toBeCalledTimes(0);
     expect(fakeLogger.error).toBeCalledLoggerMethod(/Config should be not empty array/, 1);
   });
+
+  test('regular, component with correction', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      components: {
+        schemas: {
+          TestObjectDTO: {
+            type: 'object',
+            properties: {
+              TestArraySchemaDTO: {
+                type: 'array',
+                items: {
+                  type: 'string',
+                  enum: ['1', '2'],
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(
+        processor.processDocument(
+            fakeOpenAPIFile,
+            [
+              {
+                patchMethod: 'replace',
+                descriptor: {
+                  type: 'component-schema',
+                  componentName: 'TestObjectDTO',
+                  correction: 'properties.TestArraySchemaDTO.items'
+                },
+                schemaDiff: {
+                  type: 'string',
+                  enum: ['3', '4'],
+                },
+              },
+            ],
+            fakeLogger
+        )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+          components: {
+              schemas: {
+                  TestObjectDTO: {
+                      type: 'object',
+                      properties: {
+                          TestArraySchemaDTO: {
+                              type: 'array',
+                              items: {
+                                  type: 'string',
+                                  enum: ['3', '4'],
+                              },
+                          },
+                      },
+                  },
+              },
+          },
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+  });
+
 });
