@@ -904,4 +904,84 @@ describe('patch-schemas rule', () => {
     expect(fakeLogger.warning).toBeCalledTimes(0);
   });
 
+  test('regular, endpoint-request-body with correction', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      paths: {
+        '/pets': {
+          post: {
+            description: '',
+            requestBody: {
+              content: {
+                '*/*': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      testField: {
+                        enum: ['1', '2'],
+                        type: 'string',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            responses: {},
+          },
+        },
+      },
+    });
+
+    expect(
+        processor.processDocument(
+            fakeOpenAPIFile,
+            [
+              {
+                patchMethod: 'replace',
+                descriptor: {
+                  type: 'endpoint-request-body',
+                  path: '/pets',
+                  method: 'POST',
+                  contentType: '*/*',
+                  correction: 'properties.testField'
+                },
+                schemaDiff: {
+                  enum: ['3', '4'],
+                },
+              },
+            ],
+            fakeLogger
+        )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        paths: {
+          '/pets': {
+            post: {
+              description: '',
+              requestBody: {
+                content: {
+                  '*/*': {
+                    schema: {
+                      type: 'object',
+                      properties: {
+                        testField: {
+                          enum: ['3', '4'],
+                          type: 'string',
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+              responses: {},
+            },
+          },
+        },
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+  });
 });
