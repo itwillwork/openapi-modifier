@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const patchMethodConfigSchema = z.union([z.literal('merge'), z.literal('replace')]);
+export const patchMethodConfigSchema = z.union([z.literal('deepmerge'), z.literal('merge')]);
 
 export const openAPISchemaConfigSchema = z.any();
 

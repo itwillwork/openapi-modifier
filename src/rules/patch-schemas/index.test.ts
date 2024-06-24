@@ -24,7 +24,7 @@ describe('patch-schemas rule', () => {
         fakeOpenAPIFile,
         [
           {
-            patchMethod: 'merge',
+            patchMethod: 'deepmerge',
             descriptor: {
               type: 'component-schema',
               componentName: 'TestSchemaDTO',
@@ -34,7 +34,7 @@ describe('patch-schemas rule', () => {
             },
           },
           {
-            patchMethod: 'replace',
+            patchMethod: 'merge',
             descriptor: {
               type: 'component-schema',
               componentName: 'TestArraySchemaDTO',
@@ -118,7 +118,7 @@ describe('patch-schemas rule', () => {
         fakeOpenAPIFile,
         [
           {
-            patchMethod: 'merge',
+            patchMethod: 'deepmerge',
             descriptor: {
               type: 'endpoint',
               path: '/pets',
@@ -140,7 +140,7 @@ describe('patch-schemas rule', () => {
             },
           },
           {
-            patchMethod: 'replace',
+            patchMethod: 'merge',
             descriptor: {
               type: 'endpoint',
               path: '/all-pets',
@@ -266,7 +266,7 @@ describe('patch-schemas rule', () => {
         fakeOpenAPIFile,
         [
           {
-            patchMethod: 'merge',
+            patchMethod: 'deepmerge',
             descriptor: {
               type: 'endpoint-response',
               path: '/pets',
@@ -279,7 +279,7 @@ describe('patch-schemas rule', () => {
             },
           },
           {
-            patchMethod: 'replace',
+            patchMethod: 'merge',
             descriptor: {
               type: 'endpoint-response',
               path: '/all-pets',
@@ -382,7 +382,7 @@ describe('patch-schemas rule', () => {
         fakeOpenAPIFile,
         [
           {
-            patchMethod: 'merge',
+            patchMethod: 'deepmerge',
             descriptor: {
               type: 'endpoint-request-body',
               path: '/pets',
@@ -394,7 +394,7 @@ describe('patch-schemas rule', () => {
             },
           },
           {
-            patchMethod: 'replace',
+            patchMethod: 'merge',
             descriptor: {
               type: 'endpoint-request-body',
               path: '/all-pets',
@@ -493,7 +493,7 @@ describe('patch-schemas rule', () => {
         fakeOpenAPIFile,
         [
           {
-            patchMethod: 'merge',
+            patchMethod: 'deepmerge',
             descriptor: {
               type: 'endpoint-parameter',
               path: '/pets',
@@ -506,7 +506,7 @@ describe('patch-schemas rule', () => {
             },
           },
           {
-            patchMethod: 'replace',
+            patchMethod: 'merge',
             descriptor: {
               type: 'endpoint-parameter',
               path: '/all-pets',
@@ -575,7 +575,7 @@ describe('patch-schemas rule', () => {
         fakeOpenAPIFile,
         {
           // @ts-expect-error
-          patchMethod: 'merge',
+          patchMethod: 'deepmerge',
           descriptor: {
             type: 'endpoint-request-body',
             path: '/pets',
@@ -622,7 +622,7 @@ describe('patch-schemas rule', () => {
             fakeOpenAPIFile,
             [
               {
-                patchMethod: 'replace',
+                patchMethod: 'merge',
                 descriptor: {
                   type: 'component-schema',
                   componentName: 'TestObjectDTO',
@@ -692,7 +692,7 @@ describe('patch-schemas rule', () => {
             fakeOpenAPIFile,
             [
               {
-                patchMethod: 'replace',
+                patchMethod: 'merge',
                 descriptor: {
                   type: 'endpoint',
                   path: '/pets',
@@ -769,7 +769,7 @@ describe('patch-schemas rule', () => {
             fakeOpenAPIFile,
             [
               {
-                patchMethod: 'replace',
+                patchMethod: 'merge',
                 descriptor: {
                   type: 'endpoint-parameter',
                   path: '/pets',
@@ -853,7 +853,7 @@ describe('patch-schemas rule', () => {
             fakeOpenAPIFile,
             [
               {
-                patchMethod: 'replace',
+                patchMethod: 'merge',
                 descriptor: {
                   type: 'endpoint-response',
                   path: '/pets',
@@ -937,7 +937,7 @@ describe('patch-schemas rule', () => {
             fakeOpenAPIFile,
             [
               {
-                patchMethod: 'replace',
+                patchMethod: 'merge',
                 descriptor: {
                   type: 'endpoint-request-body',
                   path: '/pets',

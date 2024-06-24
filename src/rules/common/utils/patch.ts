@@ -13,11 +13,11 @@ export const patchSchema = (logger: LoggerI, sourceSchema: OpenAPISchema, method
 
   return otherSchemas.reduce((acc, otherSchema) => {
     switch (method) {
-      case 'merge': {
+      case 'deepmerge': {
         return deepmerge(sourceSchema, otherSchema);
         break;
       }
-      case 'replace': {
+      case 'merge': {
         return {
           ...acc,
           ...otherSchema,

@@ -36,7 +36,7 @@ describe('patch-parameter rule', () => {
             name: 'filter',
             in: 'query',
           },
-          patchMethod: 'merge',
+          patchMethod: 'deepmerge',
           schemaDiff: {
             format: 'double',
           },
@@ -100,7 +100,7 @@ describe('patch-parameter rule', () => {
             name: 'filter',
             in: 'query',
           },
-          patchMethod: 'merge',
+          patchMethod: 'deepmerge',
           schemaDiff: {
             format: 'double',
           },
