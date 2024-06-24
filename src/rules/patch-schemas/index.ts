@@ -174,7 +174,20 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
                     const endpointSchema = pathObjSchema?.[targetMethod];
                     if (endpointSchema) {
-                        pathObjSchema[targetMethod] = patchSchema(logger, endpointSchema, patchMethod, schemaDiff);
+                        if (descriptor.correction) {
+                            setObjectProp(
+                                pathObjSchema[targetMethod],
+                                descriptor.correction,
+                                patchSchema(
+                                    logger,
+                                    getObjectPath(pathObjSchema[targetMethod], descriptor.correction),
+                                    patchMethod,
+                                    schemaDiff,
+                                ),
+                            );
+                        } else {
+                            pathObjSchema[targetMethod] = patchSchema(logger, endpointSchema, patchMethod, schemaDiff);
+                        }
                     } else {
                         logger.warning(`Not found endpoint (same method) with descriptor: ${JSON.stringify(descriptor)}!`);
                     }

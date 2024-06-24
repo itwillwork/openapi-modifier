@@ -662,4 +662,77 @@ describe('patch-schemas rule', () => {
     expect(fakeLogger.warning).toBeCalledTimes(0);
   });
 
+  test('regular, endpoint with correction', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      paths: {
+        '/pets': {
+          get: {
+            summary: '',
+            responses: {
+              '200': {
+                description: 'Test 200',
+                content: {
+                  '*/*': {
+                    schema: {
+                      enum: ['1', '2'],
+                      type: 'string',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(
+        processor.processDocument(
+            fakeOpenAPIFile,
+            [
+              {
+                patchMethod: 'replace',
+                descriptor: {
+                  type: 'endpoint',
+                  path: '/pets',
+                  method: 'GET',
+                  correction: 'responses.200.content.*/*.schema',
+                },
+                schemaDiff: {
+                  enum: ['3', '4'],
+                },
+              },
+            ],
+            fakeLogger
+        )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        paths: {
+          '/pets': {
+            get: {
+              summary: '',
+              responses: {
+                '200': {
+                  description: 'Test 200',
+                  content: {
+                    '*/*': {
+                      schema: {
+                        enum: ['3', '4'],
+                        type: 'string',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+  });
 });
