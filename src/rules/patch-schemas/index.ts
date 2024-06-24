@@ -209,7 +209,20 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
                     const paramater = operationSchema.parameters?.[parameterIndex];
                     if (paramater && !checkIsRefSchema(paramater)) {
-                        paramater.schema = patchSchema(logger, paramater.schema, patchMethod, schemaDiff);
+                        if (descriptor.correction) {
+                            setObjectProp(
+                                paramater.schema,
+                                descriptor.correction,
+                                patchSchema(
+                                    logger,
+                                    getObjectPath(paramater.schema, descriptor.correction),
+                                    patchMethod,
+                                    schemaDiff,
+                                ),
+                            );
+                        } else {
+                            paramater.schema = patchSchema(logger, paramater.schema, patchMethod, schemaDiff);
+                        }
                     }
 
                     break;
