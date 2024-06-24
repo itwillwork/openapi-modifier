@@ -321,8 +321,7 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 ### TODO
 
-- сделать возможность патчить внутри сущности что-то
-- скрипт генерации README.md для всех правил (склейка ссылок на readme из папок)
+- разделить слишком сложное правило patch-schemas
 - причесать README.md правил
 - причесать README.md примеров
 - причесать главный README.md

@@ -133,4 +133,84 @@ describe('patch-parameter rule', () => {
 
     expect(fakeLogger.warning).toBeCalledTimes(0);
   });
+  test('regular, with correction', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      paths: {
+        '/pets': {
+          get: {
+            summary: 'List all pets',
+            parameters: [
+              {
+                in: 'query',
+                name: 'filter',
+                schema: {
+                  type: 'object',
+                  properties: {
+                    testField: {
+                      enum: ['1', '2'],
+                      type: 'string',
+                    },
+                  },
+                },
+              },
+            ],
+            responses: {},
+          },
+        },
+      },
+    });
+
+    expect(
+        processor.processDocument(
+            fakeOpenAPIFile,
+            {
+              endpointDescriptor: {
+                path: '/pets',
+                method: 'GET',
+              },
+              parameterDescriptor: {
+                name: 'filter',
+                in: 'query',
+                correction: 'properties.testField'
+              },
+              patchMethod: 'merge',
+              schemaDiff: {
+                enum: ['3', '4'],
+              },
+            },
+            fakeLogger
+        )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        paths: {
+          '/pets': {
+            get: {
+              summary: 'List all pets',
+              parameters: [
+                {
+                  in: 'query',
+                  name: 'filter',
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      testField: {
+                        enum: ['3', '4'],
+                        type: 'string',
+                      },
+                    },
+                  },
+                },
+              ],
+              responses: {},
+            },
+          },
+        },
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+  });
 });

@@ -11,11 +11,16 @@ import { HttpMethods, PathItemObject } from '../common/openapi-models';
 import { getOperationSchema } from '../common/utils/get-operation-schema';
 import { findParameterIndex } from '../common/utils/find-parameter-index';
 import { checkIsRefSchema } from '../common/utils/refs';
+import {getObjectPath, setObjectProp} from "../common/utils/object-path";
 
 const configSchema = z
   .object({
     endpointDescriptor: endpointDescriptorConfigSchema.optional(),
-    parameterDescriptor: parameterDescriptorConfigSchema.optional(),
+    parameterDescriptor: z.object({
+        name: z.string(),
+        in: parameterInConfigSchema,
+        correction: z.string().optional(),
+    }).strict().optional(),
     patchMethod: patchMethodConfigSchema.optional(),
     schemaDiff: openAPISchemaConfigSchema.optional(),
     objectDiff: z
@@ -114,7 +119,20 @@ const processor: RuleProcessorT<typeof configSchema> = {
       return openAPIFile;
     }
 
-    targetParameterSchema.schema = patchSchema(logger, targetParameterSchema.schema, patchMethod, schemaDiff);
+    if (parameterDescriptor.correction) {
+      setObjectProp(
+          targetParameterSchema.schema,
+          parameterDescriptor.correction,
+          patchSchema(
+              logger,
+              getObjectPath(targetParameterSchema.schema, parameterDescriptor.correction),
+              patchMethod,
+              schemaDiff,
+          ),
+      );
+    } else {
+      targetParameterSchema.schema = patchSchema(logger, targetParameterSchema.schema, patchMethod, schemaDiff);
+    }
 
     if (objectDiff?.name !== undefined) {
       targetParameterSchema.name = objectDiff.name;

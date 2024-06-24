@@ -34,3 +34,5 @@ export const patchSchema = (logger: LoggerI, sourceSchema: OpenAPISchema, method
     return acc;
   }, sourceSchema);
 };
+
+
