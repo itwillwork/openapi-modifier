@@ -246,7 +246,20 @@ const processor: RuleProcessorT<typeof configSchema> = {
                         break;
                     }
 
-                    responseContentSchema.schema = patchSchema(logger, responseContentSchema.schema, patchMethod, schemaDiff);
+                    if (descriptor.correction) {
+                        setObjectProp(
+                            responseContentSchema.schema,
+                            descriptor.correction,
+                            patchSchema(
+                                logger,
+                                getObjectPath(responseContentSchema.schema, descriptor.correction),
+                                patchMethod,
+                                schemaDiff,
+                            ),
+                        );
+                    } else {
+                        responseContentSchema.schema = patchSchema(logger, responseContentSchema.schema, patchMethod, schemaDiff);
+                    }
 
                     break;
                 }

@@ -817,4 +817,91 @@ describe('patch-schemas rule', () => {
 
     expect(fakeLogger.warning).toBeCalledTimes(0);
   });
+
+  test('regular, endpoint-response with correction', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      paths: {
+        '/pets': {
+          get: {
+            summary: '',
+            responses: {
+              '200': {
+                description: 'Test 200',
+                content: {
+                  '*/*': {
+                    schema: {
+                      type: 'object',
+                      properties: {
+                        testField: {
+                          enum: ['1', '2'],
+                          type: 'string',
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(
+        processor.processDocument(
+            fakeOpenAPIFile,
+            [
+              {
+                patchMethod: 'replace',
+                descriptor: {
+                  type: 'endpoint-response',
+                  path: '/pets',
+                  method: 'GET',
+                  code: '200',
+                  contentType: '*/*',
+                  correction: 'properties.testField'
+                },
+                schemaDiff: {
+                  enum: ['3', '4'],
+                },
+              },
+            ],
+            fakeLogger
+        )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        paths: {
+          '/pets': {
+            get: {
+              summary: '',
+              responses: {
+                '200': {
+                  description: 'Test 200',
+                  content: {
+                    '*/*': {
+                      schema: {
+                        type: 'object',
+                        properties: {
+                          testField: {
+                            enum: ['3', '4'],
+                            type: 'string',
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+  });
+
 });
