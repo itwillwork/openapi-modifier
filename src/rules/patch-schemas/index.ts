@@ -7,53 +7,7 @@ import {checkIsHttpMethod} from '../common/openapi-models';
 import {checkIsRefSchema} from '../common/utils/refs';
 import {getOperationSchema} from '../common/utils/get-operation-schema';
 import {findParameterIndex} from '../common/utils/find-parameter-index';
-
-const getObjectPath = <SourceObject = any, Value = any>(
-    sourceObject: SourceObject,
-    path: string | Array<string> | undefined,
-): Value => {
-    if (!path) {
-        throw new Error('Not valid path');
-    }
-
-    const pathKeys = Array.isArray(path) ? path : path.split('.');
-
-    // @ts-expect-error
-    let resultObject = sourceObject[pathKeys[0]] || null;
-
-    if (sourceObject && pathKeys.length > 1) {
-        return getObjectPath(resultObject, pathKeys.slice(1));
-    }
-
-    return resultObject;
-}
-
-const setObjectProp = <SourceObject = any, Value = any>(
-    sourceObject: SourceObject,
-    path: string | Array<string> | undefined,
-    value: Value,
-): void => {
-    if (!path) {
-        throw new Error('Not valid path');
-    }
-
-    const pathKeys = Array.isArray(path) ? path : path.split('.');
-
-    if (pathKeys.length > 1) {
-        // @ts-expect-error
-        if (!sourceObject[pathKeys[0]]) {
-            throw new Error('Not valid path');
-        }
-
-        // @ts-expect-error
-        return setObjectProp(sourceObject[pathKeys[0]], pathKeys.slice(1), value);
-    }
-
-    if (pathKeys[0]) {
-        // @ts-expect-error
-        sourceObject[pathKeys[0]] = value;
-    }
-}
+import {setObjectProp, getObjectPath} from '../common/utils/object-path';
 
 const descriptorSchema = z
     .object({
