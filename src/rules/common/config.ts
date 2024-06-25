@@ -6,7 +6,7 @@ export const openAPISchemaConfigSchema = z.any();
 
 export const parameterInConfigSchema = z.union([z.literal('query'), z.literal('header'), z.literal('path'), z.literal('cookie')]);
 
-export const parameterDescriptorConfigSchema = z
+export const endpointParameterDescriptorConfigSchema = z
   .object({
     name: z.string(),
     in: parameterInConfigSchema,

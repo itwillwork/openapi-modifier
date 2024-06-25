@@ -1,7 +1,7 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
 import { OpenAPIV2, OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
-import { endpointDescriptorConfigSchema, parameterDescriptorConfigSchema } from '../common/config';
+import { endpointDescriptorConfigSchema, endpointParameterDescriptorConfigSchema } from '../common/config';
 import { normalizeMethod } from '../common/utils/normilizers';
 import { HttpMethods, PathItemObject } from '../common/openapi-models';
 import { getOperationSchema } from '../common/utils/get-operation-schema';
@@ -10,7 +10,7 @@ import { checkIsRefSchema } from '../common/utils/refs';
 const configSchema = z
   .object({
     endpointDescriptor: endpointDescriptorConfigSchema.optional(),
-    parameterDescriptor: parameterDescriptorConfigSchema.optional(),
+    parameterDescriptor: endpointParameterDescriptorConfigSchema.optional(),
   })
   .strict();
 

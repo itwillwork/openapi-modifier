@@ -5,7 +5,7 @@ import deepmerge from 'deepmerge';
 import { OpenAPIFileT } from '../../openapi';
 import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
 import { patchSchema } from '../common/utils/patch';
-import { openAPISchemaConfigSchema, patchMethodConfigSchema, parameterInConfigSchema, endpointDescriptorConfigSchema, parameterDescriptorConfigSchema } from '../common/config';
+import { openAPISchemaConfigSchema, patchMethodConfigSchema, parameterInConfigSchema, endpointDescriptorConfigSchema, endpointParameterDescriptorConfigSchema } from '../common/config';
 import { normalizeMethod } from '../common/utils/normilizers';
 import { HttpMethods, PathItemObject } from '../common/openapi-models';
 import { getOperationSchema } from '../common/utils/get-operation-schema';
@@ -16,7 +16,7 @@ import {getObjectPath, setObjectProp} from "../common/utils/object-path";
 const configSchema = z
   .object({
     endpointDescriptor: endpointDescriptorConfigSchema.optional(),
-    parameterDescriptor: parameterDescriptorConfigSchema.optional(),
+    parameterDescriptor: endpointParameterDescriptorConfigSchema.optional(),
     parameterDescriptorCorrection: z.string().optional(),
     patchMethod: patchMethodConfigSchema.optional(),
     schemaDiff: openAPISchemaConfigSchema.optional(),
