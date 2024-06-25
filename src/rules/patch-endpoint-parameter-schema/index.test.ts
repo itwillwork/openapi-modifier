@@ -1,6 +1,6 @@
 import processor from './index';
 
-describe('patch-parameter rule', () => {
+describe('patch-endpoint-parameter-schema rule', () => {
   test('regular', () => {
     const fakeLogger = global.createFakeLogger();
     const fakeOpenAPIFile = global.createFakeOpenAPIFile({

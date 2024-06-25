@@ -1,4 +1,4 @@
-## patch-parameter
+## patch-endpoint-parameter-schema
 
 Патчит параметр в endpoint'е через сливание или замену.
 

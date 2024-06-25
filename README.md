@@ -258,7 +258,7 @@ await openapiModifier({
 [6]: ./src/rules/filter-by-content-type/README.md
 [7]: ./src/rules/filter-endpoints/README.md
 [8]: ./src/rules/patch-schemas/README.md
-[9]: ./src/rules/patch-parameter/README.md
+[9]: src/rules/patch-endpoint-parameter-schema/README.md
 [10]: ./src/rules/remove-parameter/README.md
 [11]: ./src/rules/merge-openapi-spec/README.md
 [12]: ./src/rules/remove-unused-components/README.md
