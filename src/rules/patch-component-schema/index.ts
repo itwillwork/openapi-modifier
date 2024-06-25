@@ -1,15 +1,13 @@
 import {RuleProcessorT} from '../../core/rules/processor-models';
 import {z} from 'zod';
 import {patchSchema} from '../common/utils/patch';
-import {openAPISchemaConfigSchema, patchMethodConfigSchema} from '../common/config';
+import {componentDescriptorConfigSchema, openAPISchemaConfigSchema, patchMethodConfigSchema} from '../common/config';
 import {getObjectPath, setObjectProp} from '../common/utils/object-path';
 
 const configSchema = z
     .object({
-        descriptor: z.object({
-            componentName: z.string(),
-            correction: z.string().optional(),
-        }).strict().optional(),
+        descriptor: componentDescriptorConfigSchema.optional(),
+        descriptorCorrection: z.string().optional(),
         patchMethod: patchMethodConfigSchema.optional(),
         schemaDiff: openAPISchemaConfigSchema.optional(),
     })
@@ -21,22 +19,22 @@ const processor: RuleProcessorT<typeof configSchema> = {
         patchMethod: 'merge',
     },
     processDocument: (openAPIFile, config, logger) => {
-        const {patchMethod, schemaDiff, descriptor} = config;
+        const {patchMethod, schemaDiff, descriptor, descriptorCorrection} = config;
         if (!descriptor || !patchMethod || !schemaDiff) {
             return openAPIFile;
         }
 
-        const {componentName, correction} = descriptor;
+        const {componentName} = descriptor;
 
         const componentSchemas = openAPIFile?.document?.components?.schemas;
         if (componentSchemas?.[componentName]) {
-            if (correction) {
+            if (descriptorCorrection) {
                 setObjectProp(
                     componentSchemas?.[componentName],
-                    correction,
+                    descriptorCorrection,
                     patchSchema(
                         logger,
-                        getObjectPath(componentSchemas[componentName], correction),
+                        getObjectPath(componentSchemas[componentName], descriptorCorrection),
                         patchMethod,
                         schemaDiff,
                     ),

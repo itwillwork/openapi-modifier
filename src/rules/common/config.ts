@@ -13,6 +13,27 @@ export const parameterDescriptorConfigSchema = z
   })
   .strict();
 
+export const componentDescriptorConfigSchema = z
+  .object({
+      componentName: z.string(),
+  })
+  .strict();
+
+export const endpointRequestBodyDescriptorConfigSchema = z
+    .object({
+        contentType: z.string(),
+    })
+    .strict();
+
+
+export const endpointResponseDescriptorConfigSchema = z
+    .object({
+        code: z.string(),
+        contentType: z.string(),
+    })
+    .strict();
+
+
 export const endpointDescriptorConfigSchema = z
   .object({
     path: z.string(),

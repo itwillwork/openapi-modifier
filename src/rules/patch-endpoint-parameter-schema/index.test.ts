@@ -172,8 +172,8 @@ describe('patch-endpoint-parameter-schema rule', () => {
               parameterDescriptor: {
                 name: 'filter',
                 in: 'query',
-                correction: 'properties.testField'
               },
+              parameterDescriptorCorrection: 'properties.testField',
               patchMethod: 'merge',
               schemaDiff: {
                 enum: ['3', '4'],

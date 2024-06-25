@@ -125,8 +125,8 @@ describe('patch-schemas rule', () => {
                 patchMethod: 'merge',
                 descriptor: {
                   componentName: 'TestObjectDTO',
-                  correction: 'properties.TestArraySchemaDTO.items'
                 },
+                descriptorCorrection: 'properties.TestArraySchemaDTO.items',
                 schemaDiff: {
                   type: 'string',
                   enum: ['3', '4'],

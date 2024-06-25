@@ -203,9 +203,7 @@ describe('patch-endpoint-schema rule', () => {
                         path: '/pets',
                         method: 'GET',
                     },
-                    descriptor: {
-                        correction: 'responses.200.content.*/*.schema',
-                    },
+                    endpointDescriptorCorrection: 'responses.200.content.*/*.schema',
                     schemaDiff: {
                         enum: ['3', '4'],
                     },

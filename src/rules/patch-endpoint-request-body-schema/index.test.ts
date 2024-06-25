@@ -172,9 +172,9 @@ describe('patch-endpoint-request-body-schema rule', () => {
                         path: '/pets',
                         method: 'POST',
                     },
+                    descriptorCorrection: 'properties.testField',
                     descriptor: {
                         contentType: '*/*',
-                        correction: 'properties.testField'
                     },
                     schemaDiff: {
                         enum: ['3', '4'],

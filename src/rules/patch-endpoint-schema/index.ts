@@ -9,9 +9,7 @@ import {getObjectPath, setObjectProp} from '../common/utils/object-path';
 const configSchema = z
     .object({
         endpointDescriptor: endpointDescriptorConfigSchema.optional(),
-        descriptor: z.object({
-            correction: z.string().optional(),
-        }).strict().optional(),
+        endpointDescriptorCorrection: z.string().optional(),
         patchMethod: patchMethodConfigSchema.optional(),
         schemaDiff: openAPISchemaConfigSchema.optional(),
     })
@@ -21,7 +19,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
     configSchema,
     defaultConfig: {},
     processDocument: (openAPIFile, config, logger) => {
-        const {patchMethod, schemaDiff, descriptor, endpointDescriptor} = config;
+        const {patchMethod, schemaDiff, endpointDescriptorCorrection, endpointDescriptor} = config;
         if (!endpointDescriptor || !patchMethod || !schemaDiff) {
             return openAPIFile;
         }
@@ -33,19 +31,19 @@ const processor: RuleProcessorT<typeof configSchema> = {
             return normalizeMethod(pathMethod) === normalizeMethod(endpointDescriptor.method);
         });
         if (!targetMethod) {
-            logger.warning(`Not found endpoint (same path and method) with descriptor: ${JSON.stringify(descriptor)}!`);
+            logger.warning(`Not found endpoint (same path and method) with descriptor: ${JSON.stringify(endpointDescriptor)}!`);
             return openAPIFile;
         }
 
         const endpointSchema = pathObjSchema?.[targetMethod];
         if (endpointSchema) {
-            if (descriptor?.correction) {
+            if (endpointDescriptorCorrection) {
                 setObjectProp(
                     pathObjSchema[targetMethod],
-                    descriptor.correction,
+                    endpointDescriptorCorrection,
                     patchSchema(
                         logger,
-                        getObjectPath(pathObjSchema[targetMethod], descriptor.correction),
+                        getObjectPath(pathObjSchema[targetMethod], endpointDescriptorCorrection),
                         patchMethod,
                         schemaDiff,
                     ),
@@ -54,7 +52,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
                 pathObjSchema[targetMethod] = patchSchema(logger, endpointSchema, patchMethod, schemaDiff);
             }
         } else {
-            logger.warning(`Not found endpoint (same method) with descriptor: ${JSON.stringify(descriptor)}!`);
+            logger.warning(`Not found endpoint (same method) with descriptor: ${JSON.stringify(endpointDescriptor)}!`);
         }
 
         return openAPIFile;

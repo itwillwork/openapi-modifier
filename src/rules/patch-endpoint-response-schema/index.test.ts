@@ -187,8 +187,8 @@ describe('patch-endpoint-response-schema rule', () => {
                     descriptor: {
                         code: '200',
                         contentType: '*/*',
-                        correction: 'properties.testField'
                     },
+                    descriptorCorrection: 'properties.testField',
                     schemaDiff: {
                         enum: ['3', '4'],
                     },

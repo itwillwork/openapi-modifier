@@ -16,11 +16,8 @@ import {getObjectPath, setObjectProp} from "../common/utils/object-path";
 const configSchema = z
   .object({
     endpointDescriptor: endpointDescriptorConfigSchema.optional(),
-    parameterDescriptor: z.object({
-        name: z.string(),
-        in: parameterInConfigSchema,
-        correction: z.string().optional(),
-    }).strict().optional(),
+    parameterDescriptor: parameterDescriptorConfigSchema.optional(),
+    parameterDescriptorCorrection: z.string().optional(),
     patchMethod: patchMethodConfigSchema.optional(),
     schemaDiff: openAPISchemaConfigSchema.optional(),
     objectDiff: z
@@ -38,7 +35,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: {},
   processDocument: (openAPIFile, config, logger) => {
-    const { endpointDescriptor, parameterDescriptor, patchMethod, schemaDiff, objectDiff } = config;
+    const { endpointDescriptor, parameterDescriptor, parameterDescriptorCorrection, patchMethod, schemaDiff, objectDiff } = config;
 
     if (!endpointDescriptor) {
       logger.trace(`Empty descriptor: ${JSON.stringify(endpointDescriptor)}`);
@@ -119,13 +116,13 @@ const processor: RuleProcessorT<typeof configSchema> = {
       return openAPIFile;
     }
 
-    if (parameterDescriptor.correction) {
+    if (parameterDescriptorCorrection) {
       setObjectProp(
           targetParameterSchema.schema,
-          parameterDescriptor.correction,
+          parameterDescriptorCorrection,
           patchSchema(
               logger,
-              getObjectPath(targetParameterSchema.schema, parameterDescriptor.correction),
+              getObjectPath(targetParameterSchema.schema, parameterDescriptorCorrection),
               patchMethod,
               schemaDiff,
           ),

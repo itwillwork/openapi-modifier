@@ -1,17 +1,20 @@
 import {RuleProcessorT} from '../../core/rules/processor-models';
 import {z} from 'zod';
 import {patchSchema} from '../common/utils/patch';
-import {endpointDescriptorConfigSchema, openAPISchemaConfigSchema, patchMethodConfigSchema} from '../common/config';
+import {
+    endpointDescriptorConfigSchema,
+    endpointRequestBodyDescriptorConfigSchema,
+    openAPISchemaConfigSchema,
+    patchMethodConfigSchema
+} from '../common/config';
 import {checkIsRefSchema} from '../common/utils/refs';
 import {getOperationSchema} from '../common/utils/get-operation-schema';
 import {getObjectPath, setObjectProp} from '../common/utils/object-path';
 
 const configSchema = z.object({
     endpointDescriptor: endpointDescriptorConfigSchema.optional(),
-    descriptor: z.object({
-        contentType: z.string(),
-        correction: z.string().optional(),
-    }).strict().optional(),
+    descriptor: endpointRequestBodyDescriptorConfigSchema.optional(),
+    descriptorCorrection: z.string().optional(),
     patchMethod: patchMethodConfigSchema.optional(),
     schemaDiff: openAPISchemaConfigSchema.optional(),
 });
@@ -20,12 +23,12 @@ const processor: RuleProcessorT<typeof configSchema> = {
     configSchema,
     defaultConfig: {},
     processDocument: (openAPIFile, config, logger) => {
-        const {patchMethod, schemaDiff, descriptor, endpointDescriptor} = config;
+        const {patchMethod, schemaDiff, descriptor, descriptorCorrection, endpointDescriptor} = config;
         if (!descriptor || !endpointDescriptor || !patchMethod || !schemaDiff) {
             return openAPIFile;
         }
 
-        const {contentType, correction} = descriptor;
+        const {contentType} = descriptor;
 
         const operationSchema = getOperationSchema(openAPIFile, endpointDescriptor.path, endpointDescriptor.method);
         if (!operationSchema) {
@@ -44,13 +47,13 @@ const processor: RuleProcessorT<typeof configSchema> = {
             return openAPIFile;
         }
 
-        if (descriptor.correction) {
+        if (descriptorCorrection) {
             setObjectProp(
                 requestBodyContentSchema.schema,
-                descriptor.correction,
+                descriptorCorrection,
                 patchSchema(
                     logger,
-                    getObjectPath(requestBodyContentSchema.schema, descriptor.correction),
+                    getObjectPath(requestBodyContentSchema.schema, descriptorCorrection),
                     patchMethod,
                     schemaDiff,
                 ),
