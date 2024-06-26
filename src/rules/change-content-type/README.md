@@ -31,6 +31,8 @@ module.exports = {
 
 ### 1. Необходимо заменить/доуточнить content-type `*/*` на что-то более конкртеное для кодегерации типизации
 
+<a name="custom_anchor_motivation_1"></a>
+
 Практический пример:
 
 **В файле `openapi.yaml`** документация на endpoint выглядит так:
@@ -80,6 +82,8 @@ paths:
 ```
 
 ### 2. Допущена опечатка в content-type 
+
+<a name="custom_anchor_motivation_2"></a>
 
 Практический пример:
 
