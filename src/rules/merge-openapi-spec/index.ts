@@ -106,7 +106,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
       if (operationHashCollisions?.length) {
         const errorMessage = `Failed to merge openapi's, operaion conflicts: \n ${operationHashCollisions.join('\n')}`;
-        logger.error(new Error(errorMessage), errorMessage);
+        logger.errorMessage( errorMessage);
         return openAPIFile;
       }
     }
@@ -136,7 +136,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
       if (componentHashCollisions?.length) {
         const errorMessage = `Failed to merge openapi's, component conflicts: \n ${componentHashCollisions.join('\n')}`;
-        logger.error(new Error(errorMessage), errorMessage);
+        logger.errorMessage(errorMessage);
         return openAPIFile;
       }
     }

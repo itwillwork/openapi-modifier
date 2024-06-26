@@ -10,6 +10,7 @@ import {
 import {checkIsRefSchema} from '../common/utils/refs';
 import {getOperationSchema} from '../common/utils/get-operation-schema';
 import {getObjectPath, setObjectProp} from '../common/utils/object-path';
+import {messagesFactory} from "../../logger/messages-factory";
 
 const configSchema = z.object({
     endpointDescriptor: endpointDescriptorConfigSchema.optional(),
@@ -24,7 +25,24 @@ const processor: RuleProcessorT<typeof configSchema> = {
     defaultConfig: {},
     processDocument: (openAPIFile, config, logger) => {
         const {patchMethod, schemaDiff, descriptor, descriptorCorrection, endpointDescriptor} = config;
-        if (!descriptor || !endpointDescriptor || !patchMethod || !schemaDiff) {
+
+        if (!descriptor) {
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('descriptor'));
+            return openAPIFile;
+        }
+
+        if (!endpointDescriptor) {
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('endpointDescriptor'));
+            return openAPIFile;
+        }
+
+        if (!patchMethod) {
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('patchMethod'));
+            return openAPIFile;
+        }
+
+        if (!schemaDiff) {
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('schemaDiff'));
             return openAPIFile;
         }
 

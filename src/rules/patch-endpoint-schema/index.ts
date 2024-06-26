@@ -5,6 +5,7 @@ import {patchSchema} from '../common/utils/patch';
 import {endpointDescriptorConfigSchema, openAPISchemaConfigSchema, patchMethodConfigSchema} from '../common/config';
 import {checkIsHttpMethod} from '../common/openapi-models';
 import {getObjectPath, setObjectProp} from '../common/utils/object-path';
+import {messagesFactory} from "../../logger/messages-factory";
 
 const configSchema = z
     .object({
@@ -20,7 +21,19 @@ const processor: RuleProcessorT<typeof configSchema> = {
     defaultConfig: {},
     processDocument: (openAPIFile, config, logger) => {
         const {patchMethod, schemaDiff, endpointDescriptorCorrection, endpointDescriptor} = config;
-        if (!endpointDescriptor || !patchMethod || !schemaDiff) {
+
+        if (!endpointDescriptor) {
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('endpointDescriptor'));
+            return openAPIFile;
+        }
+
+        if (!patchMethod) {
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('patchMethod'));
+            return openAPIFile;
+        }
+
+        if (!schemaDiff) {
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('schemaDiff'));
             return openAPIFile;
         }
 

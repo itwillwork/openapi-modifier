@@ -1,17 +1,18 @@
-import { RuleProcessorT } from '../../core/rules/processor-models';
-import { string, z } from 'zod';
-import { forEachOperation } from '../common/utils/iterators/each-operation';
-import deepmerge from 'deepmerge';
-import { OpenAPIFileT } from '../../openapi';
-import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
-import { patchSchema } from '../common/utils/patch';
-import { openAPISchemaConfigSchema, patchMethodConfigSchema, parameterInConfigSchema, endpointDescriptorConfigSchema, endpointParameterDescriptorConfigSchema } from '../common/config';
-import { normalizeMethod } from '../common/utils/normilizers';
-import { HttpMethods, PathItemObject } from '../common/openapi-models';
-import { getOperationSchema } from '../common/utils/get-operation-schema';
-import { findParameterIndex } from '../common/utils/find-parameter-index';
-import { checkIsRefSchema } from '../common/utils/refs';
+import {RuleProcessorT} from '../../core/rules/processor-models';
+import {z} from 'zod';
+import {patchSchema} from '../common/utils/patch';
+import {
+  endpointDescriptorConfigSchema,
+  endpointParameterDescriptorConfigSchema,
+  openAPISchemaConfigSchema,
+  parameterInConfigSchema,
+  patchMethodConfigSchema
+} from '../common/config';
+import {getOperationSchema} from '../common/utils/get-operation-schema';
+import {findParameterIndex} from '../common/utils/find-parameter-index';
+import {checkIsRefSchema} from '../common/utils/refs';
 import {getObjectPath, setObjectProp} from "../common/utils/object-path";
+import {messagesFactory} from "../../logger/messages-factory";
 
 const configSchema = z
   .object({
@@ -37,6 +38,16 @@ const processor: RuleProcessorT<typeof configSchema> = {
   processDocument: (openAPIFile, config, logger) => {
     const { endpointDescriptor, parameterDescriptor, parameterDescriptorCorrection, patchMethod, schemaDiff, objectDiff } = config;
 
+    if (!patchMethod) {
+      logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('patchMethod'));
+      return openAPIFile;
+    }
+
+    if (!parameterDescriptor) {
+        logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('parameterDescriptor'));
+      return openAPIFile;
+    }
+
     if (!endpointDescriptor) {
       logger.trace(`Empty descriptor: ${JSON.stringify(endpointDescriptor)}`);
 
@@ -47,12 +58,13 @@ const processor: RuleProcessorT<typeof configSchema> = {
           return false;
         }
 
-        if (componentParameterSchema.name === parameterDescriptor?.name && componentParameterSchema.in === parameterDescriptor?.in) {
+        if (componentParameterSchema.name === parameterDescriptor.name && componentParameterSchema.in === parameterDescriptor.in) {
           return true;
         }
       });
 
       if (!targetComponentParameterKey) {
+          logger.warning(`Rule not apply: not found parameter with descriptor ${parameterDescriptor} !`);
         return openAPIFile;
       }
 
@@ -61,23 +73,39 @@ const processor: RuleProcessorT<typeof configSchema> = {
         return openAPIFile;
       }
 
-      if (!patchMethod) {
-        logger.warning(`Required patchMethod!`);
-        return openAPIFile;
+      if (schemaDiff) {
+        logger.trace(`Apply schemaDiff: ${schemaDiff}`);
+
+        if (parameterDescriptorCorrection) {
+          setObjectProp(
+              targetComponentParameter.schema,
+              parameterDescriptorCorrection,
+              patchSchema(
+                  logger,
+                  getObjectPath(targetComponentParameter.schema, parameterDescriptorCorrection),
+                  patchMethod,
+                  schemaDiff,
+              ),
+          );
+        } else {
+          targetComponentParameter.schema = patchSchema(logger, targetComponentParameter.schema, patchMethod, schemaDiff);
+        }
       }
 
-      targetComponentParameter.schema = patchSchema(logger, targetComponentParameter.schema, patchMethod, schemaDiff);
+      if (objectDiff) {
+        logger.trace(`Apply objectDiff: ${objectDiff}`);
 
-      if (objectDiff?.name !== undefined) {
-        targetComponentParameter.name = objectDiff.name;
-      }
+        if (objectDiff?.name !== undefined) {
+          targetComponentParameter.name = objectDiff.name;
+        }
 
-      if (objectDiff?.in !== undefined) {
-        targetComponentParameter.in = objectDiff.in;
-      }
+        if (objectDiff?.in !== undefined) {
+          targetComponentParameter.in = objectDiff.in;
+        }
 
-      if (objectDiff?.required !== undefined) {
-        targetComponentParameter.required = objectDiff.required;
+        if (objectDiff?.required !== undefined) {
+          targetComponentParameter.required = objectDiff.required;
+        }
       }
 
       return openAPIFile;
@@ -89,12 +117,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
       return openAPIFile;
     }
 
-    if (!parameterDescriptor) {
-      logger.warning(`Empty parameterDescriptor, not found endpoint: ${JSON.stringify(parameterDescriptor)}`);
-      return openAPIFile;
-    }
-
-    const targetParameterIndex = findParameterIndex(operationSchema.parameters, parameterDescriptor?.name, parameterDescriptor?.in);
+    const targetParameterIndex = findParameterIndex(operationSchema.parameters, parameterDescriptor.name, parameterDescriptor.in);
     if (targetParameterIndex === null) {
       logger.warning(`Not found parameter: ${JSON.stringify(endpointDescriptor)}`);
       return openAPIFile;
@@ -111,36 +134,39 @@ const processor: RuleProcessorT<typeof configSchema> = {
       return openAPIFile;
     }
 
-    if (!patchMethod) {
-      logger.warning(`Required patchMethod!`);
-      return openAPIFile;
+    if (schemaDiff) {
+      logger.trace(`Apply schemaDiff: ${schemaDiff}`);
+
+      if (parameterDescriptorCorrection) {
+        setObjectProp(
+            targetParameterSchema.schema,
+            parameterDescriptorCorrection,
+            patchSchema(
+                logger,
+                getObjectPath(targetParameterSchema.schema, parameterDescriptorCorrection),
+                patchMethod,
+                schemaDiff,
+            ),
+        );
+      } else {
+        targetParameterSchema.schema = patchSchema(logger, targetParameterSchema.schema, patchMethod, schemaDiff);
+      }
     }
 
-    if (parameterDescriptorCorrection) {
-      setObjectProp(
-          targetParameterSchema.schema,
-          parameterDescriptorCorrection,
-          patchSchema(
-              logger,
-              getObjectPath(targetParameterSchema.schema, parameterDescriptorCorrection),
-              patchMethod,
-              schemaDiff,
-          ),
-      );
-    } else {
-      targetParameterSchema.schema = patchSchema(logger, targetParameterSchema.schema, patchMethod, schemaDiff);
-    }
+    if (objectDiff) {
+      logger.trace(`Apply objectDiff: ${objectDiff}`);
 
-    if (objectDiff?.name !== undefined) {
-      targetParameterSchema.name = objectDiff.name;
-    }
+      if (objectDiff?.name !== undefined) {
+        targetParameterSchema.name = objectDiff.name;
+      }
 
-    if (objectDiff?.in !== undefined) {
-      targetParameterSchema.in = objectDiff.in;
-    }
+      if (objectDiff?.in !== undefined) {
+        targetParameterSchema.in = objectDiff.in;
+      }
 
-    if (objectDiff?.required !== undefined) {
-      targetParameterSchema.required = objectDiff.required;
+      if (objectDiff?.required !== undefined) {
+        targetParameterSchema.required = objectDiff.required;
+      }
     }
 
     return openAPIFile;

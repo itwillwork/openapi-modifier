@@ -20,7 +20,18 @@ const processor: RuleProcessorT<typeof configSchema> = {
     },
     processDocument: (openAPIFile, config, logger) => {
         const {patchMethod, schemaDiff, descriptor, descriptorCorrection} = config;
-        if (!descriptor || !patchMethod || !schemaDiff) {
+        if (!descriptor) {
+            logger.errorMessage('Rule not apply: empty descriptor!');
+            return openAPIFile;
+        }
+
+        if (!patchMethod) {
+            logger.errorMessage('Rule not apply: empty patchMethod!');
+            return openAPIFile;
+        }
+
+        if (!schemaDiff) {
+            logger.errorMessage('Rule not apply: empty schemaDiff!');
             return openAPIFile;
         }
 

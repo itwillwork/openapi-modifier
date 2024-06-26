@@ -84,6 +84,25 @@ class ConsoleLogger implements LoggerI {
     console.error(error);
   };
 
+  errorMessage = (message?: string) => {
+    this.debugTrace('Error message');
+    if (message) {
+      this.debugTrace(message);
+    }
+
+    if (!this.checkIsAllowed('error')) {
+      return;
+    }
+
+    if (message) {
+      console.log(chalk.bold.red(this.logsPrefix + message));
+      this.debugTrace(message);
+    }
+
+    console.log(chalk.bold.red('Error details:'));
+    console.error(message);
+  };
+
   warning = (message: string) => {
     this.debugTrace(message);
 

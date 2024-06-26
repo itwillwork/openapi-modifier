@@ -16,7 +16,7 @@ const descriptorSchema = z
   .or(
     z
       .object({
-        type: z.literal('endpoint-parameter'),
+        type: z.literal('enddpoint-parameter'),
         path: z.string(),
         method: z.string(),
         parameterName: z.string(),

@@ -26,8 +26,8 @@ const processor: RuleProcessorT<typeof configSchema> = {
   processDocument: (openAPIFile, config, logger) => {
     const { ignore } = config;
 
-
     const ignoredComponentNames = (ignore || []).map(item => item.componentName);
+    logger.trace(`Ignore component names: ${ignoredComponentNames}`);
     const ignoredComponentNamesSet = new Set<string>(ignoredComponentNames);
     const usageIgnoredComponentNames = ignoredComponentNames.reduce<Record<string, number>>((acc, componentName) => {
       acc[componentName] = 0;

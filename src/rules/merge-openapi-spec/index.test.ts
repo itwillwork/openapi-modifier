@@ -138,7 +138,7 @@ describe('merge-openapi-spec rule', () => {
     });
 
     expect(fakeLogger.warning).toBeCalledTimes(0);
-    expect(fakeLogger.error).toBeCalledLoggerMethod(/operaion conflicts/, 1);
+    expect(fakeLogger.errorMessage).toBeCalledLoggerMethod(/operaion conflicts/, 1);
   });
 
   test('collision operations/paths, usage config.ignoreOperarionCollisions', () => {
@@ -236,7 +236,7 @@ describe('merge-openapi-spec rule', () => {
     });
 
     expect(fakeLogger.warning).toBeCalledTimes(0);
-    expect(fakeLogger.error).toBeCalledLoggerMethod(/component conflicts/, 1);
+    expect(fakeLogger.errorMessage).toBeCalledLoggerMethod(/component conflicts/, 1);
   });
 
   test('collision components, usage config.ignoreComponentCollisions', () => {

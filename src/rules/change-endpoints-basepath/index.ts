@@ -57,7 +57,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
       if (collisionOperationHashes?.length) {
         const errorMessage = `Failed to change endpoint basepath's, operaion conflicts: \n ${collisionOperationHashes.join('\n')}`;
-        logger.error(new Error(errorMessage), errorMessage);
+        logger.errorMessage(errorMessage)
         return openAPIFile;
       }
     }

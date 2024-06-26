@@ -149,7 +149,7 @@ describe('change-endpoints-basepath rule', () => {
     });
 
     expect(fakeLogger.warning).toBeCalledTimes(0);
-    expect(fakeLogger.error).toBeCalledLoggerMethod(/operaion conflicts/, 1);
+    expect(fakeLogger.errorMessage).toBeCalledLoggerMethod(/operaion conflicts/, 1);
   });
 
   test('operations collision, usage config.ignoreOperarionCollisions', () => {
