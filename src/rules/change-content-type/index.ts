@@ -2,6 +2,7 @@ import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
 import { checkIsRefSchema } from '../common/utils/refs';
 import { forEachOperation } from '../common/utils/iterators/each-operation';
+import {messagesFactory} from "../../logger/messages-factory";
 
 const configSchema = z
   .object({
@@ -107,7 +108,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
     Object.keys(map).forEach((contentType) => {
       if (!usageCount[contentType]) {
-        logger.warning(`Not usage contentType "${contentType}"`);
+        logger.warning(messagesFactory.configField.notUsaged(`map.${contentType}`));
       }
     });
 
