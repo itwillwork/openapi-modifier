@@ -1,44 +1,15 @@
-import { RuleProcessorT } from '../../core/rules/processor-models';
-import { z } from 'zod';
-import { normalizeMethod } from '../common/utils/normilizers';
+import {RuleProcessorT} from '../../core/rules/processor-models';
+import {z} from 'zod';
+import {normalizeMethod} from '../common/utils/normilizers';
 import {
   componentDescriptorConfigSchema,
-  endpointDescriptorConfigSchema, parameterDescriptorConfigSchema,
-  parameterInConfigSchema
+  endpointDescriptorConfigSchema,
+  parameterDescriptorConfigSchema
 } from '../common/config';
-import { checkIsRefSchema } from '../common/utils/refs';
-import { forEachOperation } from '../common/utils/iterators/each-operation';
-import { forEachSchema } from '../common/utils/iterators/each-schema';
-import { checkIsObjectSchema } from '../common/utils/object-schema';
-
-const descriptorSchema = z
-  .object({
-    type: z.literal('component-schema'),
-    componentName: z.string(),
-  })
-  .strict()
-  .or(
-    z
-      .object({
-        type: z.literal('endpoint-parameter'),
-        path: z.string(),
-        method: z.string(),
-        parameterName: z.string(),
-        parameterIn: parameterInConfigSchema,
-      })
-      .strict()
-  )
-  .or(
-    z
-      .object({
-        type: z.literal('endpoint'),
-        path: z.string(),
-        method: z.string(),
-      })
-      .strict()
-  );
-
-type Descriptor = z.infer<typeof descriptorSchema>;
+import {checkIsRefSchema} from '../common/utils/refs';
+import {forEachOperation} from '../common/utils/iterators/each-operation';
+import {forEachSchema} from '../common/utils/iterators/each-schema';
+import {checkIsObjectSchema} from '../common/utils/object-schema';
 
 const configSchema = z
   .object({
@@ -54,6 +25,11 @@ const processor: RuleProcessorT<typeof configSchema> = {
   processDocument: (openAPIFile, config, logger) => {
     const { ignoreComponents, ignoreEndpoints, ignoreEndpointParameters } = config;
 
+    const usageIgnoreComponents = ignoreComponents?.reduce<Record<string, number>>((acc, item) => {
+      acc[item.componentName] = 0;
+      return acc;
+    }, {}) || {};
+
     const componentSchemas = openAPIFile.document?.components?.schemas;
     Object.keys(componentSchemas || {}).forEach((name) => {
       const schema = componentSchemas?.[name];
@@ -66,9 +42,17 @@ const processor: RuleProcessorT<typeof configSchema> = {
           return false;
         }
 
-        return ignoreComponents.some((item) => {
+        const shouldIgnore = ignoreComponents.some((item) => {
           return item.componentName === name;
         });
+
+        if (!usageIgnoreComponents[name]) {
+          usageIgnoreComponents[name] = 0;
+        }
+
+        usageIgnoreComponents[name] += 1;
+
+        return shouldIgnore;
       };
 
       if (schema?.deprecated && !checkIsIgnoredComponent({ name }) && componentSchemas) {
@@ -149,6 +133,12 @@ const processor: RuleProcessorT<typeof configSchema> = {
             delete properties[propertyKey];
           }
         });
+      }
+    });
+
+    Object.keys(usageIgnoreComponents).forEach((componentName) => {
+      if (!usageIgnoreComponents[componentName]) {
+        logger.warning(`Not usaged ignore component: "${componentName}"`);
       }
     });
 
