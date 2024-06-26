@@ -1,4 +1,4 @@
-### 1. Необходимо заменить/доуточнить content-type `*/*` на что-то более конкртеное для кодегерации типизации
+#### 1. Необходимо заменить/доуточнить content-type `*/*` на что-то более конкртеное для кодегерации типизации
 
 Практический пример:
 
@@ -16,11 +16,11 @@ paths:
               schema:
                 type: 'object'
 ```
-Нужно заменить `*/*` на `application/json`.
+**Нужно заменить `*/*` на `application/json`.**
 
 **В файле конфигурации** `openapi-modifier-config.js` добавляем правило `change-content-type`:
 
-```json
+```js
 module.exports = {
     pipeline: [
         {
@@ -48,7 +48,7 @@ paths:
                 type: 'object'
 ```
 
-### 2. Допущена опечатка в content-type 
+#### 2. Допущена опечатка в content-type 
 
 Практический пример:
 
@@ -66,11 +66,11 @@ paths:
               schema:
                 type: 'object'
 ```
-Нужно заменить `json` на `application/json`.
+**Нужно заменить `json` на `application/json`.**
 
 **В файле конфигурации** `openapi-modifier-config.js` добавляем правило `change-content-type`:
 
-```json
+```js
 module.exports = {
     pipeline: [
         {
