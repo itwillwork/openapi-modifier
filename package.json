@@ -17,7 +17,8 @@
     "build:transpile": "tsc",
     "build:types": "tsc --declaration --declarationDir dist-types",
     "format": "npx prettier --single-quote --print-width 200 --trailing-comma es5 --write .",
-    "tools:generate-rule-types": "ts-node tools/generate-rule-types.ts"
+    "tools:generate-rule-types": "ts-node tools/generate-rule-types.ts",
+    "tools:generate-rule-readme": "ts-node tools/generate-rule-readme.ts"
   },
   "bin": {
     "openapi-modifier": "./bin/openapi-modifier.js",
