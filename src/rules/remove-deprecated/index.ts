@@ -1,7 +1,11 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
 import { normalizeMethod } from '../common/utils/normilizers';
-import { parameterInConfigSchema } from '../common/config';
+import {
+  componentDescriptorConfigSchema,
+  endpointDescriptorConfigSchema, parameterDescriptorConfigSchema,
+  parameterInConfigSchema
+} from '../common/config';
 import { checkIsRefSchema } from '../common/utils/refs';
 import { forEachOperation } from '../common/utils/iterators/each-operation';
 import { forEachSchema } from '../common/utils/iterators/each-schema';
@@ -16,7 +20,7 @@ const descriptorSchema = z
   .or(
     z
       .object({
-        type: z.literal('enddpoint-parameter'),
+        type: z.literal('endpoint-parameter'),
         path: z.string(),
         method: z.string(),
         parameterName: z.string(),
@@ -38,7 +42,9 @@ type Descriptor = z.infer<typeof descriptorSchema>;
 
 const configSchema = z
   .object({
-    ignore: z.array(descriptorSchema).optional(),
+    ignoreComponents: z.array(componentDescriptorConfigSchema).optional(),
+    ignoreEndpoints: z.array(endpointDescriptorConfigSchema).optional(),
+    ignoreEndpointParameters: z.array(parameterDescriptorConfigSchema).optional(),
   })
   .strict();
 
@@ -46,7 +52,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: {},
   processDocument: (openAPIFile, config, logger) => {
-    const { ignore } = config;
+    const { ignoreComponents, ignoreEndpoints, ignoreEndpointParameters } = config;
 
     const componentSchemas = openAPIFile.document?.components?.schemas;
     Object.keys(componentSchemas || {}).forEach((name) => {
@@ -56,12 +62,12 @@ const processor: RuleProcessorT<typeof configSchema> = {
       }
 
       const checkIsIgnoredComponent = ({ name }: { name: string }): boolean => {
-        if (!ignore) {
+        if (!ignoreComponents) {
           return false;
         }
 
-        return ignore.some((item) => {
-          return item.type === 'component-schema' && item.componentName === name;
+        return ignoreComponents.some((item) => {
+          return item.componentName === name;
         });
       };
 
@@ -75,12 +81,12 @@ const processor: RuleProcessorT<typeof configSchema> = {
       const pathObjSchema = openAPIFile?.document?.paths?.[path];
 
       const checkIsIgnoredEndpoint = ({ path, method }: { path: string; method: string }): boolean => {
-        if (!ignore) {
+        if (!ignoreEndpoints) {
           return false;
         }
 
-        return ignore.some((item) => {
-          return item.type === 'endpoint' && item.path === path && normalizeMethod(item.method) === normalizeMethod(method);
+        return ignoreEndpoints.some((item) => {
+          return item.path === path && normalizeMethod(item.method) === normalizeMethod(method);
         });
       };
 
@@ -99,17 +105,16 @@ const processor: RuleProcessorT<typeof configSchema> = {
       if (operationSchema?.parameters) {
         operationSchema.parameters = operationSchema.parameters.filter((parameter) => {
           const checkIsIgnoredEndpointParameter = ({ path, method, parameterName, parameterIn }: { path: string; method: string; parameterName: string; parameterIn: string }): boolean => {
-            if (!ignore) {
+            if (!ignoreEndpointParameters) {
               return false;
             }
 
-            return ignore.some((item) => {
+            return ignoreEndpointParameters.some((item) => {
               return (
-                item.type === 'endpoint-parameter' &&
                 item.path === path &&
                 normalizeMethod(item.method) === normalizeMethod(method) &&
-                item.parameterName === parameterName &&
-                item.parameterIn === parameterIn
+                item.name === parameterName &&
+                item.in === parameterIn
               );
             });
           };

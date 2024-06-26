@@ -262,24 +262,19 @@ describe('remove-deprecated rule', () => {
       processor.processDocument(
         fakeOpenAPIFile,
         {
-          ignore: [
-            {
-              type: 'endpoint',
-              path: '/deprecated-endpoint',
-              method: 'get',
-            },
-            {
-              type: 'endpoint-parameter',
-              path: '/deprecated-parameter',
-              method: 'post',
-              parameterName: 'deprecated-filter',
-              parameterIn: 'query',
-            },
-            {
-              type: 'component-schema',
-              componentName: 'TestDeprecatedSchemaDTO',
-            },
-          ],
+          ignoreEndpointParameters: [{
+            path: '/deprecated-parameter',
+            method: 'post',
+            name: 'deprecated-filter',
+            in: 'query',
+          }],
+          ignoreEndpoints: [{
+            path: '/deprecated-endpoint',
+            method: 'get',
+          }],
+          ignoreComponents: [{
+            componentName: 'TestDeprecatedSchemaDTO',
+          }],
         },
         fakeLogger
       )

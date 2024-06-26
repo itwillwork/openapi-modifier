@@ -13,6 +13,15 @@ export const endpointParameterDescriptorConfigSchema = z
   })
   .strict();
 
+export const parameterDescriptorConfigSchema = z
+  .object({
+      path: z.string(),
+      method: z.string(),
+      name: z.string(),
+      in: parameterInConfigSchema,
+  })
+  .strict();
+
 export const componentDescriptorConfigSchema = z
   .object({
       componentName: z.string(),
