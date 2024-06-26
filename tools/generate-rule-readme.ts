@@ -41,9 +41,9 @@ fs.readdirSync('src/rules').forEach((entityName, index) => {
         return;
     }
 
-    const configReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/config.md`).toString();
-    const descriptionReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/description.md`).toString();
-    const motivationReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/motivation.md`).toString();
+    const configReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/_config.md`).toString();
+    const descriptionReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/_description.md`).toString();
+    const motivationReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/_motivation.md`).toString();
 
     const ruleReadme = RULE_README_TEMPLATE
         .replace('{{{name}}}', entityName)
