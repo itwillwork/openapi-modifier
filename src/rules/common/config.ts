@@ -40,3 +40,5 @@ export const endpointDescriptorConfigSchema = z
     method: z.string(),
   })
   .strict();
+
+export const operationIdConfigSchema = z.string();

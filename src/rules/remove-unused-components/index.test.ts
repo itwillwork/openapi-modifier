@@ -191,7 +191,9 @@ describe('remove-unused-components rule', () => {
       processor.processDocument(
         fakeOpenAPIFile,
         {
-          ignore: ['Notifications'],
+          ignore: [{
+            componentName: 'Notifications',
+          }],
         },
         fakeLogger
       )
@@ -206,5 +208,95 @@ describe('remove-unused-components rule', () => {
     });
 
     expect(fakeLogger.warning).toBeCalledTimes(0);
+  });
+
+  test('regular, show not usaged warning', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      components: {
+        schemas: {
+          Date: {
+            type: 'string',
+          },
+          AttributesDTO: {
+            type: 'string',
+          },
+          Pet: {
+            type: 'object',
+            properties: {
+              date: {
+                $ref: '#/components/schemas/Date',
+              },
+              attributes: {
+                type: 'object',
+                additionalProperties: {
+                  $ref: '#/components/schemas/AttributesDTO',
+                },
+              },
+            },
+          },
+          Notification: {
+            type: 'object',
+            properties: {
+              date: {
+                $ref: '#/components/schemas/Date',
+              },
+            },
+          },
+          Notifications: {
+            type: 'array',
+            items: {
+              $ref: '#/components/schemas/Notification',
+            },
+          },
+        },
+      },
+      paths: {
+        '/pets': {
+          get: {
+            summary: 'Get all pets',
+            responses: {
+              '200': {
+                description: '',
+                content: {
+                  '*/*': {
+                    schema: {
+                      type: 'array',
+                      items: {
+                        $ref: '#/components/schemas/Pet',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          ignore: [{
+            componentName: 'Notifications',
+          }, {
+            componentName: 'TestNotUsagedComponent',
+          }],
+        },
+        fakeLogger
+      )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        paths: {
+          ...fakeOpenAPIFile.document.paths,
+        },
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledLoggerMethod(/Not usaged ignore component/, 1);
   });
 });
