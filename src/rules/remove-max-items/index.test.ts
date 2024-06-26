@@ -36,4 +36,27 @@ describe('remove-max-items rule', () => {
 
     expect(fakeLogger.warning).toBeCalledTimes(0);
   });
+
+  test('regular, usage showUnusedWarning', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      components: {
+        schemas: { },
+      },
+    });
+
+    expect(processor.processDocument(fakeOpenAPIFile, {
+      showUnusedWarning: true,
+    }, fakeLogger)).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        components: {
+          schemas: { },
+        },
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledLoggerMethod(/Not found schemas with max-items/, 1);
+  });
 });

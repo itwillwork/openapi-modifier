@@ -36,4 +36,24 @@ describe('remove-min-items rule', () => {
 
     expect(fakeLogger.warning).toBeCalledTimes(0);
   });
+
+  test('regular, use showUnusedWarning', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      components: {
+        schemas: {},
+      },
+    });
+
+    expect(processor.processDocument(fakeOpenAPIFile, {
+      showUnusedWarning: true,
+    }, fakeLogger)).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledLoggerMethod(/Not found schemas with min-items/, 1);
+  });
 });
