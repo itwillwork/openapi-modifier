@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { forEachSchema } from '../common/utils/iterators/each-schema';
 import { HttpMethods } from '../common/openapi-models';
 import { forEachOperation } from '../common/utils/iterators/each-operation';
+import {messagesFactory} from "../../logger/messages-factory";
 
 const configSchema = z
   .object({
@@ -91,7 +92,12 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
     Object.keys(map).forEach((fromPrefix) => {
       if (!usageCount[fromPrefix]) {
-        logger.warning(`Not found endpoints with prefix "${fromPrefix}"`);
+        logger.warning(
+            messagesFactory.configField.notUsaged(
+            `map.${fromPrefix}`,
+            `Not found endpoints with prefix "${fromPrefix}"`,
+          ),
+        );
       }
     });
 
