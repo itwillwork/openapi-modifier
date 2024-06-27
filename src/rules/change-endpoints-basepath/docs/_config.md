@@ -1,6 +1,6 @@
 | Параметр    | Описание                          | Пример                     | Типизация              | Дефолтное |
 | -------- |-----------------------------------|----------------------------|------------------------|-----------|
-| `map`  | [**обязательный**] Словарь замены | `{"*/*": "application/json"}` | `Record<string, string>` | `{}`        |
+| `map`  | [**обязательный**] Словарь замены | `{ '/public/api': '' }` | `Record<string, string>` | `{}`        |
 
 
 Пример конфигурации:
@@ -10,11 +10,11 @@ module.exports = {
     pipeline: [
         // ... other rules
         {
-            rule: "change-content-type",
+            rule: "change-endpoints-basepath",
             config: {
-                map: {
-                    "*/*": "application/json"
-                }
+               map: { 
+                   '/public/api': '',
+               }
             },
         }
         // ... other rules

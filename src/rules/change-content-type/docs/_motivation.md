@@ -27,7 +27,9 @@ module.exports = {
         {
             rule: "change-content-type",
             config: {
-              "*/*": "application/json"
+                map: {
+                    "*/*": "application/json"
+                }
             },
         }
     ]
@@ -78,7 +80,9 @@ module.exports = {
         {
             rule: "change-content-type",
             config: {
-              "json": "application/json"
+                map: {
+                    "json": "application/json"
+                }
             },
         }
     ]
