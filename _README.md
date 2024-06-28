@@ -3,7 +3,7 @@
 <a name="custom_anchor_rule_change-content-type"></a>
 ### change-content-type
 
-Изменяет content-type для request и response в соответствии со словарем замены.
+Изменяет content-type для request и response в соответствии со словарем
 
 #### Config
 
@@ -21,7 +21,9 @@ module.exports = {
         {
             rule: "change-content-type",
             config: {
-                "*/*": "application/json"
+                map: {
+                    "*/*": "application/json"
+                }
             },
         }
         // ... other rules
@@ -37,4 +39,4 @@ module.exports = {
 
 | Правило | Краткое описание |
 | -- | -- |
-| [change-content-type](./src/rules/change-content-type/README.md) | Изменяет content-type для request и response в соответствии со словарем замены. |
+| [change-content-type](./src/rules/change-content-type/README.md) | Изменяет content-type для request и response в соответствии со словарем |

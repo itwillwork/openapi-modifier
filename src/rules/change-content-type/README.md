@@ -1,6 +1,6 @@
 # change-content-type
 
-Изменяет content-type для request и response в соответствии со словарем замены.
+Изменяет content-type для request и response в соответствии со словарем
 
 ## Config
 
@@ -18,7 +18,9 @@ module.exports = {
         {
             rule: "change-content-type",
             config: {
-                "*/*": "application/json"
+                map: {
+                    "*/*": "application/json"
+                }
             },
         }
         // ... other rules
@@ -58,7 +60,9 @@ module.exports = {
         {
             rule: "change-content-type",
             config: {
-              "*/*": "application/json"
+                map: {
+                    "*/*": "application/json"
+                }
             },
         }
     ]
@@ -109,7 +113,9 @@ module.exports = {
         {
             rule: "change-content-type",
             config: {
-              "json": "application/json"
+                map: {
+                    "json": "application/json"
+                }
             },
         }
     ]
