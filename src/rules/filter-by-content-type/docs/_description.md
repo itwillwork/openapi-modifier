@@ -1,0 +1,1 @@
+Фильтрует requestBody, response по типу контента

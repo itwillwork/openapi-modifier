@@ -37,6 +37,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
       Object.keys(requestBodySchema?.content || {}).forEach((contentType) => {
         if (requestBodySchema?.content?.[contentType] && !checkIsEnabledContentType(contentType)) {
+          logger.trace(`Deleting request "${contentType}" common requestBodies "${name}"`);
           delete requestBodySchema?.content?.[contentType];
           increaseUsageCount(contentType);
         }
@@ -52,13 +53,14 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
       Object.keys(responsesCodeSchema?.content || {}).forEach((contentType) => {
         if (responsesCodeSchema?.content?.[contentType] && !checkIsEnabledContentType(contentType)) {
+          logger.trace(`Deleting request "${contentType}" common responses "${code}"`);
           delete responsesCodeSchema?.content?.[contentType];
           increaseUsageCount(contentType);
         }
       });
     });
 
-    forEachOperation(openAPIFile, ({ operationSchema }) => {
+    forEachOperation(openAPIFile, ({ operationSchema, method, path }) => {
       // forEach - paths[path][method].responses[code].content[contentType].schema
       const responses = operationSchema?.responses || {};
       Object.keys(responses).forEach((code) => {
@@ -66,6 +68,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
         if (!checkIsRefSchema(responseSchema)) {
           Object.keys(responseSchema?.content || {}).forEach((contentType) => {
             if (responseSchema?.content?.[contentType] && !checkIsEnabledContentType(contentType)) {
+              logger.trace(`Deleting response "${contentType}" for reponse [${method}] ${path}`);
               delete responseSchema?.content?.[contentType];
               increaseUsageCount(contentType);
             }
@@ -79,6 +82,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
         Object.keys(requestBody?.content || {}).forEach((contentType) => {
           if (requestBody?.content?.[contentType] && !checkIsEnabledContentType(contentType)) {
             delete requestBody?.content?.[contentType];
+            logger.trace(`Deleting response "${contentType}" for request [${method}] ${path}`);
             increaseUsageCount(contentType);
           }
         });
