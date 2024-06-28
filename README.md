@@ -326,6 +326,5 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 ### TODO
 
-- причесать README.md правил
-- причесать README.md примеров
+- причесать README.md правил - 13 штук
 - причесать главный README.md
