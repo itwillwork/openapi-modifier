@@ -18,7 +18,7 @@ const configSchema = z
     ignoreComponents: z.array(componentDescriptorConfigSchema).optional(),
     ignoreEndpoints: z.array(endpointDescriptorConfigSchema).optional(),
     ignoreEndpointParameters: z.array(parameterDescriptorConfigSchema).optional(),
-    showDescriptionsDeprecatedFields: z.boolean().optional(),
+    showDeprecatedDescriptions: z.boolean().optional(),
   })
   .strict();
 
@@ -26,7 +26,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: {},
   processDocument: (openAPIFile, config, logger) => {
-    const { ignoreComponents, ignoreEndpoints, ignoreEndpointParameters, showDescriptionsDeprecatedFields } = config;
+    const { ignoreComponents, ignoreEndpoints, ignoreEndpointParameters, showDeprecatedDescriptions } = config;
 
     const sourceOpenAPIFile = deepClone(openAPIFile);
 
@@ -68,7 +68,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
       ) {
         logger.trace(`Deleted component - "${name}"`);
 
-        if (showDescriptionsDeprecatedFields) {
+        if (showDeprecatedDescriptions) {
           logger.info(messagesFactory.deprecated.field(name, schema?.description));
         }
 
@@ -80,7 +80,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
         if (resolvedSchema?.deprecated) {
           logger.trace(`Deleted component by resolving ref - "${name}"`);
 
-          if (showDescriptionsDeprecatedFields) {
+          if (showDeprecatedDescriptions) {
             logger.info(messagesFactory.deprecated.fieldByRef(name, resolvedSchema?.description));
           }
 
@@ -112,7 +112,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
       ) {
         logger.trace(`Deleted endpoint - "${JSON.stringify({ path, method })}"`);
 
-        if (showDescriptionsDeprecatedFields) {
+        if (showDeprecatedDescriptions) {
           logger.info(messagesFactory.deprecated.endpoint(method, path, pathObjSchema[method]?.description));
         }
 
@@ -148,7 +148,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
           ) {
             logger.trace(`Deleted parameter - "${JSON.stringify(parameter)}"`);
 
-            if (showDescriptionsDeprecatedFields) {
+            if (showDeprecatedDescriptions) {
               logger.info(messagesFactory.deprecated.endpointParameter(method, path, parameter.name, parameter.in, parameter?.description));
             }
 
@@ -168,7 +168,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
           if (!checkIsRefSchema(propertySchema) && propertySchema?.deprecated) {
             logger.trace(`Deleted property - "${propertyKey}"`);
-            if (showDescriptionsDeprecatedFields) {
+            if (showDeprecatedDescriptions) {
               logger.info(messagesFactory.deprecated.field(propertyKey, propertySchema?.description));
             }
 
@@ -180,7 +180,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
             if (resolvedPropertySchema?.deprecated) {
               logger.trace(`Deleted property by resolving ref - "${propertyKey}"`);
 
-              if (showDescriptionsDeprecatedFields) {
+              if (showDeprecatedDescriptions) {
                 logger.info(messagesFactory.deprecated.fieldByRef(propertyKey, resolvedPropertySchema?.description));
               }
 
