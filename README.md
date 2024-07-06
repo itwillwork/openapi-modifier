@@ -326,5 +326,7 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 ### TODO
 
+- выводить description для deprecated
+- варнинг что после патча тоже самое получилось (что он бесполезен)
 - причесать README.md правил - 13 штук
 - причесать главный README.md
