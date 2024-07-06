@@ -332,4 +332,72 @@ describe('remove-deprecated rule', () => {
     expect(fakeLogger.warning).toBeCalledTimes(0);
     expect(fakeLogger.error).toBeCalledTimes(0);
   });
+
+  test('regular, with $ref', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      components: {
+        schemas: {
+          TestDTO: {
+            type: 'object',
+            properties: {
+              testField: {
+                type: 'number',
+              },
+              deprecatedField: {
+                $ref: '#/components/schemas/TestDeprecatedSchemaDTO',
+              },
+            },
+          },
+          TestDeprecatedSchemaDTO: {
+            deprecated: true,
+            type: 'string',
+          },
+          TestRefSchemaDTO: {
+            $ref: '#/components/schemas/TestDeprecatedSchemaDTO',
+          },
+          IgnoredRefSchemaDTO: {
+            $ref: '#/components/schemas/TestDeprecatedSchemaDTO',
+          },
+        },
+      },
+    });
+
+    expect(
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          ignoreComponents: [
+            {
+              componentName: 'IgnoredRefSchemaDTO'
+            }
+          ]
+        },
+        fakeLogger
+      )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        components: {
+          schemas: {
+            TestDTO: {
+              type: 'object',
+              properties: {
+                testField: {
+                  type: 'number',
+                },
+              }
+            },
+            IgnoredRefSchemaDTO: {
+              $ref: '#/components/schemas/TestDeprecatedSchemaDTO',
+            },
+          },
+        },
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+    expect(fakeLogger.error).toBeCalledTimes(0);
+  });
 });

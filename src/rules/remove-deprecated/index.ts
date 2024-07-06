@@ -6,16 +6,19 @@ import {
   endpointDescriptorConfigSchema,
   parameterDescriptorConfigSchema
 } from '../common/config';
-import {checkIsRefSchema} from '../common/utils/refs';
+import {checkIsRefSchema, resolveRef} from '../common/utils/refs';
 import {forEachOperation} from '../common/utils/iterators/each-operation';
 import {forEachSchema} from '../common/utils/iterators/each-schema';
 import {checkIsObjectSchema} from '../common/utils/object-schema';
+import {deepClone} from "../common/utils/deep-clone";
+import {messagesFactory} from "../../logger/messages-factory";
 
 const configSchema = z
   .object({
     ignoreComponents: z.array(componentDescriptorConfigSchema).optional(),
     ignoreEndpoints: z.array(endpointDescriptorConfigSchema).optional(),
     ignoreEndpointParameters: z.array(parameterDescriptorConfigSchema).optional(),
+    showDescriptionsDeprecatedFields: z.boolean().optional(),
   })
   .strict();
 
@@ -23,7 +26,9 @@ const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: {},
   processDocument: (openAPIFile, config, logger) => {
-    const { ignoreComponents, ignoreEndpoints, ignoreEndpointParameters } = config;
+    const { ignoreComponents, ignoreEndpoints, ignoreEndpointParameters, showDescriptionsDeprecatedFields } = config;
+
+    const sourceOpenAPIFile = deepClone(openAPIFile);
 
     const usageIgnoreComponents = ignoreComponents?.reduce<Record<string, number>>((acc, item) => {
       acc[item.componentName] = 0;
@@ -32,10 +37,11 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
     const componentSchemas = openAPIFile.document?.components?.schemas;
     Object.keys(componentSchemas || {}).forEach((name) => {
-      const schema = componentSchemas?.[name];
-      if (checkIsRefSchema(schema)) {
+      if (!componentSchemas) {
         return;
       }
+
+      const schema = componentSchemas?.[name];
 
       const checkIsIgnoredComponent = ({ name }: { name: string }): boolean => {
         if (!ignoreComponents) {
@@ -55,9 +61,31 @@ const processor: RuleProcessorT<typeof configSchema> = {
         return shouldIgnore;
       };
 
-      if (schema?.deprecated && !checkIsIgnoredComponent({ name }) && componentSchemas) {
+      if (
+          !checkIsRefSchema(schema) &&
+          schema?.deprecated &&
+          !checkIsIgnoredComponent({ name })
+      ) {
         logger.trace(`Deleted component - "${name}"`);
+
+        if (showDescriptionsDeprecatedFields) {
+          logger.info(messagesFactory.deprecated.field(name, schema?.description));
+        }
+
         delete componentSchemas[name];
+      }
+
+      if (checkIsRefSchema(schema) && !checkIsIgnoredComponent({ name })) {
+        const resolvedSchema = resolveRef(sourceOpenAPIFile, schema);
+        if (resolvedSchema?.deprecated) {
+          logger.trace(`Deleted component by resolving ref - "${name}"`);
+
+          if (showDescriptionsDeprecatedFields) {
+            logger.info(messagesFactory.deprecated.fieldByRef(name, resolvedSchema?.description));
+          }
+
+          delete componentSchemas?.[name];
+        }
       }
     });
 
@@ -83,6 +111,11 @@ const processor: RuleProcessorT<typeof configSchema> = {
         })
       ) {
         logger.trace(`Deleted endpoint - "${JSON.stringify({ path, method })}"`);
+
+        if (showDescriptionsDeprecatedFields) {
+          logger.info(messagesFactory.deprecated.endpoint(method, path, pathObjSchema[method]?.description));
+        }
+
         delete pathObjSchema[method];
       }
 
@@ -114,6 +147,11 @@ const processor: RuleProcessorT<typeof configSchema> = {
             })
           ) {
             logger.trace(`Deleted parameter - "${JSON.stringify(parameter)}"`);
+
+            if (showDescriptionsDeprecatedFields) {
+              logger.info(messagesFactory.deprecated.endpointParameter(method, path, parameter.name, parameter.in, parameter?.description));
+            }
+
             return false;
           }
 
@@ -130,7 +168,24 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
           if (!checkIsRefSchema(propertySchema) && propertySchema?.deprecated) {
             logger.trace(`Deleted property - "${propertyKey}"`);
+            if (showDescriptionsDeprecatedFields) {
+              logger.info(messagesFactory.deprecated.field(propertyKey, propertySchema?.description));
+            }
+
             delete properties[propertyKey];
+          }
+
+          if (checkIsRefSchema(propertySchema)) {
+            const resolvedPropertySchema = resolveRef(sourceOpenAPIFile, propertySchema);
+            if (resolvedPropertySchema?.deprecated) {
+              logger.trace(`Deleted property by resolving ref - "${propertyKey}"`);
+
+              if (showDescriptionsDeprecatedFields) {
+                logger.info(messagesFactory.deprecated.fieldByRef(propertyKey, resolvedPropertySchema?.description));
+              }
+
+              delete properties[propertyKey];
+            }
           }
         });
       }
