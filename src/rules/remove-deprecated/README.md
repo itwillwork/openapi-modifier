@@ -11,12 +11,12 @@
 
 ### Конфигурация
 
-| Параметр |                   Описание                    |
-| -------- | :-------------------------------------------: |
-| ignoreComponents   | Игнорирование deprecated флагов для сущностей |
-| ignoreEndpoints   | Игнорирование deprecated endpoint'ов |
-| ignoreEndpointParameters   | Игнорирование deprecated параметров endpoint'ов |
-| showDeprecatedDescriptions | Включает вывод description удаляемых полей, обычно разработчики туда указывают, что нужно использовать взамен |
+| Параметр    | Описание                          | Пример                              | Типизация                                                                                          | Дефолтное |
+| -------- |-----------------------------------|-------------------------------------|----------------------------------------------------------------------------------------------------|-----------|
+| `ignoreComponents`  | Игнорирование deprecated флагов для сущностей  | `[{componentName: "TestDTO"}]`      | `Array<{componentName: string}>`                                                                   | `[]`      |
+| `ignoreEndpoints`  | Игнорирование deprecated endpoint'ов  | `[{path: '/ping', method: 'get' }]` | `Array<{path: string; method: string;}>`                                                           | `[]`      |
+| `ignoreEndpointParameters`  | Игнорирование deprecated параметров endpoint'ов  | `[{path: '/ping', method: 'get' }]`       | `Array<{path: string; method: string; name: string; in: 'query' \ 'header' \ 'path' \ 'cookie' }>` | `[]`      |
+| `showDeprecatedDescriptions`  | Включает вывод description удаляемых полей, обычно разработчики туда указывают, что нужно использовать взамен  | `true`                              | `boolean`                                                                                          | `false`   |
 
 Пример конфигурации:
 
