@@ -331,3 +331,5 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 - deprecated notes в стиле не привлекающим внимание если не нужно
 - бага с remove-unused-components (то что сейчас заигнорено)
+
+- дебаг файлик, который подписывает асииметричным ключем исходный файл и что получился
