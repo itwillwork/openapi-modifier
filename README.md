@@ -333,3 +333,6 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 - бага с remove-unused-components (то что сейчас заигнорено)
 
 - дебаг файлик, который подписывает асииметричным ключем исходный файл и что получился
+
+- path'ы неудобно писать, мб можно как-то дескрипторы оптимизировать
+
