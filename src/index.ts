@@ -19,7 +19,7 @@ export const openapiModifier = async (config: Partial<ConfigT>) => {
             return;
         }
 
-        logger.trace(`Final openapi modifier config: ${JSON.stringify(finalConfig)}`);
+        logger.trace(`Final openapi modifier config:`, finalConfig);
 
         const inputPath = finalConfig?.input || null;
         if (!inputPath) {

@@ -11,7 +11,7 @@ import {forEachOperation} from '../common/utils/iterators/each-operation';
 import {forEachSchema} from '../common/utils/iterators/each-schema';
 import {checkIsObjectSchema} from '../common/utils/object-schema';
 import {deepClone} from "../common/utils/deep-clone";
-import {messagesFactory} from "../../logger/messages/messagesFactory";
+import {messagesFactory} from "../../logger/messages/factory";
 
 const configSchema = z
   .object({

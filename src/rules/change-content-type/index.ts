@@ -2,7 +2,7 @@ import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
 import { checkIsRefSchema } from '../common/utils/refs';
 import { forEachOperation } from '../common/utils/iterators/each-operation';
-import {messagesFactory} from "../../logger/messages/messagesFactory";
+import {messagesFactory} from "../../logger/messages/factory";
 
 const configSchema = z
   .object({

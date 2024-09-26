@@ -2,6 +2,8 @@ import chalk from 'chalk';
 import debug, { Debugger } from 'debug';
 import { LoggerI } from './interface';
 
+type ValueOf<T> = T[keyof T];
+
 class ConsoleLogger implements LoggerI {
   public static typeLevelMap = {
     trace: 0,
@@ -14,13 +16,13 @@ class ConsoleLogger implements LoggerI {
 
   public static debugPrefix = 'openapi-modifier';
 
-  private minLevel: number = 1;
+  private minLevel: ValueOf<typeof ConsoleLogger.typeLevelMap> = ConsoleLogger.typeLevelMap.info;
 
   private debug: Debugger;
 
   private logsPrefix: string;
 
-  constructor({ minLevel, name }: { minLevel?: number; name?: string }) {
+  constructor({ minLevel, name }: { minLevel?: ValueOf<typeof ConsoleLogger.typeLevelMap>; name?: string }) {
     if (minLevel !== undefined) {
       this.minLevel = minLevel;
     }
@@ -46,14 +48,14 @@ class ConsoleLogger implements LoggerI {
     });
   };
 
-  trace = (message: string) => {
+  trace = (message: string, obj: any) => {
     this.debugTrace(message);
 
     if (!this.checkIsAllowed('trace')) {
       return;
     }
 
-    console.log(this.logsPrefix + message);
+    console.log(`${this.logsPrefix}${message}${obj ? JSON.stringify(obj, null, 4) : ''}`);
   };
 
   info = (message: string) => {

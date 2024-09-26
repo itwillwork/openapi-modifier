@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { forEachSchema } from '../common/utils/iterators/each-schema';
 import { HttpMethods } from '../common/openapi-models';
 import { forEachOperation } from '../common/utils/iterators/each-operation';
-import {messagesFactory} from "../../logger/messages/messagesFactory";
+import {messagesFactory} from "../../logger/messages/factory";
 
 const configSchema = z
   .object({

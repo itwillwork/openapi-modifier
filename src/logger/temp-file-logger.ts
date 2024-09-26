@@ -18,7 +18,7 @@ class TempFileLogger implements LoggerI {
     }
 
     private writeLog = (message: string) => {
-        const log = `[${new Date().toISOString()} ${this.logsPrefix}] - ${message}`;
+        const log = `[${new Date().toISOString()} ${this.logsPrefix}] - ${message}\n`;
         fs.appendFileSync(this.tmpFile.fd, new Buffer(log));
     }
 
@@ -65,7 +65,7 @@ class TempFileLogger implements LoggerI {
     };
 
     getHelpInfo = (): string => {
-        return `A complete log of this run can be found in: ${tmp.tmpdir + this.tmpFile.name}`;
+        return `A complete log of this run can be found in: ${this.tmpFile.name}`;
     };
 }
 

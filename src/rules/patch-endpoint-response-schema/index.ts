@@ -10,7 +10,7 @@ import {
 import {checkIsRefSchema} from '../common/utils/refs';
 import {getOperationSchema} from '../common/utils/get-operation-schema';
 import {getObjectPath, setObjectProp} from '../common/utils/object-path';
-import {messagesFactory} from "../../logger/messages/messagesFactory";
+import {messagesFactory} from "../../logger/messages/factory";
 
 const configSchema = z
     .object({
