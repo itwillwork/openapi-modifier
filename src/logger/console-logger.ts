@@ -7,8 +7,8 @@ type ValueOf<T> = T[keyof T];
 class ConsoleLogger implements LoggerI {
   public static typeLevelMap = {
     trace: 0,
-    'not-important-info': 1,
-    info: 2,
+    info: 1,
+    'not-important-warning': 2,
     warning: 3,
     error: 4,
     success: 5,
@@ -68,10 +68,10 @@ class ConsoleLogger implements LoggerI {
     console.info(this.logsPrefix + message);
   };
 
-  notImportantInfo = (message: string) => {
+  notImportantWarning = (message: string) => {
     this.debugTrace(message);
 
-    if (!this.checkIsAllowed('not-important-info')) {
+    if (!this.checkIsAllowed('not-important-warning')) {
       return;
     }
 

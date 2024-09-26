@@ -7,12 +7,16 @@ class TempFileLogger implements LoggerI {
 
     private logsPrefix: string;
 
-    constructor({name, tmpFile}: { name?: string; tmpFile?: FileResult }) {
-        this.tmpFile = tmpFile || tmp.fileSync({
+    public static createTmpFile = () => {
+        return tmp.fileSync({
             keep: true,
             postfix: 'verbose-logs.log',
             prefix: 'npm-openapi-modifier'
         });
+    }
+
+    constructor({name, tmpFile}: { name?: string; tmpFile?: FileResult }) {
+        this.tmpFile = tmpFile || TempFileLogger.createTmpFile();
 
         this.logsPrefix = name ? `${name}: ` : '';
     }
@@ -30,15 +34,16 @@ class TempFileLogger implements LoggerI {
     };
 
     trace = (message: string, obj: any) => {
-        this.writeLog('trace', message + obj ? JSON.stringify(obj || {}, null, 4) : '');
+        const stringifiedObj = obj ? JSON.stringify(obj || {}, null, 4) : '';
+        this.writeLog('trace', message + stringifiedObj);
     };
 
     info = (message: string) => {
         this.writeLog('info', message);
     };
 
-    notImportantInfo = (message: string) => {
-        this.writeLog('not important info', message);
+    notImportantWarning = (message: string) => {
+        this.writeLog('not important warning', message);
     };
 
     error = (error: Error, message?: string) => {

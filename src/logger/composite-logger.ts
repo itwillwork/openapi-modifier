@@ -31,9 +31,9 @@ class CompositeLogger implements LoggerI {
         });
     };
 
-    notImportantInfo = (message: string) => {
+    notImportantWarning = (message: string) => {
         this.loggers.forEach(logger => {
-            return logger.notImportantInfo(message);
+            return logger.notImportantWarning(message);
         });
     };
 

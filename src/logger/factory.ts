@@ -10,8 +10,8 @@ export type LoggerFactoryTypeLevel = ValueOf<typeof LoggerFactory.typeLevelMap>;
 class LoggerFactory {
     public static typeLevelMap = {
         trace: 0,
-        'not-important-info': 1,
-        info: 2,
+        info: 1,
+        'not-important-warning': 2,
         warning: 3,
         error: 4,
         success: 5,
@@ -28,7 +28,7 @@ class LoggerFactory {
     }): LoggerI {
         const consoleLoggerTypeLevelMap: Record<ValueOf<typeof LoggerFactory.typeLevelMap>, ValueOf<typeof ConsoleLogger.typeLevelMap>> = {
             [LoggerFactory.typeLevelMap.trace]: ConsoleLogger.typeLevelMap.trace,
-            [LoggerFactory.typeLevelMap['not-important-info']]: ConsoleLogger.typeLevelMap['not-important-info'],
+            [LoggerFactory.typeLevelMap['not-important-warning']]: ConsoleLogger.typeLevelMap['not-important-warning'],
             [LoggerFactory.typeLevelMap.info]: ConsoleLogger.typeLevelMap.info,
             [LoggerFactory.typeLevelMap.warning]: ConsoleLogger.typeLevelMap.warning,
             [LoggerFactory.typeLevelMap.error]: ConsoleLogger.typeLevelMap.error,

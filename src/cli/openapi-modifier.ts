@@ -16,7 +16,7 @@ const DEFAULT_CONFIG_PATHS = ['openapi-modifier.config.js', 'openapi-modifier.co
 const cli = async (params: ParamsT) => {
     const logger = LoggerFactory.createLogger({
         name: 'openapi-modifier-cli',
-        minLevel: LoggerFactory.typeLevelMap.warning,
+        minLevel: LoggerFactory.typeLevelMap["not-important-warning"],
         verbose: !!params?.verbose,
     });
 
@@ -56,10 +56,23 @@ const cli = async (params: ParamsT) => {
             throw new Error('Required --output param!');
         }
 
+        const loggerConfig: ConfigT['logger'] = {};
+
+        const verbose = params?.verbose || null;
+        if (verbose) {
+            loggerConfig.verbose = true;
+        }
+
+        const minLevel = params?.minLevel || null;
+        if (minLevel) {
+            loggerConfig.minLevel = parseInt(minLevel, 10);
+        }
+
         logger.trace('Merging config with cli params...');
         const finalConfig = mergeConfigs(logger, config, {
             input: inputPath,
             output: outputPath,
+            logger: loggerConfig
         });
 
         logger.trace(`Final CLI config`, finalConfig);

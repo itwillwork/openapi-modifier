@@ -214,6 +214,10 @@ const mergeConfigs = (baseLogger: LoggerI, ...configs: Array<Partial<ConfigT>>):
       return {
         ...acc,
         ...config,
+        logger: {
+          ...acc.logger,
+          ...config.logger,
+        },
         pipeline: [...(acc.pipeline || []), ...(config.pipeline || [])],
       };
     }, {});

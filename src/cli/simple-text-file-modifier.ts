@@ -28,7 +28,7 @@ const DEFAULT_CONFIG_PATHS = [
 const cli = async (params: ParamsT) => {
   const logger = LoggerFactory.createLogger({
     name: 'simple-text-file-modifier',
-    minLevel: LoggerFactory.typeLevelMap.warning,
+    minLevel: LoggerFactory.typeLevelMap['not-important-warning'],
     verbose: !!params?.verbose,
   });
 
