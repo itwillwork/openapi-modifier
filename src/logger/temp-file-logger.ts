@@ -9,15 +9,17 @@ class TempFileLogger implements LoggerI {
 
     constructor({name, tmpFile}: { name?: string; tmpFile?: FileResult }) {
         this.tmpFile = tmpFile || tmp.fileSync({
-            postfix: '.txt',
-            prefix: 'npm-openapi-modifier-verbose-logs-'
+            keep: true,
+            postfix: 'verbose-logs.log',
+            prefix: 'npm-openapi-modifier'
         });
 
         this.logsPrefix = name ? `${name}: ` : '';
     }
 
     private writeLog = (message: string) => {
-        fs.appendFileSync(this.tmpFile.fd, new Buffer(this.logsPrefix + message));
+        const log = `[${new Date().toISOString()} ${this.logsPrefix}] - ${message}`;
+        fs.appendFileSync(this.tmpFile.fd, new Buffer(log));
     }
 
     clone = (name: string): TempFileLogger => {
@@ -63,7 +65,7 @@ class TempFileLogger implements LoggerI {
     };
 
     getHelpInfo = (): string => {
-        return `Temp file path: ${tmp.tmpdir + this.tmpFile.name}`;
+        return `A complete log of this run can be found in: ${tmp.tmpdir + this.tmpFile.name}`;
     };
 }
 

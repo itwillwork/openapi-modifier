@@ -135,9 +135,13 @@ class ConsoleLogger implements LoggerI {
   };
 
   helpInfo = (message: string) => {
+    if (!message) {
+      return;
+    }
+
     this.debugTrace(message);
 
-    console.log(chalk.bold.grey(this.logsPrefix + message));
+    console.log(chalk.bold.grey(message));
   }
 
   getHelpInfo = (): string => {
