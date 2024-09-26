@@ -10,7 +10,7 @@ class ConsoleLogger implements LoggerI {
     warning: 3,
     error: 4,
     success: 5,
-  };
+  } as const;
 
   public static debugPrefix = 'openapi-modifier';
 
@@ -132,6 +132,21 @@ class ConsoleLogger implements LoggerI {
     }
 
     console.log(chalk.bold.green(this.logsPrefix + message));
+  };
+
+  helpInfo = (message: string) => {
+    this.debugTrace(message);
+
+    console.log(chalk.bold.grey(this.logsPrefix + message));
+  }
+
+  getHelpInfo = (): string => {
+    if (this.debug.enabled) {
+      // TODO message
+      return `For see more logs env DEBUG=df*`
+    }
+
+    return ``
   };
 }
 

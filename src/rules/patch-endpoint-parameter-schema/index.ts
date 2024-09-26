@@ -12,7 +12,7 @@ import {getOperationSchema} from '../common/utils/get-operation-schema';
 import {findParameterIndex} from '../common/utils/find-parameter-index';
 import {checkIsRefSchema} from '../common/utils/refs';
 import {getObjectPath, setObjectProp} from "../common/utils/object-path";
-import {messagesFactory} from "../../logger/messages-factory";
+import {messagesFactory} from "../../logger/messages/messagesFactory";
 
 const configSchema = z
   .object({

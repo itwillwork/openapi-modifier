@@ -9,6 +9,7 @@ const configSchema = z
   .object({
     logger: z
       .object({
+        verbose: z.boolean().optional(),
         minLevel: z.number().optional(),
       })
       .strict()

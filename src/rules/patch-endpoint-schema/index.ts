@@ -5,7 +5,7 @@ import {patchSchema} from '../common/utils/patch';
 import {endpointDescriptorConfigSchema, openAPISchemaConfigSchema, patchMethodConfigSchema} from '../common/config';
 import {checkIsHttpMethod} from '../common/openapi-models';
 import {getObjectPath, setObjectProp} from '../common/utils/object-path';
-import {messagesFactory} from "../../logger/messages-factory";
+import {messagesFactory} from "../../logger/messages/messagesFactory";
 
 const configSchema = z
     .object({

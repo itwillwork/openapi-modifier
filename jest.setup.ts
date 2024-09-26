@@ -35,9 +35,11 @@ global.createFakeLogger = () => {
     error: jest.fn(() => {}),
     errorMessage: jest.fn(() => {}),
     success: jest.fn(() => {}),
+    helpInfo: jest.fn(() => {}),
     clone: jest.fn(() => {
       return logger;
     }),
+    getHelpInfo:  jest.fn(() => ''),
   };
 
   return logger;
