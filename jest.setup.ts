@@ -30,6 +30,7 @@ global.createFakeLogger = () => {
   const logger: LoggerI = {
     trace: jest.fn(() => {}),
     info: jest.fn(() => {}),
+    notImportantInfo: jest.fn(() => {}),
     warning: jest.fn(() => {}),
     error: jest.fn(() => {}),
     errorMessage: jest.fn(() => {}),

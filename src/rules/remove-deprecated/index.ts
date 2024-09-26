@@ -69,7 +69,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
         logger.trace(`Deleted component - "${name}"`);
 
         if (showDeprecatedDescriptions) {
-          logger.info(messagesFactory.deprecated.field(name, schema?.description));
+          logger.notImportantInfo(messagesFactory.deprecated.field(name, schema?.description));
         }
 
         delete componentSchemas[name];
@@ -81,7 +81,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
           logger.trace(`Deleted component by resolving ref - "${name}"`);
 
           if (showDeprecatedDescriptions) {
-            logger.info(messagesFactory.deprecated.fieldByRef(name, resolvedSchema?.description));
+            logger.notImportantInfo(messagesFactory.deprecated.fieldByRef(name, resolvedSchema?.description));
           }
 
           delete componentSchemas?.[name];
@@ -113,7 +113,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
         logger.trace(`Deleted endpoint - "${JSON.stringify({ path, method })}"`);
 
         if (showDeprecatedDescriptions) {
-          logger.info(messagesFactory.deprecated.endpoint(method, path, pathObjSchema[method]?.description));
+          logger.notImportantInfo(messagesFactory.deprecated.endpoint(method, path, pathObjSchema[method]?.description));
         }
 
         delete pathObjSchema[method];
@@ -149,7 +149,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
             logger.trace(`Deleted parameter - "${JSON.stringify(parameter)}"`);
 
             if (showDeprecatedDescriptions) {
-              logger.info(messagesFactory.deprecated.endpointParameter(method, path, parameter.name, parameter.in, parameter?.description));
+              logger.notImportantInfo(messagesFactory.deprecated.endpointParameter(method, path, parameter.name, parameter.in, parameter?.description));
             }
 
             return false;
@@ -169,7 +169,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
           if (!checkIsRefSchema(propertySchema) && propertySchema?.deprecated) {
             logger.trace(`Deleted property - "${propertyKey}"`);
             if (showDeprecatedDescriptions) {
-              logger.info(messagesFactory.deprecated.field(propertyKey, propertySchema?.description));
+              logger.notImportantInfo(messagesFactory.deprecated.field(propertyKey, propertySchema?.description));
             }
 
             delete properties[propertyKey];
@@ -181,7 +181,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
               logger.trace(`Deleted property by resolving ref - "${propertyKey}"`);
 
               if (showDeprecatedDescriptions) {
-                logger.info(messagesFactory.deprecated.fieldByRef(propertyKey, resolvedPropertySchema?.description));
+                logger.notImportantInfo(messagesFactory.deprecated.fieldByRef(propertyKey, resolvedPropertySchema?.description));
               }
 
               delete properties[propertyKey];

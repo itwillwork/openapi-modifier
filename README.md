@@ -329,7 +329,6 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 - причесать README.md правил - 13 штук
 - причесать главный README.md
 
-- deprecated notes в стиле не привлекающим внимание если не нужно
 - бага с remove-unused-components (то что сейчас заигнорено)
 
 - дебаг файлик, который подписывает асииметричным ключем исходный файл и что получился

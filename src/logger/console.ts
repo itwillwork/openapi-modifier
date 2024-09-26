@@ -5,10 +5,11 @@ import { LoggerI } from './interface';
 class ConsoleLogger implements LoggerI {
   public static typeLevelMap = {
     trace: 0,
-    info: 1,
-    warning: 2,
-    error: 3,
-    success: 3,
+    'not-important-info': 1,
+    info: 2,
+    warning: 3,
+    error: 4,
+    success: 5,
   };
 
   public static debugPrefix = 'openapi-modifier';
@@ -63,6 +64,16 @@ class ConsoleLogger implements LoggerI {
     }
 
     console.info(this.logsPrefix + message);
+  };
+
+  notImportantInfo = (message: string) => {
+    this.debugTrace(message);
+
+    if (!this.checkIsAllowed('not-important-info')) {
+      return;
+    }
+
+    console.log(chalk.grey(this.logsPrefix + message));
   };
 
   error = (error: Error, message?: string) => {
