@@ -3,9 +3,10 @@ import {LoggerFactory, LoggerFactoryTypeLevel} from './logger/factory';
 import {readInputFile, writeOutputFile} from './openapi';
 import {runner} from './core/runner';
 import {AnyPipelineRule} from './rules/generated-types';
+import {LoggerI} from "./logger/interface";
 
-export const openapiModifier = async (config: Partial<ConfigT>) => {
-    const logger = LoggerFactory.createLogger({
+export const openapiModifier = async (config: Partial<ConfigT>, forcedLogger?: LoggerI) => {
+    const logger = forcedLogger || LoggerFactory.createLogger({
         name: 'openapi-modifier',
         verbose: config.logger?.verbose,
         minLevel: config.logger?.minLevel as LoggerFactoryTypeLevel,

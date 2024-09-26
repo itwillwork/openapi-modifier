@@ -77,7 +77,7 @@ const cli = async (params: ParamsT) => {
 
         logger.trace(`Final CLI config`, finalConfig);
         logger.trace('Trying run openapi modifier...');
-        await openapiModifier(finalConfig);
+        await openapiModifier(finalConfig, logger);
     } finally {
         logger.helpInfo(logger.getHelpInfo());
     }
