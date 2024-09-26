@@ -43,7 +43,9 @@ export const openapiModifier = async (config: Partial<ConfigT>, forcedLogger?: L
 
         logger.success('OK!');
     } finally {
-        logger.helpInfo(logger.getHelpInfo());
+        if (!forcedLogger) {
+            logger.helpInfo(logger.getHelpInfo());
+        }
     }
 };
 
