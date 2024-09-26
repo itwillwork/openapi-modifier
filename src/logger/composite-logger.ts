@@ -19,9 +19,9 @@ class CompositeLogger implements LoggerI {
         );
     };
 
-    trace = (message: string) => {
+    trace = (message: string, obj?: any) => {
         this.loggers.forEach(logger => {
-            return logger.trace(message);
+            return logger.trace(message, obj);
         });
     };
 

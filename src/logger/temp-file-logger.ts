@@ -17,8 +17,8 @@ class TempFileLogger implements LoggerI {
         this.logsPrefix = name ? `${name}: ` : '';
     }
 
-    private writeLog = (message: string) => {
-        const log = `[${new Date().toISOString()} ${this.logsPrefix}] - ${message}\n`;
+    private writeLog = (level: string, message: string) => {
+        const log = `[${new Date().toISOString()} ${this.logsPrefix} ${level}] - ${message}\n`;
         fs.appendFileSync(this.tmpFile.fd, new Buffer(log));
     }
 
@@ -30,38 +30,39 @@ class TempFileLogger implements LoggerI {
     };
 
     trace = (message: string, obj: any) => {
-        this.writeLog(`[trace]: ` + message + JSON.stringify(obj || {}, null, 4));
+        this.writeLog('trace', message + obj ? JSON.stringify(obj || {}, null, 4) : '');
     };
 
     info = (message: string) => {
-        this.writeLog(`[info]: ` + message);
+        this.writeLog('info', message);
     };
 
     notImportantInfo = (message: string) => {
-        this.writeLog(`[not important info]: ` + message);
+        this.writeLog('not important info', message);
     };
 
     error = (error: Error, message?: string) => {
-        this.writeLog(`[error]: ` + message);
-        this.writeLog(`[error message]: ` + error.message);
-        this.writeLog(`[error stack]: ` + error.stack);
-        this.writeLog(`[error object]: ` + error);
+        this.writeLog(`error`, message || '');
+        this.writeLog(`error message`, error.message);
+        this.writeLog(`error stack`, error.stack as string);
+        // @ts-expect-error
+        this.writeLog(`error object`, error);
     };
 
     errorMessage = (message?: string) => {
-        this.writeLog(`[error message]: ` + message);
+        this.writeLog(`error message`, message || '');
     };
 
     warning = (message: string) => {
-        this.writeLog(`[warning]: ` + message);
+        this.writeLog(`warning`, message);
     };
 
     success = (message: string) => {
-        this.writeLog(`[success]: ` + message);
+        this.writeLog(`success`, message);
     };
 
     helpInfo = (message: string) => {
-        this.writeLog(`[help info]: ` + message);
+        this.writeLog(`help info`, message);
     };
 
     getHelpInfo = (): string => {
