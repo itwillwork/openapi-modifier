@@ -10,6 +10,7 @@ import {
 } from '../common/config';
 import {getObjectPath, setObjectProp} from '../common/utils/object-path';
 import {parseAnyComponentWithCorrectionDescriptor} from "../common/utils/config/parse-component-descriptor";
+import {messagesFactory} from "../../logger/messages/factory";
 
 const configSchema = z
     .object({
@@ -22,29 +23,29 @@ const configSchema = z
 const processor: RuleProcessorT<typeof configSchema> = {
     configSchema,
     defaultConfig: {
-        patchMethod: 'deepmerge',
+        patchMethod: 'merge',
     },
     processDocument: (openAPIFile, config, logger) => {
         const {patchMethod, schemaDiff, descriptor} = config;
 
         if (!descriptor) {
-            logger.errorMessage('Rule not apply: empty descriptor!');
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('descriptor'));
             return openAPIFile;
         }
 
         const parsedDesciptor = parseAnyComponentWithCorrectionDescriptor(descriptor, logger);
         if (!parsedDesciptor) {
-            logger.errorMessage('Rule not apply: failed to parse descriptor!');
+            logger.errorMessage(messagesFactory.ruleNotApply.withReason('failed to parse descriptor'));
             return openAPIFile;
         }
 
         if (!patchMethod) {
-            logger.errorMessage('Rule not apply: empty patchMethod!');
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('patchMethod'));
             return openAPIFile;
         }
 
         if (!schemaDiff) {
-            logger.errorMessage('Rule not apply: empty schemaDiff!');
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('schemaDiff'));
             return openAPIFile;
         }
 
