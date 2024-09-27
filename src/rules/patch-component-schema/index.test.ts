@@ -124,7 +124,7 @@ describe('patch-schemas rule', () => {
 
         expect(fakeLogger.warning).toBeCalledTimes(0);
     });
-    
+
     test('regular, use simple descriptor, root array', () => {
         const fakeLogger = global.createFakeLogger();
         const fakeOpenAPIFile = global.createFakeOpenAPIFile({
