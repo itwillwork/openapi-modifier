@@ -1,160 +1,159 @@
-import { RuleProcessorT } from '../../core/rules/processor-models';
-import { z } from 'zod';
-import { normalizeMethod } from '../common/utils/normilizers';
-import { forEachOperation } from '../common/utils/iterators/each-operation';
-import { checkIsHttpMethod } from '../common/openapi-models';
+import {RuleProcessorT} from '../../core/rules/processor-models';
+import {z} from 'zod';
+import {normalizeMethod} from '../common/utils/normilizers';
+import {forEachOperation} from '../common/utils/iterators/each-operation';
+import {checkIsHttpMethod} from '../common/openapi-models';
+import {anyEndpointDescriptorConfigSchema} from "../common/config";
+import {
+    parseAnyEndpointDescriptor,
+    ParsedEndpointDescriptor
+} from "../common/utils/config/parse-endpoint-descriptor";
+import {isNonNil} from "../common/utils/empty";
 
 const configSchema = z
-  .object({
-    enabled: z
-      .array(
-        z
-          .object({
-            path: z.string(),
-            method: z.string(),
-          })
-          .strict()
-      )
-      .optional(),
-    enabledPathRegExp: z.array(z.instanceof(RegExp)).optional(),
-    disabled: z
-      .array(
-        z
-          .object({
-            path: z.string(),
-            method: z.string(),
-          })
-          .strict()
-      )
-      .optional(),
-    disabledPathRegExp: z.array(z.instanceof(RegExp)).optional(),
-    printIgnoredEndpoints: z.boolean().optional(),
-  })
-  .strict();
+    .object({
+        enabled: z
+            .array(
+                anyEndpointDescriptorConfigSchema,
+            )
+            .optional(),
+        enabledPathRegExp: z.array(z.instanceof(RegExp)).optional(),
+        disabled: z
+            .array(
+                anyEndpointDescriptorConfigSchema,
+            )
+            .optional(),
+        disabledPathRegExp: z.array(z.instanceof(RegExp)).optional(),
+        printIgnoredEndpoints: z.boolean().optional(),
+    })
+    .strict();
 
-type EndpointT = {
-  path: string;
-  method: string;
-};
-
-const normalizeEndpoint = (endpoint: EndpointT): EndpointT => {
-  return {
-    ...endpoint,
-    method: normalizeMethod(endpoint.method),
-  };
+const normalizeEndpoint = (endpoint: ParsedEndpointDescriptor): ParsedEndpointDescriptor => {
+    return {
+        ...endpoint,
+        method: normalizeMethod(endpoint.method),
+    };
 };
 
 type EndpointHash = string;
 
-const getEndpointHash = (endpoint: EndpointT): EndpointHash => {
-  return `${endpoint.method}/${endpoint.path}`;
+const getEndpointHash = (endpoint: ParsedEndpointDescriptor): EndpointHash => {
+    return `${endpoint.method}/${endpoint.path}`;
 };
 
 const processor: RuleProcessorT<typeof configSchema> = {
-  configSchema,
-  defaultConfig: {},
-  processDocument: (openAPIFile, config, logger) => {
-    const { enabled, enabledPathRegExp, disabled, disabledPathRegExp, printIgnoredEndpoints } = config;
+    configSchema,
+    defaultConfig: {},
+    processDocument: (openAPIFile, config, logger) => {
+        const {enabled, enabledPathRegExp, disabled, disabledPathRegExp, printIgnoredEndpoints} = config;
 
-    const normalizedEnabled = enabled ? enabled.map(normalizeEndpoint) : null;
-    const normalizedEnabledPathRegExps = enabledPathRegExp || null;
+        const parsedEnabled = enabled ? enabled.map((descriptor) => {
+            return parseAnyEndpointDescriptor(descriptor, logger);
+        }).filter(isNonNil) : null;
 
-    const normalizedDisabled = disabled ? disabled.map(normalizeEndpoint) : null;
-    const normalizedDisabledPathRegExps = disabledPathRegExp || null;
+        const normalizedEnabled = parsedEnabled ? parsedEnabled.map(normalizeEndpoint) : null;
+        const normalizedEnabledPathRegExps = enabledPathRegExp || null;
 
-    const enabledEndpointHashSet = normalizedEnabled ? new Set(normalizedEnabled.map(getEndpointHash)) : null;
-    const disabledEndpointHashSet = normalizedDisabled ? new Set(normalizedDisabled.map(getEndpointHash)) : null;
+        const parsedDisabled = disabled ? disabled.map((descriptor) => {
+            return parseAnyEndpointDescriptor(descriptor, logger);
+        }).filter(isNonNil) : null;
 
-    const checkIsEnabledEndpoint = (endpoint: EndpointT) => {
-      const hash = getEndpointHash(endpoint);
+        const normalizedDisabled = parsedDisabled ? parsedDisabled.map(normalizeEndpoint) : null;
+        const normalizedDisabledPathRegExps = disabledPathRegExp || null;
 
-      const isEnabled =
-        (enabledEndpointHashSet && enabledEndpointHashSet.has(hash)) ||
-        (normalizedEnabledPathRegExps &&
-          normalizedEnabledPathRegExps.some((normalizedEnabledPathRegExp) => {
-            return normalizedEnabledPathRegExp.test(endpoint.path);
-          })) ||
-        (!enabledEndpointHashSet && !normalizedEnabledPathRegExps);
+        const enabledEndpointHashSet = normalizedEnabled ? new Set(normalizedEnabled.map(getEndpointHash)) : null;
+        const disabledEndpointHashSet = normalizedDisabled ? new Set(normalizedDisabled.map(getEndpointHash)) : null;
 
-      const isDisabled =
-        (disabledEndpointHashSet && disabledEndpointHashSet.has(hash)) ||
-        (normalizedDisabledPathRegExps &&
-          normalizedDisabledPathRegExps.some((normalizedDisabledPathRegExp) => {
-            return normalizedDisabledPathRegExp.test(endpoint.path);
-          }));
+        const checkIsEnabledEndpoint = (endpoint: ParsedEndpointDescriptor) => {
+            const hash = getEndpointHash(endpoint);
 
-      return isEnabled && !isDisabled;
-    };
+            const isEnabled =
+                (enabledEndpointHashSet && enabledEndpointHashSet.has(hash)) ||
+                (normalizedEnabledPathRegExps &&
+                    normalizedEnabledPathRegExps.some((normalizedEnabledPathRegExp) => {
+                        return normalizedEnabledPathRegExp.test(endpoint.path);
+                    })) ||
+                (!enabledEndpointHashSet && !normalizedEnabledPathRegExps);
 
-    let usageCount: Record<EndpointHash, number> = {};
-    const increaseUsageCount = (endpoint: EndpointT) => {
-      const hash = getEndpointHash(endpoint);
+            const isDisabled =
+                (disabledEndpointHashSet && disabledEndpointHashSet.has(hash)) ||
+                (normalizedDisabledPathRegExps &&
+                    normalizedDisabledPathRegExps.some((normalizedDisabledPathRegExp) => {
+                        return normalizedDisabledPathRegExp.test(endpoint.path);
+                    }));
 
-      usageCount[hash] = (usageCount[hash] || 0) + 1;
-    };
+            return isEnabled && !isDisabled;
+        };
 
-    const ignoredEndpoints: Array<EndpointT> = [];
+        let usageCount: Record<EndpointHash, number> = {};
+        const increaseUsageCount = (endpoint: ParsedEndpointDescriptor) => {
+            const hash = getEndpointHash(endpoint);
 
-    forEachOperation(openAPIFile, ({ operationSchema, method, path }) => {
-      const endpoint = normalizeEndpoint({
-        path,
-        method,
-      });
+            usageCount[hash] = (usageCount[hash] || 0) + 1;
+        };
 
-      increaseUsageCount(endpoint);
+        const ignoredEndpoints: Array<ParsedEndpointDescriptor> = [];
 
-      const pathObjSchema = openAPIFile?.document?.paths?.[path];
+        forEachOperation(openAPIFile, ({operationSchema, method, path}) => {
+            const endpoint = normalizeEndpoint({
+                path,
+                method,
+            });
 
-      if (!checkIsEnabledEndpoint(endpoint) && pathObjSchema) {
-        delete pathObjSchema[method];
+            increaseUsageCount(endpoint);
 
-        ignoredEndpoints.push({
-          path,
-          method,
+            const pathObjSchema = openAPIFile?.document?.paths?.[path];
+
+            if (!checkIsEnabledEndpoint(endpoint) && pathObjSchema) {
+                delete pathObjSchema[method];
+
+                ignoredEndpoints.push({
+                    path,
+                    method,
+                });
+            }
         });
-      }
-    });
 
-    const paths = openAPIFile.document?.paths;
-    Object.keys(paths || {}).forEach((pathKey) => {
-      const path = paths?.[pathKey];
+        const paths = openAPIFile.document?.paths;
+        Object.keys(paths || {}).forEach((pathKey) => {
+            const path = paths?.[pathKey];
 
-      const methods = Object.keys(path || {}).filter(checkIsHttpMethod);
-      if (!methods?.length && paths?.[pathKey]) {
-        delete paths[pathKey];
-      }
-    });
+            const methods = Object.keys(path || {}).filter(checkIsHttpMethod);
+            if (!methods?.length && paths?.[pathKey]) {
+                delete paths[pathKey];
+            }
+        });
 
-    if (printIgnoredEndpoints && ignoredEndpoints.length) {
-      logger.info(`Ignored endpoints: \n
+        if (printIgnoredEndpoints && ignoredEndpoints.length) {
+            logger.info(`Ignored endpoints: \n
         ${ignoredEndpoints.map((endpoint) => {
-          const { method, path } = endpoint;
+                const {method, path} = endpoint;
 
-          return `[${method}] - ${path} \n`;
-        })}\n`);
-    }
-
-    if (normalizedEnabled) {
-      normalizedEnabled.forEach((endpoint) => {
-        const hash = getEndpointHash(endpoint);
-        if (!usageCount[hash]) {
-          logger.warning(`Non-existent enabled endpoint "${JSON.stringify(endpoint)}"`);
+                return `[${method}] - ${path} \n`;
+            })}\n`);
         }
-      });
-    }
 
-    if (normalizedDisabled) {
-      normalizedDisabled.forEach((endpoint) => {
-        const hash = getEndpointHash(endpoint);
-        if (!usageCount[hash]) {
-          logger.warning(`Non-existent disabled endpoint "${JSON.stringify(endpoint)}"`);
+        if (normalizedEnabled) {
+            normalizedEnabled.forEach((endpoint) => {
+                const hash = getEndpointHash(endpoint);
+                if (!usageCount[hash]) {
+                    logger.warning(`Non-existent enabled endpoint "${JSON.stringify(endpoint)}"`);
+                }
+            });
         }
-      });
-    }
 
-    return openAPIFile;
-  },
+        if (normalizedDisabled) {
+            normalizedDisabled.forEach((endpoint) => {
+                const hash = getEndpointHash(endpoint);
+                if (!usageCount[hash]) {
+                    logger.warning(`Non-existent disabled endpoint "${JSON.stringify(endpoint)}"`);
+                }
+            });
+        }
+
+        return openAPIFile;
+    },
 };
 
 export default processor;
-export { configSchema };
+export {configSchema};

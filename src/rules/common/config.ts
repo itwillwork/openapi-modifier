@@ -22,11 +22,32 @@ export const parameterDescriptorConfigSchema = z
   })
   .strict();
 
+export const simpleComponentWithCorrectionDescriptorConfigSchema = z.string();
+
+export const componentWithCorrectionDescriptorConfigSchema = z
+    .object({
+        componentName: z.string(),
+        correction: z.string().optional(),
+    })
+    .strict();
+
+export const anyComponentWithCorrectionDescriptorConfigSchema = z.union([
+    simpleComponentWithCorrectionDescriptorConfigSchema,
+    componentWithCorrectionDescriptorConfigSchema,
+]);
+
+export const simpleComponentDescriptorConfigSchema = z.string();
+
 export const componentDescriptorConfigSchema = z
   .object({
       componentName: z.string(),
   })
   .strict();
+
+export const anyComponentDescriptorConfigSchema = z.union([
+    simpleComponentDescriptorConfigSchema,
+    componentDescriptorConfigSchema,
+])
 
 export const endpointRequestBodyDescriptorConfigSchema = z
     .object({
@@ -43,11 +64,18 @@ export const endpointResponseDescriptorConfigSchema = z
     .strict();
 
 
+export const simpleEndpointDescriptorConfigSchema = z.string();
+
 export const endpointDescriptorConfigSchema = z
   .object({
     path: z.string(),
     method: z.string(),
   })
   .strict();
+
+export const anyEndpointDescriptorConfigSchema = z.union([
+    endpointDescriptorConfigSchema,
+    simpleEndpointDescriptorConfigSchema,
+])
 
 export const operationIdConfigSchema = z.string();

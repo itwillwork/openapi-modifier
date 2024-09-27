@@ -1,13 +1,19 @@
 import {RuleProcessorT} from '../../core/rules/processor-models';
 import {z} from 'zod';
 import {patchSchema} from '../common/utils/patch';
-import {componentDescriptorConfigSchema, openAPISchemaConfigSchema, patchMethodConfigSchema} from '../common/config';
+import {
+    anyComponentWithCorrectionDescriptorConfigSchema,
+    componentDescriptorConfigSchema,
+    openAPISchemaConfigSchema,
+    patchMethodConfigSchema,
+    simpleComponentDescriptorConfigSchema
+} from '../common/config';
 import {getObjectPath, setObjectProp} from '../common/utils/object-path';
+import {parseAnyComponentWithCorrectionDescriptor} from "../common/utils/config/parse-component-descriptor";
 
 const configSchema = z
     .object({
-        descriptor: componentDescriptorConfigSchema.optional(),
-        descriptorCorrection: z.string().optional(),
+        descriptor: anyComponentWithCorrectionDescriptorConfigSchema.optional(),
         patchMethod: patchMethodConfigSchema.optional(),
         schemaDiff: openAPISchemaConfigSchema.optional(),
     })
@@ -16,12 +22,19 @@ const configSchema = z
 const processor: RuleProcessorT<typeof configSchema> = {
     configSchema,
     defaultConfig: {
-        patchMethod: 'merge',
+        patchMethod: 'deepmerge',
     },
     processDocument: (openAPIFile, config, logger) => {
-        const {patchMethod, schemaDiff, descriptor, descriptorCorrection} = config;
+        const {patchMethod, schemaDiff, descriptor} = config;
+
         if (!descriptor) {
             logger.errorMessage('Rule not apply: empty descriptor!');
+            return openAPIFile;
+        }
+
+        const parsedDesciptor = parseAnyComponentWithCorrectionDescriptor(descriptor, logger);
+        if (!parsedDesciptor) {
+            logger.errorMessage('Rule not apply: failed to parse descriptor!');
             return openAPIFile;
         }
 
@@ -35,17 +48,17 @@ const processor: RuleProcessorT<typeof configSchema> = {
             return openAPIFile;
         }
 
-        const {componentName} = descriptor;
+        const {componentName, correction} = parsedDesciptor;
 
         const componentSchemas = openAPIFile?.document?.components?.schemas;
         if (componentSchemas?.[componentName]) {
-            if (descriptorCorrection) {
+            if (correction) {
                 setObjectProp(
                     componentSchemas?.[componentName],
-                    descriptorCorrection,
+                    correction,
                     patchSchema(
                         logger,
-                        getObjectPath(componentSchemas[componentName], descriptorCorrection),
+                        getObjectPath(componentSchemas[componentName], correction),
                         patchMethod,
                         schemaDiff,
                     ),
