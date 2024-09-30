@@ -2,6 +2,7 @@ import { ConfigT } from '../config';
 import { LoggerI } from '../logger/interface';
 import { OpenAPIFileT } from '../openapi';
 import { RuleRunner } from './rules/rule-runner';
+import {messagesFactory} from "../logger/messages/factory";
 
 export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, baseLogger: LoggerI): Promise<OpenAPIFileT> => {
   const logger = baseLogger.clone('runner');
@@ -10,7 +11,7 @@ export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, b
 
   const pipeline = config.pipeline || [];
   if (!pipeline?.length) {
-    logger.warning(`Empty pipeline!`);
+    logger.warning(messagesFactory.failedRun.emptyPipeline);
   }
 
   for (const pipelineItem of pipeline) {
@@ -26,7 +27,7 @@ export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, b
       }
     } catch (error) {
       if (error instanceof Error) {
-        logger.error(error, `Failed to process pipeline item "${JSON.stringify(pipelineItem)}"`);
+        logger.error(error, messagesFactory.failedRun.failedRunPipelineItem(pipelineItem));
       }
 
       throw error;
