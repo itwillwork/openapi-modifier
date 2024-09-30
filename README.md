@@ -326,12 +326,18 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 ### TODO
 
+- оптимизация path'ов
+    patch-endpoint-parameter-schema
+    patch-endpoint-request-body-schema
+    patch-endpoint-response-schema
+    patch-endpoint-schema
+    remove-deprecated
+    remove-parameter
+    remove-unused-components
+
+- к ошибкам конфигурации правил в сообщении сделать ссылку на документацию github
+
+- поменять логику remove-deprecated: добавить correction для компонентов
+
 - причесать README.md правил - 13 штук
 - причесать главный README.md
-
-- бага с remove-unused-components (то что сейчас заигнорено)
-- remove unsued components не видит discriminator
-
-- path'ы неудобно писать, мб можно как-то дескрипторы оптимизировать, может самому пытаться писать уточнять дескрипторы по схеме, например парсить строчку, и если двойственно, писать об этом warning чтобы доуточняли
-
-- к ошибкам конфигурации в сообщении сделать ссылку на документацию github
