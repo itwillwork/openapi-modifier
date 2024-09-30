@@ -1,6 +1,10 @@
 # openapi-modifier
 
-TODO что это и мотивация создания
+OpenAPI описывающий бекендное API далеко не всегда идеальное: содержит ошибки, неточности или какие-то особенности ломают другие инструменты, например, кодогенерацию или генерацию типов.
+
+Данный инструмент предназначен для облегчения работы с OpenAPI - для легкой модификации и удобного описания и документации изменений.
+
+Частые кейсы применения:
 
 <details>
   <summary>-Бекендер просит проверить используется ли поле в какой-то сущности</summary>
@@ -92,8 +96,6 @@ const config: ConfigT = {
 Далее при помощи, к примеру cli [dtsgenerator](https://github.com/horiuchi/dtsgenerator), генерируем из модифицированной спецификации/документаци [файл типизации для api](./examples/example-cli-generate-api-types/output/generated-api-types.d.ts), которую уже используем в коде проекта.
 
 [Полный код примера](./examples/example-cli-generate-api-types)
-
-Примеры как можно использовать сгенерированную типизацию для api можно в отдельном [репозитории с примерами применения](https://github.com/itwillwork/openapi-use-cases).
 
 ### Использование как CLI
 
@@ -295,6 +297,8 @@ DEBUG=openapi-modifier:* openapi-modifier
 ```bash
 DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 ```
+
+TODO описание параметра verbose
 
 ### Примеры использования
 
