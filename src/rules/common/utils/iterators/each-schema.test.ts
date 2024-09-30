@@ -102,6 +102,39 @@ describe('forEachSchema', () => {
               },
             },
           },
+          TestSchemaRefOneOfDTO: {
+            type: 'string',
+          },
+          TestObjectWithOneOfDTO: {
+            type: 'object',
+            oneOf: [
+              {
+                $ref: '#/components/schemas/TestSchemaRefOneOfDTO',
+              }
+            ]
+          },
+          TestSchemaRefAllOfDTO: {
+            type: 'string',
+          },
+          TestObjectWithAllOfDTO: {
+            type: 'object',
+            allOf: [
+              {
+                $ref: '#/components/schemas/TestSchemaRefAllOfDTO',
+              }
+            ]
+          },
+          TestSchemaRefAnyOfDTO: {
+            type: 'string',
+          },
+          TestObjectWithAnyOfDTO: {
+            type: 'object',
+            anyOf: [
+              {
+                $ref: '#/components/schemas/TestSchemaRefAnyOfDTO',
+              }
+            ]
+          },
         },
       },
       paths: {
@@ -155,6 +188,6 @@ describe('forEachSchema', () => {
 
     forEachSchema(fakeOpenAPIFile, callback);
 
-    expect(callback).toBeCalledTimes(25);
+    expect(callback).toBeCalledTimes(34);
   });
 });
