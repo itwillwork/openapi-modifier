@@ -333,8 +333,6 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
     patch-endpoint-schema
     remove-deprecated
 
-- к ошибкам конфигурации правил в сообщении сделать ссылку на документацию github
-
 - поменять логику remove-deprecated: добавить correction для компонентов
 
 - причесать README.md правил - 13 штук
