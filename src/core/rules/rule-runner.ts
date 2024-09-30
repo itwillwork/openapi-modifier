@@ -3,6 +3,7 @@ import path from 'path';
 import { RuleProcessorT, RuleMetaT } from './processor-models';
 import { OpenAPIFileT } from '../../openapi';
 import { z } from 'zod';
+import {messagesFactory} from "../../logger/messages/factory";
 
 type RuleAnyConfigT = z.ZodObject<any>;
 
@@ -32,7 +33,13 @@ class RuleRunner {
     const processor = processorImport.default as RuleProcessorT<RuleAnyConfigT>;
     if (!processor) {
       const error = new Error();
-      logger.error(error, `Failed to init rule "${this.ruleMeta.ruleName}", not found rule processor: "${name}"`);
+      logger.error(
+          error,
+          messagesFactory.ruleNotApply.withReason(
+              this.ruleMeta,
+              `Not found rule processor: "${this.rulePath}"`,
+          ),
+      );
       throw error;
     }
 
@@ -43,7 +50,12 @@ class RuleRunner {
     const { logger, processor } = this;
 
     if (!processor) {
-      logger.warning(`Failed to apply rule "${this.ruleMeta.ruleName}" config, empty processor!`);
+      logger.warning(
+          messagesFactory.ruleNotApply.withReason(
+              this.ruleMeta,
+              `empty processor!`,
+          ),
+      );
       return;
     }
 
@@ -52,7 +64,13 @@ class RuleRunner {
       mergedConfig = Object.assign(processor.defaultConfig, config);
     } catch (error) {
       if (error instanceof Error) {
-        logger.error(error, `Failed to init rule "${this.ruleMeta.ruleName}", failed merge default and "${JSON.stringify(config || {})}"`);
+        logger.error(
+            error,
+            messagesFactory.ruleNotApply.withReason(
+                this.ruleMeta,
+                `Failed merge default config ("${JSON.stringify(processor.defaultConfig || {})}") and custom config ("${JSON.stringify(config || {})})"`,
+            ),
+        );
       }
 
       throw error;
@@ -62,7 +80,13 @@ class RuleRunner {
       processor.configSchema.parse(mergedConfig);
     } catch (error) {
       if (error instanceof Error) {
-        logger.error(error, `Failed to init rule, not valid rule config: ${JSON.stringify(mergedConfig || {})}`);
+        logger.error(
+            error,
+            messagesFactory.ruleNotApply.withReason(
+                this.ruleMeta,
+                `Not valid rule config: ${JSON.stringify(mergedConfig || {})}`,
+            ),
+        );
       }
 
       throw error;
@@ -74,8 +98,13 @@ class RuleRunner {
   processDocument = async (openAPIFile: OpenAPIFileT): Promise<OpenAPIFileT> => {
     const { logger, processor, config } = this;
 
-    if (!processor || !config) {
-      logger.warning(`Failed to run rule, empty processor or config!`);
+    if (!processor) {
+      logger.warning(messagesFactory.ruleNotApply.withReason(this.ruleMeta, `empty rule processor`));
+      return openAPIFile;
+    }
+
+    if (!config) {
+      logger.warning(messagesFactory.ruleNotApply.withReason(this.ruleMeta, `empty rule config`));
       return openAPIFile;
     }
 

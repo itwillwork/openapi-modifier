@@ -11,10 +11,10 @@ const getGitHubRuleReadMeLink = (ruleName: string) => {
 export const messagesFactory = {
     ruleNotApply: {
         withReason: (ruleMeta: RuleMetaT, reason: string) => {
-            return `The rule does not apply, for the reason: ${reason}. See rule docs: ${getGitHubRuleReadMeLink(ruleMeta.ruleName)}`;
+            return `The rule "${ruleMeta.ruleName}" does not apply, for the reason: ${reason}. See rule docs: ${getGitHubRuleReadMeLink(ruleMeta.ruleName)}`;
         },
         requiredConfigField: (ruleMeta: RuleMetaT, field: string) => {
-            return `The rule does not apply, you must specify the "${field}" field of the rule configuration. See rule config docs: ${getGitHubRuleConfigReadMeLink(ruleMeta.ruleName)}`;
+            return `The rule "${ruleMeta.ruleName}" does not apply, you must specify the "${field}" field of the rule configuration. See rule config docs: ${getGitHubRuleConfigReadMeLink(ruleMeta.ruleName)}`;
         }
     },
     deprecated: {
