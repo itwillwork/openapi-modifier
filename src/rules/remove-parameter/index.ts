@@ -1,15 +1,21 @@
 import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
 import { OpenAPIV2, OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
-import { endpointDescriptorConfigSchema, endpointParameterDescriptorConfigSchema } from '../common/config';
+import {
+  anyEndpointDescriptorConfigSchema,
+  endpointDescriptorConfigSchema,
+  endpointParameterDescriptorConfigSchema
+} from '../common/config';
 import { normalizeMethod } from '../common/utils/normilizers';
 import { HttpMethods, PathItemObject } from '../common/openapi-models';
 import { getOperationSchema } from '../common/utils/get-operation-schema';
 import { checkIsRefSchema } from '../common/utils/refs';
+import {parseAnyEndpointDescriptor} from "../common/utils/config/parse-endpoint-descriptor";
+import {isNonNil} from "../common/utils/empty";
 
 const configSchema = z
   .object({
-    endpointDescriptor: endpointDescriptorConfigSchema.optional(),
+    endpointDescriptor: anyEndpointDescriptorConfigSchema.optional(),
     parameterDescriptor: endpointParameterDescriptorConfigSchema.optional(),
   })
   .strict();
@@ -42,7 +48,12 @@ const processor: RuleProcessorT<typeof configSchema> = {
       return openAPIFile;
     }
 
-    const operationSchema = getOperationSchema(openAPIFile, endpointDescriptor.path, endpointDescriptor.method);
+    const parsedEndpointDescriptor = parseAnyEndpointDescriptor(endpointDescriptor, logger);
+    if (!parsedEndpointDescriptor) {
+      return openAPIFile;
+    }
+
+    const operationSchema = getOperationSchema(openAPIFile, parsedEndpointDescriptor.path, parsedEndpointDescriptor.method);
     if (!operationSchema) {
       logger.warning(`Not found operation: ${JSON.stringify(endpointDescriptor)}`);
       return openAPIFile;

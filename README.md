@@ -332,7 +332,6 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
     patch-endpoint-response-schema
     patch-endpoint-schema
     remove-deprecated
-    remove-parameter
 
 - к ошибкам конфигурации правил в сообщении сделать ссылку на документацию github
 
