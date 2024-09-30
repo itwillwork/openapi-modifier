@@ -1,4 +1,4 @@
-import {parseSimpleComponentWithCorrectionDescriptor} from './parse-component-descriptor';
+import {parseSimpleComponentWithCorrectionDescriptor} from './parse-component-with-correction-descriptor';
 
 describe('parseSimpleComponentWithCorrectionDescriptor', () => {
     test.each([

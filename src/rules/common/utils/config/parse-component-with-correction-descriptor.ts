@@ -7,7 +7,6 @@ export type ParsedComponentWithCorrectionDescriptor = {
     correction?: string;
 }
 
-
 export const parseSimpleComponentWithCorrectionDescriptor = (
     componentDescriptor: z.infer<typeof anyComponentWithCorrectionDescriptorConfigSchema>,
 ): ParsedComponentWithCorrectionDescriptor | null => {
