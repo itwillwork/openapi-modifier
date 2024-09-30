@@ -135,6 +135,32 @@ describe('forEachSchema', () => {
               }
             ]
           },
+            "TestDiscriminatorVariantObject": {
+                "type": "object",
+                "properties": {
+                    "foo": {
+                        "type": "string"
+                    }
+                }
+            },
+            "TestObjectWithDiscriminatorDto": {
+                "discriminator": {
+                    "mapping": {
+                        "TEST_DISCRIMINATOR": "#/components/schemas/TestDiscriminatorVariantObject"
+                    },
+                    "propertyName": "action"
+                },
+                "type": "object",
+                "properties": {
+                    "action": {
+                        "description": "Test discriminator property",
+                        "enum": [
+                            "TEST_DISCRIMINATOR"
+                        ],
+                        "type": "string"
+                    }
+                }
+            }
         },
       },
       paths: {
@@ -188,6 +214,6 @@ describe('forEachSchema', () => {
 
     forEachSchema(fakeOpenAPIFile, callback);
 
-    expect(callback).toBeCalledTimes(34);
+    expect(callback).toBeCalledTimes(39);
   });
 });

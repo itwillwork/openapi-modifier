@@ -162,6 +162,15 @@ export const forEachSchema = (openAPIFile: OpenAPIFileT, callback: SchemaCallbac
       item.anyOf?.forEach((schema) => {
         stack.push(schema);
       });
+
+      const discriminatorMapping = item.discriminator?.mapping || null;
+      if (discriminatorMapping) {
+        Object.values(discriminatorMapping).forEach(ref => {
+          stack.push({
+            '$ref': ref
+          });
+        });
+      }
     }
   }
 };
