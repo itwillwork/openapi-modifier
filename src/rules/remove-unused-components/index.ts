@@ -39,6 +39,8 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
     let hasUnusedComponents = true;
     while (hasUnusedComponents) {
+      logger.trace(`New iteration of removing unused components ...`);
+
       let usagedCount: Record<string, number> = {};
 
       Object.keys(components).forEach((component) => {
@@ -56,7 +58,11 @@ const processor: RuleProcessorT<typeof configSchema> = {
         });
       });
 
+      logger.trace('usageIgnoredComponentNames', usageIgnoredComponentNames);
+
       forEachSchema(openAPIFile, (schema) => {
+        logger.trace('forEachSchema the callback was called', schema);
+
         if ('$ref' in schema) {
           const shortenedRef = shortenRef(schema['$ref']);
 
@@ -64,9 +70,13 @@ const processor: RuleProcessorT<typeof configSchema> = {
         }
       });
 
+      logger.trace('usagedCount', usagedCount);
+
       hasUnusedComponents = false;
       Object.keys(usagedCount).forEach((ref) => {
         if (!usagedCount[ref]) {
+          logger.trace('Removing ref ... - ', ref);
+
           hasUnusedComponents = true;
 
           const [, , component, key] = ref.split(REF_SEPARATOR);
