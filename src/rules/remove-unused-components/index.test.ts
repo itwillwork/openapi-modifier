@@ -24,7 +24,77 @@ describe('remove-unused-components rule', () => {
                   $ref: '#/components/schemas/AttributesDTO',
                 },
               },
+              testWithOf: {
+                $ref: '#/components/schemas/TestObjectWithOfDTO',
+              },
+              testWithDiscriminator: {
+                $ref: '#/components/schemas/TestObjectWithDiscriminatorDto',
+              },
             },
+          },
+          TestSchemaRefOneOfDTO: {
+            type: 'string',
+          },
+          TestSchemaRefAllOfDTO: {
+            type: 'string',
+          },
+          TestSchemaRefAnyOfDTO: {
+            type: 'string',
+          },
+          TestObjectWithOfDTO: {
+            "type": "object",
+            "properties": {
+              "anyOfProperty": {
+                type: 'object',
+                anyOf: [
+                  {
+                    $ref: '#/components/schemas/TestSchemaRefAnyOfDTO',
+                  }
+                ]
+              },
+              "allOfProperty": {
+                type: 'object',
+                allOf: [
+                  {
+                    $ref: '#/components/schemas/TestSchemaRefAllOfDTO',
+                  }
+                ]
+              },
+              "oneOfProperty": {
+                type: 'object',
+                oneOf: [
+                  {
+                    $ref: '#/components/schemas/TestSchemaRefOneOfDTO',
+                  }
+                ]
+              },
+            }
+          },
+          "TestDiscriminatorVariantObject": {
+            "type": "object",
+            "properties": {
+              "foo": {
+                "type": "string"
+              }
+            }
+          },
+          "TestObjectWithDiscriminatorDto": {
+            "discriminator": {
+              "mapping": {
+                "TEST_DISCRIMINATOR": "#/components/schemas/TestDiscriminatorVariantObject"
+              },
+              "propertyName": "action"
+            },
+            "type": "object",
+            "properties": {
+              "action": {
+                "description": "Test discriminator property",
+                "enum": [
+                  "TEST_DISCRIMINATOR"
+                ],
+                "type": "string"
+              }
+            }
           },
           Notification: {
             type: 'object',
@@ -90,7 +160,77 @@ describe('remove-unused-components rule', () => {
                     $ref: '#/components/schemas/AttributesDTO',
                   },
                 },
+                testWithOf: {
+                  $ref: '#/components/schemas/TestObjectWithOfDTO',
+                },
+                testWithDiscriminator: {
+                  $ref: '#/components/schemas/TestObjectWithDiscriminatorDto',
+                },
               },
+            },
+            TestSchemaRefOneOfDTO: {
+              type: 'string',
+            },
+            TestSchemaRefAllOfDTO: {
+              type: 'string',
+            },
+            TestSchemaRefAnyOfDTO: {
+              type: 'string',
+            },
+            TestObjectWithOfDTO: {
+              "type": "object",
+              "properties": {
+                "anyOfProperty": {
+                  type: 'object',
+                  anyOf: [
+                    {
+                      $ref: '#/components/schemas/TestSchemaRefAnyOfDTO',
+                    }
+                  ]
+                },
+                "allOfProperty": {
+                  type: 'object',
+                  allOf: [
+                    {
+                      $ref: '#/components/schemas/TestSchemaRefAllOfDTO',
+                    }
+                  ]
+                },
+                "oneOfProperty": {
+                  type: 'object',
+                  oneOf: [
+                    {
+                      $ref: '#/components/schemas/TestSchemaRefOneOfDTO',
+                    }
+                  ]
+                },
+              }
+            },
+            "TestDiscriminatorVariantObject": {
+              "type": "object",
+              "properties": {
+                "foo": {
+                  "type": "string"
+                }
+              }
+            },
+            "TestObjectWithDiscriminatorDto": {
+              "discriminator": {
+                "mapping": {
+                  "TEST_DISCRIMINATOR": "#/components/schemas/TestDiscriminatorVariantObject"
+                },
+                "propertyName": "action"
+              },
+              "type": "object",
+              "properties": {
+                "action": {
+                  "description": "Test discriminator property",
+                  "enum": [
+                    "TEST_DISCRIMINATOR"
+                  ],
+                  "type": "string"
+                }
+              }
             },
           },
         },
