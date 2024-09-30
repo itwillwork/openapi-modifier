@@ -24,26 +24,26 @@ const configSchema = z
 const processor: RuleProcessorT<typeof configSchema> = {
     configSchema,
     defaultConfig: {},
-    processDocument: (openAPIFile, config, logger) => {
+    processDocument: (openAPIFile, config, logger, ruleMeta) => {
         const {patchMethod, schemaDiff, descriptor, descriptorCorrection, endpointDescriptor} = config;
 
         if (!descriptor) {
-            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('descriptor'));
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'descriptor'));
             return openAPIFile;
         }
 
         if (!endpointDescriptor) {
-            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('endpointDescriptor'));
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'endpointDescriptor'));
             return openAPIFile;
         }
 
         if (!patchMethod) {
-            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('patchMethod'));
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'patchMethod'));
             return openAPIFile;
         }
 
         if (!schemaDiff) {
-            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('schemaDiff'));
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'schemaDiff'));
             return openAPIFile;
         }
 
@@ -65,6 +65,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
         if (!responseContentSchema) {
             logger.errorMessage(
                 messagesFactory.ruleNotApply.withReason(
+                    ruleMeta,
                     `Not found endpoint (same code and contentType) with descriptor: ${JSON.stringify(descriptor)}!`
                 ),
             );

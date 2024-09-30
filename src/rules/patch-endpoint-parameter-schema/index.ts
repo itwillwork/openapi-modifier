@@ -35,16 +35,16 @@ const configSchema = z
 const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: {},
-  processDocument: (openAPIFile, config, logger) => {
+  processDocument: (openAPIFile, config, logger, ruleMeta) => {
     const { endpointDescriptor, parameterDescriptor, parameterDescriptorCorrection, patchMethod, schemaDiff, objectDiff } = config;
 
     if (!patchMethod) {
-      logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('patchMethod'));
+      logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'patchMethod'));
       return openAPIFile;
     }
 
     if (!parameterDescriptor) {
-        logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('parameterDescriptor'));
+        logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'parameterDescriptor'));
       return openAPIFile;
     }
 

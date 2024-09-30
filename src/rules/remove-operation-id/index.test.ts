@@ -30,7 +30,8 @@ describe('remove-operation-id rule', () => {
         {
           ignore: [],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -87,7 +88,8 @@ describe('remove-operation-id rule', () => {
         {
           ignore: ['listPets'],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -137,7 +139,8 @@ describe('remove-operation-id rule', () => {
         {
           ignore: ['OperationId'],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,

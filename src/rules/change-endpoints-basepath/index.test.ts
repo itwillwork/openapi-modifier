@@ -21,7 +21,8 @@ describe('change-endpoints-basepath rule', () => {
         {
           map: { '/api/v1': '' },
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -62,7 +63,8 @@ describe('change-endpoints-basepath rule', () => {
         {
           map: { '/api/v2': '' },
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -91,7 +93,8 @@ describe('change-endpoints-basepath rule', () => {
         {
           map: { '/api/v1': '/proxy' },
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -139,7 +142,8 @@ describe('change-endpoints-basepath rule', () => {
         {
           map: { '/api/v1': '/proxy' },
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -180,7 +184,8 @@ describe('change-endpoints-basepath rule', () => {
           map: { '/api/v1': '/proxy' },
           ignoreOperarionCollisions: true,
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,

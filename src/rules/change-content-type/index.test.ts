@@ -34,7 +34,8 @@ describe('change-content-type rule', () => {
             '*/*': 'application/json',
           },
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -92,7 +93,8 @@ describe('change-content-type rule', () => {
             '*/*': 'application/json',
           },
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -144,7 +146,8 @@ describe('change-content-type rule', () => {
             '*/*': 'application/json',
           },
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -203,7 +206,8 @@ describe('change-content-type rule', () => {
             'test/test': '',
           },
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,

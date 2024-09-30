@@ -1,10 +1,20 @@
+import {RuleMetaT} from "../../core/rules/processor-models";
+
+const getGitHubRuleConfigReadMeLink = (ruleName: string) => {
+    return `https://github.com/itwillwork/openapi-modifier/blob/main/src/rules/${ruleName}/README.md#config`
+}
+
+const getGitHubRuleReadMeLink = (ruleName: string) => {
+    return `https://github.com/itwillwork/openapi-modifier/blob/main/src/rules/${ruleName}/README.md`
+}
+
 export const messagesFactory = {
     ruleNotApply: {
-        withReason: (reason: string) => {
-            return `The rule does not apply, for the reason: ${reason}`;
+        withReason: (ruleMeta: RuleMetaT, reason: string) => {
+            return `The rule does not apply, for the reason: ${reason}. See rule docs: ${getGitHubRuleReadMeLink(ruleMeta.ruleName)}`;
         },
-        requiredConfigField: (field: string) => {
-            return `The rule does not apply, you must specify the "${field}" field of the rule configuration`;
+        requiredConfigField: (ruleMeta: RuleMetaT, field: string) => {
+            return `The rule does not apply, you must specify the "${field}" field of the rule configuration. See rule config docs: ${getGitHubRuleConfigReadMeLink(ruleMeta.ruleName)}`;
         }
     },
     deprecated: {

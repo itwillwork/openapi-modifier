@@ -36,7 +36,8 @@ describe('filter-by-content-type rule', () => {
         {
           disabled: ['multipart/form-data'],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -96,7 +97,8 @@ describe('filter-by-content-type rule', () => {
         {
           disabled: ['multipart/form-data'],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -151,7 +153,8 @@ describe('filter-by-content-type rule', () => {
         {
           disabled: ['multipart/form-data'],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -209,7 +212,8 @@ describe('filter-by-content-type rule', () => {
           enabled: ['txt'],
           disabled: ['application/json'],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -253,7 +257,8 @@ describe('filter-by-content-type rule', () => {
         {
           enabled: ['*/*'],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -317,7 +322,8 @@ describe('filter-by-content-type rule', () => {
         {
           disabled: ['*/*'],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,

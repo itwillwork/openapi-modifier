@@ -121,7 +121,7 @@ describe('remove-deprecated rule', () => {
       },
     });
 
-    expect(processor.processDocument(fakeOpenAPIFile, {}, fakeLogger)).toEqual({
+    expect(processor.processDocument(fakeOpenAPIFile, {}, fakeLogger, {ruleName: ''})).toEqual({
       ...fakeOpenAPIFile,
       document: {
         ...fakeOpenAPIFile.document,
@@ -276,7 +276,8 @@ describe('remove-deprecated rule', () => {
             componentName: 'TestDeprecatedSchemaDTO',
           }],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -373,7 +374,8 @@ describe('remove-deprecated rule', () => {
             }
           ]
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,

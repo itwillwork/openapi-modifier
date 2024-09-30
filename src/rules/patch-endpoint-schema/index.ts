@@ -19,21 +19,21 @@ const configSchema = z
 const processor: RuleProcessorT<typeof configSchema> = {
     configSchema,
     defaultConfig: {},
-    processDocument: (openAPIFile, config, logger) => {
+    processDocument: (openAPIFile, config, logger, ruleMeta) => {
         const {patchMethod, schemaDiff, endpointDescriptorCorrection, endpointDescriptor} = config;
 
         if (!endpointDescriptor) {
-            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('endpointDescriptor'));
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'endpointDescriptor'));
             return openAPIFile;
         }
 
         if (!patchMethod) {
-            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('patchMethod'));
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'patchMethod'));
             return openAPIFile;
         }
 
         if (!schemaDiff) {
-            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('schemaDiff'));
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'schemaDiff'));
             return openAPIFile;
         }
 

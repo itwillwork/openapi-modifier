@@ -1,6 +1,6 @@
 import { LoggerI } from '../../logger/interface';
 import path from 'path';
-import { RuleProcessorT } from './processor-models';
+import { RuleProcessorT, RuleMetaT } from './processor-models';
 import { OpenAPIFileT } from '../../openapi';
 import { z } from 'zod';
 
@@ -68,7 +68,7 @@ class RuleRunner {
     this.config = mergedConfig;
   };
 
-  processDocument = async (openAPIFile: OpenAPIFileT): Promise<OpenAPIFileT> => {
+  processDocument = async (openAPIFile: OpenAPIFileT, ruleMeta: RuleMetaT): Promise<OpenAPIFileT> => {
     const { logger, processor, config } = this;
 
     if (!processor || !config) {
@@ -76,7 +76,7 @@ class RuleRunner {
       return openAPIFile;
     }
 
-    return processor.processDocument(openAPIFile, config, logger);
+    return processor.processDocument(openAPIFile, config, logger, ruleMeta);
   };
 }
 

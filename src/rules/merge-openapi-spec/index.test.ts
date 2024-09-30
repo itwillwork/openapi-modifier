@@ -31,7 +31,8 @@ describe('merge-openapi-spec rule', () => {
         {
           path: __dirname + '/__mocks__/new-api-for-new-feature.yaml',
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -128,7 +129,8 @@ describe('merge-openapi-spec rule', () => {
         {
           path: __dirname + '/__mocks__/collision/paths.yaml',
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -172,7 +174,8 @@ describe('merge-openapi-spec rule', () => {
           path: __dirname + '/__mocks__/collision/paths.yaml',
           ignoreOperarionCollisions: true,
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -226,7 +229,8 @@ describe('merge-openapi-spec rule', () => {
         {
           path: __dirname + '/__mocks__/collision/components.yaml',
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -258,7 +262,8 @@ describe('merge-openapi-spec rule', () => {
           path: __dirname + '/__mocks__/collision/components.yaml',
           ignoreComponentCollisions: true,
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,

@@ -26,7 +26,8 @@ describe('patch-schemas rule', () => {
                         enum: ['3', '4'],
                     },
                 },
-                fakeLogger
+                fakeLogger,
+                {ruleName: ''}
             )
         ).toEqual({
             ...fakeOpenAPIFile,
@@ -87,7 +88,8 @@ describe('patch-schemas rule', () => {
                         enum: ['3', '4'],
                     },
                 },
-                fakeLogger
+                fakeLogger,
+                {ruleName: ''}
             )
         ).toEqual({
             ...fakeOpenAPIFile,
@@ -169,7 +171,8 @@ describe('patch-schemas rule', () => {
                         enum: ['3', '4'],
                     },
                 },
-                fakeLogger
+                fakeLogger,
+                {ruleName: ''}
             )
         ).toEqual({
             ...fakeOpenAPIFile,
@@ -239,7 +242,8 @@ describe('patch-schemas rule', () => {
                         },
                     },
                 },
-                fakeLogger
+                fakeLogger,
+                {ruleName: ''}
             )
         ).toEqual({
             ...fakeOpenAPIFile,
@@ -296,7 +300,8 @@ describe('patch-schemas rule', () => {
                         enum: ['3', '4'],
                     },
                 },
-                fakeLogger
+                fakeLogger,
+                {ruleName: ''}
             )
         ).toEqual({
             ...fakeOpenAPIFile,

@@ -136,7 +136,7 @@ describe('remove-unused-components rule', () => {
       },
     });
 
-    expect(processor.processDocument(fakeOpenAPIFile, {}, fakeLogger)).toEqual({
+    expect(processor.processDocument(fakeOpenAPIFile, {}, fakeLogger, { ruleName: ''})).toEqual({
       ...fakeOpenAPIFile,
       document: {
         ...fakeOpenAPIFile.document,
@@ -340,7 +340,8 @@ describe('remove-unused-components rule', () => {
           'TestIgnoreDescriptionDTO'
           ],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -430,7 +431,8 @@ describe('remove-unused-components rule', () => {
             componentName: 'TestNotUsagedComponent',
           }],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,

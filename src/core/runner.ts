@@ -22,7 +22,7 @@ export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, b
       await ruleRunner.applyConfig(pipelineItem.config || {});
 
       if (!pipelineItem.disabled) {
-        openAPIFile = await ruleRunner.processDocument(openAPIFile);
+        openAPIFile = await ruleRunner.processDocument(openAPIFile, { ruleName });
       }
     } catch (error) {
       if (error instanceof Error) {

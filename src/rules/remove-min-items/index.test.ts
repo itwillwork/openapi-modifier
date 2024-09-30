@@ -17,7 +17,7 @@ describe('remove-min-items rule', () => {
       },
     });
 
-    expect(processor.processDocument(fakeOpenAPIFile, {}, fakeLogger)).toEqual({
+    expect(processor.processDocument(fakeOpenAPIFile, {}, fakeLogger, { ruleName: ''})).toEqual({
       ...fakeOpenAPIFile,
       document: {
         ...fakeOpenAPIFile.document,
@@ -47,7 +47,7 @@ describe('remove-min-items rule', () => {
 
     expect(processor.processDocument(fakeOpenAPIFile, {
       showUnusedWarning: true,
-    }, fakeLogger)).toEqual({
+    }, fakeLogger, { ruleName: ''})).toEqual({
       ...fakeOpenAPIFile,
       document: {
         ...fakeOpenAPIFile.document,

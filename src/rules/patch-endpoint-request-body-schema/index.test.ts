@@ -39,7 +39,8 @@ describe('patch-endpoint-request-body-schema rule', () => {
                         type: 'string',
                     },
                 },
-                fakeLogger
+                fakeLogger,
+                {ruleName: ''}
             )
         ).toEqual({
             ...fakeOpenAPIFile,
@@ -106,7 +107,8 @@ describe('patch-endpoint-request-body-schema rule', () => {
                         enum: ['1', '2'],
                     },
                 },
-                fakeLogger
+                fakeLogger,
+                {ruleName: ''}
             )
         ).toEqual({
             ...fakeOpenAPIFile,
@@ -180,7 +182,8 @@ describe('patch-endpoint-request-body-schema rule', () => {
                         enum: ['3', '4'],
                     },
                 },
-                fakeLogger
+                fakeLogger,
+                {ruleName: ''}
             )
         ).toEqual({
             ...fakeOpenAPIFile,

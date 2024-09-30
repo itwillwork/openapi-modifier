@@ -25,27 +25,27 @@ const processor: RuleProcessorT<typeof configSchema> = {
     defaultConfig: {
         patchMethod: 'merge',
     },
-    processDocument: (openAPIFile, config, logger) => {
+    processDocument: (openAPIFile, config, logger, ruleMeta) => {
         const {patchMethod, schemaDiff, descriptor} = config;
 
         if (!descriptor) {
-            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('descriptor'));
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'descriptor'));
             return openAPIFile;
         }
 
         const parsedDesciptor = parseAnyComponentWithCorrectionDescriptor(descriptor, logger);
         if (!parsedDesciptor) {
-            logger.errorMessage(messagesFactory.ruleNotApply.withReason('failed to parse descriptor'));
+            logger.errorMessage(messagesFactory.ruleNotApply.withReason(ruleMeta, 'failed to parse descriptor'));
             return openAPIFile;
         }
 
         if (!patchMethod) {
-            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('patchMethod'));
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'patchMethod'));
             return openAPIFile;
         }
 
         if (!schemaDiff) {
-            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField('schemaDiff'));
+            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'schemaDiff'));
             return openAPIFile;
         }
 

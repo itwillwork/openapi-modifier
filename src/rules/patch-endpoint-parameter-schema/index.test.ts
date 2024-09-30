@@ -45,7 +45,8 @@ describe('patch-endpoint-parameter-schema rule', () => {
             required: true,
           },
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -109,7 +110,8 @@ describe('patch-endpoint-parameter-schema rule', () => {
             required: true,
           },
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -179,7 +181,8 @@ describe('patch-endpoint-parameter-schema rule', () => {
                 enum: ['3', '4'],
               },
             },
-            fakeLogger
+            fakeLogger,
+            {ruleName: ''}
         )
     ).toEqual({
       ...fakeOpenAPIFile,

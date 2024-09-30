@@ -29,7 +29,8 @@ describe('filter-endpoints rule', () => {
             },
           ],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -74,7 +75,8 @@ describe('filter-endpoints rule', () => {
               'delete /pets'
           ],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -128,7 +130,8 @@ describe('filter-endpoints rule', () => {
             },
           ],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -165,7 +168,8 @@ describe('filter-endpoints rule', () => {
             },
           ],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -220,7 +224,8 @@ describe('filter-endpoints rule', () => {
             },
           ],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -288,7 +293,8 @@ describe('filter-endpoints rule', () => {
             },
           ],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -327,7 +333,8 @@ describe('filter-endpoints rule', () => {
             },
           ],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -368,7 +375,8 @@ describe('filter-endpoints rule', () => {
         {
           disabledPathRegExp: [/\/test\//],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -412,7 +420,8 @@ describe('filter-endpoints rule', () => {
         {
           enabledPathRegExp: [/\/dogs/],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -463,7 +472,8 @@ describe('filter-endpoints rule', () => {
             },
           ],
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,

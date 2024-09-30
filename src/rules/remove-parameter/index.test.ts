@@ -37,7 +37,8 @@ describe('remove-parameter rule', () => {
             in: 'query',
           },
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -90,7 +91,8 @@ describe('remove-parameter rule', () => {
             in: 'query',
           },
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
@@ -144,7 +146,8 @@ describe('remove-parameter rule', () => {
             in: 'query',
           },
         },
-        fakeLogger
+        fakeLogger,
+          {ruleName: ''}
       )
     ).toEqual({
       ...fakeOpenAPIFile,
