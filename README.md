@@ -337,3 +337,6 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
 
 - причесать README.md правил - 13 штук
 - причесать главный README.md
+- в readme каждого правила добавить ссылку "Назад" (в конец и начало доки)
+- проверить ссылки из ошибок на github (якори проверить)
+- разделить документацию на ru/en
