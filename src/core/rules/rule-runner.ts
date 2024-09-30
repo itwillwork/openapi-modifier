@@ -7,7 +7,9 @@ import { z } from 'zod';
 type RuleAnyConfigT = z.ZodObject<any>;
 
 class RuleRunner {
-  private name: string;
+  private rulePath: string;
+
+  private ruleMeta: RuleMetaT;
 
   private logger: LoggerI;
 
@@ -15,21 +17,22 @@ class RuleRunner {
 
   private processor: RuleProcessorT<RuleAnyConfigT> | null = null;
 
-  constructor(name: string, logger: LoggerI) {
-    this.name = name;
-    this.logger = logger.clone(`rule:${name}`);
+  constructor(rulePath: string, ruleMeta: RuleMetaT, logger: LoggerI) {
+    this.rulePath = rulePath;
+    this.ruleMeta = ruleMeta;
+    this.logger = logger.clone(`rule:${ruleMeta?.ruleName}`);
   }
 
   init = async () => {
-    const { logger, name } = this;
+    const { logger } = this;
 
-    const processorPath = path.resolve(__dirname, `../../rules/${name}`);
+    const processorPath = path.resolve(__dirname, `../../rules/${this.rulePath}`);
     const processorImport = await import(processorPath);
 
     const processor = processorImport.default as RuleProcessorT<RuleAnyConfigT>;
     if (!processor) {
       const error = new Error();
-      logger.error(error, `Failed to init rule "${this.name}", not found rule processor: "${name}"`);
+      logger.error(error, `Failed to init rule "${this.ruleMeta.ruleName}", not found rule processor: "${name}"`);
       throw error;
     }
 
@@ -40,7 +43,7 @@ class RuleRunner {
     const { logger, processor } = this;
 
     if (!processor) {
-      logger.warning(`Failed to apply rule "${this.name}" config, empty processor!`);
+      logger.warning(`Failed to apply rule "${this.ruleMeta.ruleName}" config, empty processor!`);
       return;
     }
 
@@ -49,7 +52,7 @@ class RuleRunner {
       mergedConfig = Object.assign(processor.defaultConfig, config);
     } catch (error) {
       if (error instanceof Error) {
-        logger.error(error, `Failed to init rule "${this.name}", failed merge default and "${JSON.stringify(config || {})}"`);
+        logger.error(error, `Failed to init rule "${this.ruleMeta.ruleName}", failed merge default and "${JSON.stringify(config || {})}"`);
       }
 
       throw error;
@@ -68,7 +71,7 @@ class RuleRunner {
     this.config = mergedConfig;
   };
 
-  processDocument = async (openAPIFile: OpenAPIFileT, ruleMeta: RuleMetaT): Promise<OpenAPIFileT> => {
+  processDocument = async (openAPIFile: OpenAPIFileT): Promise<OpenAPIFileT> => {
     const { logger, processor, config } = this;
 
     if (!processor || !config) {
@@ -76,7 +79,7 @@ class RuleRunner {
       return openAPIFile;
     }
 
-    return processor.processDocument(openAPIFile, config, logger, ruleMeta);
+    return processor.processDocument(openAPIFile, config, logger, this.ruleMeta);
   };
 }
 

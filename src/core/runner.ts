@@ -15,14 +15,14 @@ export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, b
 
   for (const pipelineItem of pipeline) {
     try {
-      const ruleName = pipelineItem.rule;
-      const ruleRunner = new RuleRunner(ruleName, logger);
+      const rulePath = pipelineItem.rule;
+      const ruleRunner = new RuleRunner(rulePath,{ ruleName: rulePath }, logger);
       await ruleRunner.init();
 
       await ruleRunner.applyConfig(pipelineItem.config || {});
 
       if (!pipelineItem.disabled) {
-        openAPIFile = await ruleRunner.processDocument(openAPIFile, { ruleName });
+        openAPIFile = await ruleRunner.processDocument(openAPIFile);
       }
     } catch (error) {
       if (error instanceof Error) {
