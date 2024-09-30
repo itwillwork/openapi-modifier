@@ -287,6 +287,9 @@ describe('remove-unused-components rule', () => {
               },
             },
           },
+          TestIgnoreDescriptionDTO: {
+            type: 'string',
+          },
           Notification: {
             type: 'object',
             properties: {
@@ -333,7 +336,9 @@ describe('remove-unused-components rule', () => {
         {
           ignore: [{
             componentName: 'Notifications',
-          }],
+          },
+          'TestIgnoreDescriptionDTO'
+          ],
         },
         fakeLogger
       )

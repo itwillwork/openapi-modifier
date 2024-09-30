@@ -333,7 +333,6 @@ DEBUG=openapi-modifier:rule:remove-operation-id openapi-modifier
     patch-endpoint-schema
     remove-deprecated
     remove-parameter
-    remove-unused-components
 
 - к ошибкам конфигурации правил в сообщении сделать ссылку на документацию github
 

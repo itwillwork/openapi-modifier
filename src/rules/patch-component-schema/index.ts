@@ -9,7 +9,7 @@ import {
     simpleComponentDescriptorConfigSchema
 } from '../common/config';
 import {getObjectPath, setObjectProp} from '../common/utils/object-path';
-import {parseAnyComponentWithCorrectionDescriptor} from "../common/utils/config/parse-component-descriptor";
+import {parseAnyComponentWithCorrectionDescriptor} from "../common/utils/config/parse-component-with-correction-descriptor";
 import {messagesFactory} from "../../logger/messages/factory";
 
 const configSchema = z

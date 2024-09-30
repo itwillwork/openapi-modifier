@@ -2,14 +2,16 @@ import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
 import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
 import { forEachSchema } from '../common/utils/iterators/each-schema';
-import {componentDescriptorConfigSchema} from "../common/config";
+import {anyComponentDescriptorConfigSchema} from "../common/config";
+import {parseAnyComponentDescriptor} from "../common/utils/config/parse-component-descriptor";
+import {isNonNil} from "../common/utils/empty";
 
 type ComponentsObject = OpenAPIV3.ComponentsObject | OpenAPIV3_1.ComponentsObject;
 
 const configSchema = z
   .object({
     ignore: z.array(
-        componentDescriptorConfigSchema,
+        anyComponentDescriptorConfigSchema,
     ).optional(),
   })
   .strict();
@@ -26,7 +28,10 @@ const processor: RuleProcessorT<typeof configSchema> = {
   processDocument: (openAPIFile, config, logger) => {
     const { ignore } = config;
 
-    const ignoredComponentNames = (ignore || []).map(item => item.componentName);
+    const ignoredComponentNames = (ignore || []).map(item => {
+      return parseAnyComponentDescriptor(item, logger);
+    }).map(componentDescriptor => componentDescriptor?.componentName).filter(isNonNil);
+
     logger.trace(`Ignore component names: ${ignoredComponentNames}`);
     const ignoredComponentNamesSet = new Set<string>(ignoredComponentNames);
     const usageIgnoredComponentNames = ignoredComponentNames.reduce<Record<string, number>>((acc, componentName) => {
