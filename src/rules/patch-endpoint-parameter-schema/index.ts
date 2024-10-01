@@ -115,6 +115,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
     const parsedEndpointDescriptor = parseAnyEndpointDescriptor(endpointDescriptor, logger)
     if (!parsedEndpointDescriptor) {
+      logger.errorMessage(messagesFactory.ruleNotApply.failedToParseDescriptor(ruleMeta, 'endpointDescriptor'));
       return openAPIFile;
     }
 

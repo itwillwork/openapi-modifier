@@ -2,7 +2,7 @@ import {RuleProcessorT} from '../../core/rules/processor-models';
 import {z} from 'zod';
 import {patchSchema} from '../common/utils/patch';
 import {
-    endpointDescriptorConfigSchema,
+    anyEndpointDescriptorConfigSchema,
     endpointRequestBodyDescriptorConfigSchema,
     openAPISchemaConfigSchema,
     patchMethodConfigSchema
@@ -11,9 +11,10 @@ import {checkIsRefSchema} from '../common/utils/refs';
 import {getOperationSchema} from '../common/utils/get-operation-schema';
 import {getObjectPath, setObjectProp} from '../common/utils/object-path';
 import {messagesFactory} from "../../logger/messages/factory";
+import {parseAnyEndpointDescriptor} from "../common/utils/config/parse-endpoint-descriptor";
 
 const configSchema = z.object({
-    endpointDescriptor: endpointDescriptorConfigSchema.optional(),
+    endpointDescriptor: anyEndpointDescriptorConfigSchema.optional(),
     descriptor: endpointRequestBodyDescriptorConfigSchema.optional(),
     descriptorCorrection: z.string().optional(),
     patchMethod: patchMethodConfigSchema.optional(),
@@ -35,6 +36,11 @@ const processor: RuleProcessorT<typeof configSchema> = {
             logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'endpointDescriptor'));
             return openAPIFile;
         }
+        const parsedEndpointDescriptor = parseAnyEndpointDescriptor(endpointDescriptor, logger);
+        if (!parsedEndpointDescriptor) {
+            logger.errorMessage(messagesFactory.ruleNotApply.failedToParseDescriptor(ruleMeta, 'endpointDescriptor'));
+            return openAPIFile;
+        }
 
         if (!patchMethod) {
             logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'patchMethod'));
@@ -48,7 +54,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
         const {contentType} = descriptor;
 
-        const operationSchema = getOperationSchema(openAPIFile, endpointDescriptor.path, endpointDescriptor.method);
+        const operationSchema = getOperationSchema(openAPIFile, parsedEndpointDescriptor.path, parsedEndpointDescriptor.method);
         if (!operationSchema) {
             logger.warning(`Not found endpoint (same path) with descriptor: ${JSON.stringify(descriptor)}!`);
             return openAPIFile;

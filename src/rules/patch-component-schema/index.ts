@@ -35,7 +35,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
         const parsedDesciptor = parseAnyComponentWithCorrectionDescriptor(descriptor, logger);
         if (!parsedDesciptor) {
-            logger.errorMessage(messagesFactory.ruleNotApply.withReason(ruleMeta, 'failed to parse descriptor'));
+            logger.errorMessage(messagesFactory.ruleNotApply.failedToParseDescriptor(ruleMeta, 'descriptor'));
             return openAPIFile;
         }
 

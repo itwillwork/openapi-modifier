@@ -12,6 +12,7 @@ import { getOperationSchema } from '../common/utils/get-operation-schema';
 import { checkIsRefSchema } from '../common/utils/refs';
 import {parseAnyEndpointDescriptor} from "../common/utils/config/parse-endpoint-descriptor";
 import {isNonNil} from "../common/utils/empty";
+import {messagesFactory} from "../../logger/messages/factory";
 
 const configSchema = z
   .object({
@@ -23,7 +24,7 @@ const configSchema = z
 const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: {},
-  processDocument: (openAPIFile, config, logger) => {
+  processDocument: (openAPIFile, config, logger, ruleMeta) => {
     const { endpointDescriptor, parameterDescriptor } = config;
 
     if (!endpointDescriptor) {
@@ -50,6 +51,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
     const parsedEndpointDescriptor = parseAnyEndpointDescriptor(endpointDescriptor, logger);
     if (!parsedEndpointDescriptor) {
+      logger.errorMessage(messagesFactory.ruleNotApply.failedToParseDescriptor(ruleMeta, 'endpointDescriptor'));
       return openAPIFile;
     }
 

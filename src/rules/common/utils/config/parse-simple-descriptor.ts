@@ -1,0 +1,55 @@
+const ROOT_ARRAY_PLACEHOLDER = '[]';
+
+const checkIsArray = (rawPart: string | null): boolean => {
+    return !!rawPart && /\[\]$/.test(rawPart);
+}
+
+const clearArrayPostfix = (rawPart: string): string => rawPart.replace(/\[\]$/, '');
+
+type ParsedSimpleDescriptor = {
+    name: string | null;
+    correction?: string;
+}
+
+export const parseSimpleDescriptor = (descriptor: string, options?: { isContainsName?: boolean }): ParsedSimpleDescriptor | null => {
+    const clearDescriptor = descriptor.trim();
+    if (!clearDescriptor) {
+        return null;
+    }
+
+    const parts = clearDescriptor.split('.').map(value => {
+        return value.trim();
+    }).filter(value => !!value);
+
+    if (!parts?.length) {
+        return null;
+    }
+
+    const rawComponentName = options?.isContainsName ? parts[0] : null;
+    const rawCorrection = options?.isContainsName ? parts.slice(1) : parts;
+
+    const correctionParts = rawCorrection.reduce<string[]>((acc, rawPart) => {
+        if (ROOT_ARRAY_PLACEHOLDER !== rawPart) {
+            acc.push('properties');
+        }
+
+        if (checkIsArray(rawPart)) {
+            if (ROOT_ARRAY_PLACEHOLDER !== rawPart) {
+                acc.push(clearArrayPostfix(rawPart));
+            }
+
+            acc.push('items');
+        } else {
+            acc.push(rawPart);
+        }
+
+        return acc;
+    }, checkIsArray(rawComponentName) ? ['items'] : []);
+
+    const correction = correctionParts.join('.');
+
+    return {
+        name: rawComponentName ? clearArrayPostfix(rawComponentName) : null,
+        correction: correction || undefined,
+    }
+}

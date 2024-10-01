@@ -20,6 +20,9 @@ export const messagesFactory = {
         }
     },
     ruleNotApply: {
+        failedToParseDescriptor: (ruleMeta: RuleMetaT, field: string) => {
+            return `The rule "${ruleMeta.ruleName}" does not apply, failed to parse descriptor "${field}". See the error description above in the current log. Or see rule config docs: ${getGitHubRuleConfigReadMeLink(ruleMeta.ruleName)}`;
+        },
         withReason: (ruleMeta: RuleMetaT, reason: string) => {
             return `The rule "${ruleMeta.ruleName}" does not apply, for the reason: ${reason}. See rule docs: ${getGitHubRuleReadMeLink(ruleMeta.ruleName)}`;
         },

@@ -1,6 +1,7 @@
 import {z} from 'zod';
 import {anyComponentWithCorrectionDescriptorConfigSchema} from "../../config";
 import {LoggerI} from "../../../../logger/interface";
+import {parseSimpleDescriptor} from "./parse-simple-descriptor";
 
 export type ParsedComponentWithCorrectionDescriptor = {
     componentName: string;
@@ -11,41 +12,18 @@ export const parseSimpleComponentWithCorrectionDescriptor = (
     componentDescriptor: z.infer<typeof anyComponentWithCorrectionDescriptorConfigSchema>,
 ): ParsedComponentWithCorrectionDescriptor | null => {
     if (typeof componentDescriptor === 'string') {
-        const checkIsArray = (rawPart: string): boolean => /\[\]$/.test(rawPart);
-        const clearArrayPostfix = (rawPart: string): string => rawPart.replace(/\[\]$/, '');
-
-        const clearComponentDescriptor = componentDescriptor.trim();
-        if (!clearComponentDescriptor) {
+        const parsedSimpleDescriptor = parseSimpleDescriptor(componentDescriptor, { isContainsName: true });
+        if (!parsedSimpleDescriptor) {
             return null;
         }
 
-        const parts = clearComponentDescriptor.split('.').map(value => {
-            return value.trim();
-        }).filter(value => !!value);
-
-        if (!parts?.length) {
+        const { name, correction } = parsedSimpleDescriptor;
+        if (!name) {
             return null;
         }
 
-        const rawComponentName = parts[0];
-        const rawCorrection = parts.slice(1);
-
-        const componentName = clearArrayPostfix(rawComponentName);
-        const correctionParts = rawCorrection.reduce<string[]>((acc, rawPart) => {
-            acc.push('properties');
-            if (checkIsArray(rawPart)) {
-                acc.push(clearArrayPostfix(rawPart));
-                acc.push('items');
-            } else {
-                acc.push(rawPart);
-            }
-
-            return acc;
-        }, checkIsArray(rawComponentName) ? ['items'] : []);
-
-        const correction = correctionParts.join('.');
         return {
-            componentName,
+            componentName: name,
             correction: correction || undefined,
         }
     }
