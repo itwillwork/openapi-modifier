@@ -190,7 +190,7 @@ describe('patch-endpoint-response-schema rule', () => {
                         code: '200',
                         contentType: '*/*',
                     },
-                    descriptorCorrection: 'properties.testField',
+                    correction: 'testField',
                     schemaDiff: {
                         enum: ['3', '4'],
                     },
@@ -219,6 +219,76 @@ describe('patch-endpoint-response-schema rule', () => {
                                                         type: 'string',
                                                     },
                                                 },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        expect(fakeLogger.warning).toBeCalledTimes(0);
+    });
+
+    test('regular, simple endpoint descriptor', () => {
+        const fakeLogger = global.createFakeLogger();
+        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+            paths: {
+                '/all-pets': {
+                    get: {
+                        summary: '',
+                        responses: {
+                            '401': {
+                                description: 'Test 401',
+                                content: {
+                                    '*/*': {
+                                        schema: {
+                                            type: 'object',
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        expect(
+            processor.processDocument(
+                fakeOpenAPIFile,
+                {
+                    patchMethod: 'merge',
+                    endpointDescriptor: 'GET /all-pets',
+                    descriptor: {
+                        code: '401',
+                        contentType: '*/*',
+                    },
+                    schemaDiff: {
+                        type: 'string',
+                    },
+                },
+                fakeLogger,
+                {ruleName: ''}
+            )
+        ).toEqual({
+            ...fakeOpenAPIFile,
+            document: {
+                ...fakeOpenAPIFile.document,
+                paths: {
+                    '/all-pets': {
+                        get: {
+                            summary: '',
+                            responses: {
+                                '401': {
+                                    description: 'Test 401',
+                                    content: {
+                                        '*/*': {
+                                            schema: {
+                                                type: 'string',
                                             },
                                         },
                                     },

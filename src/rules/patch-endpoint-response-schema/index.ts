@@ -2,6 +2,7 @@ import {RuleProcessorT} from '../../core/rules/processor-models';
 import {z} from 'zod';
 import {patchSchema} from '../common/utils/patch';
 import {
+    anyEndpointDescriptorConfigSchema, correctionConfigSchema,
     endpointDescriptorConfigSchema,
     endpointResponseDescriptorConfigSchema,
     openAPISchemaConfigSchema,
@@ -11,12 +12,14 @@ import {checkIsRefSchema} from '../common/utils/refs';
 import {getOperationSchema} from '../common/utils/get-operation-schema';
 import {getObjectPath, setObjectProp} from '../common/utils/object-path';
 import {messagesFactory} from "../../logger/messages/factory";
+import {parseAnyEndpointDescriptor} from "../common/utils/config/parse-endpoint-descriptor";
+import {parseSimpleDescriptor} from "../common/utils/config/parse-simple-descriptor";
 
 const configSchema = z
     .object({
-        endpointDescriptor: endpointDescriptorConfigSchema.optional(),
+        endpointDescriptor: anyEndpointDescriptorConfigSchema.optional(),
         descriptor: endpointResponseDescriptorConfigSchema.optional(),
-        descriptorCorrection: z.string().optional(),
+        correction: correctionConfigSchema.optional(),
         patchMethod: patchMethodConfigSchema.optional(),
         schemaDiff: openAPISchemaConfigSchema.optional(),
     }).strict();
@@ -25,7 +28,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
     configSchema,
     defaultConfig: {},
     processDocument: (openAPIFile, config, logger, ruleMeta) => {
-        const {patchMethod, schemaDiff, descriptor, descriptorCorrection, endpointDescriptor} = config;
+        const {patchMethod, schemaDiff, descriptor, correction, endpointDescriptor} = config;
 
         if (!descriptor) {
             logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'descriptor'));
@@ -49,7 +52,13 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
         const {contentType} = descriptor;
 
-        const operationSchema = getOperationSchema(openAPIFile, endpointDescriptor.path, endpointDescriptor.method);
+        const parsedEndpointDescriptor = parseAnyEndpointDescriptor(endpointDescriptor, logger);
+        if (!parsedEndpointDescriptor) {
+            logger.errorMessage(messagesFactory.ruleNotApply.failedToParseDescriptor(ruleMeta, 'endpointDescriptor'));
+            return openAPIFile;
+        }
+
+        const operationSchema = getOperationSchema(openAPIFile, parsedEndpointDescriptor.path, parsedEndpointDescriptor.method);
         if (!operationSchema) {
             logger.warning(`Not found endpoint (same method) with descriptor: ${JSON.stringify(descriptor)}!`);
             return openAPIFile;
@@ -72,13 +81,14 @@ const processor: RuleProcessorT<typeof configSchema> = {
             return openAPIFile;
         }
 
-        if (descriptorCorrection) {
+        const parsedCorrection = parseSimpleDescriptor(correction, {isContainsName: false})?.correction || null;
+        if (parsedCorrection) {
             setObjectProp(
                 responseContentSchema.schema,
-                descriptorCorrection,
+                parsedCorrection,
                 patchSchema(
                     logger,
-                    getObjectPath(responseContentSchema.schema, descriptorCorrection),
+                    getObjectPath(responseContentSchema.schema, parsedCorrection),
                     patchMethod,
                     schemaDiff,
                 ),
