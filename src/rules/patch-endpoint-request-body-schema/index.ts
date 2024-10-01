@@ -3,7 +3,7 @@ import {z} from 'zod';
 import {patchSchema} from '../common/utils/patch';
 import {
     anyEndpointDescriptorConfigSchema,
-    endpointRequestBodyDescriptorConfigSchema,
+    correctionConfigSchema,
     openAPISchemaConfigSchema,
     patchMethodConfigSchema
 } from '../common/config';
@@ -12,11 +12,12 @@ import {getOperationSchema} from '../common/utils/get-operation-schema';
 import {getObjectPath, setObjectProp} from '../common/utils/object-path';
 import {messagesFactory} from "../../logger/messages/factory";
 import {parseAnyEndpointDescriptor} from "../common/utils/config/parse-endpoint-descriptor";
+import {parseSimpleDescriptor} from "../common/utils/config/parse-simple-descriptor";
 
 const configSchema = z.object({
     endpointDescriptor: anyEndpointDescriptorConfigSchema.optional(),
-    descriptor: endpointRequestBodyDescriptorConfigSchema.optional(),
-    descriptorCorrection: z.string().optional(),
+    contentType: z.string().optional(),
+    correction: correctionConfigSchema.optional(),
     patchMethod: patchMethodConfigSchema.optional(),
     schemaDiff: openAPISchemaConfigSchema.optional(),
 });
@@ -25,12 +26,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
     configSchema,
     defaultConfig: {},
     processDocument: (openAPIFile, config, logger, ruleMeta) => {
-        const {patchMethod, schemaDiff, descriptor, descriptorCorrection, endpointDescriptor} = config;
-
-        if (!descriptor) {
-            logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'descriptor'));
-            return openAPIFile;
-        }
+        const {patchMethod, schemaDiff, contentType, correction, endpointDescriptor} = config;
 
         if (!endpointDescriptor) {
             logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'endpointDescriptor'));
@@ -52,39 +48,50 @@ const processor: RuleProcessorT<typeof configSchema> = {
             return openAPIFile;
         }
 
-        const {contentType} = descriptor;
-
         const operationSchema = getOperationSchema(openAPIFile, parsedEndpointDescriptor.path, parsedEndpointDescriptor.method);
         if (!operationSchema) {
-            logger.warning(`Not found endpoint (same path) with descriptor: ${JSON.stringify(descriptor)}!`);
+            logger.warning(messagesFactory.ruleNotApply.withReason(ruleMeta, `Not found endpoint (same path) with descriptor: ${JSON.stringify(parsedEndpointDescriptor)}!`));
             return openAPIFile;
         }
 
         const requestBodySchema = operationSchema?.requestBody;
         if (checkIsRefSchema(requestBodySchema)) {
-            logger.warning(`requestBodySchema is ref: ${JSON.stringify(descriptor)}!`);
-            return openAPIFile;
-        }
-        const requestBodyContentSchema = requestBodySchema?.content?.[descriptor.contentType] || null;
-        if (!requestBodyContentSchema) {
-            logger.warning(`Not found endpoint (same requestBody) with descriptor: ${JSON.stringify(descriptor)}!`);
+            logger.warning(messagesFactory.ruleNotApply.withReason(ruleMeta, `requestBodySchema is ref: ${JSON.stringify(endpointDescriptor)}!`));
             return openAPIFile;
         }
 
-        if (descriptorCorrection) {
-            setObjectProp(
-                requestBodyContentSchema.schema,
-                descriptorCorrection,
-                patchSchema(
-                    logger,
-                    getObjectPath(requestBodyContentSchema.schema, descriptorCorrection),
-                    patchMethod,
-                    schemaDiff,
-                ),
-            );
-        } else {
-            requestBodyContentSchema.schema = patchSchema(logger, requestBodyContentSchema.schema, patchMethod, schemaDiff);
+        const targetRequestBodyContentSchema = requestBodySchema?.content?.[contentType as string] || null;
+        if (contentType && !targetRequestBodyContentSchema) {
+            logger.warning(messagesFactory.ruleNotApply.withReason(ruleMeta, `Not found endpoint (same requestBody) with contentType: "${contentType}"!`));
+            return openAPIFile;
         }
+
+        const requestBodyContentSchemas = targetRequestBodyContentSchema ? [
+            targetRequestBodyContentSchema
+        ] : Object.values(requestBodySchema?.content || {})
+
+        requestBodyContentSchemas.forEach((requestBodyContentSchema) => {
+            if (!requestBodyContentSchema) {
+                return;
+            }
+
+            const parsedCorrection = parseSimpleDescriptor(correction, {isContainsName: false})?.correction || null;
+            if (parsedCorrection) {
+                setObjectProp(
+                    requestBodyContentSchema.schema,
+                    parsedCorrection,
+                    patchSchema(
+                        logger,
+                        getObjectPath(requestBodyContentSchema.schema, parsedCorrection),
+                        patchMethod,
+                        schemaDiff,
+                    ),
+                );
+            } else {
+                requestBodyContentSchema.schema = patchSchema(logger, requestBodyContentSchema.schema, patchMethod, schemaDiff);
+            }
+        })
+
 
         return openAPIFile;
     },

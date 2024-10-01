@@ -5,7 +5,7 @@ export const patchMethodConfigSchema = z.union([z.literal('deepmerge'), z.litera
 export const openAPISchemaConfigSchema = z.any();
 
 export const parameterInConfigSchema = z.union([z.literal('query'), z.literal('header'), z.literal('path'), z.literal('cookie')]);
-export const correctionConfigSchema = z.string().optional();
+export const correctionConfigSchema = z.string();
 
 export const endpointParameterDescriptorConfigSchema = z
   .object({
@@ -57,13 +57,6 @@ export const anyComponentDescriptorConfigSchema = z.union([
     simpleComponentDescriptorConfigSchema,
     componentDescriptorConfigSchema,
 ])
-
-export const endpointRequestBodyDescriptorConfigSchema = z
-    .object({
-        contentType: z.string(),
-    })
-    .strict();
-
 
 export const endpointResponseDescriptorConfigSchema = z
     .object({

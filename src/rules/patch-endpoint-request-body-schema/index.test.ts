@@ -32,9 +32,7 @@ describe('patch-endpoint-request-body-schema rule', () => {
                         path: '/all-pets',
                         method: 'POST',
                     },
-                    descriptor: {
-                        contentType: '*/*',
-                    },
+                    contentType: '*/*',
                     schemaDiff: {
                         type: 'string',
                     },
@@ -100,9 +98,7 @@ describe('patch-endpoint-request-body-schema rule', () => {
                         path: '/pets',
                         method: 'POST',
                     },
-                    descriptor: {
-                        contentType: '*/*',
-                    },
+                    contentType: '*/*',
                     schemaDiff: {
                         enum: ['1', '2'],
                     },
@@ -174,10 +170,243 @@ describe('patch-endpoint-request-body-schema rule', () => {
                         path: '/pets',
                         method: 'POST',
                     },
-                    descriptorCorrection: 'properties.testField',
-                    descriptor: {
-                        contentType: '*/*',
+                    correction: 'testField',
+                    contentType: '*/*',
+                    schemaDiff: {
+                        enum: ['3', '4'],
                     },
+                },
+                fakeLogger,
+                {ruleName: ''}
+            )
+        ).toEqual({
+            ...fakeOpenAPIFile,
+            document: {
+                ...fakeOpenAPIFile.document,
+                paths: {
+                    '/pets': {
+                        post: {
+                            description: '',
+                            requestBody: {
+                                content: {
+                                    '*/*': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                testField: {
+                                                    enum: ['3', '4'],
+                                                    type: 'string',
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            responses: {},
+                        },
+                    },
+                },
+            },
+        });
+
+        expect(fakeLogger.warning).toBeCalledTimes(0);
+    });
+
+    test('regular, use merge with difficult correction', () => {
+        const fakeLogger = global.createFakeLogger();
+        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+            paths: {
+                '/pets': {
+                    post: {
+                        description: '',
+                        requestBody: {
+                            content: {
+                                '*/*': {
+                                    schema: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                testField: {
+                                                    enum: ['1', '2'],
+                                                    type: 'string',
+                                                },
+                                            },
+                                        }
+                                    },
+                                },
+                            },
+                        },
+                        responses: {},
+                    },
+                },
+            },
+        });
+
+        expect(
+            processor.processDocument(
+                fakeOpenAPIFile, {
+                    patchMethod: 'merge',
+                    endpointDescriptor: {
+                        path: '/pets',
+                        method: 'POST',
+                    },
+                    correction: '[].testField',
+                    contentType: '*/*',
+                    schemaDiff: {
+                        enum: ['3', '4'],
+                    },
+                },
+                fakeLogger,
+                {ruleName: ''}
+            )
+        ).toEqual({
+            ...fakeOpenAPIFile,
+            document: {
+                ...fakeOpenAPIFile.document,
+                paths: {
+                    '/pets': {
+                        post: {
+                            description: '',
+                            requestBody: {
+                                content: {
+                                    '*/*': {
+                                        schema: {
+                                            type: 'array',
+                                            items: {
+                                                type: 'object',
+                                                properties: {
+                                                    testField: {
+                                                        enum: ['3', '4'],
+                                                        type: 'string',
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            responses: {},
+                        },
+                    },
+                },
+            },
+        });
+
+        expect(fakeLogger.warning).toBeCalledTimes(0);
+    });
+
+    test('regular, for all content type', () => {
+        const fakeLogger = global.createFakeLogger();
+        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+            paths: {
+                '/pets': {
+                    post: {
+                        description: '',
+                        requestBody: {
+                            content: {
+                                '*/*': {
+                                    schema: {
+                                        type: 'object',
+                                        properties: {
+                                            testField: {
+                                                enum: ['1', '2'],
+                                                type: 'string',
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        responses: {},
+                    },
+                },
+            },
+        });
+
+        expect(
+            processor.processDocument(
+                fakeOpenAPIFile, {
+                    patchMethod: 'merge',
+                    endpointDescriptor: {
+                        path: '/pets',
+                        method: 'POST',
+                    },
+                    correction: 'testField',
+                    schemaDiff: {
+                        enum: ['3', '4'],
+                    },
+                },
+                fakeLogger,
+                {ruleName: ''}
+            )
+        ).toEqual({
+            ...fakeOpenAPIFile,
+            document: {
+                ...fakeOpenAPIFile.document,
+                paths: {
+                    '/pets': {
+                        post: {
+                            description: '',
+                            requestBody: {
+                                content: {
+                                    '*/*': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                testField: {
+                                                    enum: ['3', '4'],
+                                                    type: 'string',
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            responses: {},
+                        },
+                    },
+                },
+            },
+        });
+
+        expect(fakeLogger.warning).toBeCalledTimes(0);
+    });
+
+    test('regular, simple endpoint descriptor', () => {
+        const fakeLogger = global.createFakeLogger();
+        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+            paths: {
+                '/pets': {
+                    post: {
+                        description: '',
+                        requestBody: {
+                            content: {
+                                '*/*': {
+                                    schema: {
+                                        type: 'object',
+                                        properties: {
+                                            testField: {
+                                                enum: ['1', '2'],
+                                                type: 'string',
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        responses: {},
+                    },
+                },
+            },
+        });
+
+        expect(
+            processor.processDocument(
+                fakeOpenAPIFile, {
+                    patchMethod: 'merge',
+                    endpointDescriptor: 'POST /pets',
+                    correction: 'testField',
                     schemaDiff: {
                         enum: ['3', '4'],
                     },
