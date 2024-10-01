@@ -34,10 +34,8 @@ describe('patch-endpoint-response-schema rule', () => {
                         path: '/all-pets',
                         method: 'GET',
                     },
-                    descriptor: {
-                        code: '401',
-                        contentType: '*/*',
-                    },
+                    code: '401',
+                    contentType: '*/*',
                     schemaDiff: {
                         type: 'string',
                     },
@@ -107,10 +105,8 @@ describe('patch-endpoint-response-schema rule', () => {
                         path: '/pets',
                         method: 'GET',
                     },
-                    descriptor: {
-                        code: '401',
-                        contentType: '*/*',
-                    },
+                    code: '401',
+                    contentType: '*/*',
                     schemaDiff: {
                         type: 'string',
                     },
@@ -186,10 +182,8 @@ describe('patch-endpoint-response-schema rule', () => {
                         path: '/pets',
                         method: 'GET',
                     },
-                    descriptor: {
-                        code: '200',
-                        contentType: '*/*',
-                    },
+                    code: '200',
+                    contentType: '*/*',
                     correction: 'testField',
                     schemaDiff: {
                         enum: ['3', '4'],
@@ -263,10 +257,8 @@ describe('patch-endpoint-response-schema rule', () => {
                 {
                     patchMethod: 'merge',
                     endpointDescriptor: 'GET /all-pets',
-                    descriptor: {
-                        code: '401',
-                        contentType: '*/*',
-                    },
+                    code: '401',
+                    contentType: '*/*',
                     schemaDiff: {
                         type: 'string',
                     },
@@ -302,4 +294,168 @@ describe('patch-endpoint-response-schema rule', () => {
 
         expect(fakeLogger.warning).toBeCalledTimes(0);
     });
+
+    test('regular, default contentType & code', () => {
+        const fakeLogger = global.createFakeLogger();
+        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+            paths: {
+                '/pets': {
+                    get: {
+                        summary: '',
+                        responses: {
+                            '200': {
+                                description: 'Test 200',
+                                content: {
+                                    '*/*': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                testField: {
+                                                    enum: ['1', '2'],
+                                                    type: 'string',
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        expect(
+            processor.processDocument(
+                fakeOpenAPIFile,
+                {
+                    patchMethod: 'merge',
+                    endpointDescriptor: {
+                        path: '/pets',
+                        method: 'GET',
+                    },
+                    correction: 'testField',
+                    schemaDiff: {
+                        enum: ['3', '4'],
+                    },
+                },
+                fakeLogger,
+                {ruleName: ''}
+            )
+        ).toEqual({
+            ...fakeOpenAPIFile,
+            document: {
+                ...fakeOpenAPIFile.document,
+                paths: {
+                    '/pets': {
+                        get: {
+                            summary: '',
+                            responses: {
+                                '200': {
+                                    description: 'Test 200',
+                                    content: {
+                                        '*/*': {
+                                            schema: {
+                                                type: 'object',
+                                                properties: {
+                                                    testField: {
+                                                        enum: ['3', '4'],
+                                                        type: 'string',
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        expect(fakeLogger.warning).toBeCalledTimes(0);
+    });
+
+    test('regular, simple endpoint descriptor', () => {
+        const fakeLogger = global.createFakeLogger();
+        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+            paths: {
+                '/pets': {
+                    get: {
+                        summary: '',
+                        responses: {
+                            '200': {
+                                description: 'Test 200',
+                                content: {
+                                    '*/*': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: {
+                                                testField: {
+                                                    enum: ['1', '2'],
+                                                    type: 'string',
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        expect(
+            processor.processDocument(
+                fakeOpenAPIFile,
+                {
+                    patchMethod: 'merge',
+                    endpointDescriptor: 'GET /pets',
+                    contentType: '*/*',
+                    code: '200',
+                    correction: 'testField',
+                    schemaDiff: {
+                        enum: ['3', '4'],
+                    },
+                },
+                fakeLogger,
+                {ruleName: ''}
+            )
+        ).toEqual({
+            ...fakeOpenAPIFile,
+            document: {
+                ...fakeOpenAPIFile.document,
+                paths: {
+                    '/pets': {
+                        get: {
+                            summary: '',
+                            responses: {
+                                '200': {
+                                    description: 'Test 200',
+                                    content: {
+                                        '*/*': {
+                                            schema: {
+                                                type: 'object',
+                                                properties: {
+                                                    testField: {
+                                                        enum: ['3', '4'],
+                                                        type: 'string',
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        expect(fakeLogger.warning).toBeCalledTimes(0);
+    });
+
 });

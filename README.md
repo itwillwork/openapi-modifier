@@ -331,7 +331,6 @@ TODO описание параметра verbose
 ### TODO
 
 - оптимизация path'ов
-    patch-endpoint-response-schema
     patch-endpoint-schema
     remove-deprecated
 
