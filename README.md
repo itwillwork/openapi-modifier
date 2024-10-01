@@ -331,7 +331,6 @@ TODO описание параметра verbose
 ### TODO
 
 - оптимизация path'ов
-    patch-endpoint-parameter-schema
     patch-endpoint-request-body-schema
     patch-endpoint-response-schema
     patch-endpoint-schema

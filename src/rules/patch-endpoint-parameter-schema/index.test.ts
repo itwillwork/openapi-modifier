@@ -76,6 +76,80 @@ describe('patch-endpoint-parameter-schema rule', () => {
 
     expect(fakeLogger.warning).toBeCalledTimes(0);
   });
+
+  test('regular, simple endpoint descriptor', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      paths: {
+        '/pets': {
+          get: {
+            summary: 'List all pets',
+            parameters: [
+              {
+                in: 'query',
+                name: 'filter',
+                schema: {
+                  format: 'int64',
+                  type: 'integer',
+                },
+              },
+            ],
+            responses: {},
+          },
+        },
+      },
+    });
+
+    expect(
+      processor.processDocument(
+        fakeOpenAPIFile,
+        {
+          endpointDescriptor: 'GET /pets',
+          parameterDescriptor: {
+            name: 'filter',
+            in: 'query',
+          },
+          patchMethod: 'deepmerge',
+          schemaDiff: {
+            format: 'double',
+          },
+          objectDiff: {
+            in: 'path',
+            required: true,
+          },
+        },
+        fakeLogger,
+          {ruleName: ''}
+      )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        paths: {
+          '/pets': {
+            get: {
+              summary: 'List all pets',
+              parameters: [
+                {
+                  in: 'path',
+                  name: 'filter',
+                  required: true,
+                  schema: {
+                    format: 'double',
+                    type: 'integer',
+                  },
+                },
+              ],
+              responses: {},
+            },
+          },
+        },
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+  });
+
   test('regular, components.parameters', () => {
     const fakeLogger = global.createFakeLogger();
     const fakeOpenAPIFile = global.createFakeOpenAPIFile({
