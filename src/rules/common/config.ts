@@ -5,11 +5,20 @@ export const patchMethodConfigSchema = z.union([z.literal('deepmerge'), z.litera
 export const openAPISchemaConfigSchema = z.any();
 
 export const parameterInConfigSchema = z.union([z.literal('query'), z.literal('header'), z.literal('path'), z.literal('cookie')]);
+export const correctionConfigSchema = z.string().optional();
 
 export const endpointParameterDescriptorConfigSchema = z
   .object({
     name: z.string(),
     in: parameterInConfigSchema,
+  })
+  .strict();
+
+export const endpointParameterWithCorrectionDescriptorConfigSchema = z
+  .object({
+    name: z.string(),
+    in: parameterInConfigSchema,
+    correction: correctionConfigSchema.optional(),
   })
   .strict();
 
@@ -27,7 +36,7 @@ export const simpleComponentWithCorrectionDescriptorConfigSchema = z.string();
 export const componentWithCorrectionDescriptorConfigSchema = z
     .object({
         componentName: z.string(),
-        correction: z.string().optional(),
+        correction: correctionConfigSchema.optional(),
     })
     .strict();
 

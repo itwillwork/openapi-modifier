@@ -209,6 +209,7 @@ describe('patch-endpoint-parameter-schema rule', () => {
 
     expect(fakeLogger.warning).toBeCalledTimes(0);
   });
+
   test('regular, with correction', () => {
     const fakeLogger = global.createFakeLogger();
     const fakeOpenAPIFile = global.createFakeOpenAPIFile({
@@ -248,8 +249,8 @@ describe('patch-endpoint-parameter-schema rule', () => {
               parameterDescriptor: {
                 name: 'filter',
                 in: 'query',
+                correction: 'testField'
               },
-              parameterDescriptorCorrection: 'properties.testField',
               patchMethod: 'merge',
               schemaDiff: {
                 enum: ['3', '4'],
@@ -280,6 +281,112 @@ describe('patch-endpoint-parameter-schema rule', () => {
                     },
                   },
                 },
+              ],
+              responses: {},
+            },
+          },
+        },
+      },
+    });
+
+    expect(fakeLogger.warning).toBeCalledTimes(0);
+  });
+
+  test('regular, with difficult correction', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      paths: {
+        '/pets': {
+          get: {
+            summary: 'List all pets',
+            parameters: [
+              {
+                in: 'query',
+                name: 'filter',
+                schema: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      foo: {
+                        type: 'array',
+                        items: {
+                          type: 'object',
+                          properties: {
+                            testField: {
+                              enum: ['1', '2'],
+                              type: 'string',
+                            },
+                          }
+                        }
+                      }
+
+                    },
+                  }
+                },
+              },
+            ],
+            responses: {},
+          },
+        },
+      },
+    });
+
+    expect(
+        processor.processDocument(
+            fakeOpenAPIFile,
+            {
+              endpointDescriptor: {
+                path: '/pets',
+                method: 'GET',
+              },
+              parameterDescriptor: {
+                name: 'filter',
+                in: 'query',
+                correction: '[].foo[].testField'
+              },
+              patchMethod: 'merge',
+              schemaDiff: {
+                enum: ['3', '4'],
+              },
+            },
+            fakeLogger,
+            {ruleName: ''}
+        )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        paths: {
+          '/pets': {
+            get: {
+              summary: 'List all pets',
+              parameters: [
+                  {
+                      in: 'query',
+                      name: 'filter',
+                      schema: {
+                          type: 'array',
+                          items: {
+                              type: 'object',
+                              properties: {
+                                  foo: {
+                                      type: 'array',
+                                      items: {
+                                          type: 'object',
+                                          properties: {
+                                              testField: {
+                                                  enum: ['3', '4'],
+                                                  type: 'string',
+                                              },
+                                          }
+                                      }
+                                  }
+
+                              },
+                          }
+                      },
+                  },
               ],
               responses: {},
             },

@@ -4,7 +4,7 @@ import {patchSchema} from '../common/utils/patch';
 import {
   anyEndpointDescriptorConfigSchema,
   endpointDescriptorConfigSchema,
-  endpointParameterDescriptorConfigSchema,
+  endpointParameterDescriptorConfigSchema, endpointParameterWithCorrectionDescriptorConfigSchema,
   openAPISchemaConfigSchema,
   parameterInConfigSchema,
   patchMethodConfigSchema
@@ -15,12 +15,12 @@ import {checkIsRefSchema} from '../common/utils/refs';
 import {getObjectPath, setObjectProp} from "../common/utils/object-path";
 import {messagesFactory} from "../../logger/messages/factory";
 import {parseAnyEndpointDescriptor} from "../common/utils/config/parse-endpoint-descriptor";
+import {parseSimpleDescriptor} from "../common/utils/config/parse-simple-descriptor";
 
 const configSchema = z
   .object({
     endpointDescriptor: anyEndpointDescriptorConfigSchema.optional(),
-    parameterDescriptor: endpointParameterDescriptorConfigSchema.optional(),
-    parameterDescriptorCorrection: z.string().optional(),
+    parameterDescriptor: endpointParameterWithCorrectionDescriptorConfigSchema.optional(),
     patchMethod: patchMethodConfigSchema.optional(),
     schemaDiff: openAPISchemaConfigSchema.optional(),
     objectDiff: z
@@ -38,7 +38,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: {},
   processDocument: (openAPIFile, config, logger, ruleMeta) => {
-    const { endpointDescriptor, parameterDescriptor, parameterDescriptorCorrection, patchMethod, schemaDiff, objectDiff } = config;
+    const { endpointDescriptor, parameterDescriptor, patchMethod, schemaDiff, objectDiff } = config;
 
     if (!patchMethod) {
       logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'patchMethod'));
@@ -78,13 +78,15 @@ const processor: RuleProcessorT<typeof configSchema> = {
       if (schemaDiff) {
         logger.trace(`Apply schemaDiff: ${schemaDiff}`);
 
-        if (parameterDescriptorCorrection) {
+        const rawCorrection = parameterDescriptor?.correction || null;
+        const parsedCorrection = parseSimpleDescriptor(rawCorrection, { isContainsName: false })?.correction;
+        if (parsedCorrection) {
           setObjectProp(
               targetComponentParameter.schema,
-              parameterDescriptorCorrection,
+              parsedCorrection,
               patchSchema(
                   logger,
-                  getObjectPath(targetComponentParameter.schema, parameterDescriptorCorrection),
+                  getObjectPath(targetComponentParameter.schema, parsedCorrection),
                   patchMethod,
                   schemaDiff,
               ),
@@ -145,13 +147,15 @@ const processor: RuleProcessorT<typeof configSchema> = {
     if (schemaDiff) {
       logger.trace(`Apply schemaDiff: ${schemaDiff}`);
 
-      if (parameterDescriptorCorrection) {
+      const rawCorrection = parameterDescriptor?.correction || null;
+      const parsedCorrection = parseSimpleDescriptor(rawCorrection, { isContainsName: false })?.correction;
+      if (parsedCorrection) {
         setObjectProp(
             targetParameterSchema.schema,
-            parameterDescriptorCorrection,
+            parsedCorrection,
             patchSchema(
                 logger,
-                getObjectPath(targetParameterSchema.schema, parameterDescriptorCorrection),
+                getObjectPath(targetParameterSchema.schema, parsedCorrection),
                 patchMethod,
                 schemaDiff,
             ),

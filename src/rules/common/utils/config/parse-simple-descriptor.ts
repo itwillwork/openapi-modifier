@@ -11,7 +11,11 @@ type ParsedSimpleDescriptor = {
     correction?: string;
 }
 
-export const parseSimpleDescriptor = (descriptor: string, options?: { isContainsName?: boolean }): ParsedSimpleDescriptor | null => {
+export const parseSimpleDescriptor = (descriptor: string | null | undefined, options?: { isContainsName?: boolean }): ParsedSimpleDescriptor | null => {
+    if (!descriptor) {
+        return null;
+    }
+
     const clearDescriptor = descriptor.trim();
     if (!clearDescriptor) {
         return null;

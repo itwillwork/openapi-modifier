@@ -1,7 +1,9 @@
 import {parseSimpleDescriptor} from './parse-simple-descriptor';
 
 describe('parseSimpleDescriptor', () => {
-    test.each<[string, {isContainsName?: boolean}, ReturnType<typeof parseSimpleDescriptor>]>([
+    test.each<[string | null | undefined, {isContainsName?: boolean}, ReturnType<typeof parseSimpleDescriptor>]>([
+        [null, {}, null],
+        [undefined, {}, null],
         ['TestDto', { isContainsName: true }, {
             name: 'TestDto',
         }],
@@ -55,6 +57,11 @@ describe('parseSimpleDescriptor', () => {
         }],
         ['', {}, null],
         [' ', {}, null],
+        // TODO check wrong ?
+        ['  [].[].foo ',  { isContainsName: false },{
+            name: null,
+            correction: 'items.items.properties.foo',
+        }],
     ])('parseSimpleDescriptor(%s, %s)', (schema, options, expectedResult) => {
         expect(parseSimpleDescriptor(schema, options)).toEqual(expectedResult);
     });
