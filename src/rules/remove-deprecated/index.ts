@@ -2,6 +2,7 @@ import {RuleProcessorT} from '../../core/rules/processor-models';
 import {z} from 'zod';
 import {normalizeMethod} from '../common/utils/normilizers';
 import {
+  anyComponentDescriptorConfigSchema, anyEndpointDescriptorConfigSchema,
   componentDescriptorConfigSchema,
   endpointDescriptorConfigSchema,
   parameterDescriptorConfigSchema
@@ -12,11 +13,14 @@ import {forEachSchema} from '../common/utils/iterators/each-schema';
 import {checkIsObjectSchema} from '../common/utils/object-schema';
 import {deepClone} from "../common/utils/deep-clone";
 import {messagesFactory} from "../../logger/messages/factory";
+import {parseAnyComponentDescriptor} from "../common/utils/config/parse-component-descriptor";
+import {isNonNil} from "../common/utils/empty";
+import {parseAnyEndpointDescriptor} from "../common/utils/config/parse-endpoint-descriptor";
 
 const configSchema = z
   .object({
-    ignoreComponents: z.array(componentDescriptorConfigSchema).optional(),
-    ignoreEndpoints: z.array(endpointDescriptorConfigSchema).optional(),
+    ignoreComponents: z.array(anyComponentDescriptorConfigSchema).optional(),
+    ignoreEndpoints: z.array(anyEndpointDescriptorConfigSchema).optional(),
     ignoreEndpointParameters: z.array(parameterDescriptorConfigSchema).optional(),
     showDeprecatedDescriptions: z.boolean().optional(),
   })
@@ -30,7 +34,15 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
     const sourceOpenAPIFile = deepClone(openAPIFile);
 
-    const usageIgnoreComponents = ignoreComponents?.reduce<Record<string, number>>((acc, item) => {
+    const parsedIgnoreComponents = ignoreComponents?.map((componentDescriptor) => {
+      return parseAnyComponentDescriptor(componentDescriptor, logger);
+    }).filter(isNonNil);
+
+    const parsedIgnoreEndpoints = ignoreEndpoints?.map((endpointDescriptor) => {
+      return parseAnyEndpointDescriptor(endpointDescriptor, logger);
+    }).filter(isNonNil);
+
+    const usageIgnoreComponents = parsedIgnoreComponents?.reduce<Record<string, number>>((acc, item) => {
       acc[item.componentName] = 0;
       return acc;
     }, {}) || {};
@@ -44,11 +56,11 @@ const processor: RuleProcessorT<typeof configSchema> = {
       const schema = componentSchemas?.[name];
 
       const checkIsIgnoredComponent = ({ name }: { name: string }): boolean => {
-        if (!ignoreComponents) {
+        if (!parsedIgnoreComponents) {
           return false;
         }
 
-        const shouldIgnore = ignoreComponents.some((item) => {
+        const shouldIgnore = parsedIgnoreComponents.some((item) => {
           return item.componentName === name;
         });
 
@@ -93,11 +105,11 @@ const processor: RuleProcessorT<typeof configSchema> = {
       const pathObjSchema = openAPIFile?.document?.paths?.[path];
 
       const checkIsIgnoredEndpoint = ({ path, method }: { path: string; method: string }): boolean => {
-        if (!ignoreEndpoints) {
+        if (!parsedIgnoreEndpoints) {
           return false;
         }
 
-        return ignoreEndpoints.some((item) => {
+        return parsedIgnoreEndpoints.some((item) => {
           return item.path === path && normalizeMethod(item.method) === normalizeMethod(method);
         });
       };

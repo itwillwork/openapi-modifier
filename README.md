@@ -330,12 +330,6 @@ TODO описание параметра verbose
 
 ### TODO
 
-- оптимизация path'ов
-    patch-endpoint-schema
-    remove-deprecated
-
-- поменять логику remove-deprecated: добавить correction для компонентов
-
 - причесать README.md правил - 13 штук
 - причесать главный README.md
 - в readme каждого правила добавить ссылку "Назад" (в конец и начало доки)
