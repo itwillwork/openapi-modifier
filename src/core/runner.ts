@@ -14,7 +14,13 @@ export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, b
     logger.warning(messagesFactory.failedRun.emptyPipeline);
   }
 
-  for (const pipelineItem of pipeline) {
+  logger.info(`Start pipeline execution...`);
+
+  for (let index = 0; index < pipeline.length; index++) {
+    const pipelineItem = pipeline[index];
+
+    logger.info(`Pipeline item execution [${index + 1}/${pipeline.length}] - ${Math.round((index + 1) / pipeline.length * 100)}%`);
+
     try {
       const rulePath = pipelineItem.rule;
       const ruleRunner = new RuleRunner(rulePath,{ ruleName: rulePath }, logger);
@@ -33,6 +39,8 @@ export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, b
       throw error;
     }
   }
+
+  logger.info(`Finish pipeline execution`);
 
   return openAPIFile;
 };

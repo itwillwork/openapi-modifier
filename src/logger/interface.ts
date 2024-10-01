@@ -6,10 +6,11 @@ interface LoggerI {
   error: (error: Error, message?: string) => void;
   errorMessage: (message?: string) => void;
   success: (message: string) => void;
-  helpInfo: (message: string) => void;
 
+  // service methods
   clone: (name: string) => LoggerI;
   getHelpInfo: () => string;
+  helpInfo: (message: string) => void;
 }
 
 export { LoggerI };
