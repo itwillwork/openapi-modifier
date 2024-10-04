@@ -17,11 +17,18 @@ type ParsedSimpleDescriptor = {
 
 type AnyOpenAPISchema = any;
 
+const checkIsExistField = (
+    rootSchema: AnyOpenAPISchema,
+    field: string,
+): boolean => {
+    return !!rootSchema[field];
+}
+
 export const parseSimpleDescriptor = (
     descriptor: string | null | undefined,
     options: { isContainsName?: boolean },
-    rootSchema: AnyOpenAPISchema,
     logger: LoggerI,
+    rootSchema?: AnyOpenAPISchema | null | undefined,
 ): ParsedSimpleDescriptor | null => {
     if (!descriptor) {
         logger.warning(messagesFactory.descriptor.failedToParse(descriptor, 'Empty value'));
@@ -37,39 +44,70 @@ export const parseSimpleDescriptor = (
     const parts = clearDescriptor.split('.').map(value => {
         return value.trim();
     }).filter(value => !!value);
-    console.log("parts", parts);
 
     if (!parts?.length) {
         logger.warning(messagesFactory.descriptor.failedToParse(descriptor));
         return null;
     }
 
-    // kekw
     const rawComponentName = options?.isContainsName ? parts[0] : null;
-    const rawCorrection = options?.isContainsName ? parts.slice(1) : parts;
+    const componentName = rawComponentName ? clearArrayPostfix(rawComponentName) : null;
+    if (
+        options?.isContainsName &&
+        rootSchema &&
+        componentName &&
+        !checkIsExistField(rootSchema, componentName)
+    ) {
+        logger.warning(messagesFactory.descriptor.failedToResolveDescriptor(descriptor));
+        return null;
+    }
 
-    const correctionParts = rawCorrection.reduce<string[]>((acc, rawPart) => {
+    const rawParts = options?.isContainsName ? parts.slice(1) : parts;
+
+    let baseSchema = rootSchema;
+    const correctionParts: Array<string> = []
+    if (checkIsArray(rawComponentName)) {
+        if (baseSchema) {
+            if (checkIsExistField(baseSchema, 'items')) {
+                baseSchema = baseSchema?.items;
+                correctionParts.push('items');
+            } else {
+                throw new Error();
+            }
+        } else {
+            correctionParts.push('items');
+        }
+    }
+
+    rawParts.forEach((rawPart) => {
         if (ROOT_ARRAY_PLACEHOLDER !== rawPart) {
-            acc.push('properties');
+            if (baseSchema) {
+                if (checkIsExistField(baseSchema, 'properties')) {
+                    baseSchema = baseSchema?.properties;
+                    correctionParts.push('properties');
+                } else {
+                    throw new Error();
+                }
+            } else {
+                correctionParts.push('properties');
+            }
         }
 
         if (checkIsArray(rawPart)) {
             if (ROOT_ARRAY_PLACEHOLDER !== rawPart) {
-                acc.push(clearArrayPostfix(rawPart));
+                correctionParts.push(clearArrayPostfix(rawPart));
             }
 
-            acc.push('items');
+            correctionParts.push('items');
         } else {
-            acc.push(rawPart);
+            correctionParts.push(rawPart);
         }
-
-        return acc;
-    }, checkIsArray(rawComponentName) ? ['items'] : []);
+    });
 
     const correction = correctionParts.join('.');
 
     return {
-        name: rawComponentName ? clearArrayPostfix(rawComponentName) : null,
+        name: componentName,
         correction: correction || undefined,
     }
 }

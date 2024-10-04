@@ -55,6 +55,9 @@ export const messagesFactory = {
     descriptor: {
         failedToParse: (descriptor: any, reason?: string) => {
             return `Failed to parse descriptor: ${JSON.stringify(descriptor || {})}. ${reason ? `Reason: ${reason}` : ''}`;
-        }
+        },
+        failedToResolveDescriptor: (descriptor: any) => {
+            return `Failed to resolver descriptor: ${JSON.stringify(descriptor || {})}.`;
+        },
     }
 }
