@@ -1,3 +1,7 @@
+import {OpenAPIFileT} from "../../../../openapi";
+import {LoggerI} from "../../../../logger/interface";
+import {messagesFactory} from "../../../../logger/messages/factory";
+
 const ROOT_ARRAY_PLACEHOLDER = '[]';
 
 const checkIsArray = (rawPart: string | null): boolean => {
@@ -11,24 +15,36 @@ type ParsedSimpleDescriptor = {
     correction?: string;
 }
 
-export const parseSimpleDescriptor = (descriptor: string | null | undefined, options?: { isContainsName?: boolean }): ParsedSimpleDescriptor | null => {
+type AnyOpenAPISchema = any;
+
+export const parseSimpleDescriptor = (
+    descriptor: string | null | undefined,
+    options: { isContainsName?: boolean },
+    rootSchema: AnyOpenAPISchema,
+    logger: LoggerI,
+): ParsedSimpleDescriptor | null => {
     if (!descriptor) {
+        logger.warning(messagesFactory.descriptor.failedToParse(descriptor, 'Empty value'));
         return null;
     }
 
     const clearDescriptor = descriptor.trim();
     if (!clearDescriptor) {
+        logger.warning(messagesFactory.descriptor.failedToParse(descriptor, 'Empty value'));
         return null;
     }
 
     const parts = clearDescriptor.split('.').map(value => {
         return value.trim();
     }).filter(value => !!value);
+    console.log("parts", parts);
 
     if (!parts?.length) {
+        logger.warning(messagesFactory.descriptor.failedToParse(descriptor));
         return null;
     }
 
+    // kekw
     const rawComponentName = options?.isContainsName ? parts[0] : null;
     const rawCorrection = options?.isContainsName ? parts.slice(1) : parts;
 

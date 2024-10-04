@@ -1,68 +1,83 @@
 import {parseSimpleDescriptor} from './parse-simple-descriptor';
 
 describe('parseSimpleDescriptor', () => {
-    test.each<[string | null | undefined, {isContainsName?: boolean}, ReturnType<typeof parseSimpleDescriptor>]>([
-        [null, {}, null],
-        [undefined, {}, null],
-        ['TestDto', { isContainsName: true }, {
+    const fakeLogger = global.createFakeLogger();
+
+    test.each<[
+        Parameters<typeof parseSimpleDescriptor>[0],
+        Parameters<typeof parseSimpleDescriptor>[1],
+        Parameters<typeof parseSimpleDescriptor>[2],
+        Parameters<typeof parseSimpleDescriptor>[3],
+        ReturnType<typeof parseSimpleDescriptor>
+    ]>([
+        [null, {}, {}, fakeLogger, null],
+        [undefined, {}, {}, fakeLogger, null],
+        ['TestDto', { isContainsName: true }, {}, fakeLogger, {
             name: 'TestDto',
         }],
-        [' TestDto ', { isContainsName: true }, {
+        [' TestDto ', { isContainsName: true }, {}, fakeLogger, {
             name: 'TestDto',
         }],
-        [' TestDto. ',  { isContainsName: true },{
+        [' TestDto. ',  { isContainsName: true },{}, fakeLogger, {
             name: 'TestDto',
         }],
-        ['TestDto.foo.bar[].test',  { isContainsName: true },{
+        ['TestDto.foo.bar[].test',  { isContainsName: true }, {}, fakeLogger, {
             name: 'TestDto',
             correction: 'properties.foo.properties.bar.items.properties.test',
         }],
-        [' TestDto.foo.bar[].test ',  { isContainsName: true },{
+        [' TestDto.foo.bar[].test ',  { isContainsName: true }, {}, fakeLogger, {
             name: 'TestDto',
             correction: 'properties.foo.properties.bar.items.properties.test',
         }],
-        [' TestDto.foo.bar[].test. ',  { isContainsName: true },{
+        [' TestDto.foo.bar[].test. ',  { isContainsName: true }, {}, fakeLogger, {
             name: 'TestDto',
             correction: 'properties.foo.properties.bar.items.properties.test',
         }],
-        ['TestDto.foo',  { isContainsName: true },{
+        ['TestDto.foo',  { isContainsName: true }, {}, fakeLogger, {
             name: 'TestDto',
             correction: 'properties.foo',
         }],
-        ['TestDto[]',  { isContainsName: true },{
+        ['TestDto[]',  { isContainsName: true }, {}, fakeLogger, {
             name: 'TestDto',
             correction: 'items',
         }],
-        ['TestDto[].foo',  { isContainsName: true },{
+        ['TestDto[].foo',  { isContainsName: true }, {}, fakeLogger, {
             name: 'TestDto',
             correction: 'items.properties.foo',
         }],
-        ['TestDto[].foo[]',  { isContainsName: true },{
+        ['TestDto[].foo[]',  { isContainsName: true }, {}, fakeLogger, {
             name: 'TestDto',
             correction: 'items.properties.foo.items',
         }],
-        ['', {isContainsName: true}, null],
-        [' ', {isContainsName: true}, null],
-        ['foo.bar[].test',  { isContainsName: false },{
+        ['', {isContainsName: true}, {}, fakeLogger, null],
+        [' ', {isContainsName: true}, {}, fakeLogger, null],
+        ['foo.bar[].test',  { isContainsName: false },{}, fakeLogger, {
             name: null,
             correction: 'properties.foo.properties.bar.items.properties.test',
         }],
-        ['  foo.bar[].test  ',  { isContainsName: false },{
+        ['  foo.bar[].test  ',  { isContainsName: false },{}, fakeLogger, {
             name: null,
             correction: 'properties.foo.properties.bar.items.properties.test',
         }],
-        ['  [].foo.bar[].test  ',  { isContainsName: false },{
+        ['  [].foo.bar[].test  ',  { isContainsName: false },{}, fakeLogger, {
             name: null,
             correction: 'items.properties.foo.properties.bar.items.properties.test',
         }],
-        ['', {}, null],
-        [' ', {}, null],
+        ['', {}, {}, fakeLogger, null],
+        [' ', {}, {}, fakeLogger, null],
         // TODO check wrong ?
-        ['  [].[].foo ',  { isContainsName: false },{
+        ['  [].[].foo ',  { isContainsName: false },{}, fakeLogger, {
             name: null,
             correction: 'items.items.properties.foo',
         }],
-    ])('parseSimpleDescriptor(%s, %s)', (schema, options, expectedResult) => {
-        expect(parseSimpleDescriptor(schema, options)).toEqual(expectedResult);
+    ])('parseSimpleDescriptor(%s, %s, %s, %s)', (descriptor, options, rootSchema, logger, expectedResult) => {
+        expect(
+            parseSimpleDescriptor(
+                descriptor,
+                options,
+                rootSchema,
+                logger,
+            ),
+        ).toEqual(expectedResult);
     });
 });

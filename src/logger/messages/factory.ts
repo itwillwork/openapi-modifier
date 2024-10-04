@@ -51,5 +51,10 @@ export const messagesFactory = {
         notUsaged: (field: string, description?: string) => {
             return `The "${field}" field of the configuration is not used${description ? `: ${description}` : '.'}`;
         }
+    },
+    descriptor: {
+        failedToParse: (descriptor: any, reason?: string) => {
+            return `Failed to parse descriptor: ${JSON.stringify(descriptor || {})}. ${reason ? `Reason: ${reason}` : ''}`;
+        }
     }
 }
