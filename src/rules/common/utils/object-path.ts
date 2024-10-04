@@ -1,12 +1,23 @@
+export const getPathKeys = (
+    path: string | Array<string> | undefined
+): Array<string> => {
+    if (!path) {
+        return [];
+    }
+
+    const rawPathKeys = Array.isArray(path) ? path : path.split(/[.\[\]]/);
+
+    return rawPathKeys.filter(key => !!key);
+}
+
 export const getObjectPath = <SourceObject = any, Value = any>(
     sourceObject: SourceObject,
     path: string | Array<string> | undefined,
 ): Value => {
-    if (!path) {
+    const pathKeys = getPathKeys(path);
+    if (!pathKeys?.length) {
         throw new Error('Not valid path');
     }
-
-    const pathKeys = Array.isArray(path) ? path : path.split('.');
 
     // @ts-expect-error
     let resultObject = sourceObject[pathKeys[0]] || null;
@@ -23,11 +34,10 @@ export const setObjectProp = <SourceObject = any, Value = any>(
     path: string | Array<string> | undefined,
     value: Value,
 ): void => {
-    if (!path) {
+    const pathKeys = getPathKeys(path);
+    if (!pathKeys?.length) {
         throw new Error('Not valid path');
     }
-
-    const pathKeys = Array.isArray(path) ? path : path.split('.');
 
     if (pathKeys.length > 1) {
         // @ts-expect-error
