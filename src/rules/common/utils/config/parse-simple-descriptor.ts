@@ -4,6 +4,30 @@ const checkIsArray = (rawPart: string | null): boolean => {
     return !!rawPart && /\[\]$/.test(rawPart);
 }
 
+const checkIsOneOff = (rawPart: string | null): boolean => {
+    if (!rawPart) {
+        return false;
+    }
+
+    return /^oneOf\[\d+\]$/.test(rawPart);
+}
+
+const checkIsAllOf = (rawPart: string | null): boolean => {
+    if (!rawPart) {
+        return false;
+    }
+
+    return /^allOf\[\d+\]$/.test(rawPart);
+}
+
+const checkIsAnyOf = (rawPart: string | null): boolean => {
+    if (!rawPart) {
+        return false;
+    }
+
+    return /^anyOf\[\d+\]$/.test(rawPart);
+}
+
 const clearArrayPostfix = (rawPart: string): string => rawPart.replace(/\[\]$/, '');
 
 type ParsedSimpleDescriptor = {
@@ -33,6 +57,11 @@ export const parseSimpleDescriptor = (descriptor: string | null | undefined, opt
     const rawCorrection = options?.isContainsName ? parts.slice(1) : parts;
 
     const correctionParts = rawCorrection.reduce<string[]>((acc, rawPart) => {
+        if (checkIsOneOff(rawPart) || checkIsAllOf(rawPart) || checkIsAnyOf(rawPart)) {
+            acc.push(rawPart);
+            return acc;
+        }
+
         if (ROOT_ARRAY_PLACEHOLDER !== rawPart) {
             acc.push('properties');
         }

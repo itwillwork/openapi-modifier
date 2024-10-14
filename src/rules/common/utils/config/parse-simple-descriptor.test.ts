@@ -62,6 +62,30 @@ describe('parseSimpleDescriptor', () => {
             name: null,
             correction: 'items.items.properties.foo',
         }],
+        ['TestDto.allOf[2].foo',  { isContainsName: true },{
+            name: 'TestDto',
+            correction: 'allOf[2].properties.foo',
+        }],
+        ['TestDto.allOf[2].foo',  { isContainsName: false },{
+            name: null,
+            correction: 'properties.TestDto.allOf[2].properties.foo',
+        }],
+        ['TestDto.oneOf[2].foo',  { isContainsName: true },{
+            name: 'TestDto',
+            correction: 'oneOf[2].properties.foo',
+        }],
+        ['TestDto.oneOf[2].foo',  { isContainsName: false },{
+            name: null,
+            correction: 'properties.TestDto.oneOf[2].properties.foo',
+        }],
+        ['TestDto.anyOf[2].foo',  { isContainsName: true },{
+            name: 'TestDto',
+            correction: 'anyOf[2].properties.foo',
+        }],
+        ['TestDto.anyOf[2].foo',  { isContainsName: false },{
+            name: null,
+            correction: 'properties.TestDto.anyOf[2].properties.foo',
+        }],
     ])('parseSimpleDescriptor(%s, %s)', (schema, options, expectedResult) => {
         expect(parseSimpleDescriptor(schema, options)).toEqual(expectedResult);
     });
