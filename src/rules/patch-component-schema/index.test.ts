@@ -328,4 +328,232 @@ describe('patch-schemas rule', () => {
 
         expect(fakeLogger.warning).toBeCalledTimes(0);
     });
+
+    test('regular, use allOf', () => {
+        const fakeLogger = global.createFakeLogger();
+        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+            components: {
+                schemas: {
+                    TestObjectDTO: {
+                        allOf: [
+                            {
+                                '$ref': 'TestRef1',
+                            },
+                            {
+                                type: 'object',
+                                properties: {
+                                    TestArraySchemaDTO: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'string',
+                                            enum: ['1', '2'],
+                                        },
+                                    },
+                                },
+                            }
+                        ]
+
+                    },
+                },
+            },
+        });
+
+        expect(
+            processor.processDocument(
+                fakeOpenAPIFile,
+                {
+                    patchMethod: 'merge',
+                    descriptor: 'TestObjectDTO.allOf[1].TestArraySchemaDTO[]',
+                    schemaDiff: {
+                        type: 'string',
+                        enum: ['3', '4'],
+                    },
+                },
+                fakeLogger,
+                {ruleName: ''}
+            )
+        ).toEqual({
+            ...fakeOpenAPIFile,
+            document: {
+                ...fakeOpenAPIFile.document,
+                components: {
+                    schemas: {
+                        TestObjectDTO: {
+                            allOf: [
+                                {
+                                    '$ref': 'TestRef1',
+                                },
+                                {
+                                    type: 'object',
+                                    properties: {
+                                        TestArraySchemaDTO: {
+                                            type: 'array',
+                                            items: {
+                                                type: 'string',
+                                                enum: ['3', '4'],
+                                            },
+                                        },
+                                    },
+                                }
+                            ]
+                        },
+                    },
+                },
+            },
+        });
+
+        expect(fakeLogger.warning).toBeCalledTimes(0);
+    });
+
+    test('regular, use anyOf', () => {
+        const fakeLogger = global.createFakeLogger();
+        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+            components: {
+                schemas: {
+                    TestObjectDTO: {
+                        anyOf: [
+                            {
+                                '$ref': 'TestRef1',
+                            },
+                            {
+                                type: 'object',
+                                properties: {
+                                    TestArraySchemaDTO: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'string',
+                                            enum: ['1', '2'],
+                                        },
+                                    },
+                                },
+                            }
+                        ]
+
+                    },
+                },
+            },
+        });
+
+        expect(
+            processor.processDocument(
+                fakeOpenAPIFile,
+                {
+                    patchMethod: 'merge',
+                    descriptor: 'TestObjectDTO.anyOf[1].TestArraySchemaDTO[]',
+                    schemaDiff: {
+                        type: 'string',
+                        enum: ['3', '4'],
+                    },
+                },
+                fakeLogger,
+                {ruleName: ''}
+            )
+        ).toEqual({
+            ...fakeOpenAPIFile,
+            document: {
+                ...fakeOpenAPIFile.document,
+                components: {
+                    schemas: {
+                        TestObjectDTO: {
+                            anyOf: [
+                                {
+                                    '$ref': 'TestRef1',
+                                },
+                                {
+                                    type: 'object',
+                                    properties: {
+                                        TestArraySchemaDTO: {
+                                            type: 'array',
+                                            items: {
+                                                type: 'string',
+                                                enum: ['3', '4'],
+                                            },
+                                        },
+                                    },
+                                }
+                            ]
+                        },
+                    },
+                },
+            },
+        });
+
+        expect(fakeLogger.warning).toBeCalledTimes(0);
+    });
+
+    test('regular, use oneOf', () => {
+        const fakeLogger = global.createFakeLogger();
+        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+            components: {
+                schemas: {
+                    TestObjectDTO: {
+                        oneOf: [
+                            {
+                                '$ref': 'TestRef1',
+                            },
+                            {
+                                type: 'object',
+                                properties: {
+                                    TestArraySchemaDTO: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'string',
+                                            enum: ['1', '2'],
+                                        },
+                                    },
+                                },
+                            }
+                        ]
+
+                    },
+                },
+            },
+        });
+
+        expect(
+            processor.processDocument(
+                fakeOpenAPIFile,
+                {
+                    patchMethod: 'merge',
+                    descriptor: 'TestObjectDTO.oneOf[1].TestArraySchemaDTO[]',
+                    schemaDiff: {
+                        type: 'string',
+                        enum: ['3', '4'],
+                    },
+                },
+                fakeLogger,
+                {ruleName: ''}
+            )
+        ).toEqual({
+            ...fakeOpenAPIFile,
+            document: {
+                ...fakeOpenAPIFile.document,
+                components: {
+                    schemas: {
+                        TestObjectDTO: {
+                            oneOf: [
+                                {
+                                    '$ref': 'TestRef1',
+                                },
+                                {
+                                    type: 'object',
+                                    properties: {
+                                        TestArraySchemaDTO: {
+                                            type: 'array',
+                                            items: {
+                                                type: 'string',
+                                                enum: ['3', '4'],
+                                            },
+                                        },
+                                    },
+                                }
+                            ]
+                        },
+                    },
+                },
+            },
+        });
+
+        expect(fakeLogger.warning).toBeCalledTimes(0);
+    });
 });

@@ -39,6 +39,8 @@ const processor: RuleProcessorT<typeof configSchema> = {
             return openAPIFile;
         }
 
+        logger.trace("parsedDesciptor", parsedDesciptor);
+
         if (!patchMethod) {
             logger.errorMessage(messagesFactory.ruleNotApply.requiredConfigField(ruleMeta, 'patchMethod'));
             return openAPIFile;
