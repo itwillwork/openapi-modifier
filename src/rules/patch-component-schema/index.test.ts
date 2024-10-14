@@ -556,4 +556,59 @@ describe('patch-schemas rule', () => {
 
         expect(fakeLogger.warning).toBeCalledTimes(0);
     });
+
+    test('failed use with $ref', () => {
+        const fakeLogger = global.createFakeLogger();
+        const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+            components: {
+                schemas: {
+                    TestObjectDTO: {
+                        oneOf: [
+                            {
+                                '$ref': 'TestRef1',
+                            },
+                        ]
+                    },
+                },
+            },
+        });
+
+        try {
+            expect(
+                processor.processDocument(
+                    fakeOpenAPIFile,
+                    {
+                        patchMethod: 'deepmerge',
+                        descriptor: 'TestObjectDTO.oneOf[0].TestArraySchemaDTO',
+                        schemaDiff: {
+                            type: 'string',
+                        },
+                    },
+                    fakeLogger,
+                    {ruleName: ''}
+                )
+            ).toEqual({
+                ...fakeOpenAPIFile,
+                document: {
+                    ...fakeOpenAPIFile.document,
+                    components: {
+                        schemas: {
+                            TestObjectDTO: {
+                                oneOf: [
+                                    {
+                                        '$ref': 'TestRef1',
+                                    },
+                                ]
+                            },
+                        },
+                    },
+                },
+            });
+        } catch (error) {
+            expect(error instanceof Error ? error.message : '').toMatch(/\$ref/);
+        }
+
+        expect(fakeLogger.warning).toBeCalledTimes(0);
+        expect(fakeLogger.error).toBeCalledTimes(0);
+    });
 });

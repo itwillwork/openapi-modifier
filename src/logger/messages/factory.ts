@@ -1,4 +1,5 @@
 import {RuleMetaT} from "../../core/rules/processor-models";
+import {tryExtractRefLastPath} from "../../rules/common/utils/refs";
 
 const getGitHubRuleConfigReadMeLink = (ruleName: string) => {
     return `https://github.com/itwillwork/openapi-modifier/blob/main/src/rules/${ruleName}/README.md#config`
@@ -10,6 +11,22 @@ const getGitHubRuleReadMeLink = (ruleName: string) => {
 
 const getGitHubConfigReadMeLink = () => {
     return `https://github.com/itwillwork/openapi-modifier/tree/main?tab=readme-ov-file#%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B-%D0%BA%D0%BE%D0%BD%D1%84%D0%B8%D0%B3%D1%83%D1%80%D0%B0%D1%86%D0%B8%D0%B8`
+}
+
+const getGitHubDescriptorWithAllOfReadMeLink = () => {
+    return 'TODO'
+}
+
+const getGitHubDescriptorWithAnyOfReadMeLink = () => {
+    return 'TODO'
+}
+
+const getGitHubDescriptorWithOneOfReadMeLink = () => {
+    return 'TODO'
+}
+
+const getGitHubDescriptorWithRefReadMeLink = () => {
+    return 'TODO'
 }
 
 export const messagesFactory = {
@@ -51,5 +68,36 @@ export const messagesFactory = {
         notUsaged: (field: string, description?: string) => {
             return `The "${field}" field of the configuration is not used${description ? `: ${description}` : '.'}`;
         }
+    },
+    failedToResolvePath: {
+        conflictRef: (sourcePath: string, currentObject: { $ref: unknown }, lostPath: string) => {
+            return `
+                Failed to resolve path "${sourcePath}". 
+                Conflict with "$ref": "${JSON.stringify(currentObject)}". 
+                Try using a direct descriptor: "${typeof currentObject['$ref'] === "string" ? tryExtractRefLastPath(currentObject['$ref']) : ''}, with lost path: ${lostPath}".
+                See docs about usage "$ref" in descriptors: ${getGitHubDescriptorWithRefReadMeLink()}
+            `
+        },
+        conflictOneOf: (sourcePath: string, currentObject: {}, lostPath: string) => {
+            return `
+                Failed to resolve path "${sourcePath}". 
+                Conflict with "oneOf": "${JSON.stringify(currentObject)}", with lost path: "${lostPath}". 
+                See docs about usage "oneOf" in descriptors: ${getGitHubDescriptorWithOneOfReadMeLink()}
+            `;
+        },
+        conflictAnyOf: (sourcePath: string, currentObject: {}, lostPath: string) => {
+            return `
+                Failed to resolve path "${sourcePath}". 
+                Conflict with "anyOf": "${JSON.stringify(currentObject)}", with lost path: "${lostPath}". 
+                See docs about usage "anyOf" in descriptors: ${getGitHubDescriptorWithAnyOfReadMeLink()}
+            `;
+        },
+        conflictAllOf: (sourcePath: string, currentObject: {}, lostPath: string) => {
+            return `
+                Failed to resolve path "${sourcePath}". 
+                Conflict with "allOf": "${JSON.stringify(currentObject)}", with lost path: "${lostPath}". 
+                See docs about usage "allOf" in descriptors: ${getGitHubDescriptorWithAllOfReadMeLink()}
+            `;
+        },
     }
 }

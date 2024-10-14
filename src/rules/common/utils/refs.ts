@@ -44,3 +44,13 @@ export const resolveRef = (openAPIFile: OpenAPIFileT, referenceObject: Reference
 
   return result;
 }
+
+export const tryExtractRefLastPath = (ref: string): string | null => {
+  try {
+    const paths = ref.split('/');
+
+    return paths[paths.length - 1] || null;
+  } catch (error) {
+    return null;
+  }
+}

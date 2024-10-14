@@ -1,3 +1,5 @@
+import {messagesFactory} from "../../../logger/messages/factory";
+
 export const getPathKeys = (
     path: string | Array<string> | undefined
 ): Array<string> => {
@@ -10,9 +12,21 @@ export const getPathKeys = (
     return rawPathKeys.filter(key => !!key);
 }
 
+const normalizePathForLogging = (
+    path: string | Array<string> | undefined
+): string => {
+    if (!path) {
+        return '';
+    }
+
+    return Array.isArray(path) ? path.join('.') : path
+}
+
+
 export const getObjectPath = <SourceObject = any, Value = any>(
     sourceObject: SourceObject,
     path: string | Array<string> | undefined,
+    sourcePath = path,
 ): Value => {
     const pathKeys = getPathKeys(path);
     if (!pathKeys?.length) {
@@ -20,10 +34,51 @@ export const getObjectPath = <SourceObject = any, Value = any>(
     }
 
     // @ts-expect-error
-    let resultObject = sourceObject[pathKeys[0]] || null;
+    let resultObject = sourceObject[pathKeys[0]];
+    if (resultObject === undefined) {
+        if (sourceObject && typeof sourceObject  === 'object' && '$ref' in sourceObject) {
+            throw new Error(
+                messagesFactory.failedToResolvePath.conflictRef(
+                    normalizePathForLogging(sourcePath),
+                    sourceObject,
+                    normalizePathForLogging(path),
+                ),
+            );
+        }
+
+        if (sourceObject && typeof sourceObject  === 'object' && 'allOf' in sourceObject) {
+            throw new Error(
+                messagesFactory.failedToResolvePath.conflictAllOf(
+                    normalizePathForLogging(sourcePath),
+                    sourceObject,
+                    normalizePathForLogging(path),
+                ),
+            );
+        }
+
+        if (sourceObject && typeof sourceObject  === 'object' && 'anyOf' in sourceObject) {
+            throw new Error(
+                messagesFactory.failedToResolvePath.conflictAnyOf(
+                    normalizePathForLogging(sourcePath),
+                    sourceObject,
+                    normalizePathForLogging(path),
+                ),
+            );
+        }
+
+        if (sourceObject && typeof sourceObject  === 'object' && 'oneOf' in sourceObject) {
+            throw new Error(
+                messagesFactory.failedToResolvePath.conflictOneOf(
+                    normalizePathForLogging(sourcePath),
+                    sourceObject,
+                    normalizePathForLogging(path),
+                ),
+            );
+        }
+    }
 
     if (sourceObject && pathKeys.length > 1) {
-        return getObjectPath(resultObject, pathKeys.slice(1));
+        return getObjectPath(resultObject, pathKeys.slice(1), path);
     }
 
     return resultObject;
