@@ -1,1 +1,1 @@
-Фильтрует requestBody, response по типу контента
+Правило для фильтрации вариантов requestBody/response по типу контента
