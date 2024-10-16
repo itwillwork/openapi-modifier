@@ -23,7 +23,7 @@ module.exports = {
 
 или
 
-```
+```js
 module.exports = {
     pipeline: [
         // ... other rules

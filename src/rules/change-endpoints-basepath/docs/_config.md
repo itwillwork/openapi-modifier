@@ -16,6 +16,25 @@ module.exports = {
                map: { 
                    '/public/api': '',
                },
+            },
+        }
+        // ... other rules
+    ]
+}
+```
+
+или
+
+```js
+module.exports = {
+    pipeline: [
+        // ... other rules
+        {
+            rule: "change-endpoints-basepath",
+            config: {
+               map: { 
+                   '/public/v1/service/api': '/api',
+               }, 
                ignoreOperarionCollisions: false,
             },
         }
@@ -23,3 +42,5 @@ module.exports = {
     ]
 }
 ```
+               
+
