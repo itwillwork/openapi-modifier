@@ -2,7 +2,7 @@ import {RuleProcessorT} from '../../core/rules/processor-models';
 import {z} from 'zod';
 import {patchSchema} from '../common/utils/patch';
 import {
-  anyEndpointDescriptorConfigSchema,
+  anyEndpointDescriptorConfigSchema, correctionConfigSchema,
   endpointDescriptorConfigSchema,
   endpointParameterDescriptorConfigSchema, endpointParameterWithCorrectionDescriptorConfigSchema,
   openAPISchemaConfigSchema,
@@ -36,7 +36,9 @@ const configSchema = z
 
 const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
-  defaultConfig: {},
+  defaultConfig: {
+    patchMethod: 'merge'
+  },
   processDocument: (openAPIFile, config, logger, ruleMeta) => {
     const { endpointDescriptor, parameterDescriptor, patchMethod, schemaDiff, objectDiff } = config;
 
