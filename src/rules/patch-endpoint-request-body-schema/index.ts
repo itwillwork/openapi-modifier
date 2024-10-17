@@ -24,7 +24,9 @@ const configSchema = z.object({
 
 const processor: RuleProcessorT<typeof configSchema> = {
     configSchema,
-    defaultConfig: {},
+    defaultConfig: {
+        patchMethod: 'merge',
+    },
     processDocument: (openAPIFile, config, logger, ruleMeta) => {
         const {patchMethod, schemaDiff, contentType, correction, endpointDescriptor} = config;
 
