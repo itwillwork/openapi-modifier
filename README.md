@@ -348,3 +348,4 @@ TODO описание параметра verbose
 - разделить документацию на ru/en
 - проверить ссылки из ошибок на github (якори проверить) и в message factory заменить их
 - доработать cli чтобы можно было так `cat foo.json | json2ts > foo.d.ts`
+- override_policy append final ?
