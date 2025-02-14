@@ -349,3 +349,6 @@ TODO описание параметра verbose
 - проверить ссылки из ошибок на github (якори проверить) и в message factory заменить их
 - доработать cli чтобы можно было так `cat foo.json | json2ts > foo.d.ts`
 - override_policy append final ?
+
+- можно получать diff yaml и постепенно матчить, через к примеру
+  https://www.npmjs.com/package/yaml-diff-patch
