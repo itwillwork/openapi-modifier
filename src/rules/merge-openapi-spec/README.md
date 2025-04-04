@@ -1,74 +1,47 @@
-## merge-openapi-spec
+# merge-openapi-spec
 
-Добавляет в текущий openapi внешнюю документацию
+Объединяет два OpenAPI спецификации в одну. Позволяет объединить текущую спецификацию с дополнительной спецификацией из указанного файла.
 
-! Если сущности пересекаются будет перезатерты
+## Config
 
-### Мотивация
-
-Часто нужно добавить в openapi будущие проектируемые API, которых еще нет в микросервисе, но оно согласовано.
-
-### Конфигурация
-
-| Параметр                  |                                     Описание                                      |
-| ------------------------- | :-------------------------------------------------------------------------------: |
-| path                      | path до openapi файла (_.json, _.yaml, \*.yml), который нужно добавить к текущему |
-| ignoreOperarionCollisions |                          Игнорировать конфликты path'ов                           |
-| ignoreComponentCollisions |                        Игнорировать конфликты component'ов                        |
+| Параметр    | Описание                          | Пример                     | Типизация              | Дефолтное |
+| -------- |-----------------------------------|----------------------------|------------------------|-----------|
+| `path`  | [**обязательный**] Путь к файлу спецификации для объединения | `"./additional-spec.yaml"` | `string` | - |
+| `ignoreOperarionCollisions` | Игнорировать конфликты операций | `true` | `boolean` | `false` |
+| `ignoreComponentCollisions` | Игнорировать конфликты компонентов | `true` | `boolean` | `false` |
 
 Пример конфигурации:
 
 ```js
-{
-  path: './src/new-api-for-new-feature.yaml';
-}
-```
-
-### Пример использования
-
-**В конфиге** `openapi-modifier-config.js` добавьте правило `merge-openapi-spec`:
-
-```json
 module.exports = {
-  path: "./src/new-api-for-new-feature.yaml"
+    pipeline: [
+        // ... other rules
+        {
+            rule: "merge-openapi-spec",
+            config: {
+                path: "./additional-spec.yaml",
+                ignoreOperarionCollisions: true,
+                ignoreComponentCollisions: true
+            },
+        }
+        // ... other rules
+    ]
 }
 ```
 
-В `new-api-for-new-feature.yaml` пишем yaml который нужно добавить к существующему.
+## Motivation
 
-**Файл `new-api-for-new-feature.yaml`**, следующую:
+<a name="custom_anchor_motivation_1"></a>
+### 1. Необходимо объединить несколько OpenAPI спецификаций в одну
 
-```
-components:
-  schemas:
-    Pet:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-paths:
-  /notifications:
-    get:
-      summary: Get all notifications
-      responses:
-        200:
-          content:
-            "*/*":
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/Pet"
-```
+Практический пример:
 
-**До применения правила**, файл `openapi.yaml` выглядит так:
+**В файле `openapi.yaml`** основная спецификация:
 
 ```yaml
+openapi: 3.0.0
+info:
+  title: Main API
 paths:
   /pets:
     get:
@@ -76,46 +49,84 @@ paths:
       responses:
         200:
           content:
-            '*/*':
+            'application/json':
               schema:
                 type: 'object'
 ```
 
-**После применения правила**, файл `openapi.yaml` выглядит так:
+**В файле `additional-spec.yaml`** дополнительная спецификация:
 
 ```yaml
-components:
-  schemas:
-    Pet:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
+openapi: 3.0.0
+info:
+  title: Additional API
 paths:
-  /notifications:
+  /users:
     get:
-      summary: Get all notifications
+      summary: List all users
       responses:
         200:
           content:
-            '*/*':
+            'application/json':
               schema:
-                type: 'array'
-                items:
-                  $ref: '#/components/schemas/Pet'
+                type: 'object'
+```
+
+**В файле конфигурации** `openapi-modifier-config.js` добавляем правило `merge-openapi-spec`:
+
+```js
+module.exports = {
+    pipeline: [
+        {
+            rule: "merge-openapi-spec",
+            config: {
+                path: "./additional-spec.yaml"
+            },
+        }
+    ]
+}
+```
+
+**После применения правила**, файл `openapi.yaml` будет содержать объединенную спецификацию:
+
+```yaml
+openapi: 3.0.0
+info:
+  title: Main API
+paths:
   /pets:
     get:
       summary: List all pets
       responses:
         200:
           content:
-            '*/*':
+            'application/json':
+              schema:
+                type: 'object'
+  /users:
+    get:
+      summary: List all users
+      responses:
+        200:
+          content:
+            'application/json':
               schema:
                 type: 'object'
 ```
+
+<a name="custom_anchor_motivation_2"></a>
+### 2. Обработка конфликтов при объединении
+
+При объединении спецификаций могут возникнуть конфликты:
+- Конфликты операций (одинаковые пути и методы)
+- Конфликты компонентов (одинаковые имена компонентов)
+
+По умолчанию при обнаружении конфликтов объединение прерывается с ошибкой. Если нужно игнорировать конфликты, можно использовать параметры:
+- `ignoreOperarionCollisions: true` - игнорировать конфликты операций
+- `ignoreComponentCollisions: true` - игнорировать конфликты компонентов
+
+## Поддерживаемые форматы
+
+Правило поддерживает следующие форматы файлов спецификации:
+- YAML (.yml, .yaml)
+- JSON (.json) 

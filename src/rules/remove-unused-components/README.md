@@ -1,66 +1,146 @@
-## remove-unused-components
+# remove-unused-components
 
-Удаляет параметр из endpoint'а
+Удаляет неиспользуемые компоненты из OpenAPI спецификации. Правило анализирует все ссылки на компоненты в документе и удаляет те, которые нигде не используются.
 
-### Мотивация
+## Config
 
-После применений правил `filter-endpoint`, `filter-by-content-tpye`, `patch-schemas` и т.п. Некоторые компоненты могут быть больше не используемыми, и их лучше удалить.
-
-### Конфигурация
-
-| Параметр | Описание |
-| -------- | :------: |
+| Параметр    | Описание                          | Пример                     | Типизация              | Дефолтное |
+| -------- |-----------------------------------|----------------------------|------------------------|-----------|
+| `ignore`  | [**опциональный**] Список компонентов, которые нужно игнорировать при удалении | `["schemas/User", "responses/NotFound"]` | `Array<string>` | `[]` |
 
 Пример конфигурации:
 
 ```js
-{
-}
-```
-
-### Пример использования
-
-**В конфиге** `openapi-modifier-config.js` добавьте правило `remove-unused-components`:
-
-```json
 module.exports = {
-  "rule": {}
+    pipeline: [
+        // ... other rules
+        {
+            rule: "remove-unused-components",
+            config: {
+                ignore: [
+                    "schemas/User",
+                    "responses/NotFound"
+                ]
+            },
+        }
+        // ... other rules
+    ]
 }
 ```
 
-**До применения правила**, файл `openapi.yaml` выглядит так:
+## Motivation
+
+<a name="custom_anchor_motivation_1"></a>
+### 1. Очистка спецификации от неиспользуемых компонентов
+
+Практический пример:
+
+**В файле `openapi.yaml`** есть неиспользуемые компоненты:
 
 ```yaml
 components:
   schemas:
-    Pet:
+    User:
       type: object
-      required:
-        - id
-        - name
       properties:
-        id:
-          type: integer
-          format: int64
         name:
           type: string
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      tags:
-        - pets
+    UnusedSchema:
+      type: object
+      properties:
+        field:
+          type: string
+  responses:
+    NotFound:
+      description: Not found
+    UnusedResponse:
+      description: Unused response
+```
+
+**Нужно удалить неиспользуемые компоненты `UnusedSchema` и `UnusedResponse`, но сохранить `User` и `NotFound`.**
+
+**В файле конфигурации** `openapi-modifier-config.js` добавляем правило `remove-unused-components`:
+
+```js
+module.exports = {
+    pipeline: [
+        {
+            rule: "remove-unused-components",
+            config: {
+                ignore: [
+                    "schemas/User",
+                    "responses/NotFound"
+                ]
+            },
+        }
+    ]
+}
 ```
 
 **После применения правила**, файл `openapi.yaml` выглядит так:
 
 ```yaml
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      tags:
-        - pets
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+  responses:
+    NotFound:
+      description: Not found
 ```
 
-Из схемы исчез компонент `Pet`.
+<a name="custom_anchor_motivation_2"></a>
+### 2. Предотвращение ошибок при генерации кода
+
+Практический пример:
+
+**В файле `openapi.yaml`** есть неиспользуемые компоненты, которые могут вызывать ошибки при генерации кода:
+
+```yaml
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+    DeprecatedSchema:
+      type: object
+      properties:
+        oldField:
+          type: string
+```
+
+**Нужно удалить устаревший компонент `DeprecatedSchema`, который больше не используется.**
+
+**В файле конфигурации** `openapi-modifier-config.js` добавляем правило `remove-unused-components`:
+
+```js
+module.exports = {
+    pipeline: [
+        {
+            rule: "remove-unused-components",
+            config: {
+                ignore: [
+                    "schemas/User"
+                ]
+            },
+        }
+    ]
+}
+```
+
+**После применения правила**, файл `openapi.yaml` выглядит так:
+
+```yaml
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+``` 

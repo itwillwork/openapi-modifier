@@ -1,32 +1,3 @@
-# remove-operation-id
-
-Удаляет operationId из всех операций в OpenAPI спецификации, кроме тех, что указаны в списке игнорирования
-
-## Config
-
-| Параметр    | Описание                          | Пример                     | Типизация              | Дефолтное |
-| -------- |-----------------------------------|----------------------------|------------------------|-----------|
-| `ignore`  | [**опциональный**] Список operationId для игнорирования | `["getPets", "createPet"]` | `string[]` | `[]` |
-
-Пример конфигурации:
-
-```js
-module.exports = {
-    pipeline: [
-        // ... other rules
-        {
-            rule: "remove-operation-id",
-            config: {
-                ignore: ["getPets", "createPet"]
-            },
-        }
-        // ... other rules
-    ]
-}
-```
-
-## Motivation
-
 <a name="custom_anchor_motivation_1"></a>
 ### 1. Необходимо удалить operationId из всех операций для улучшения читаемости спецификации
 

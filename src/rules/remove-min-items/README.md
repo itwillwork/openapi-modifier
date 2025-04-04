@@ -1,43 +1,64 @@
-## remove-min-items
+# remove-min-items
 
-Убирает minItems из всех сущностей.
+Удаляет свойство `minItems` из всех схем в OpenAPI спецификации.
 
-### Конфигурация
+## Config
 
-| Параметр | Описание |
-| -------- | :------: |
+| Параметр    | Описание                          | Пример                     | Типизация              | Дефолтное |
+| -------- |-----------------------------------|----------------------------|------------------------|-----------|
+| `showUnusedWarning`  | [**опциональный**] Показывать предупреждение, если не найдено схем с `minItems` | `true` | `boolean` | `false`        |
 
 Пример конфигурации:
 
 ```js
-{
-}
-```
-
-### Пример использования
-
-**В конфиге** `openapi-modifier-config.js` добавьте правило `remove-min-items`:
-
-```json
 module.exports = {
-    "rules": [
+    pipeline: [
+        // ... other rules
         {
-            "name": "remove-min-items"
+            rule: "remove-min-items",
+            config: {
+                showUnusedWarning: true
+            },
         }
+        // ... other rules
     ]
 }
 ```
 
-**До применения правила**, файл `openapi.yaml` выглядит так:
+## Motivation
+
+<a name="custom_anchor_motivation_1"></a>
+### 1. Необходимо удалить ограничение на минимальное количество элементов в массивах
+
+Практический пример:
+
+**В файле `openapi.yaml`** схема выглядит так:
 
 ```yaml
 components:
   schemas:
-    ExmapleDTO:
+    PetList:
       type: array
-      minItems: 1
       items:
-        type: number
+        $ref: '#/components/schemas/Pet'
+      minItems: 1
+```
+
+**Нужно удалить ограничение `minItems: 1`.**
+
+**В файле конфигурации** `openapi-modifier-config.js` добавляем правило `remove-min-items`:
+
+```js
+module.exports = {
+    pipeline: [
+        {
+            rule: "remove-min-items",
+            config: {
+                showUnusedWarning: true
+            },
+        }
+    ]
+}
 ```
 
 **После применения правила**, файл `openapi.yaml` выглядит так:
@@ -45,8 +66,13 @@ components:
 ```yaml
 components:
   schemas:
-    ExmapleDTO:
+    PetList:
       type: array
       items:
-        type: number
+        $ref: '#/components/schemas/Pet'
 ```
+
+<a name="custom_anchor_motivation_2"></a>
+### 2. Упрощение схемы для генерации кода
+
+В некоторых случаях ограничение `minItems` может мешать генерации кода или создавать ненужные проверки. Удаление этого свойства позволяет сделать схему более гибкой и универсальной. 

@@ -1,93 +1,108 @@
-## patch-endpoint-response-schema
+# patch-endpoint-response-schema
 
-Патчит сущности через сливание или замену.
+Правило для изменения схемы ответа эндпоинта путем применения патча к существующей схеме.
 
-Через присваивание undefined можно удалить поля.
+## Config
 
-Если используете ref, то необходимо сослаться на него!
-
-### Конфигурация
-
-| Параметр |           Описание            |
-| -------- | :---------------------------: |
-| merge    | Изменение происходит слиянием |
-| replace  | Изменение происходит заменой  |
+| Параметр | Описание | Пример | Типизация | Дефолтное |
+|----------|-----------|---------|------------|-----------|
+| `endpointDescriptor` | [**обязательный**] Описание эндпоинта | `{"path": "/pets", "method": "get"}` | `EndpointDescriptorConfig` | - |
+| `code` | Код ответа для модификации | `"200"` | `string` | - |
+| `contentType` | Тип контента для модификации | `"application/json"` | `string` | - |
+| `correction` | Путь к свойству схемы для модификации | `"properties.items"` | `string` | - |
+| `patchMethod` | [**обязательный**] Метод патчинга | `"merge"` | `"merge" \| "replace"` | `"merge"` |
+| `schemaDiff` | [**обязательный**] Схема для патчинга | `{"type": "object", "properties": {...}}` | `OpenAPISchemaConfig` | - |
 
 Пример конфигурации:
 
 ```js
-{
-    "merge": {
-        "FilterDTO": {
-            "properties": {
-                "status": {
-                    "type": "string"
+module.exports = {
+    pipeline: [
+        {
+            rule: "patch-endpoint-response-schema",
+            config: {
+                endpointDescriptor: {
+                    path: "/pets",
+                    method: "get"
+                },
+                code: "200",
+                contentType: "application/json",
+                patchMethod: "merge",
+                schemaDiff: {
+                    type: "object",
+                    properties: {
+                        items: {
+                            type: "array",
+                            items: {
+                                type: "object",
+                                properties: {
+                                    id: { type: "string" },
+                                    name: { type: "string" }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
-    },
-    "replace": {
-        "CounterDTO": {
-            "type": "number"
-        }
-    },
+    ]
 }
 ```
 
-### Пример использования
+## Motivation
 
-**В конфиге** `openapi-modifier-config.js` добавьте правило `patch-schemas`:
+### 1. Необходимо обновить схему ответа эндпоинта
 
-```json
-module.exports = {
-  "rules": [
-    {
-      "name": "patch-schemas",
-      "config": {
-        "merge": {
-          "FilterDTO": {
-            "required": [
-              "status"
-            ],
-            "properties": {
-              "status": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "replace": {
-          "CounterDTO": {
-            "type": "number"
-          }
-        }
-      }
-    }
-  ]
-}
-```
+Практический пример:
 
-**До применения правила**, файл `openapi.yaml` выглядит так:
+**В файле `openapi.yaml`** документация на endpoint выглядит так:
 
 ```yaml
-components:
-  schemas:
-    FilterDTO:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-    CounterDTO:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      responses:
+        200:
+          content:
+            'application/json':
+              schema:
+                type: 'object'
+                properties:
+                  items:
+                    type: 'array'
+                    items:
+                      type: 'object'
+                      properties:
+                        id: { type: 'string' }
+                        name: { type: 'string' }
+```
+
+**Нужно добавить новое поле `description` в схему каждого элемента массива.**
+
+**В файле конфигурации** `openapi-modifier-config.js` добавляем правило `patch-endpoint-response-schema`:
+
+```js
+module.exports = {
+    pipeline: [
+        {
+            rule: "patch-endpoint-response-schema",
+            config: {
+                endpointDescriptor: {
+                    path: "/pets",
+                    method: "get"
+                },
+                code: "200",
+                contentType: "application/json",
+                correction: "properties.items.items.properties",
+                patchMethod: "merge",
+                schemaDiff: {
+                    description: { type: "string" }
+                }
+            }
+        }
+    ]
+}
 ```
 
 **После применения правила**, файл `openapi.yaml` выглядит так:
@@ -97,6 +112,109 @@ paths:
   /pets:
     get:
       summary: List all pets
-      tags:
-        - pets
+      responses:
+        200:
+          content:
+            'application/json':
+              schema:
+                type: 'object'
+                properties:
+                  items:
+                    type: 'array'
+                    items:
+                      type: 'object'
+                      properties:
+                        id: { type: 'string' }
+                        name: { type: 'string' }
+                        description: { type: 'string' }
 ```
+
+### 2. Необходимо полностью заменить схему ответа
+
+Практический пример:
+
+**В файле `openapi.yaml`** документация на endpoint выглядит так:
+
+```yaml
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      responses:
+        200:
+          content:
+            'application/json':
+              schema:
+                type: 'object'
+                properties:
+                  items:
+                    type: 'array'
+                    items:
+                      type: 'object'
+                      properties:
+                        id: { type: 'string' }
+                        name: { type: 'string' }
+```
+
+**Нужно полностью заменить схему ответа на новую.**
+
+**В файле конфигурации** `openapi-modifier-config.js` добавляем правило `patch-endpoint-response-schema`:
+
+```js
+module.exports = {
+    pipeline: [
+        {
+            rule: "patch-endpoint-response-schema",
+            config: {
+                endpointDescriptor: {
+                    path: "/pets",
+                    method: "get"
+                },
+                code: "200",
+                contentType: "application/json",
+                patchMethod: "replace",
+                schemaDiff: {
+                    type: "object",
+                    properties: {
+                        data: {
+                            type: "array",
+                            items: {
+                                type: "object",
+                                properties: {
+                                    id: { type: "string" },
+                                    name: { type: "string" },
+                                    description: { type: "string" }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
+```
+
+**После применения правила**, файл `openapi.yaml` выглядит так:
+
+```yaml
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      responses:
+        200:
+          content:
+            'application/json':
+              schema:
+                type: 'object'
+                properties:
+                  data:
+                    type: 'array'
+                    items:
+                      type: 'object'
+                      properties:
+                        id: { type: 'string' }
+                        name: { type: 'string' }
+                        description: { type: 'string' }
+``` 

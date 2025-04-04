@@ -1,93 +1,88 @@
-## patch-endpoint-request-body-schema
+# patch-endpoint-request-body-schema
 
-Патчит сущности через сливание или замену.
+Правило для изменения схемы request body в OpenAPI спецификации. Позволяет модифицировать схему запроса для указанного эндпоинта.
 
-Через присваивание undefined можно удалить поля.
+## Config
 
-Если используете ref, то необходимо сослаться на него!
-
-### Конфигурация
-
-| Параметр |           Описание            |
-| -------- | :---------------------------: |
-| merge    | Изменение происходит слиянием |
-| replace  | Изменение происходит заменой  |
+| Параметр | Описание | Пример | Типизация | Дефолтное |
+|----------|-----------|---------|------------|------------|
+| `endpointDescriptor` | [**обязательный**] Описание эндпоинта | `"/pets"` или `{"path": "/pets", "method": "post"}` | `string \| {path: string, method: string}` | - |
+| `contentType` | Тип контента для модификации | `"application/json"` | `string` | - |
+| `correction` | Путь к полю в схеме для модификации | `"properties.name"` | `string` | - |
+| `patchMethod` | [**обязательный**] Метод патчинга схемы | `"merge"` | `"merge" \| "replace"` | `"merge"` |
+| `schemaDiff` | [**обязательный**] Изменения для применения к схеме | `{"type": "string"}` | `object` | - |
 
 Пример конфигурации:
 
 ```js
-{
-    "merge": {
-        "FilterDTO": {
-            "properties": {
-                "status": {
-                    "type": "string"
+module.exports = {
+    pipeline: [
+        {
+            rule: "patch-endpoint-request-body-schema",
+            config: {
+                endpointDescriptor: "/pets",
+                contentType: "application/json",
+                patchMethod: "merge",
+                schemaDiff: {
+                    type: "object",
+                    properties: {
+                        name: {
+                            type: "string"
+                        }
+                    }
                 }
             }
         }
-    },
-    "replace": {
-        "CounterDTO": {
-            "type": "number"
-        }
-    },
+    ]
 }
 ```
 
-### Пример использования
+## Motivation
 
-**В конфиге** `openapi-modifier-config.js` добавьте правило `patch-schemas`:
+### 1. Необходимость обновления схемы request body для конкретного эндпоинта
 
-```json
-module.exports = {
-  "rules": [
-    {
-      "name": "patch-schemas",
-      "config": {
-        "merge": {
-          "FilterDTO": {
-            "required": [
-              "status"
-            ],
-            "properties": {
-              "status": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "replace": {
-          "CounterDTO": {
-            "type": "number"
-          }
-        }
-      }
-    }
-  ]
-}
-```
+Практический пример:
 
-**До применения правила**, файл `openapi.yaml` выглядит так:
+**В файле `openapi.yaml`** документация на endpoint выглядит так:
 
 ```yaml
-components:
-  schemas:
-    FilterDTO:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-    CounterDTO:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
+paths:
+  /pets:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+```
+
+**Нужно обновить схему, добавив новое поле `age`.**
+
+**В файле конфигурации** `openapi-modifier-config.js` добавляем правило `patch-endpoint-request-body-schema`:
+
+```js
+module.exports = {
+    pipeline: [
+        {
+            rule: "patch-endpoint-request-body-schema",
+            config: {
+                endpointDescriptor: "/pets",
+                contentType: "application/json",
+                patchMethod: "merge",
+                schemaDiff: {
+                    properties: {
+                        age: {
+                            type: "number"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
 ```
 
 **После применения правила**, файл `openapi.yaml` выглядит так:
@@ -95,8 +90,76 @@ components:
 ```yaml
 paths:
   /pets:
-    get:
-      summary: List all pets
-      tags:
-        - pets
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                age:
+                  type: number
 ```
+
+### 2. Необходимость изменения конкретного поля в схеме
+
+Практический пример:
+
+**В файле `openapi.yaml`** документация на endpoint выглядит так:
+
+```yaml
+paths:
+  /pets:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Pet name
+```
+
+**Нужно изменить описание поля `name`.**
+
+**В файле конфигурации** `openapi-modifier-config.js` добавляем правило `patch-endpoint-request-body-schema`:
+
+```js
+module.exports = {
+    pipeline: [
+        {
+            rule: "patch-endpoint-request-body-schema",
+            config: {
+                endpointDescriptor: "/pets",
+                contentType: "application/json",
+                correction: "properties.name",
+                patchMethod: "merge",
+                schemaDiff: {
+                    description: "Name of the pet"
+                }
+            }
+        }
+    ]
+}
+```
+
+**После применения правила**, файл `openapi.yaml` выглядит так:
+
+```yaml
+paths:
+  /pets:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the pet
+``` 

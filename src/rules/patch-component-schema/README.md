@@ -1,102 +1,157 @@
-## patch-component-schema
+# patch-component-schema
 
-Патчит сущности через сливание или замену.
+Позволяет модифицировать схему компонента в OpenAPI спецификации путем применения патча к определенному свойству или всей схеме.
 
-Через присваивание undefined можно удалить поля.
+## Config
 
-Если используете ref, то необходимо сослаться на него!
-
-### Конфигурация
-
-| Параметр |           Описание            |
-| -------- | :---------------------------: |
-| merge    | Изменение происходит слиянием |
-| replace  | Изменение происходит заменой  |
+| Параметр    | Описание                          | Пример                     | Типизация              | Дефолтное |
+| -------- |-----------------------------------|----------------------------|------------------------|-----------|
+| `descriptor`  | [**обязательный**] Описание компонента для модификации | `{"componentName": "Pet", "correction": "properties.name"}` | `ComponentWithCorrectionDescriptorConfig` | - |
+| `patchMethod`  | [**обязательный**] Метод применения патча | `"merge"` | `"merge" \| "replace"` | `"merge"` |
+| `schemaDiff`  | [**обязательный**] Схема для патча | `{"type": "string", "description": "New description"}` | `OpenAPISchemaConfig` | - |
 
 Пример конфигурации:
 
 ```js
-{
-    "merge": {
-        "FilterDTO": {
-            "properties": {
-                "status": {
-                    "type": "string"
-                }
-            }
-        }
-    },
-    "replace": {
-        "CounterDTO": {
-            "type": "number"
-        }
-    },
-}
-```
-
-### Пример использования
-
-**В конфиге** `openapi-modifier-config.js` добавьте правило `patch-schemas`:
-
-```json
 module.exports = {
-  "rules": [
-    {
-      "name": "patch-schemas",
-      "config": {
-        "merge": {
-          "FilterDTO": {
-            "required": [
-              "status"
-            ],
-            "properties": {
-              "status": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "replace": {
-          "CounterDTO": {
-            "type": "number"
-          }
+    pipeline: [
+        {
+            rule: "patch-component-schema",
+            config: {
+                descriptor: {
+                    componentName: "Pet",
+                    correction: "properties.name"
+                },
+                patchMethod: "merge",
+                schemaDiff: {
+                    type: "string",
+                    description: "New description"
+                }
+            },
         }
-      }
-    }
-  ]
+    ]
 }
 ```
 
-**До применения правила**, файл `openapi.yaml` выглядит так:
+## Motivation
+
+<a name="custom_anchor_motivation_1"></a>
+### 1. Необходимо обновить описание конкретного свойства в схеме компонента
+
+Практический пример:
+
+**В файле `openapi.yaml`** схема компонента выглядит так:
 
 ```yaml
 components:
   schemas:
-    FilterDTO:
+    Pet:
       type: object
-      required:
-        - id
-        - name
       properties:
-        id:
-          type: integer
-          format: int64
         name:
           type: string
-    CounterDTO:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
+          description: Old description
+```
+
+**Нужно обновить описание свойства `name`.**
+
+**В файле конфигурации** `openapi-modifier-config.js` добавляем правило `patch-component-schema`:
+
+```js
+module.exports = {
+    pipeline: [
+        {
+            rule: "patch-component-schema",
+            config: {
+                descriptor: {
+                    componentName: "Pet",
+                    correction: "properties.name"
+                },
+                patchMethod: "merge",
+                schemaDiff: {
+                    description: "New description"
+                }
+            },
+        }
+    ]
+}
 ```
 
 **После применения правила**, файл `openapi.yaml` выглядит так:
 
 ```yaml
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      tags:
-        - pets
+components:
+  schemas:
+    Pet:
+      type: object
+      properties:
+        name:
+          type: string
+          description: New description
 ```
+
+<a name="custom_anchor_motivation_2"></a>
+### 2. Необходимо полностью заменить схему компонента
+
+Практический пример:
+
+**В файле `openapi.yaml`** схема компонента выглядит так:
+
+```yaml
+components:
+  schemas:
+    Pet:
+      type: object
+      properties:
+        name:
+          type: string
+```
+
+**Нужно полностью заменить схему компонента.**
+
+**В файле конфигурации** `openapi-modifier-config.js` добавляем правило `patch-component-schema`:
+
+```js
+module.exports = {
+    pipeline: [
+        {
+            rule: "patch-component-schema",
+            config: {
+                descriptor: {
+                    componentName: "Pet"
+                },
+                patchMethod: "replace",
+                schemaDiff: {
+                    type: "object",
+                    properties: {
+                        name: {
+                            type: "string",
+                            description: "Pet name"
+                        },
+                        age: {
+                            type: "integer",
+                            description: "Pet age"
+                        }
+                    }
+                }
+            },
+        }
+    ]
+}
+```
+
+**После применения правила**, файл `openapi.yaml` выглядит так:
+
+```yaml
+components:
+  schemas:
+    Pet:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Pet name
+        age:
+          type: integer
+          description: Pet age
+``` 

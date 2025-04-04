@@ -1,93 +1,94 @@
-## patch-endpoint-schema
+# patch-endpoint-schema
 
-Патчит сущности через сливание или замену.
+Правило для патчинга схемы эндпоинта в OpenAPI спецификации. Позволяет модифицировать схему конкретного эндпоинта с помощью различных методов патчинга.
 
-Через присваивание undefined можно удалить поля.
+## Config
 
-Если используете ref, то необходимо сослаться на него!
-
-### Конфигурация
-
-| Параметр |           Описание            |
-| -------- | :---------------------------: |
-| merge    | Изменение происходит слиянием |
-| replace  | Изменение происходит заменой  |
+| Параметр | Описание | Пример | Типизация | Дефолтное |
+|----------|-----------|---------|------------|-----------|
+| `endpointDescriptor` | [**обязательный**] Описание эндпоинта для патчинга | `{ path: "/pets", method: "get" }` | `{ path: string, method: string }` | - |
+| `endpointDescriptorCorrection` | Путь к конкретному полю в схеме эндпоинта для патчинга | `"responses.200.content.application/json.schema"` | `string` | - |
+| `patchMethod` | [**обязательный**] Метод патчинга | `"merge"` | `"merge" \| "replace" \| "remove"` | - |
+| `schemaDiff` | [**обязательный**] Схема для патчинга | `{ type: "object", properties: { ... } }` | `object` | - |
 
 Пример конфигурации:
 
 ```js
-{
-    "merge": {
-        "FilterDTO": {
-            "properties": {
-                "status": {
-                    "type": "string"
+module.exports = {
+    pipeline: [
+        {
+            rule: "patch-endpoint-schema",
+            config: {
+                endpointDescriptor: {
+                    path: "/pets",
+                    method: "get"
+                },
+                patchMethod: "merge",
+                schemaDiff: {
+                    type: "object",
+                    properties: {
+                        name: {
+                            type: "string"
+                        }
+                    }
                 }
             }
         }
-    },
-    "replace": {
-        "CounterDTO": {
-            "type": "number"
-        }
-    },
+    ]
 }
 ```
 
-### Пример использования
+## Motivation
 
-**В конфиге** `openapi-modifier-config.js` добавьте правило `patch-schemas`:
+<a name="custom_anchor_motivation_1"></a>
+### 1. Необходимо добавить новое поле в схему ответа эндпоинта
 
-```json
-module.exports = {
-  "rules": [
-    {
-      "name": "patch-schemas",
-      "config": {
-        "merge": {
-          "FilterDTO": {
-            "required": [
-              "status"
-            ],
-            "properties": {
-              "status": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "replace": {
-          "CounterDTO": {
-            "type": "number"
-          }
-        }
-      }
-    }
-  ]
-}
-```
+Практический пример:
 
-**До применения правила**, файл `openapi.yaml` выглядит так:
+**В файле `openapi.yaml`** документация на endpoint выглядит так:
 
 ```yaml
-components:
-  schemas:
-    FilterDTO:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-    CounterDTO:
-      type: array
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/Pet'
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      responses:
+        200:
+          content:
+            'application/json':
+              schema:
+                type: 'object'
+                properties:
+                  id:
+                    type: 'integer'
+```
+
+**Нужно добавить поле `name` в схему ответа.**
+
+**В файле конфигурации** `openapi-modifier-config.js` добавляем правило `patch-endpoint-schema`:
+
+```js
+module.exports = {
+    pipeline: [
+        {
+            rule: "patch-endpoint-schema",
+            config: {
+                endpointDescriptor: {
+                    path: "/pets",
+                    method: "get"
+                },
+                patchMethod: "merge",
+                schemaDiff: {
+                    properties: {
+                        name: {
+                            type: "string"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
 ```
 
 **После применения правила**, файл `openapi.yaml` выглядит так:
@@ -97,6 +98,84 @@ paths:
   /pets:
     get:
       summary: List all pets
-      tags:
-        - pets
+      responses:
+        200:
+          content:
+            'application/json':
+              schema:
+                type: 'object'
+                properties:
+                  id:
+                    type: 'integer'
+                  name:
+                    type: 'string'
 ```
+
+<a name="custom_anchor_motivation_2"></a>
+### 2. Необходимо заменить схему конкретного поля в ответе
+
+Практический пример:
+
+**В файле `openapi.yaml`** документация на endpoint выглядит так:
+
+```yaml
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      responses:
+        200:
+          content:
+            'application/json':
+              schema:
+                type: 'object'
+                properties:
+                  status:
+                    type: 'string'
+                    enum: ['active', 'inactive']
+```
+
+**Нужно изменить схему поля `status`.**
+
+**В файле конфигурации** `openapi-modifier-config.js` добавляем правило `patch-endpoint-schema`:
+
+```js
+module.exports = {
+    pipeline: [
+        {
+            rule: "patch-endpoint-schema",
+            config: {
+                endpointDescriptor: {
+                    path: "/pets",
+                    method: "get"
+                },
+                endpointDescriptorCorrection: "responses.200.content.application/json.schema.properties.status",
+                patchMethod: "replace",
+                schemaDiff: {
+                    type: "string",
+                    enum: ["active", "inactive", "pending"]
+                }
+            }
+        }
+    ]
+}
+```
+
+**После применения правила**, файл `openapi.yaml` выглядит так:
+
+```yaml
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      responses:
+        200:
+          content:
+            'application/json':
+              schema:
+                type: 'object'
+                properties:
+                  status:
+                    type: 'string'
+                    enum: ['active', 'inactive', 'pending']
+``` 
