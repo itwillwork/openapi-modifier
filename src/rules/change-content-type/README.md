@@ -1,13 +1,12 @@
 # change-content-type
 
-Изменяет content-type для request и response в соответствии со словарем
+Изменяет типы контента (content-type) в OpenAPI спецификации в соответствии со словарем замен
 
 ## Config
 
 | Параметр    | Описание                          | Пример                     | Типизация              | Дефолтное |
 | -------- |-----------------------------------|----------------------------|------------------------|-----------|
-| `map`  | [**обязательный**] Словарь замены | `{"*/*": "application/json"}` | `Record<string, string>` | `{}`        |
-
+| `map`  | [**обязательный**] Словарь замены типов контента | `{"application/xml": "application/json"}` | `Record<string, string>` | `{}`        |
 
 Пример конфигурации:
 
@@ -19,7 +18,7 @@ module.exports = {
             rule: "change-content-type",
             config: {
                 map: {
-                    "*/*": "application/json"
+                    "application/xml": "application/json"
                 }
             },
         }
@@ -28,11 +27,10 @@ module.exports = {
 }
 ```
 
-
 ## Motivation
 
 <a name="custom_anchor_motivation_1"></a>
-### 1. Необходимо заменить/доуточнить content-type `*/*` на что-то более конкртеное для кодегерации типизации
+### 1. Необходимо изменить тип контента API для соответствия новым требованиям
 
 Практический пример:
 
@@ -46,11 +44,12 @@ paths:
       responses:
         200:
           content:
-            '*/*':
+            'application/xml':
               schema:
                 type: 'object'
 ```
-**Нужно заменить `*/*` на `application/json`.**
+
+**Нужно заменить `application/xml` на `application/json`.**
 
 **В файле конфигурации** `openapi-modifier-config.js` добавляем правило `change-content-type`:
 
@@ -61,7 +60,7 @@ module.exports = {
             rule: "change-content-type",
             config: {
                 map: {
-                    "*/*": "application/json"
+                    "application/xml": "application/json"
                 }
             },
         }
@@ -85,55 +84,38 @@ paths:
 ```
 
 <a name="custom_anchor_motivation_2"></a>
-### 2. Допущена опечатка в content-type
+### 2. Обработка всех мест использования content-type
 
-Практический пример:
+Правило обрабатывает все места в OpenAPI спецификации, где используется content-type:
 
-**В файле `openapi.yaml`** документация на endpoint выглядит так:
+1. В компонентах requestBodies
+2. В компонентах responses
+3. В операциях (paths) в:
+   - requestBody
+   - responses
 
-```yaml
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      responses:
-        200:
-          content:
-            'json':
-              schema:
-                type: 'object'
-```
-**Нужно заменить `json` на `application/json`.**
-
-**В файле конфигурации** `openapi-modifier-config.js` добавляем правило `change-content-type`:
-
-```js
-module.exports = {
-    pipeline: [
-        {
-            rule: "change-content-type",
-            config: {
-                map: {
-                    "json": "application/json"
-                }
-            },
-        }
-    ]
-}
-```
-
-**После применения правила**, файл `openapi.yaml` выглядит так:
+Пример обработки компонента requestBody:
 
 ```yaml
-paths:
-  /pets:
-    get:
-      summary: List all pets
-      responses:
-        200:
-          content:
-            'application/json':
-              schema:
-                type: 'object'
+components:
+  requestBodies:
+    PetRequestBody:
+      content:
+        'application/xml':
+          schema:
+            type: 'object'
 ```
 
+После применения правила с конфигурацией `{"application/xml": "application/json"}`:
+
+```yaml
+components:
+  requestBodies:
+    PetRequestBody:
+      content:
+        'application/json':
+          schema:
+            type: 'object'
+```
+
+Правило также ведет учет использования типов контента и предупреждает, если какой-то тип из конфигурации не был использован в спецификации. 
