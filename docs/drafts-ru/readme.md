@@ -233,14 +233,14 @@ module.exports = {
 
 ## Ссылки на примеры использования
 
-- [Проект с простым использованием пакета](./examples/example-cli-generate-api-types)
-- [Проект с простым использованием пакета](./examples/example-cli-openapi-yaml-to-json)
-- [Проект с простым использованием пакета](./examples/example-cli-simple-npx)
-- [Проект с простым использованием пакета](./examples/example-cli-openapi-json)
-- [Проект с простым использованием пакета](./examples/example-cli-openapi-json)
-- [Проект с простым использованием пакета](./examples/example-cli-simple-generate-api-types)
-- [Проект с простым использованием пакета](./examples/example-package-openapi-yaml)
-- [Проект с простым использованием пакета](./examples/example-cli-simple-json-config)
+- [Проект с простым использованием пакета #1](./examples/example-cli-generate-api-types)
+- [Проект с простым использованием пакета #2](./examples/example-cli-openapi-yaml-to-json)
+- [Проект с простым использованием пакета #3](./examples/example-cli-simple-npx)
+- [Проект с простым использованием пакета #4](./examples/example-cli-openapi-json)
+- [Проект с простым использованием пакета #5](./examples/example-cli-openapi-json)
+- [Проект с простым использованием пакета #6](./examples/example-cli-simple-generate-api-types)
+- [Проект с простым использованием пакета #7](./examples/example-package-openapi-yaml)
+- [Проект с простым использованием пакета #8](./examples/example-cli-simple-json-config)
 
 ## Дополнительные полезные ссылки
 
