@@ -11,6 +11,102 @@
 > [!IMPORTANT]  
 > Поддерживает OpenAPI 3.1, 3.0. Мы не проверяли поддержку OpenAPI 2, так как формат является устаревшим и рекомендуем мигрировать вашу документацию на OpenAPI 3.0.
 
+## Мотивация и примеры использования
+
+OpenAPI описывающий бекендное API далеко не всегда идеальное: содержит ошибки, неточности или какие-то особенности ломают другие инструменты, например, кодогенерацию или генерацию типов.
+
+Хранить информацию об изменения в декларативном формате, чтобы был понятент контекст и актуальность каждого изменения, особенно полезно в крупных коммандах.
+
+<details>
+  <summary><b>Другие случаи применения</b></summary>
+
+### Другие случаи применения:
+
+- Бекендер просит проверить используется ли поле в какой-то сущности;
+- Бекендер просит проверить используется ли параметр в какой-то ручке; 
+- Бекендер создает задачу перестать пользоваться endpoint'ом;
+- Бекендер написал новое API в разработке, но его нет в документации;
+- Бекендер просит больше не использовать какой-то параметр в endpoint'е;
+- Не валидное OpenAPI (например, использовали не существующий тип int);
+- Нужно оставить знания по модификации (коллеге важно знать почему какое-то поле заблокировано);
+- Нужно наблюдать за изменениями API и вовремя корректировать конфиг (убрали использование ручки);
+- Убирать deprecated поля из openapi (чтобы вовремя замечать возможности api которые будут удалены);
+
+</details>
+
+<details>
+  <summary><b>Демонстрация использования</b></summary>
+
+<a name="custom_anchor_demo"></a>
+
+### Демонстрация использования
+
+Например имеем [входной файл спецификации/документации api](./examples/example-cli-generate-api-types/input/openapi.yaml) от бекенд разработчиков. Например, [скачен через curl cli из github](./examples/example-cli-generate-api-types/package.json#L11).
+
+Пишем [файл конфигурации](./examples/example-cli-generate-api-types/openapi-modifier.config.ts), описывающий все что нужно поменять в исходной спецификации/документации с пояснительными комментариями:
+
+```ts
+const config: ConfigT = {
+    pipeline: [
+        // JIRA-10207 - new feature API for epic JIRA-232
+        {
+            rule: 'merge-openapi-spec',
+            config: {
+                path: 'input/feature-openapi-JIRA-232.yaml',
+            },
+        },
+
+        // ...
+
+        // JIRA-10212 - wrong docs, waiting JIRABACKEND-8752
+        {
+            rule: 'patch-schemas',
+            config: [
+                {
+                    descriptor: {
+                        type: 'component-schema',
+                        componentName: 'Pet',
+                    },
+                    patchMethod: 'merge',
+                    schemaDiff: {
+                        properties: {
+                            id: {
+                                type: 'string',
+                                format: 'uuid',
+                            },
+                        },
+                    },
+                },
+            ],
+        },
+
+        // ...
+
+        // JIRA-11236 - removed deprecated endpoint, waiting JIRABACKEND-3641
+        {
+            rule: 'filter-endpoints',
+            config: {
+                disabled: [
+                    {
+                        path: '/v1/pets/{petId}',
+                        method: 'delete',
+                    },
+                ],
+            },
+        },
+
+        // ...
+}
+```
+
+Далее [при помощи этого файла конфигурации и cli openapi-modifier](./examples/example-cli-generate-api-types/package.json#L7), изменяем исходный файл спецификации/документации и получается [модифицированная спецификация/документация](./examples/example-cli-generate-api-types/output/openapi.yaml).
+
+Далее при помощи, к примеру cli [dtsgenerator](https://github.com/horiuchi/dtsgenerator), генерируем из модифицированной спецификации/документаци [файл типизации для api](./examples/example-cli-generate-api-types/output/generated-api-types.d.ts), которую уже используем в коде проекта.
+
+[Полный код примера](./examples/example-cli-generate-api-types)
+
+</details>
+
 ## Установка
 
 ```bash
@@ -134,6 +230,17 @@ module.exports = {
 ## FAQ
 
 - **Чем опасны модификации по ссылкам $ref?** Потому что значит что $ref ссылается на общую часть схемы, и ее модификация, возможно, приведет к неявному изменению в другом месте спецификации, где переиспользуется $ref, и такую багу будет крайне сложно отловить.
+
+## Ссылки на примеры использования
+
+- [Проект с простым использованием пакета](./examples/example-cli-generate-api-types)
+- [Проект с простым использованием пакета](./examples/example-cli-openapi-yaml-to-json)
+- [Проект с простым использованием пакета](./examples/example-cli-simple-npx)
+- [Проект с простым использованием пакета](./examples/example-cli-openapi-json)
+- [Проект с простым использованием пакета](./examples/example-cli-openapi-json)
+- [Проект с простым использованием пакета](./examples/example-cli-simple-generate-api-types)
+- [Проект с простым использованием пакета](./examples/example-package-openapi-yaml)
+- [Проект с простым использованием пакета](./examples/example-cli-simple-json-config)
 
 ## Дополнительные полезные ссылки
 
