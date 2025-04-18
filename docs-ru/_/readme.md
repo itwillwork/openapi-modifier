@@ -19,9 +19,23 @@ npm install --save-dev openapi-modifier
 
 ## Использование
 
+<a name="custom_anchor_cli_npx_usage"></a>
+
+### CLI через NPX
+
+```shell
+npx openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=openapi-modifier.config.js
+```
+
+[Пример использования как CLI через NPX](./examples/example-cli-simple-npx/package.json#L6)
+
+{{{cliParams}}}
+
+{{{cliConfigWarning}}}
+
 <a name="custom_anchor_cli_usage"></a>
 
-### Как CLI
+### CLI
 
 ```shell
 npm i --save-dev openapi-modifier
@@ -30,20 +44,6 @@ openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=
 ```
 
 [Пример использования как CLI](./examples/example-cli-openapi-yaml/package.json#L7)
-
-{{{cliParams}}}
-
-{{{cliConfigWarning}}}
-
-<a name="custom_anchor_cli_npx_usage"></a>
-
-### Как CLI через NPX
-
-```shell
-npx openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=openapi-modifier.config.js
-```
-
-[Пример использования как CLI через NPX](./examples/example-cli-simple-npx/package.json#L6)
 
 {{{cliParams}}}
 
