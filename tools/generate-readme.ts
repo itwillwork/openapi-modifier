@@ -5,6 +5,7 @@ const ruleTypes: Array<string> = [];
 
 const IGNORE_ENTIRY_NAME = [
     'common',
+    '.DS_Store',
     'generated-types.ts',
     'patch-endpoint-request-body-schema', // TODO remove
     'change-endpoints-basepath', // TODO remove
@@ -51,6 +52,8 @@ LANGS.forEach((lang) => {
         if (IGNORE_ENTIRY_NAME.includes(entityName)) {
             return;
         }
+
+        console.log(`Generate entity name ${entityName}`);
 
         const configTemplate = fs.readFileSync(`src/rules/${entityName}/docs/_config.md`).toString();
         const descriptionTemplate = fs.readFileSync(`src/rules/${entityName}/docs/_description.md`).toString();
