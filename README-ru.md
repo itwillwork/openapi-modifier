@@ -294,16 +294,24 @@ module.exports = {
 
 - **Чем опасны модификации по ссылкам $ref?** Потому что значит что $ref ссылается на общую часть схемы, и ее модификация, возможно, приведет к неявному изменению в другом месте спецификации, где переиспользуется $ref, и такую багу будет крайне сложно отловить.
 
-## Ссылки на примеры использования
+## Примеры использования
 
-- [Проект с простым использованием пакета #1](./examples/example-cli-generate-api-types)
-- [Проект с простым использованием пакета #2](./examples/example-cli-openapi-yaml-to-json)
-- [Проект с простым использованием пакета #3](./examples/example-cli-simple-npx)
-- [Проект с простым использованием пакета #4](./examples/example-cli-openapi-json)
-- [Проект с простым использованием пакета #5](./examples/example-cli-openapi-json)
-- [Проект с простым использованием пакета #6](./examples/example-cli-simple-generate-api-types)
-- [Проект с простым использованием пакета #7](./examples/example-package-openapi-yaml)
-- [Проект с простым использованием пакета #8](./examples/example-cli-simple-json-config)
+В директории `examples` вы можете найти различные примеры использования пакета:
+
+- [example-cli-generate-api-types](./examples/example-cli-generate-api-types) - Пример генерации типов API с использованием CLI
+- [example-cli-openapi-json](./examples/example-cli-openapi-json) - Пример работы с JSON форматом OpenAPI через CLI
+- [example-cli-openapi-yaml](./examples/example-cli-openapi-yaml) - Пример работы с YAML форматом OpenAPI через CLI
+- [example-cli-openapi-yaml-to-json](./examples/example-cli-openapi-yaml-to-json) - Пример конвертации YAML в JSON формат
+- [example-cli-simple-generate-api-types](./examples/example-cli-simple-generate-api-types) - Простой пример генерации типов API
+- [example-cli-simple-json-config](./examples/example-cli-simple-json-config) - Пример использования JSON конфигурации
+- [example-cli-simple-npx](./examples/example-cli-simple-npx) - Пример использования через npx
+- [example-package-openapi-yaml](./examples/example-package-openapi-yaml) - Пример программного использования пакета
+
+Каждый пример содержит:
+- Входные файлы OpenAPI спецификации
+- Конфигурационные файлы
+- Скрипты для запуска
+- Результирующие файлы
 
 ## Дополнительные полезные ссылки
 
