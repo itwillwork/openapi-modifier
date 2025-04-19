@@ -235,7 +235,8 @@ module.exports = {
 ## Доступные правила
 
 | Правило | Краткое описание |
-| -- | -- || [change-content-type](./src/rules/{{{name}}}/README.md) | Правило для изменения content-type для request и response в соответствии со словарем
+|------------------------------------------------------------------| ---- |
+| [change-content-type](./src/rules/{{{name}}}/README.md) | Правило для изменения content-type для request и response в соответствии со словарем
  |
 
 <a name="custom_anchor_rules_description"></a>

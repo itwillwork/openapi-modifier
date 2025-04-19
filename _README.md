@@ -37,6 +37,6 @@ module.exports = {
 
 # Table
 
-| Правило | Краткое описание |
-| -- | -- |
+| Правило                                                          | Краткое описание |
+|------------------------------------------------------------------| ---- |
 | [change-content-type](./src/rules/change-content-type/README.md) | Изменяет content-type для request и response в соответствии со словарем |
