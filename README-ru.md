@@ -156,9 +156,20 @@ openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=
 
 [Пример использования как CLI](./examples/example-cli-openapi-yaml/package.json#L7)
 
-{{{cliParams}}}
+CLI параметры:
 
-{{{cliConfigWarning}}}
+| Опция    | Описание                                                                                                 | Пример                       | Дефолтное                                    |
+| -------- | -------------------------------------------------------------------------------------------------------- | ---------------------------- |----------------------------------------------|
+| `input`  | [**обязательный**] входной файл, специфиакция/документация в формате openapi                             | `input/openapi.yml`          |                                              |
+| `output` | [**обязательный**] выходной файл, специфиакция/документация в формате opeanpi                            | `output/openapi.yml`         |                                              |
+| `config` | путь до файла конфигурации. Детальное описание конфигурации [см. ниже](#custom_anchor_config_parameters) | `openapi-modifier.config.js` | `openapi-modifier.config.(js\ts\json\yaml\yml)` |
+
+
+Подробнее про файл конфигурации [см. ниже](#custom_anchor_config_parameters)
+
+Если путь до конфигурации не указан, конфигурации по-умолчанию берется из файла `openapi-modifier.config.js` относительно директории запуска.
+
+Можно использовать конфиги в след. расширениях: `.ts`, `.js`, `.yaml`, `.yml`, `.json`.
 
 <a name="custom_anchor_package_usage"></a>
 
@@ -236,7 +247,7 @@ module.exports = {
 
 | Правило | Краткое описание |
 |------------------------------------------------------------------| ---- |
-| [change-content-type](./src/rules/{{{name}}}/README.md) | Правило для изменения content-type для request и response в соответствии со словарем
+| [change-content-type](./src/rules/change-content-type/README.md) | Правило для изменения content-type для request и response в соответствии со словарем
  |
 
 <a name="custom_anchor_rules_description"></a>
@@ -245,7 +256,7 @@ module.exports = {
 
 <a name="custom_anchor_rule_change-content-type"></a>
 
-### {{{name}}}
+### change-content-type
 
 Правило для изменения content-type для request и response в соответствии со словарем
 
@@ -277,7 +288,7 @@ module.exports = {
 ```
 
 
-[Подрбонее про правило {{{name}}}](./src/rules/{{{name}}}/README-ru.md)
+[Подрбонее про правило change-content-type](./src/rules/change-content-type/README-ru.md)
 
 ## FAQ
 

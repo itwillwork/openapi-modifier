@@ -29,6 +29,10 @@ const LANGS = [
     // 'zh'
 ];
 
+const createPlaceholderRegExp = (placeholder: string) => {
+    return new RegExp(`{{{${placeholder}}}}`, "g");
+}
+
 const LANG_SWITCHER_MD = '[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)';
 
 LANGS.forEach((lang) => {
@@ -46,12 +50,12 @@ LANGS.forEach((lang) => {
         const motivationReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/_motivation.md`).toString();
 
         const ruleReadme = ruleTemplate
-            .replace('{{{langSwitcher}}}', LANG_SWITCHER_MD)
-            .replace('{{{name}}}', entityName)
-            .replace('{{{config}}}', configReadmeContent)
-            .replace('{{{description}}}', descriptionReadmeContent)
-            .replace('{{{motivation}}}', motivationReadmeContent)
-            .replace('{{{langPostfix}}}', langPostfix);
+            .replace(createPlaceholderRegExp("langSwitcher"), LANG_SWITCHER_MD)
+            .replace(createPlaceholderRegExp("name"), entityName)
+            .replace(createPlaceholderRegExp("config"), configReadmeContent)
+            .replace(createPlaceholderRegExp("description"), descriptionReadmeContent)
+            .replace(createPlaceholderRegExp("motivation"), motivationReadmeContent)
+            .replace(createPlaceholderRegExp("langPostfix"), langPostfix);
 
         fs.writeFileSync(`src/rules/${entityName}/README${langPostfix}.md`, ruleReadme);
     });

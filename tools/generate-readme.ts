@@ -30,6 +30,10 @@ const LANGS = [
     // 'zh'
 ];
 
+const createPlaceholderRegExp = (placeholder: string) => {
+    return new RegExp(`{{{${placeholder}}}}`, "g");
+}
+
 const LANG_SWITCHER_MD = '[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)';
 
 const RULE_TABLE_ROW_TEMPLATE = `| [{{{name}}}](./src/rules/{{{name}}}/README.md) | {{{description}}} |`
@@ -59,26 +63,26 @@ LANGS.forEach((lang) => {
         const descriptionTemplate = fs.readFileSync(`src/rules/${entityName}/docs/_description.md`).toString();
 
         const ruleListItem = ruleListItemTemplate
-            .replace('{{{name}}}', entityName)
-            .replace('{{{config}}}', configTemplate)
-            .replace('{{{description}}}', descriptionTemplate);
+            .replace(createPlaceholderRegExp("name"), entityName)
+            .replace(createPlaceholderRegExp("config"), configTemplate)
+            .replace(createPlaceholderRegExp("description"), descriptionTemplate);
 
         const ruleTableRow = RULE_TABLE_ROW_TEMPLATE
-            .replace('{{{name}}}', entityName)
-            .replace('{{{config}}}', configTemplate)
-            .replace('{{{description}}}', descriptionTemplate)
+            .replace(createPlaceholderRegExp("name"), entityName)
+            .replace(createPlaceholderRegExp("config"), configTemplate)
+            .replace(createPlaceholderRegExp("description"), descriptionTemplate)
 
         ruleTableReadme += ruleTableRow;
         ruleListReadme += ruleListItem;
     });
 
     const readme =  readmeTemplate
-        .replace('{{{langSwitcher}}}', LANG_SWITCHER_MD)
-        .replace('{{{cliParams}}}', cliParamsTemplate)
-        .replace('{{{cliConfigWarning}}}', cliConfigWarningTemplate)
-        .replace('{{{ruleTable}}}', ruleTableReadme)
-        .replace('{{{rulesDescription}}}', ruleListReadme)
-        .replace('{{{langPostfix}}}', langPostfix)
+        .replace(createPlaceholderRegExp("langSwitcher"), LANG_SWITCHER_MD)
+        .replace(createPlaceholderRegExp("cliParams"), cliParamsTemplate)
+        .replace(createPlaceholderRegExp("cliConfigWarning"), cliConfigWarningTemplate)
+        .replace(createPlaceholderRegExp("ruleTable"), ruleTableReadme)
+        .replace(createPlaceholderRegExp("rulesDescription"), ruleListReadme)
+        .replace(createPlaceholderRegExp("langPostfix"), langPostfix)
 
     fs.writeFileSync(`README${langPostfix}.md`, readme);
 });
