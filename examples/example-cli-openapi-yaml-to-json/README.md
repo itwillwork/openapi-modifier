@@ -1,3 +1,5 @@
+[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)
+
 # Example of Converting OpenAPI from YAML to JSON
 
 This example demonstrates using `openapi-modifier` to convert OpenAPI specification from YAML to JSON format while applying modification rules.

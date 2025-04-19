@@ -1,3 +1,5 @@
+[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)
+
 # 使用简单 JSON 配置的 openapi-modifier 示例
 
 本示例演示如何使用 JSON 配置的 openapi-modifier 来修改 OpenAPI 规范。

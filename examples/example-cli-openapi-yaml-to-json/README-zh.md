@@ -1,3 +1,5 @@
+[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)
+
 # 将 OpenAPI 从 YAML 转换为 JSON 的示例
 
 本示例演示如何使用 `openapi-modifier` 在应用修改规则的同时将 OpenAPI 规范从 YAML 格式转换为 JSON 格式。

@@ -1,3 +1,5 @@
+[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)
+
 # 通过 NPX 使用 openapi-modifier 的简单示例
 
 本示例演示如何通过 NPX 基本使用 openapi-modifier 来修改 OpenAPI 规范。

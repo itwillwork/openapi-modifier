@@ -1,3 +1,5 @@
+[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)
+
 # Example of Using openapi-modifier for API Type Generation
 
 This example demonstrates using `openapi-modifier` to modify OpenAPI specification and subsequently generate TypeScript types.

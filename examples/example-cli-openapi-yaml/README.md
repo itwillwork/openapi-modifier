@@ -1,3 +1,5 @@
+[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)
+
 # Example of Using openapi-modifier with YAML File
 
 This example demonstrates using openapi-modifier to modify OpenAPI specification in YAML format.

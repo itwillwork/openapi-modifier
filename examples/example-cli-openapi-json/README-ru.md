@@ -1,3 +1,5 @@
+[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)
+
 # Пример использования openapi-modifier с JSON файлом
 
 Этот пример демонстрирует базовое использование openapi-modifier для модификации OpenAPI спецификации в формате JSON.

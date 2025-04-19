@@ -1,3 +1,5 @@
+[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)
+
 # 使用 openapi-modifier 生成 API 类型的示例
 
 本示例演示如何使用 `openapi-modifier` 修改 OpenAPI 规范并生成 TypeScript 类型。
