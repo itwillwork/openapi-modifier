@@ -23,34 +23,36 @@ const IGNORE_ENTIRY_NAME = [
     'remove-unused-components', // TODO remove
 ];
 
-const RULE_README_TEMPLATE = `# {{{name}}}
+const LANGS = [
+    'ru',
+    // 'en',
+    // 'zh'
+];
 
-{{{description}}}
+const LANG_SWITCHER_MD = '[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)';
 
-## Config
+LANGS.forEach((lang) => {
+    const langPostfix = lang === "en" ? '' : `-${lang}`;
 
-{{{config}}}
+    const ruleTemplate = fs.readFileSync(`docs/drafts-${lang}/rule-details.md`).toString();
 
-## Motivation
+    fs.readdirSync('src/rules').forEach((entityName, index) => {
+        if (IGNORE_ENTIRY_NAME.includes(entityName)) {
+            return;
+        }
 
-{{{motivation}}}
-`
+        const configReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/_config.md`).toString();
+        const descriptionReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/_description.md`).toString();
+        const motivationReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/_motivation.md`).toString();
 
-fs.readdirSync('src/rules').forEach((entityName, index) => {
-    if (IGNORE_ENTIRY_NAME.includes(entityName)) {
-        return;
-    }
+        const ruleReadme = ruleTemplate
+            .replace('{{{langSwitcher}}}', LANG_SWITCHER_MD)
+            .replace('{{{name}}}', entityName)
+            .replace('{{{config}}}', configReadmeContent)
+            .replace('{{{description}}}', descriptionReadmeContent)
+            .replace('{{{motivation}}}', motivationReadmeContent)
+            .replace('{{{langPostfix}}}', langPostfix);
 
-    const configReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/_config.md`).toString();
-    const descriptionReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/_description.md`).toString();
-    const motivationReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/_motivation.md`).toString();
-
-    const ruleReadme = RULE_README_TEMPLATE
-        .replace('{{{name}}}', entityName)
-        .replace('{{{config}}}', configReadmeContent)
-        .replace('{{{description}}}', descriptionReadmeContent)
-        .replace('{{{motivation}}}', motivationReadmeContent);
-
-    fs.writeFileSync(`src/rules/${entityName}/README.md`, ruleReadme);
+        fs.writeFileSync(`src/rules/${entityName}/README${langPostfix}.md`, ruleReadme);
+    });
 });
-

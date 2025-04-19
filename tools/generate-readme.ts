@@ -23,54 +23,65 @@ const IGNORE_ENTIRY_NAME = [
     'remove-unused-components', // TODO remove
 ];
 
-const RULE_LIST_ITEM_TEMPLATE = `<a name="custom_anchor_rule_{{{name}}}"></a>
-### {{{name}}}
+const LANGS = [
+    'ru',
+    // 'en',
+    // 'zh'
+];
 
-{{{description}}}
-
-#### Config
-
-{{{config}}}
-
-[Подрбонее про правило {{{name}}}](./src/rules/{{{name}}}/README.md)
-`
+const LANG_SWITCHER_MD = '[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)';
 
 const RULE_TABLE_ROW_TEMPLATE = `| [{{{name}}}](./src/rules/{{{name}}}/README.md) | {{{description}}} |`
 
-let ruleTableReadme = `
-| Правило | Краткое описание |
-| -- | -- |
-`;
-let ruleListReadme = '';
+LANGS.forEach((lang) => {
+    const langPostfix = lang === "en" ? '' : `-${lang}`;
 
-fs.readdirSync('src/rules').forEach((entityName, index) => {
-    if (IGNORE_ENTIRY_NAME.includes(entityName)) {
-        return;
-    }
+    const readmeTemplate = fs.readFileSync(`docs/drafts-${lang}/readme.md`).toString();
 
-    const configReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/_config.md`).toString();
-    const descriptionReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/_description.md`).toString();
+    const cliConfigWarningTemplate = fs.readFileSync(`docs/drafts-${lang}/sections/cli-config-warning.md`).toString();
+    const cliParamsTemplate = fs.readFileSync(`docs/drafts-${lang}/sections/cli-params.md`).toString();
 
-    const ruleListItem = RULE_LIST_ITEM_TEMPLATE
-        .replace(/\{\{\{name\}\}\}/g, entityName)
-        .replace('{{{config}}}', configReadmeContent)
-        .replace('{{{description}}}', descriptionReadmeContent);
+    const ruleListItemTemplate = fs.readFileSync(`docs/drafts-${lang}/sections/rule-short-details.md`).toString();
+    const ruleTableHeader =  fs.readFileSync(`docs/drafts-${lang}/sections/rule-table-head.md`).toString();
 
-    const ruleTableRow = RULE_TABLE_ROW_TEMPLATE
-        .replace(/\{\{\{name\}\}\}/g, entityName)
-        .replace('{{{config}}}', configReadmeContent)
-        .replace('{{{description}}}', descriptionReadmeContent)
+    let ruleTableReadme = ruleTableHeader;
+    let ruleListReadme = '';
 
-    ruleTableReadme += ruleTableRow;
-    ruleListReadme += ruleListItem;
+    fs.readdirSync('src/rules').forEach((entityName, index) => {
+        if (IGNORE_ENTIRY_NAME.includes(entityName)) {
+            return;
+        }
+
+        const configTemplate = fs.readFileSync(`src/rules/${entityName}/docs/_config.md`).toString();
+        const descriptionTemplate = fs.readFileSync(`src/rules/${entityName}/docs/_description.md`).toString();
+
+        const ruleListItem = ruleListItemTemplate
+            .replace('{{{name}}}', entityName)
+            .replace('{{{config}}}', configTemplate)
+            .replace('{{{description}}}', descriptionTemplate);
+
+        const ruleTableRow = RULE_TABLE_ROW_TEMPLATE
+            .replace('{{{name}}}', entityName)
+            .replace('{{{config}}}', configTemplate)
+            .replace('{{{description}}}', descriptionTemplate)
+
+        ruleTableReadme += ruleTableRow;
+        ruleListReadme += ruleListItem;
+    });
+
+    const readme =  readmeTemplate
+        .replace('{{{langSwitcher}}}', LANG_SWITCHER_MD)
+        .replace('{{{cliParams}}}', cliParamsTemplate)
+        .replace('{{{cliConfigWarning}}}', cliConfigWarningTemplate)
+        .replace('{{{ruleTable}}}', ruleTableReadme)
+        .replace('{{{rulesDescription}}}', ruleListReadme)
+        .replace('{{{langPostfix}}}', langPostfix)
+
+    fs.writeFileSync(`README${langPostfix}.md`, readme);
 });
 
-fs.writeFileSync(`_README.md`, `
-# List
-${ruleListReadme}
 
-# Table
-${ruleTableReadme}
-`);
+
+
 
 
