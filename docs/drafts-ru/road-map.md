@@ -3,9 +3,9 @@
 - причесать README.md правил
 
 merge-openapi-spec			remove-deprecated
-change-endpoints-basepath		patch-component-schema			remove-max-items
+patch-component-schema			remove-max-items
 patch-endpoint-parameter-schema		remove-min-items
-filter-by-content-type			patch-endpoint-request-body-schema	remove-operation-id
+patch-endpoint-request-body-schema	remove-operation-id
 filter-endpoints			patch-endpoint-response-schema		remove-parameter
 generated-types.ts			patch-endpoint-schema			remove-unused-components
 
