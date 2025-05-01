@@ -3,8 +3,8 @@
 - причесать README.md правил
 
 remove-deprecated
-patch-component-schema			remove-max-items
-patch-endpoint-parameter-schema		remove-min-items
+remove-max-items
+remove-min-items
 patch-endpoint-request-body-schema	remove-operation-id
 patch-endpoint-response-schema		remove-parameter
 patch-endpoint-schema			remove-unused-components
