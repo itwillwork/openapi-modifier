@@ -6,7 +6,7 @@ remove-deprecated
 remove-max-items
 remove-min-items
 remove-operation-id
-patch-endpoint-response-schema		remove-parameter
+remove-parameter
 patch-endpoint-schema			remove-unused-components
 
 - разделить документацию на ru/en (доделать выбор языка)
