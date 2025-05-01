@@ -1,3 +1,4 @@
+<a name="custom_anchor_motivation_1"></a>
 ### 1. Необходимо обновить схему ответа эндпоинта
 
 Практический пример:
@@ -73,6 +74,7 @@ paths:
                         description: { type: 'string' }
 ```
 
+<a name="custom_anchor_motivation_2"></a>
 ### 2. Необходимо полностью заменить схему ответа
 
 Практический пример:

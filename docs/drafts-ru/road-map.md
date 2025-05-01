@@ -7,7 +7,7 @@ remove-max-items
 remove-min-items
 remove-operation-id
 remove-parameter
-patch-endpoint-schema			remove-unused-components
+remove-unused-components
 
 - разделить документацию на ru/en (доделать выбор языка)
 - проверить ссылки из ошибок на github (якори проверить) и в message factory заменить их

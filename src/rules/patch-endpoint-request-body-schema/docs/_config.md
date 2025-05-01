@@ -3,7 +3,7 @@
 | `endpointDescriptor`                     | [**обязательный**] Указание в каком endpoint нужно поменять схему параметра запроса.                                                                    | `'GET /api/list'`                                                                                                                                                     | `string`       |           |
 | `contentType`                    | Указание к какому типу запросов (content-type) endpoint'а нужно применить изменение. При отсутствии значения, будут изменены все варианты типов запросов. | `'application/json'`                                                                                                                                                  | `string`       |  |
 | `correction` | Путь к полю в схеме для модификации                                                                                                                     | `"properties.name"` | `string` | - |
-| `schemaDiff`                     | Изменения для применения к схеме. [Примеры патчей схем](TODO)                                                                                                                          | `{type: "number"}` или см. больше примеров OpenAPISchema TODO ссылка                                                                                                  | `OpenAPISchema` |           |
+| `schemaDiff`                     | [**обязательный**] Изменения для применения к схеме. [Примеры патчей схем](TODO)                                                                                                                          | `{type: "number"}` или см. больше примеров OpenAPISchema TODO ссылка                                                                                                  | `OpenAPISchema` |           |
 | `patchMethod`                    | Метод применения изменений [Различия между методами merge и deepmerge](TODO) | `'merge' /                                                                                                                                                  'deepmerge'` | `enum`                                                                              |  `merge` |
 
 Пример конфигурации:
@@ -28,35 +28,3 @@ module.exports = {
     ]
 }
 ```
-
-или можно указать более детально что нужно поменять в общем компоненте при помощи поля `correction`
-
-```js
-module.exports = {
-    pipeline: [
-        // ... other rules
-        {
-            rule: "patch-endpoint-request-body-schema",
-            config: {
-                endpointDescriptor: 'POST /api/order',
-                contentType: "application/json",
-                correction: "data",
-                patchMethod: "deepmerge",
-                schemaDiff: {
-                    type: "object",
-                    required: ["email"],
-                    properties: {
-                        email: {
-                            type: "string",
-                            format: "email"
-                        }
-                    }
-                }
-            },
-        }
-        // ... other rules
-    ]
-}
-```
-
-**Если необходимо изменить несколько спецификаций**, вы можете использовать несколько раз данное правило в общем пайлайне конфигурации.
