@@ -7,7 +7,7 @@ patch-component-schema			remove-max-items
 patch-endpoint-parameter-schema		remove-min-items
 patch-endpoint-request-body-schema	remove-operation-id
 patch-endpoint-response-schema		remove-parameter
-generated-types.ts			patch-endpoint-schema			remove-unused-components
+patch-endpoint-schema			remove-unused-components
 
 - разделить документацию на ru/en (доделать выбор языка)
 - проверить ссылки из ошибок на github (якори проверить) и в message factory заменить их
