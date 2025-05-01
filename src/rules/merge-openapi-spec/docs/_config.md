@@ -30,7 +30,7 @@ module.exports = {
         {
             rule: "merge-openapi-spec",
             config: {
-                path: __dirname + '../temp-openapi-specs/new-list-endpoints.yaml',
+                path: __dirname + '../temp-openapi-specs/new-list-endpoints.json',
                 ignoreOperarionCollisions: true,
                 ignoreComponentCollisions: true,
             },
