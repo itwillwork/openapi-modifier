@@ -2,11 +2,11 @@
 
 - причесать README.md правил
 
-merge-openapi-spec			remove-deprecated
+remove-deprecated
 patch-component-schema			remove-max-items
 patch-endpoint-parameter-schema		remove-min-items
 patch-endpoint-request-body-schema	remove-operation-id
-filter-endpoints			patch-endpoint-response-schema		remove-parameter
+patch-endpoint-response-schema		remove-parameter
 generated-types.ts			patch-endpoint-schema			remove-unused-components
 
 - разделить документацию на ru/en (доделать выбор языка)
