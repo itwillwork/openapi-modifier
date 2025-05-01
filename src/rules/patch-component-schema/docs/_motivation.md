@@ -26,11 +26,8 @@ module.exports = {
         {
             rule: "patch-component-schema",
             config: {
-                descriptor: {
-                    componentName: "Pet",
-                    correction: "properties.name"
-                },
-                patchMethod: "merge",
+                descriptor: "Pet.name",
+                patchMethod: "deepmerge",
                 schemaDiff: {
                     description: "New description"
                 }
@@ -83,7 +80,7 @@ module.exports = {
                 descriptor: {
                     componentName: "Pet"
                 },
-                patchMethod: "replace",
+                patchMethod: "merge",
                 schemaDiff: {
                     type: "object",
                     properties: {
