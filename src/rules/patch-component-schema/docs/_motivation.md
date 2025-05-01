@@ -11,12 +11,14 @@ components:
     Pet:
       type: object
       properties:
-        name:
+        status:
           type: string
-          description: Old description
+          enum:
+            - status1
+            - status2
 ```
 
-**Нужно обновить описание свойства `name`.**
+**Нужно обновить описание свойства `type`, расширив enum дополнительными значениями.**
 
 **В файле конфигурации** `openapi-modifier-config.js` добавляем правило `patch-component-schema`:
 
@@ -26,10 +28,10 @@ module.exports = {
         {
             rule: "patch-component-schema",
             config: {
-                descriptor: "Pet.name",
+                descriptor: "Pet.status",
                 patchMethod: "deepmerge",
                 schemaDiff: {
-                    description: "New description"
+                    enum: ['status3', 'status4'],
                 }
             },
         }
@@ -45,9 +47,13 @@ components:
     Pet:
       type: object
       properties:
-        name:
+        status:
           type: string
-          description: New description
+          enum:
+            - status1
+            - status2
+            - status3
+            - status4
 ```
 
 <a name="custom_anchor_motivation_2"></a>
@@ -84,9 +90,9 @@ module.exports = {
                 schemaDiff: {
                     type: "object",
                     properties: {
-                        name: {
+                        id: {
                             type: "string",
-                            description: "Pet name"
+                            description: "Pet id"
                         },
                         age: {
                             type: "integer",
@@ -108,9 +114,9 @@ components:
     Pet:
       type: object
       properties:
-        name:
+        id:
           type: string
-          description: Pet name
+          description: Pet id
         age:
           type: integer
           description: Pet age
