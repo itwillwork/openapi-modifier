@@ -2,7 +2,7 @@
 | -------- |------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|--------------------------------------------------|------------------------------------------|
 | `descriptor`  | [**обязательный**] Описание компонента для модификации. [Подробнее про descriptor](TODO)                   | `"Pet.name"` или `{"componentName": "Pet", "correction": "properties.name"}` | `string | ComponentWithCorrectionDescriptorConfig` | - |
 | `patchMethod`  | [**обязательный**] Метод применения патча. [Подробнее про различия между методами merge и deepmerge](TODO) | `"merge"`                                                                    | `"merge" \                                       | "deepmerge"`                             | `"merge"` |
-| `schemaDiff`  | [**обязательный**] Схема для патча. [Примеры патчей](TODO)                                                 | `{"type": "string", "description": "New description"}`                       | `OpenAPISchemaConfig`                            | -                                        |
+| `schemaDiff`  | [**обязательный**] Схема для патча. [Примеры патчей схем](TODO)                                                | `{"type": "string", "description": "New description"}`                       | `OpenAPISchemaConfig`                            | -                                        |
 
 > [!IMPORTANT]
 > Тонкости задачния параметра `descriptor`:

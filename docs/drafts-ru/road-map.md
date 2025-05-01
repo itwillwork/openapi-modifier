@@ -5,7 +5,7 @@
 remove-deprecated
 remove-max-items
 remove-min-items
-patch-endpoint-request-body-schema	remove-operation-id
+remove-operation-id
 patch-endpoint-response-schema		remove-parameter
 patch-endpoint-schema			remove-unused-components
 

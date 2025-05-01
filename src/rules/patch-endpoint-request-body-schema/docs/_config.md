@@ -1,14 +1,13 @@
 | Параметр                    | Описание                                                                                                                                                  | Пример                                                                                                                                                                | Типизация      | Дефолтное |
 |-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------|-----------|
 | `endpointDescriptor`                     | [**обязательный**] Указание в каком endpoint нужно поменять схему параметра запроса.                                                                      | `'GET /api/list'`                                                                                                                                                     | `string`       |           |
-| `descriptor`                     | [**обязательный**] Указание к какой части body, на который ссылается `endpointDescriptor`, нужно поменять `schemaDiff`.                                   | `test`, `[].testField`,  `oneOf[1]`, `allOf[1]` или  `anyOf[1].testField`                                                      | `string`       |           |
-| `schemaDiff`                     | Необходимое изменение в формате OpenAPI на которую указывает `endpointDescriptor` и `descriptor` в спецификации.                                          | `{type: "number"}` или см. больше примеров OpenAPISchema TODO ссылка                                                                                                  | `OpenAPISchema` |           |
-| `patchMethod`                    | Стратегия слияния схем. Подробнее о стратегиях слияния на примерах. TODO ссылка                                                                           | `'merge' /                                                                                                                                                  'deepmerge'` | `enum`         |  `merge` |
 | `contentType`                    | Указание к какому типу запросов (content-type) endpoint'а нужно применить изменение. При отсутствии значения, будут изменены все варианты типов запросов. | `'application/json'`                                                                                                                                                  | `string`       |  |
-
-Подробнее про формат `schemaDiff` и `OpenAPISchema` TODO ссылка
+| `correction` | Путь к полю в схеме для модификации                                                                                                                       | `"properties.name"` | `string` | - |
+| `schemaDiff`                     | Изменения для применения к схеме. [Примеры патчей схем](TODO)                                                                                                                            | `{type: "number"}` или см. больше примеров OpenAPISchema TODO ссылка                                                                                                  | `OpenAPISchema` |           |
+| `patchMethod`                    | Метод применения изменений, указанных в `objectDiff` и `schemaDiff`. [Различия между методами merge и deepmerge](TODO) | `'merge' /                                                                                                                                                  'deepmerge'` | `enum`                                                                              |  `merge` |
 
 Пример конфигурации:
+
 
 ```js
 module.exports = {
@@ -17,8 +16,8 @@ module.exports = {
         {
             rule: "patch-endpoint-request-body-schema",
             config: {
-                endpointDescriptor: 'GET /api/list',
-                descriptor: 'foo.bar',
+                endpointDescriptor: 'POST /api/order',
+                correction: "status",
                 schemaDiff: {
                     type: 'string',
                     enum: ['foo', 'bar'],
@@ -30,7 +29,7 @@ module.exports = {
 }
 ```
 
-или можно указать более детально что нужно поменять в общем компоненте
+или можно указать более детально что нужно поменять в общем компоненте при помощи поля `correction`
 
 ```js
 module.exports = {
@@ -39,14 +38,20 @@ module.exports = {
         {
             rule: "patch-endpoint-request-body-schema",
             config: {
-                endpointDescriptor: 'GET /api/list',
-                contentType: 'application/json',
-                descriptor: 'foo.bar',
-                patchMethod: 'deepmerge',
+                endpointDescriptor: 'POST /api/order',
+                contentType: "application/json",
+                correction: "data",
+                patchMethod: "deepmerge",
                 schemaDiff: {
-                    type: 'string',
-                    enum: ['foo', 'bar'],
-                },
+                    type: "object",
+                    required: ["email"],
+                    properties: {
+                        email: {
+                            type: "string",
+                            format: "email"
+                        }
+                    }
+                }
             },
         }
         // ... other rules
