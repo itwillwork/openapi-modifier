@@ -2,7 +2,6 @@
 
 - причесать README.md правил
 
-remove-deprecated
 remove-max-items
 remove-min-items
 remove-operation-id
