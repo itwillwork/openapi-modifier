@@ -1,15 +1,15 @@
 > [!IMPORTANT]  
 > Правило работает либо в режиме enabled - фильтрации endpoint'ов из спецификации (когда указан в конфигурации либо `enabled`, либо `enabledPathRegExp`), либо в disabled - исключения endpoint'ов из спецификации (когда указан в конфигурации либо `disabled`, либо `disabledPathRegExp`)
 
-| Параметр    | Описание                                                                                                                                                                               | Пример                | Типизация       | Дефолтное       |
-| -------- |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|-----------------|-----------------|
-| `enabled` | Список эндпоинтов, которые нужно оставить | `[{"method": "GET", "path": "/pets"}]` | `Array<EndpointDescriptor>` | - |
-| `enabledPathRegExp` | Список регулярных выражений для путей, которые нужно оставить | `[/^\/api\/v1/]` | `Array<RegExp>` | - |
-| `disabled` | Список эндпоинтов, которые нужно исключить | `[{"method": "POST", "path": "/pets"}]` | `Array<EndpointDescriptor>` | - |
-| `disabledPathRegExp` | Список регулярных выражений для путей, которые нужно исключить | `[/^\/internal/]` | `Array<RegExp>` | - |
+| Параметр                | Описание                                                                                                                                                                               | Пример                | Типизация       | Дефолтное       |
+|-------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|-----------------|-----------------|
+| `enabled`               | Список эндпоинтов, которые нужно оставить | `[{"method": "GET", "path": "/pets"}]` | `Array<EndpointDescriptor>` | - |
+| `enabledPathRegExp`     | Список регулярных выражений для путей, которые нужно оставить | `[/^\/api\/v1/]` | `Array<RegExp>` | - |
+| `disabled`              | Список эндпоинтов, которые нужно исключить | `[{"method": "POST", "path": "/pets"}]` | `Array<EndpointDescriptor>` | - |
+| `disabledPathRegExp`    | Список регулярных выражений для путей, которые нужно исключить | `[/^\/internal/]` | `Array<RegExp>` | - |
 | `printIgnoredEndpoints` | Выводить ли в лог информацию об исключенных эндпоинтах | `true` | `boolean` | `false` |
 
-Примеры конфигурации:
+Примеры конфигураций:
 
 ```js
 module.exports = {
@@ -21,7 +21,6 @@ module.exports = {
                 enabled: [
                     'GET /foo/ping'
                 ],
-                printIgnoredEndpoints: false,
             },
         }
         // ... other rules
@@ -41,7 +40,6 @@ module.exports = {
                 enabledPathRegExp: [
                     /\/public/
                 ],
-                printIgnoredEndpoints: false,
             },
         }
         // ... other rules
@@ -61,7 +59,6 @@ module.exports = {
                 disabled: [
                     'GET /foo/ping'
                 ],
-                printIgnoredEndpoints: false,
             },
         }
         // ... other rules
@@ -81,7 +78,7 @@ module.exports = {
                 disabledPathRegExp: [
                     /\/internal/
                 ],
-                printIgnoredEndpoints: false,
+                printIgnoredEndpoints: true,
             },
         }
         // ... other rules

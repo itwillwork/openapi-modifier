@@ -30,7 +30,7 @@ module.exports = {
 }
 ```
 
-или можно указать более детально что нужно поменять в общем компоненте
+Пример более детальной конфигурации:
 
 ```js
 module.exports = {
@@ -39,12 +39,12 @@ module.exports = {
         {
             rule: "patch-component-schema",
             config: {
-                patchMethod: 'deepmerge',
                 descriptor: 'TestObjectDTO.oneOf[0].TestArraySchemaDTO[]',
                 schemaDiff: {
                     type: 'string',
                     enum: ['foo', 'bar'],
                 },
+                patchMethod: 'deepmerge',
             },
         }
         // ... other rules

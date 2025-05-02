@@ -10,6 +10,21 @@ module.exports = {
         // ... other rules
         {
             rule: "remove-max-items",
+            config: {},
+        }
+        // ... other rules
+    ]
+}
+```
+
+Пример более детальной конфигурации:
+
+```js
+module.exports = {
+    pipeline: [
+        // ... other rules
+        {
+            rule: "remove-max-items",
             config: {
                 showUnusedWarning: true
             },

@@ -1,10 +1,10 @@
-| Параметр                    | Описание                                                                                                               | Пример                                                                                                                                                                 | Типизация                                                                           | Дефолтное    |
-|-----------------------------|------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|--------------|
-| `endpointDescriptor`                     | [**обязательный**] Указание в каком endpoint нужно поменять схему параметра запроса.                                   | `'GET /api/list'`                                                                                                                                                     | `string`                                                                            |              |
-| `parameterDescriptor`                     | [**обязательный**] Указание какой параметр запроса, на который ссылается `endpointDescriptor`, нужно поменять.         | `TestSchemaDTO`, `TestSchemaDTO.test`, `TestSchemaDTO[].testField`,  `TestObjectDTO.oneOf[1]`, `TestObjectDTO.allOf[1]` или  `TestObjectDTO.anyOf[1].testField`        | `string`                                                                            |              |
-| `schemaDiff`                     | Изменения для схемы параметра [Примеры патчей схем](TODO)                                                              | `{type: "number"}`                                                                                                   | `OpenAPISchema`                                                                     |              |
-| `objectDiff`                     | Изменения для самого параметра                                                                                         | `{ required: true }`                                                                                                    | `{name?: string; in?: 'query' / 'header' / 'path' / 'cookie'; required?: boolean;}` |              |
-| `patchMethod`                    | Метод применения изменений, указанных в `objectDiff` и `schemaDiff`. [Различия между методами merge и deepmerge](TODO) | `'merge' /                                                                                                                                                  'deepmerge'` | `enum`                                                                              |  `merge` |
+| Параметр              | Описание                                                                                                               | Пример                                                                                                                                                                 | Типизация                                                                           | Дефолтное    |
+|-----------------------|------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|--------------|
+| `endpointDescriptor`  | [**обязательный**] Указание в каком endpoint нужно поменять схему параметра запроса.                                   | `'GET /api/list'`                                                                                                                                                     | `string`                                                                            |              |
+| `parameterDescriptor` | [**обязательный**] Указание какой параметр запроса, на который ссылается `endpointDescriptor`, нужно поменять.         | `TestSchemaDTO`, `TestSchemaDTO.test`, `TestSchemaDTO[].testField`,  `TestObjectDTO.oneOf[1]`, `TestObjectDTO.allOf[1]` или  `TestObjectDTO.anyOf[1].testField`        | `string`                                                                            |              |
+| `schemaDiff`          | Изменения для схемы параметра [Примеры патчей схем](TODO)                                                              | `{type: "number"}`                                                                                                   | `OpenAPISchema`                                                                     |              |
+| `objectDiff`          | Изменения для самого параметра                                                                                         | `{ required: true }`                                                                                                    | `{name?: string; in?: 'query' / 'header' / 'path' / 'cookie'; required?: boolean;}` |              |
+| `patchMethod`         | Метод применения изменений, указанных в `objectDiff` и `schemaDiff`. [Различия между методами merge и deepmerge](TODO) | `'merge' /                                                                                                                                                  'deepmerge'` | `enum`                                                                              |  `merge` |
 
 Пример конфигурации:
 
@@ -21,11 +21,7 @@ module.exports = {
                     in: 'query',
                 },
                 schemaDiff: {
-                    type: 'string',
                     enum: ['foo', 'bar'],
-                },
-                objectDiff: {
-                    required: true,
                 }
             },
         }
@@ -34,7 +30,7 @@ module.exports = {
 }
 ```
 
-или можно указать более детально что нужно поменять в общем компоненте
+Пример более детальной конфигурации:
 
 ```js
 module.exports = {
@@ -48,7 +44,6 @@ module.exports = {
                     name: 'test',
                     in: 'path',
                 },
-                patchMethod: 'deepmerge',
                 schemaDiff: {
                     type: 'string',
                     enum: ['foo', 'bar'],
@@ -57,7 +52,8 @@ module.exports = {
                     name: 'newTest',
                     in: 'query',
                     required: true,
-                }
+                },
+                patchMethod: 'deepmerge',
             },
         }
         // ... other rules

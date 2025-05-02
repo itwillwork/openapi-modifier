@@ -10,6 +10,21 @@ module.exports = {
         // ... other rules
         {
             rule: "remove-operation-id",
+            config: {},
+        }
+        // ... other rules
+    ]
+}
+```
+
+Пример более детальной конфигурации:
+
+```js
+module.exports = {
+    pipeline: [
+        // ... other rules
+        {
+            rule: "remove-operation-id",
             config: {
                 ignore: ["getPets", "createPet"]
             },

@@ -27,3 +27,23 @@ module.exports = {
     ]
 }
 ```
+
+Пример более детальной конфигурации:
+
+```js
+module.exports = {
+    pipeline: [
+        {
+            rule: "patch-endpoint-schema",
+            config: {
+                patchMethod: 'merge',
+                endpointDescriptor: "GET /pets",
+                endpointDescriptorCorrection: 'responses.200.content.*/*.schema',
+                schemaDiff: {
+                    enum: ['3', '4'],
+                },
+            }
+        }
+    ]
+}
+```
