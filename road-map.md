@@ -2,7 +2,6 @@
 
 - причесать README.md правил
 
-remove-operation-id
 remove-parameter
 remove-unused-components
 
