@@ -2,8 +2,6 @@
 
 - причесать README.md правил
 
-remove-max-items
-remove-min-items
 remove-operation-id
 remove-parameter
 remove-unused-components
