@@ -21,7 +21,7 @@ const createPlaceholderRegExp = (placeholder: string) => {
 
 const LANG_SWITCHER_MD = '[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)';
 
-const RULE_TABLE_ROW_TEMPLATE = `| [{{{name}}}](./src/rules/{{{name}}}/README.md) | {{{description}}} |`
+const RULE_TABLE_ROW_TEMPLATE = `| [{{{name}}}](./src/rules/{{{name}}}/README.md) | {{{description}}} |\n`
 
 LANGS.forEach((lang) => {
     const langPostfix = lang === "en" ? '' : `-${lang}`;
@@ -45,7 +45,7 @@ LANGS.forEach((lang) => {
         console.log(`Generate entity name ${entityName}`);
 
         const configTemplate = fs.readFileSync(`src/rules/${entityName}/docs/_config.md`).toString();
-        const descriptionTemplate = fs.readFileSync(`src/rules/${entityName}/docs/_description.md`).toString();
+        const descriptionTemplate = fs.readFileSync(`src/rules/${entityName}/docs/_description.md`).toString().trim();
 
         const ruleListItem = ruleListItemTemplate
             .replace(createPlaceholderRegExp("name"), entityName)
