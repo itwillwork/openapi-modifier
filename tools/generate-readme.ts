@@ -7,21 +7,6 @@ const IGNORE_ENTIRY_NAME = [
     'common',
     '.DS_Store',
     'generated-types.ts',
-    'patch-endpoint-request-body-schema', // TODO remove
-    'change-endpoints-basepath', // TODO remove
-    'patch-endpoint-response-schema', // TODO remove
-    'patch-endpoint-schema', // TODO remove
-    'filter-by-content-type', // TODO remove
-    'remove-deprecated', // TODO remove
-    'filter-endpoints', // TODO remove
-    'remove-max-items', // TODO remove
-    'remove-min-items', // TODO remove
-    'merge-openapi-spec', // TODO remove
-    'remove-operation-id', // TODO remove
-    'patch-component-schema', // TODO remove
-    'remove-parameter', // TODO remove
-    'patch-endpoint-parameter-schema', // TODO remove
-    'remove-unused-components', // TODO remove
 ];
 
 const LANGS = [
@@ -41,13 +26,13 @@ const RULE_TABLE_ROW_TEMPLATE = `| [{{{name}}}](./src/rules/{{{name}}}/README.md
 LANGS.forEach((lang) => {
     const langPostfix = lang === "en" ? '' : `-${lang}`;
 
-    const readmeTemplate = fs.readFileSync(`docs/drafts-${lang}/readme.md`).toString();
+    const readmeTemplate = fs.readFileSync(`docs/drafts/${lang}/readme.md`).toString();
 
-    const cliConfigWarningTemplate = fs.readFileSync(`docs/drafts-${lang}/sections/cli-config-warning.md`).toString();
-    const cliParamsTemplate = fs.readFileSync(`docs/drafts-${lang}/sections/cli-params.md`).toString();
+    const cliConfigWarningTemplate = fs.readFileSync(`docs/drafts/${lang}/sections/cli-config-warning.md`).toString();
+    const cliParamsTemplate = fs.readFileSync(`docs/drafts/${lang}/sections/cli-params.md`).toString();
 
-    const ruleListItemTemplate = fs.readFileSync(`docs/drafts-${lang}/sections/rule-short-details.md`).toString();
-    const ruleTableHeader =  fs.readFileSync(`docs/drafts-${lang}/sections/rule-table-head.md`).toString();
+    const ruleListItemTemplate = fs.readFileSync(`docs/drafts/${lang}/sections/rule-short-details.md`).toString();
+    const ruleTableHeader =  fs.readFileSync(`docs/drafts/${lang}/sections/rule-table-head.md`).toString();
 
     let ruleTableReadme = ruleTableHeader;
     let ruleListReadme = '';
