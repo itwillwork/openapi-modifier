@@ -1,0 +1,1 @@
+该规则允许修改 OpenAPI 规范中端点的响应模式（response schema）。 

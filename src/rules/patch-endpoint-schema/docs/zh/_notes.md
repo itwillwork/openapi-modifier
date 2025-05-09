@@ -1,0 +1,3 @@
+- 该规则会修改整个端点结构，因此应谨慎使用
+- 使用 `endpointDescriptorCorrection` 时，可以修改特定属性而不影响其余结构
+- 如果未找到指定的端点，规则会输出警告，以便及时更新 openapi-modifier 配置 

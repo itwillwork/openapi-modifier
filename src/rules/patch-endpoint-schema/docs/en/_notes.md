@@ -1,0 +1,3 @@
+- The rule modifies the entire endpoint structure, so it should be used with caution
+- When using `endpointDescriptorCorrection`, you can modify specific properties without affecting the rest of the structure
+- If the specified endpoint is not found, the rule outputs a warning for timely updating of the openapi-modifier configuration 

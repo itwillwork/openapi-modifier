@@ -1,0 +1,1 @@
+The rule allows modifying the entire endpoint schema in the OpenAPI specification. Unlike other patching rules that work with individual parts of the endpoint (parameters, request body, responses), this rule can modify the entire endpoint structure, including all its components. 

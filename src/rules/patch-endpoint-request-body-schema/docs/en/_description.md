@@ -1,0 +1,1 @@
+Rule for modifying the request body schema in OpenAPI specification. Allows to modify the request schema for a specified endpoint. 

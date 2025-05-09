@@ -1,0 +1,7 @@
+- If `code` is not specified, the rule attempts to find the first 2xx response code
+- If `contentType` is not specified, changes are applied to all content types
+- When specifying a non-existent code or content type, the rule outputs a warning for timely updating of the openapi-modifier configuration
+- The `correction` parameter allows precise modification of nested schema properties
+- The rule does not work with schemas defined via references ($ref)
+- When the specified endpoint is not found, the rule outputs a warning for timely updating of the openapi-modifier configuration
+- Changes are applied atomically - either all changes are successful, or the specification remains unchanged 

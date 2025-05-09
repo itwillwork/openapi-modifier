@@ -1,0 +1,1 @@
+The rule allows modifying the response schema for endpoints in the OpenAPI specification. 
