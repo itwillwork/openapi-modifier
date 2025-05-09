@@ -1,0 +1,1 @@
+Merges two OpenAPI specifications into one. Allows merging the current specification with an additional specification from a specified file. Supports working with files in JSON and YAML formats. 
