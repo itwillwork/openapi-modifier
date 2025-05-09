@@ -23,6 +23,12 @@ const LANG_SWITCHER_MD = '[🇺🇸 English](./README.md) | [🇷🇺 Русск
 
 const RULE_TABLE_ROW_TEMPLATE = `| [{{{name}}}](./src/rules/{{{name}}}/README.md) | {{{description}}} |\n`
 
+const getTemplate = (
+    path: string,
+): string => {
+    return fs.readFileSync(path).toString().trim();
+}
+
 LANGS.forEach((lang) => {
     const langPostfix = lang === "en" ? '' : `-${lang}`;
 
@@ -44,18 +50,20 @@ LANGS.forEach((lang) => {
 
         console.log(`Generate entity name ${entityName}`);
 
-        const configTemplate = fs.readFileSync(`src/rules/${entityName}/docs/_config.md`).toString();
-        const descriptionTemplate = fs.readFileSync(`src/rules/${entityName}/docs/_description.md`).toString().trim();
+        const configTemplate = getTemplate(`src/rules/${entityName}/docs/_config.md`);
+        const descriptionTemplate = getTemplate(`src/rules/${entityName}/docs/_description.md`);
 
         const ruleListItem = ruleListItemTemplate
             .replace(createPlaceholderRegExp("name"), entityName)
             .replace(createPlaceholderRegExp("config"), configTemplate)
-            .replace(createPlaceholderRegExp("description"), descriptionTemplate);
+            .replace(createPlaceholderRegExp("description"), descriptionTemplate)
+            .replace(createPlaceholderRegExp("rootPath"), './');
 
         const ruleTableRow = RULE_TABLE_ROW_TEMPLATE
             .replace(createPlaceholderRegExp("name"), entityName)
             .replace(createPlaceholderRegExp("config"), configTemplate)
             .replace(createPlaceholderRegExp("description"), descriptionTemplate)
+            .replace(createPlaceholderRegExp("rootPath"), './');
 
         ruleTableReadme += ruleTableRow;
         ruleListReadme += ruleListItem;
@@ -67,11 +75,12 @@ LANGS.forEach((lang) => {
         .replace(createPlaceholderRegExp("cliConfigWarning"), cliConfigWarningTemplate)
         .replace(createPlaceholderRegExp("ruleTable"), ruleTableReadme)
         .replace(createPlaceholderRegExp("rulesDescription"), ruleListReadme)
+        .replace(createPlaceholderRegExp("rootPath"), './')
         .replace(createPlaceholderRegExp("langPostfix"), langPostfix)
 
     fs.writeFileSync(`README${langPostfix}.md`, readme);
 
-    const debuggingTemplate = fs.readFileSync(`docs/drafts/${lang}/sections/debugging.md`).toString();
+    const debuggingTemplate = getTemplate(`docs/drafts/${lang}/sections/debugging.md`);
 
     const additionalReadMePages: Array<[string, string]> = [
         [`docs/drafts/${lang}/contributing.md`, 'contributing'],
@@ -87,6 +96,7 @@ LANGS.forEach((lang) => {
 
         const output =  inputTemplate
             .replace(createPlaceholderRegExp("langSwitcher"), additionalReadMeTemplate)
+            .replace(createPlaceholderRegExp("langPostfix"), langPostfix)
             .replace(createPlaceholderRegExp("debugging"), debuggingTemplate)
 
         fs.writeFileSync(`docs/${outputPrefix}${langPostfix}.md`, output);

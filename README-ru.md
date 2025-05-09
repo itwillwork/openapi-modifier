@@ -352,9 +352,6 @@ module.exports = {
     ]
 }
 ```
-               
-
-
 
 [Подрбонее про правило change-endpoints-basepath](./src/rules/change-endpoints-basepath/README-ru.md)<a name="custom_anchor_rule_filter-by-content-type"></a>
 
@@ -402,7 +399,6 @@ module.exports = {
     ]
 }
 ```
-
 
 [Подрбонее про правило filter-by-content-type](./src/rules/filter-by-content-type/README-ru.md)<a name="custom_anchor_rule_filter-endpoints"></a>
 
@@ -500,8 +496,6 @@ module.exports = {
 }
 ```
 
-
-
 [Подрбонее про правило filter-endpoints](./src/rules/filter-endpoints/README-ru.md)<a name="custom_anchor_rule_merge-openapi-spec"></a>
 
 ### merge-openapi-spec
@@ -555,7 +549,6 @@ module.exports = {
 }
 ```
 
-
 [Подрбонее про правило merge-openapi-spec](./src/rules/merge-openapi-spec/README-ru.md)<a name="custom_anchor_rule_patch-component-schema"></a>
 
 ### patch-component-schema
@@ -566,9 +559,9 @@ module.exports = {
 
 | Параметр    | Описание                                                                                 | Пример                                                                       | Типизация                                        | Дефолтное                                |
 | -------- |------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|--------------------------------------------------|------------------------------------------|
-| `descriptor`  | [**обязательный**] Описание компонента для модификации. [Подробнее про descriptor](TODO) | `"Pet.name"` или `{"componentName": "Pet", "correction": "properties.name"}` | `string | ComponentWithCorrectionDescriptorConfig` | - |
-| `patchMethod`  | Метод применения патча. [Подробнее про различия между методами merge и deepmerge](TODO)  | `"merge"`                                                                    | `"merge" \                                       | "deepmerge"`                             | `"merge"` |
-| `schemaDiff`  | [**обязательный**] Схема для патча. [Примеры патчей схем](TODO)                          | `{"type": "string", "description": "New description"}`                       | `OpenAPISchemaConfig`                            | -                                        |
+| `descriptor`  | [**обязательный**] Описание компонента для модификации. [Подробнее про различия между простым и объектным дескриптором компонента с коррекцией](./docs/descriptor-ru.md) | `"Pet.name"` или `{"componentName": "Pet", "correction": "properties.name"}` | `string | ComponentWithCorrectionDescriptorConfig` | - |
+| `patchMethod`  | Метод применения патча. [Подробнее про различия между методами merge и deepmerge](./docs/merge-vs-deepmerge-ru.md)  | `"merge"`                                                                    | `"merge" \                                       | "deepmerge"`                             | `"merge"` |
+| `schemaDiff`  | [**обязательный**] Схема для патча. [Подробные примеры спецификаций для OpenAPI](./docs/schema-diff-ru.md)                          | `{"type": "string", "description": "New description"}`                       | `OpenAPISchemaConfig`                            | -                                        |
 
 > [!IMPORTANT]
 > Тонкости задачния параметра `descriptor`:
@@ -618,7 +611,6 @@ module.exports = {
 }
 ```
 
-
 [Подрбонее про правило patch-component-schema](./src/rules/patch-component-schema/README-ru.md)<a name="custom_anchor_rule_patch-endpoint-parameter-schema"></a>
 
 ### patch-endpoint-parameter-schema
@@ -631,9 +623,9 @@ module.exports = {
 |-----------------------|------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|--------------|
 | `endpointDescriptor`  | [**обязательный**] Указание в каком endpoint нужно поменять схему параметра запроса.                                   | `'GET /api/list'`                                                                                                                                                     | `string`                                                                            |              |
 | `parameterDescriptor` | [**обязательный**] Указание какой параметр запроса, на который ссылается `endpointDescriptor`, нужно поменять.         | `TestSchemaDTO`, `TestSchemaDTO.test`, `TestSchemaDTO[].testField`,  `TestObjectDTO.oneOf[1]`, `TestObjectDTO.allOf[1]` или  `TestObjectDTO.anyOf[1].testField`        | `string`                                                                            |              |
-| `schemaDiff`          | Изменения для схемы параметра [Примеры патчей схем](TODO)                                                              | `{type: "number"}`                                                                                                   | `OpenAPISchema`                                                                     |              |
+| `schemaDiff`          | Изменения для схемы параметра [Подробные примеры спецификаций для OpenAPI](./docs/schema-diff-ru.md)                                                              | `{type: "number"}`                                                                                                   | `OpenAPISchema`                                                                     |              |
 | `objectDiff`          | Изменения для самого параметра                                                                                         | `{ required: true }`                                                                                                    | `{name?: string; in?: 'query' / 'header' / 'path' / 'cookie'; required?: boolean;}` |              |
-| `patchMethod`         | Метод применения изменений, указанных в `objectDiff` и `schemaDiff`. [Различия между методами merge и deepmerge](TODO) | `'merge' /                                                                                                                                                  'deepmerge'` | `enum`                                                                              |  `merge` |
+| `patchMethod`         | Метод применения изменений, указанных в `objectDiff` и `schemaDiff`. [Подробнее про различия между методами merge и deepmerge](./docs/merge-vs-deepmerge-ru.md) | `'merge' /                                                                                                                                                  'deepmerge'` | `enum`                                                                              |  `merge` |
 
 Пример конфигурации:
 
@@ -703,8 +695,8 @@ module.exports = {
 | `endpointDescriptor`        | [**обязательный**] Указание в каком endpoint нужно поменять схему параметра запроса.                                                                    | `'GET /api/list'`                                                                                                                                                     | `string`       |           |
 | `contentType`               | Указание к какому типу запросов (content-type) endpoint'а нужно применить изменение. При отсутствии значения, будут изменены все варианты типов запросов. | `'application/json'`                                                                                                                                                  | `string`       |  |
 | `correction`                | Путь к полю в схеме для модификации                                                                                                                     | `"name"` | `string` | - |
-| `schemaDiff`                | [**обязательный**] Изменения для применения к схеме. [Примеры патчей схем](TODO)                                                                                                                          | `{type: "number"}` или см. больше примеров OpenAPISchema TODO ссылка                                                                                                  | `OpenAPISchema` |           |
-| `patchMethod`               | Метод применения изменений [Различия между методами merge и deepmerge](TODO) | `'merge' /                                                                                                                                                  'deepmerge'` | `enum`                                                                              |  `merge` |
+| `schemaDiff`                | [**обязательный**] Изменения для применения к схеме. [Подробные примеры спецификаций для OpenAPI](./docs/schema-diff-ru.md)                                                                                                                          | `{type: "number"}` или см. больше примеров OpenAPISchema TODO ссылка                                                                                                  | `OpenAPISchema` |           |
+| `patchMethod`               | Метод применения изменений [Подробнее про различия между методами merge и deepmerge](./docs/merge-vs-deepmerge-ru.md) | `'merge' /                                                                                                                                                  'deepmerge'` | `enum`                                                                              |  `merge` |
 
 Примеры конфигурации:
 
@@ -775,7 +767,6 @@ module.exports = {
 }
 ```
 
-
 [Подрбонее про правило patch-endpoint-request-body-schema](./src/rules/patch-endpoint-request-body-schema/README-ru.md)<a name="custom_anchor_rule_patch-endpoint-response-schema"></a>
 
 ### patch-endpoint-response-schema
@@ -790,8 +781,8 @@ module.exports = {
 | `correction`            | Путь к свойству схемы для модификации                                                                                                               | `"status"`                                                                                                                                                               | `string` | - |
 | `code`                  | Указание к какому статус коду ответа нужно применить изменение. При отсутствии значения, будет применен к первому 2xx ответу.                       | `200`                                                                                                                                                                    | `number`        |  |
 | `contentType`           | Указание к какому типу ответа (content-type) endpoint нужно применить изменение. При отсутствии значения, будут изменены все варианты типов ответов. | `'application/json'`                                                                                                                                                     | `string`        |  |
-| `schemaDiff`            | [**обязательный**] Необходимое изменение в формате OpenAPI. [Примеры патчей схем](TODO)                                                             | `{type: "number"}`                                                                                                  | `OpenAPISchema` |           |
-| `patchMethod`           | Метод применения изменений [Различия между методами merge и deepmerge](TODO)                                                                        | `'merge' /                                                                                                                                                  'deepmerge'` | `enum`                                                                              |  `merge` |
+| `schemaDiff`            | [**обязательный**] Необходимое изменение в формате OpenAPI. [Подробные примеры спецификаций для OpenAPI](./docs/schema-diff-ru.md)                                                             | `{type: "number"}`                                                                                                  | `OpenAPISchema` |           |
+| `patchMethod`           | Метод применения изменений [Подробнее про различия между методами merge и deepmerge](./docs/merge-vs-deepmerge-ru.md)                                                                        | `'merge' /                                                                                                                                                  'deepmerge'` | `enum`                                                                              |  `merge` |
 
 Пример конфигурации:
 
@@ -850,8 +841,8 @@ module.exports = {
 |--------------------------------|--------------------------------------------------------|---------|------------|---------------|
 | `endpointDescriptor`           | [**обязательный**] Описание эндпоинта для патчинга     | `{ path: "/pets", method: "get" }` | `{ path: string, method: string }` | -             |
 | `endpointDescriptorCorrection` | Путь к конкретному полю в схеме эндпоинта для патчинга | `"responses.200.content.application/json.schema"` | `string` | -             |
-| `schemaDiff`                   | [**обязательный**] Необходимое изменение в формате OpenAPI. [Примеры патчей схем](TODO)              | `{ type: "object", properties: { ... } }` | `OpenAPISchema` | -             |
-| `patchMethod`                    | Метод применения изменений [Различия между методами merge и deepmerge](TODO)                                                                        | `'merge' /                                                                                                                                                  'deepmerge'` | `enum`                                                                              |  `merge` |
+| `schemaDiff`                   | [**обязательный**] Необходимое изменение в формате OpenAPI. [Подробные примеры спецификаций для OpenAPI](./docs/schema-diff-ru.md)              | `{ type: "object", properties: { ... } }` | `OpenAPISchema` | -             |
+| `patchMethod`                    | Метод применения изменений [Подробнее про различия между методами merge и deepmerge](./docs/merge-vs-deepmerge-ru.md)                                                                        | `'merge' /                                                                                                                                                  'deepmerge'` | `enum`                                                                              |  `merge` |
 
 Пример конфигурации:
 
@@ -895,7 +886,6 @@ module.exports = {
     ]
 }
 ```
-
 
 [Подрбонее про правило patch-endpoint-schema](./src/rules/patch-endpoint-schema/README-ru.md)<a name="custom_anchor_rule_remove-deprecated"></a>
 
@@ -1163,7 +1153,6 @@ module.exports = {
     ]
 }
 ```
-
 
 [Подрбонее про правило remove-unused-components](./src/rules/remove-unused-components/README-ru.md)
 

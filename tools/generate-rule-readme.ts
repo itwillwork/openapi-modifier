@@ -21,6 +21,23 @@ const createPlaceholderRegExp = (placeholder: string) => {
 
 const LANG_SWITCHER_MD = '[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)';
 
+const getReadmeContent = (
+    path: string,
+): string => {
+    return fs.readFileSync(path).toString().trim();
+}
+
+const getReadmeContentIfExist = (
+    path: string,
+    placeholder: string
+): string => {
+    if (fs.existsSync(path)) {
+        return getReadmeContent(path);
+    }
+
+    return placeholder;
+}
+
 LANGS.forEach((lang) => {
     const langPostfix = lang === "en" ? '' : `-${lang}`;
 
@@ -31,17 +48,29 @@ LANGS.forEach((lang) => {
             return;
         }
 
-        const configReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/_config.md`).toString();
-        const descriptionReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/_description.md`).toString();
-        const motivationReadmeContent = fs.readFileSync(`src/rules/${entityName}/docs/_motivation.md`).toString();
+        console.log(`Generate docs for rule ${entityName}...`);
+
+        const rootPath = '../../../';
+
+        const configReadmeContent = getReadmeContent(`src/rules/${entityName}/docs/_config.md`);
+        const descriptionReadmeContent = getReadmeContent(`src/rules/${entityName}/docs/_description.md`);
+        const motivationReadmeContent = getReadmeContent(`src/rules/${entityName}/docs/_motivation.md`);
+
+        const notesReadmeContent = getReadmeContentIfExist(`src/rules/${entityName}/docs/_notes.md`, '-');
+        const linksReadmeContent = getReadmeContentIfExist(`src/rules/${entityName}/docs/_links.md`, '');
+        const afterDescriptorReadmeContent = getReadmeContentIfExist(`src/rules/${entityName}/docs/_after-descriptor.md`, '');
 
         const ruleReadme = ruleTemplate
             .replace(createPlaceholderRegExp("langSwitcher"), LANG_SWITCHER_MD)
             .replace(createPlaceholderRegExp("name"), entityName)
             .replace(createPlaceholderRegExp("config"), configReadmeContent)
             .replace(createPlaceholderRegExp("description"), descriptionReadmeContent)
+            .replace(createPlaceholderRegExp("afterDescription"), afterDescriptorReadmeContent)
             .replace(createPlaceholderRegExp("motivation"), motivationReadmeContent)
-            .replace(createPlaceholderRegExp("langPostfix"), langPostfix);
+            .replace(createPlaceholderRegExp("notes"), notesReadmeContent)
+            .replace(createPlaceholderRegExp("links"), linksReadmeContent)
+            .replace(createPlaceholderRegExp("rootPath"), rootPath)
+            .replace(createPlaceholderRegExp("langPostfix"), langPostfix)
 
         fs.writeFileSync(`src/rules/${entityName}/README${langPostfix}.md`, ruleReadme);
     });

@@ -1,2 +1,2 @@
-- [Различия между методами merge и deepmerge](TODO)
-- [Примеры спецификаций для OpenAPI](TODO)         
+- [Различия между методами merge и deepmerge]({{{rootPath}}}docs/merge-vs-deepmerge{{{langPostfix}}}.md)
+- [Примеры спецификаций для OpenAPI]({{{rootPath}}}docs/schema-diff{{{langPostfix}}}.md)

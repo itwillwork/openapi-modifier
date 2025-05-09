@@ -2,15 +2,17 @@
 
 # patch-component-schema
 
-Правило позволяет модифицировать схему компонента в OpenAPI спецификации. 
+Правило позволяет модифицировать схему компонента в OpenAPI спецификации.
+
+
 
 ## Конфигурация
 
 | Параметр    | Описание                                                                                 | Пример                                                                       | Типизация                                        | Дефолтное                                |
 | -------- |------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|--------------------------------------------------|------------------------------------------|
-| `descriptor`  | [**обязательный**] Описание компонента для модификации. [Подробнее про descriptor](TODO) | `"Pet.name"` или `{"componentName": "Pet", "correction": "properties.name"}` | `string | ComponentWithCorrectionDescriptorConfig` | - |
-| `patchMethod`  | Метод применения патча. [Подробнее про различия между методами merge и deepmerge](TODO)  | `"merge"`                                                                    | `"merge" \                                       | "deepmerge"`                             | `"merge"` |
-| `schemaDiff`  | [**обязательный**] Схема для патча. [Примеры патчей схем](TODO)                          | `{"type": "string", "description": "New description"}`                       | `OpenAPISchemaConfig`                            | -                                        |
+| `descriptor`  | [**обязательный**] Описание компонента для модификации. [Подробнее про различия между простым и объектным дескриптором компонента с коррекцией](../../../docs/descriptor-ru.md) | `"Pet.name"` или `{"componentName": "Pet", "correction": "properties.name"}` | `string | ComponentWithCorrectionDescriptorConfig` | - |
+| `patchMethod`  | Метод применения патча. [Подробнее про различия между методами merge и deepmerge](../../../docs/merge-vs-deepmerge-ru.md)  | `"merge"`                                                                    | `"merge" \                                       | "deepmerge"`                             | `"merge"` |
+| `schemaDiff`  | [**обязательный**] Схема для патча. [Подробные примеры спецификаций для OpenAPI](../../../docs/schema-diff-ru.md)                          | `{"type": "string", "description": "New description"}`                       | `OpenAPISchemaConfig`                            | -                                        |
 
 > [!IMPORTANT]
 > Тонкости задачния параметра `descriptor`:
@@ -59,7 +61,6 @@ module.exports = {
     ]
 }
 ```
-
 
 **Если необходимо изменить несколько спецификаций**, вы можете использовать несколько раз данное правило в общем пайлайне конфигурации.
 
@@ -187,9 +188,15 @@ components:
         age:
           type: integer
           description: Pet age
-``` 
+```
+
+## Важные замечания
+
+-
 
 ## Полезные ссылки
 
-{{{links}}}
 - [Примеры применения правила в тестах](./index.test.ts)  
+- [Различия между простым и объектным дескриптором компонента с коррекцией](../../../docs/descriptor-ru.md)
+- [Различия между методами merge и deepmerge](../../../docs/merge-vs-deepmerge-ru.md)
+- [Примеры спецификаций для OpenAPI](../../../docs/schema-diff-ru.md)
