@@ -1,0 +1,2 @@
+- The rule does not affect schemas defined via references ($ref)
+- If `showUnusedWarning` is enabled, the rule will display a warning if no schemas with `minItems` are found, to help keep the openapi-modifier configuration up to date 

@@ -1,0 +1,1 @@
+从 OpenAPI 规范中的所有模式中删除 `minItems` 属性。 

@@ -1,0 +1,2 @@
+- 该规则不影响通过引用（$ref）定义的模式
+- 如果启用了 `showUnusedWarning`，当未找到带有 `maxItems` 的模式时，规则将显示警告，以帮助保持 openapi-modifier 配置的及时更新 

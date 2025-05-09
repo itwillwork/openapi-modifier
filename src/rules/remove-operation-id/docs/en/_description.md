@@ -1,0 +1,1 @@
+Removes operationId from all operations in the OpenAPI specification, except those specified in the ignore list 

@@ -1,0 +1,1 @@
+Removes the `minItems` property from all schemas in the OpenAPI specification. 

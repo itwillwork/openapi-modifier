@@ -1,0 +1,1 @@
+从 OpenAPI 规范中删除所有操作的 operationId，忽略列表中指定的操作除外 

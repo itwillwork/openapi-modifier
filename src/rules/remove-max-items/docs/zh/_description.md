@@ -1,0 +1,1 @@
+从 OpenAPI 规范的所有模式中删除 `maxItems` 属性。 

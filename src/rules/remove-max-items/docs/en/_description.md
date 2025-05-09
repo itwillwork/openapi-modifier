@@ -1,0 +1,1 @@
+Removes the `maxItems` property from all schemas in the OpenAPI specification. 
