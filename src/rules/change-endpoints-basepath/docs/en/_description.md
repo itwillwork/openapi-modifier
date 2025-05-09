@@ -1,0 +1,1 @@
+Changes basepaths of endpoints according to the replacement dictionary 
