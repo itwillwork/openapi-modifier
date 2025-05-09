@@ -1,0 +1,6 @@
+- The rule removes elements marked as `deprecated: true`
+- Removal is recursive - if a component is marked as deprecated, all its references are removed
+- When removing an endpoint, all its methods are removed
+- The rule checks and resolves references ($ref) before making a decision to remove
+- If `showDeprecatedDescriptions` is enabled, descriptions of all removed elements are output to the log
+- The rule outputs warnings for ignored components that were not found 

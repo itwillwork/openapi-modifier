@@ -1,0 +1,1 @@
+The rule allows removing deprecated elements from the OpenAPI specification. It can remove deprecated components, endpoints, parameters, and properties, while providing the ability to ignore specific elements and display descriptions of removed elements. 
