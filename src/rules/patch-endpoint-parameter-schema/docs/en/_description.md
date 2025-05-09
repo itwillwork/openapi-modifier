@@ -1,0 +1,1 @@
+The rule allows modifying the schema of endpoint parameters in the OpenAPI specification. 

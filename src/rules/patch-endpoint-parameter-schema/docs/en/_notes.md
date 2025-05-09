@@ -1,0 +1,3 @@
+- The rule skips parameters defined via references ($ref)
+- If the specified parameter or endpoint is not found, the rule outputs a warning for timely updating of the openapi-modifier configuration
+- Changes are applied atomically - either all changes are successful, or the specification remains unchanged 

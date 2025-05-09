@@ -1,0 +1,3 @@
+- [Differences between simple and object component descriptors with correction]({{{rootPath}}}docs/descriptor{{{langPostfix}}}.md)
+- [Differences between merge and deepmerge methods]({{{rootPath}}}docs/merge-vs-deepmerge{{{langPostfix}}}.md)
+- [OpenAPI specification examples]({{{rootPath}}}docs/schema-diff{{{langPostfix}}}.md) 

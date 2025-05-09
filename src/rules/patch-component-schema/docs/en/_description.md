@@ -1,0 +1,1 @@
+This rule allows modifying the component schema in the OpenAPI specification. 

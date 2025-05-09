@@ -1,0 +1,3 @@
+- [简单组件描述符和带校正的对象组件描述符之间的区别]({{{rootPath}}}docs/descriptor{{{langPostfix}}}.md)
+- [merge 和 deepmerge 方法之间的区别]({{{rootPath}}}docs/merge-vs-deepmerge{{{langPostfix}}}.md)
+- [OpenAPI 规范示例]({{{rootPath}}}docs/schema-diff{{{langPostfix}}}.md) 
