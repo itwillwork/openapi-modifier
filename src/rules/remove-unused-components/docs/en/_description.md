@@ -1,0 +1,1 @@
+Removes unused components from the OpenAPI specification. The rule analyzes all component references in the document and removes those that are not used anywhere. 

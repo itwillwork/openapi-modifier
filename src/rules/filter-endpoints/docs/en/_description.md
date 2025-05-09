@@ -1,0 +1,1 @@
+The rule allows filtering endpoints in the OpenAPI specification based on their paths and methods. It enables explicit specification of which endpoints should be kept or removed from the specification. The rule supports both exact matching and regular expression-based filtering. 

@@ -1,0 +1,1 @@
+- The rule outputs warnings for endpoints specified in the configuration but not found in the specification 
