@@ -11,8 +11,8 @@ const IGNORE_ENTIRY_NAME = [
 
 const LANGS = [
     'ru',
-    // 'en',
-    // 'zh'
+    'en',
+    'zh'
 ];
 
 const createPlaceholderRegExp = (placeholder: string) => {
