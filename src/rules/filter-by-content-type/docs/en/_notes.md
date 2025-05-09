@@ -1,0 +1,2 @@
+1. If both `enabled` and `disabled` parameters are specified, the `enabled` filter is applied first, followed by `disabled`
+2. The rule outputs warnings for content types specified in the configuration but not found in the specification 

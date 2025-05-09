@@ -1,0 +1,1 @@
+The rule allows filtering content types in the OpenAPI specification. It enables explicit specification of which content types should be kept or removed from the specification. The rule applies to all API components, including requests, responses, and common components. 
