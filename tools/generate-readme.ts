@@ -50,8 +50,8 @@ LANGS.forEach((lang) => {
 
         console.log(`Generate entity name ${entityName}`);
 
-        const configTemplate = getTemplate(`src/rules/${entityName}/docs/_config.md`);
-        const descriptionTemplate = getTemplate(`src/rules/${entityName}/docs/_description.md`);
+        const configTemplate = getTemplate(`src/rules/${entityName}/docs/${lang}/_config.md`);
+        const descriptionTemplate = getTemplate(`src/rules/${entityName}/docs/${lang}/_description.md`);
 
         const ruleListItem = ruleListItemTemplate
             .replace(createPlaceholderRegExp("name"), entityName)

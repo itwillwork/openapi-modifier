@@ -50,15 +50,13 @@ LANGS.forEach((lang) => {
 
         console.log(`Generate docs for rule ${entityName}...`);
 
-        const rootPath = '../../../';
+        const configReadmeContent = getReadmeContent(`src/rules/${entityName}/docs/${lang}/_config.md`);
+        const descriptionReadmeContent = getReadmeContent(`src/rules/${entityName}/docs/${lang}/_description.md`);
+        const motivationReadmeContent = getReadmeContent(`src/rules/${entityName}/docs/${lang}/_motivation.md`);
 
-        const configReadmeContent = getReadmeContent(`src/rules/${entityName}/docs/_config.md`);
-        const descriptionReadmeContent = getReadmeContent(`src/rules/${entityName}/docs/_description.md`);
-        const motivationReadmeContent = getReadmeContent(`src/rules/${entityName}/docs/_motivation.md`);
-
-        const notesReadmeContent = getReadmeContentIfExist(`src/rules/${entityName}/docs/_notes.md`, '-');
-        const linksReadmeContent = getReadmeContentIfExist(`src/rules/${entityName}/docs/_links.md`, '');
-        const afterDescriptorReadmeContent = getReadmeContentIfExist(`src/rules/${entityName}/docs/_after-descriptor.md`, '');
+        const notesReadmeContent = getReadmeContentIfExist(`src/rules/${entityName}/docs/${lang}/_notes.md`, '-');
+        const linksReadmeContent = getReadmeContentIfExist(`src/rules/${entityName}/docs/${lang}/_links.md`, '');
+        const afterDescriptorReadmeContent = getReadmeContentIfExist(`src/rules/${entityName}/docs/${lang}/_after-descriptor.md`, '');
 
         const ruleReadme = ruleTemplate
             .replace(createPlaceholderRegExp("langSwitcher"), LANG_SWITCHER_MD)
@@ -69,7 +67,7 @@ LANGS.forEach((lang) => {
             .replace(createPlaceholderRegExp("motivation"), motivationReadmeContent)
             .replace(createPlaceholderRegExp("notes"), notesReadmeContent)
             .replace(createPlaceholderRegExp("links"), linksReadmeContent)
-            .replace(createPlaceholderRegExp("rootPath"), rootPath)
+            .replace(createPlaceholderRegExp("rootPath"), '../../../')
             .replace(createPlaceholderRegExp("langPostfix"), langPostfix)
 
         fs.writeFileSync(`src/rules/${entityName}/README${langPostfix}.md`, ruleReadme);
