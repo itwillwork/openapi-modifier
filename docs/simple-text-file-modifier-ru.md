@@ -1,4 +1,4 @@
-{{{langSwitcher}}}
+[🇺🇸 English](./simple-text-file-modifier.md) | [🇷🇺 Русский](./simple-text-file-modifier-ru.md)  | [🇨🇳 中文](./simple-text-file-modifier-zh.md)
 
 # Simple Text File Modifier
 

@@ -1192,7 +1192,8 @@ module.exports = {
 
 ## Дополнительные полезные ссылки
 
-- [Подробная документация по разработке и добавлению новых правил](./docs/debug.md)
-- [Разница между merge и deepmerge стратегиями](./docs/merge-strategy.md)
-- [Примеры спецификаций OpenAPI формата](./docs/schema-diff.md)
-- [Подробная документация по cli simple-text-file-modifier](./docs/simple-text-file-modifier.md)
+- [Добавление нового правила](./docs/contributing-ru.md)
+- [Различия между простым и объектным дескриптором компонента с коррекцией](./docs/descriptor-ru.md)
+- [Различия между методами merge и deepmerge](./docs/merge-vs-deepmerge-ru.md)
+- [Примеры спецификаций для OpenAPI](./docs/schema-diff-ru.md)
+- [Simple Text File Modifier](./docs/simple-text-file-modifier-ru.md)

@@ -70,6 +70,27 @@ LANGS.forEach((lang) => {
         .replace(createPlaceholderRegExp("langPostfix"), langPostfix)
 
     fs.writeFileSync(`README${langPostfix}.md`, readme);
+
+    const debuggingTemplate = fs.readFileSync(`docs/drafts/${lang}/sections/debugging.md`).toString();
+
+    const additionalReadMePages: Array<[string, string]> = [
+        [`docs/drafts/${lang}/contributing.md`, 'contributing'],
+        [`docs/drafts/${lang}/descriptor.md`, 'descriptor'],
+        [`docs/drafts/${lang}/merge-vs-deepmerge.md`, 'merge-vs-deepmerge'],
+        [`docs/drafts/${lang}/schema-diff.md`, 'schema-diff'],
+        [`docs/drafts/${lang}/simple-text-file-modifier.md`, 'simple-text-file-modifier'],
+    ];
+    additionalReadMePages.forEach(([inputTemplatePath, outputPrefix]) => {
+        const inputTemplate = fs.readFileSync(inputTemplatePath).toString();
+
+        const additionalReadMeTemplate = `[🇺🇸 English](./${outputPrefix}.md) | [🇷🇺 Русский](./${outputPrefix}-ru.md)  | [🇨🇳 中文](./${outputPrefix}-zh.md)`;
+
+        const output =  inputTemplate
+            .replace(createPlaceholderRegExp("langSwitcher"), additionalReadMeTemplate)
+            .replace(createPlaceholderRegExp("debugging"), debuggingTemplate)
+
+        fs.writeFileSync(`docs/${outputPrefix}${langPostfix}.md`, output);
+    })
 });
 
 

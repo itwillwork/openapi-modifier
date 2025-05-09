@@ -1,4 +1,4 @@
-{{{langSwitcher}}}
+[🇺🇸 English](./schema-diff.md) | [🇷🇺 Русский](./schema-diff-ru.md)  | [🇨🇳 中文](./schema-diff-zh.md)
 
 # Примеры спецификаций для OpenAPI
 

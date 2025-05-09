@@ -1,4 +1,4 @@
-{{{langSwitcher}}}
+[🇺🇸 English](./merge-vs-deepmerge.md) | [🇷🇺 Русский](./merge-vs-deepmerge-ru.md)  | [🇨🇳 中文](./merge-vs-deepmerge-zh.md)
 
 # Различия между методами merge и deepmerge
 
