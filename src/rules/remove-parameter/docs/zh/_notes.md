@@ -1,0 +1,2 @@
+- 如果未找到端点或参数，规则将输出警告并保持规范不变，以便及时更新 openapi-modifier 配置
+- 该规则可应用于任何类型的参数（query、path、header、cookie） 

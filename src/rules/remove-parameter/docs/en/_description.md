@@ -1,0 +1,1 @@
+Removes a parameter from an endpoint in the OpenAPI specification 

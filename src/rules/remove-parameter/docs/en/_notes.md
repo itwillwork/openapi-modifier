@@ -1,0 +1,2 @@
+- If the endpoint or parameter is not found, the rule outputs a warning and leaves the specification unchanged, for timely updating of the openapi-modifier configuration
+- The rule can be applied to parameters of any type (query, path, header, cookie) 
