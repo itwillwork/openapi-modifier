@@ -1,0 +1,1 @@
+Changes content types in the OpenAPI specification according to the replacement dictionary 
