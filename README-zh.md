@@ -872,7 +872,7 @@ module.exports = {
 | `endpointDescriptor`           | [**必填**] 需要修补的端点描述                          | `{ path: "/pets", method: "get" }` | `{ path: string, method: string }` | -             |
 | `endpointDescriptorCorrection` | 端点模式中需要修补的特定字段路径                       | `"responses.200.content.application/json.schema"` | `string` | -             |
 | `schemaDiff`                   | [**必填**] OpenAPI 格式所需的更改。[OpenAPI 规范详细示例](./docs/schema-diff-zh.md)              | `{ type: "object", properties: { ... } }` | `OpenAPISchema` | -             |
-| `patchMethod`                  | 应用更改的方法 [了解 merge 和 deepmerge 方法的区别](./docs/merge-vs-deepmerge-zh.md)                                                                        | `'merge' / 'deepmerge'` | `enum`                                                                              |  `merge` |
+| `patchMethod`                  | 应用更改的方法 [了解 merge 和 deepmerge 方法的区别](./docs/merge-vs-deepmerge-zh.md)                                                                        | `"merge"` | `"merge" \ "deepmerge"` | `"merge"` |
 
 配置示例：
 

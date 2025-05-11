@@ -14,7 +14,7 @@
 | `endpointDescriptor`           | [**обязательный**] Описание эндпоинта для патчинга     | `{ path: "/pets", method: "get" }` | `{ path: string, method: string }` | -             |
 | `endpointDescriptorCorrection` | Путь к конкретному полю в схеме эндпоинта для патчинга | `"responses.200.content.application/json.schema"` | `string` | -             |
 | `schemaDiff`                   | [**обязательный**] Необходимое изменение в формате OpenAPI. [Подробные примеры спецификаций для OpenAPI](../../../docs/schema-diff-ru.md)              | `{ type: "object", properties: { ... } }` | `OpenAPISchema` | -             |
-| `patchMethod`                    | Метод применения изменений [Подробнее про различия между методами merge и deepmerge](../../../docs/merge-vs-deepmerge-ru.md)                                                                        | `'merge' /                                                                                                                                                  'deepmerge'` | `enum`                                                                              |  `merge` |
+| `patchMethod`                    | Метод применения изменений [Подробнее про различия между методами merge и deepmerge](../../../docs/merge-vs-deepmerge-ru.md)                                                                       | `"merge"` | `"merge" \ "deepmerge"` | `"merge"` |
 
 Пример конфигурации:
 
