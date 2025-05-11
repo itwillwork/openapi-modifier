@@ -297,7 +297,10 @@ module.exports = {
 }
 ```
 
-[More details about rule change-content-type](./src/rules/change-content-type/README.md) ----------------------
+[More details about rule change-content-type](./src/rules/change-content-type/README.md) 
+
+----------------------
+
 <a name="custom_anchor_rule_change-endpoints-basepath"></a>
 
 ### change-endpoints-basepath
@@ -351,7 +354,10 @@ module.exports = {
 }
 ```
 
-[More details about rule change-endpoints-basepath](./src/rules/change-endpoints-basepath/README.md) ----------------------
+[More details about rule change-endpoints-basepath](./src/rules/change-endpoints-basepath/README.md) 
+
+----------------------
+
 <a name="custom_anchor_rule_filter-by-content-type"></a>
 
 ### filter-by-content-type
@@ -399,7 +405,10 @@ module.exports = {
 }
 ```
 
-[More details about rule filter-by-content-type](./src/rules/filter-by-content-type/README.md) ----------------------
+[More details about rule filter-by-content-type](./src/rules/filter-by-content-type/README.md) 
+
+----------------------
+
 <a name="custom_anchor_rule_filter-endpoints"></a>
 
 ### filter-endpoints
@@ -495,7 +504,10 @@ module.exports = {
     ]
 }
 
-[More details about rule filter-endpoints](./src/rules/filter-endpoints/README.md) ----------------------
+[More details about rule filter-endpoints](./src/rules/filter-endpoints/README.md) 
+
+----------------------
+
 <a name="custom_anchor_rule_merge-openapi-spec"></a>
 
 ### merge-openapi-spec
@@ -548,7 +560,10 @@ module.exports = {
     ]
 }
 
-[More details about rule merge-openapi-spec](./src/rules/merge-openapi-spec/README.md) ----------------------
+[More details about rule merge-openapi-spec](./src/rules/merge-openapi-spec/README.md) 
+
+----------------------
+
 <a name="custom_anchor_rule_patch-component-schema"></a>
 
 ### patch-component-schema
@@ -610,7 +625,10 @@ module.exports = {
     ]
 }
 
-[More details about rule patch-component-schema](./src/rules/patch-component-schema/README.md) ----------------------
+[More details about rule patch-component-schema](./src/rules/patch-component-schema/README.md) 
+
+----------------------
+
 <a name="custom_anchor_rule_patch-endpoint-parameter-schema"></a>
 
 ### patch-endpoint-parameter-schema
@@ -681,7 +699,10 @@ module.exports = {
     ]
 }
 
-[More details about rule patch-endpoint-parameter-schema](./src/rules/patch-endpoint-parameter-schema/README.md) ----------------------
+[More details about rule patch-endpoint-parameter-schema](./src/rules/patch-endpoint-parameter-schema/README.md) 
+
+----------------------
+
 <a name="custom_anchor_rule_patch-endpoint-request-body-schema"></a>
 
 ### patch-endpoint-request-body-schema
@@ -767,7 +788,10 @@ module.exports = {
 }
 ```
 
-[More details about rule patch-endpoint-request-body-schema](./src/rules/patch-endpoint-request-body-schema/README.md) ----------------------
+[More details about rule patch-endpoint-request-body-schema](./src/rules/patch-endpoint-request-body-schema/README.md) 
+
+----------------------
+
 <a name="custom_anchor_rule_patch-endpoint-response-schema"></a>
 
 ### patch-endpoint-response-schema
@@ -829,7 +853,10 @@ module.exports = {
     ]
 }
 
-[More details about rule patch-endpoint-response-schema](./src/rules/patch-endpoint-response-schema/README.md) ----------------------
+[More details about rule patch-endpoint-response-schema](./src/rules/patch-endpoint-response-schema/README.md) 
+
+----------------------
+
 <a name="custom_anchor_rule_patch-endpoint-schema"></a>
 
 ### patch-endpoint-schema
@@ -887,7 +914,10 @@ module.exports = {
     ]
 }
 
-[More details about rule patch-endpoint-schema](./src/rules/patch-endpoint-schema/README.md) ----------------------
+[More details about rule patch-endpoint-schema](./src/rules/patch-endpoint-schema/README.md) 
+
+----------------------
+
 <a name="custom_anchor_rule_remove-deprecated"></a>
 
 ### remove-deprecated
@@ -942,7 +972,10 @@ module.exports = {
     ]
 }
 
-[More details about rule remove-deprecated](./src/rules/remove-deprecated/README.md) ----------------------
+[More details about rule remove-deprecated](./src/rules/remove-deprecated/README.md) 
+
+----------------------
+
 <a name="custom_anchor_rule_remove-max-items"></a>
 
 ### remove-max-items
@@ -987,7 +1020,10 @@ module.exports = {
 }
 ```
 
-[More details about rule remove-max-items](./src/rules/remove-max-items/README.md) ----------------------
+[More details about rule remove-max-items](./src/rules/remove-max-items/README.md) 
+
+----------------------
+
 <a name="custom_anchor_rule_remove-min-items"></a>
 
 ### remove-min-items
@@ -1032,7 +1068,10 @@ module.exports = {
 }
 ```
 
-[More details about rule remove-min-items](./src/rules/remove-min-items/README.md) ----------------------
+[More details about rule remove-min-items](./src/rules/remove-min-items/README.md) 
+
+----------------------
+
 <a name="custom_anchor_rule_remove-operation-id"></a>
 
 ### remove-operation-id
@@ -1076,7 +1115,10 @@ module.exports = {
     ]
 }
 
-[More details about rule remove-operation-id](./src/rules/remove-operation-id/README.md) ----------------------
+[More details about rule remove-operation-id](./src/rules/remove-operation-id/README.md) 
+
+----------------------
+
 <a name="custom_anchor_rule_remove-parameter"></a>
 
 ### remove-parameter
@@ -1111,7 +1153,10 @@ module.exports = {
 }
 ```
 
-[More details about rule remove-parameter](./src/rules/remove-parameter/README.md) ----------------------
+[More details about rule remove-parameter](./src/rules/remove-parameter/README.md) 
+
+----------------------
+
 <a name="custom_anchor_rule_remove-unused-components"></a>
 
 ### remove-unused-components

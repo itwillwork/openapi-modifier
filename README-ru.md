@@ -300,7 +300,10 @@ module.exports = {
 }
 ```
 
-[Подрбонее про правило change-content-type](./src/rules/change-content-type/README-ru.md)----------------------
+[Подрбонее про правило change-content-type](./src/rules/change-content-type/README-ru.md)
+
+----------------------
+
 <a name="custom_anchor_rule_change-endpoints-basepath"></a>
 
 ### change-endpoints-basepath
@@ -354,7 +357,10 @@ module.exports = {
 }
 ```
 
-[Подрбонее про правило change-endpoints-basepath](./src/rules/change-endpoints-basepath/README-ru.md)----------------------
+[Подрбонее про правило change-endpoints-basepath](./src/rules/change-endpoints-basepath/README-ru.md)
+
+----------------------
+
 <a name="custom_anchor_rule_filter-by-content-type"></a>
 
 ### filter-by-content-type
@@ -402,7 +408,10 @@ module.exports = {
 }
 ```
 
-[Подрбонее про правило filter-by-content-type](./src/rules/filter-by-content-type/README-ru.md)----------------------
+[Подрбонее про правило filter-by-content-type](./src/rules/filter-by-content-type/README-ru.md)
+
+----------------------
+
 <a name="custom_anchor_rule_filter-endpoints"></a>
 
 ### filter-endpoints
@@ -499,7 +508,10 @@ module.exports = {
 }
 ```
 
-[Подрбонее про правило filter-endpoints](./src/rules/filter-endpoints/README-ru.md)----------------------
+[Подрбонее про правило filter-endpoints](./src/rules/filter-endpoints/README-ru.md)
+
+----------------------
+
 <a name="custom_anchor_rule_merge-openapi-spec"></a>
 
 ### merge-openapi-spec
@@ -553,7 +565,10 @@ module.exports = {
 }
 ```
 
-[Подрбонее про правило merge-openapi-spec](./src/rules/merge-openapi-spec/README-ru.md)----------------------
+[Подрбонее про правило merge-openapi-spec](./src/rules/merge-openapi-spec/README-ru.md)
+
+----------------------
+
 <a name="custom_anchor_rule_patch-component-schema"></a>
 
 ### patch-component-schema
@@ -616,7 +631,10 @@ module.exports = {
 }
 ```
 
-[Подрбонее про правило patch-component-schema](./src/rules/patch-component-schema/README-ru.md)----------------------
+[Подрбонее про правило patch-component-schema](./src/rules/patch-component-schema/README-ru.md)
+
+----------------------
+
 <a name="custom_anchor_rule_patch-endpoint-parameter-schema"></a>
 
 ### patch-endpoint-parameter-schema
@@ -688,7 +706,10 @@ module.exports = {
 }
 ```
 
-[Подрбонее про правило patch-endpoint-parameter-schema](./src/rules/patch-endpoint-parameter-schema/README-ru.md)----------------------
+[Подрбонее про правило patch-endpoint-parameter-schema](./src/rules/patch-endpoint-parameter-schema/README-ru.md)
+
+----------------------
+
 <a name="custom_anchor_rule_patch-endpoint-request-body-schema"></a>
 
 ### patch-endpoint-request-body-schema
@@ -774,7 +795,10 @@ module.exports = {
 }
 ```
 
-[Подрбонее про правило patch-endpoint-request-body-schema](./src/rules/patch-endpoint-request-body-schema/README-ru.md)----------------------
+[Подрбонее про правило patch-endpoint-request-body-schema](./src/rules/patch-endpoint-request-body-schema/README-ru.md)
+
+----------------------
+
 <a name="custom_anchor_rule_patch-endpoint-response-schema"></a>
 
 ### patch-endpoint-response-schema
@@ -837,7 +861,10 @@ module.exports = {
 }
 ```
 
-[Подрбонее про правило patch-endpoint-response-schema](./src/rules/patch-endpoint-response-schema/README-ru.md)----------------------
+[Подрбонее про правило patch-endpoint-response-schema](./src/rules/patch-endpoint-response-schema/README-ru.md)
+
+----------------------
+
 <a name="custom_anchor_rule_patch-endpoint-schema"></a>
 
 ### patch-endpoint-schema
@@ -896,7 +923,10 @@ module.exports = {
 }
 ```
 
-[Подрбонее про правило patch-endpoint-schema](./src/rules/patch-endpoint-schema/README-ru.md)----------------------
+[Подрбонее про правило patch-endpoint-schema](./src/rules/patch-endpoint-schema/README-ru.md)
+
+----------------------
+
 <a name="custom_anchor_rule_remove-deprecated"></a>
 
 ### remove-deprecated
@@ -952,7 +982,10 @@ module.exports = {
 }
 ```
 
-[Подрбонее про правило remove-deprecated](./src/rules/remove-deprecated/README-ru.md)----------------------
+[Подрбонее про правило remove-deprecated](./src/rules/remove-deprecated/README-ru.md)
+
+----------------------
+
 <a name="custom_anchor_rule_remove-max-items"></a>
 
 ### remove-max-items
@@ -997,7 +1030,10 @@ module.exports = {
 }
 ```
 
-[Подрбонее про правило remove-max-items](./src/rules/remove-max-items/README-ru.md)----------------------
+[Подрбонее про правило remove-max-items](./src/rules/remove-max-items/README-ru.md)
+
+----------------------
+
 <a name="custom_anchor_rule_remove-min-items"></a>
 
 ### remove-min-items
@@ -1042,7 +1078,10 @@ module.exports = {
 }
 ```
 
-[Подрбонее про правило remove-min-items](./src/rules/remove-min-items/README-ru.md)----------------------
+[Подрбонее про правило remove-min-items](./src/rules/remove-min-items/README-ru.md)
+
+----------------------
+
 <a name="custom_anchor_rule_remove-operation-id"></a>
 
 ### remove-operation-id
@@ -1087,7 +1126,10 @@ module.exports = {
 }
 ```
 
-[Подрбонее про правило remove-operation-id](./src/rules/remove-operation-id/README-ru.md)----------------------
+[Подрбонее про правило remove-operation-id](./src/rules/remove-operation-id/README-ru.md)
+
+----------------------
+
 <a name="custom_anchor_rule_remove-parameter"></a>
 
 ### remove-parameter
@@ -1122,7 +1164,10 @@ module.exports = {
 }
 ```
 
-[Подрбонее про правило remove-parameter](./src/rules/remove-parameter/README-ru.md)----------------------
+[Подрбонее про правило remove-parameter](./src/rules/remove-parameter/README-ru.md)
+
+----------------------
+
 <a name="custom_anchor_rule_remove-unused-components"></a>
 
 ### remove-unused-components

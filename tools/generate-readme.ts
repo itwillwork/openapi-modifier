@@ -51,7 +51,7 @@ LANGS.forEach((lang) => {
         console.log(`Generate ${lang} rule name ${ruleName}`);
 
         if (ruleListReadme) {
-            ruleListReadme += '----------------------\n';
+            ruleListReadme += '\n\n----------------------\n\n';
         }
 
         const configTemplate = getTemplate(`src/rules/${ruleName}/docs/${lang}/_config.md`);
