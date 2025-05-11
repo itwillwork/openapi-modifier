@@ -50,7 +50,7 @@ LANGS.forEach((lang) => {
 
         console.log(`Generate ${lang} rule name ${ruleName}`);
 
-        if (!ruleListReadme) {
+        if (ruleListReadme) {
             ruleListReadme += '----------------------\n';
         }
 

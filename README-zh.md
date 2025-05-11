@@ -266,7 +266,6 @@ module.exports = {
 
 ## 规则简要说明
 
-----------------------
 <a name="custom_anchor_rule_change-content-type"></a>
 
 ### change-content-type
@@ -298,7 +297,8 @@ module.exports = {
 }
 ```
 
-[关于规则 change-content-type 的更多详情](./src/rules/change-content-type/README-zh.md) <a name="custom_anchor_rule_change-endpoints-basepath"></a>
+[关于规则 change-content-type 的更多详情](./src/rules/change-content-type/README-zh.md) ----------------------
+<a name="custom_anchor_rule_change-endpoints-basepath"></a>
 
 ### change-endpoints-basepath
 
@@ -351,7 +351,8 @@ module.exports = {
 }
 ```
 
-[关于规则 change-endpoints-basepath 的更多详情](./src/rules/change-endpoints-basepath/README-zh.md) <a name="custom_anchor_rule_filter-by-content-type"></a>
+[关于规则 change-endpoints-basepath 的更多详情](./src/rules/change-endpoints-basepath/README-zh.md) ----------------------
+<a name="custom_anchor_rule_filter-by-content-type"></a>
 
 ### filter-by-content-type
 
@@ -398,7 +399,8 @@ module.exports = {
 }
 ```
 
-[关于规则 filter-by-content-type 的更多详情](./src/rules/filter-by-content-type/README-zh.md) <a name="custom_anchor_rule_filter-endpoints"></a>
+[关于规则 filter-by-content-type 的更多详情](./src/rules/filter-by-content-type/README-zh.md) ----------------------
+<a name="custom_anchor_rule_filter-endpoints"></a>
 
 ### filter-endpoints
 
@@ -493,7 +495,8 @@ module.exports = {
     ]
 }
 
-[关于规则 filter-endpoints 的更多详情](./src/rules/filter-endpoints/README-zh.md) <a name="custom_anchor_rule_merge-openapi-spec"></a>
+[关于规则 filter-endpoints 的更多详情](./src/rules/filter-endpoints/README-zh.md) ----------------------
+<a name="custom_anchor_rule_merge-openapi-spec"></a>
 
 ### merge-openapi-spec
 
@@ -545,7 +548,8 @@ module.exports = {
     ]
 }
 
-[关于规则 merge-openapi-spec 的更多详情](./src/rules/merge-openapi-spec/README-zh.md) <a name="custom_anchor_rule_patch-component-schema"></a>
+[关于规则 merge-openapi-spec 的更多详情](./src/rules/merge-openapi-spec/README-zh.md) ----------------------
+<a name="custom_anchor_rule_patch-component-schema"></a>
 
 ### patch-component-schema
 
@@ -606,7 +610,8 @@ module.exports = {
     ]
 }
 
-[关于规则 patch-component-schema 的更多详情](./src/rules/patch-component-schema/README-zh.md) <a name="custom_anchor_rule_patch-endpoint-parameter-schema"></a>
+[关于规则 patch-component-schema 的更多详情](./src/rules/patch-component-schema/README-zh.md) ----------------------
+<a name="custom_anchor_rule_patch-endpoint-parameter-schema"></a>
 
 ### patch-endpoint-parameter-schema
 
@@ -677,7 +682,8 @@ module.exports = {
 }
 ```
 
-[关于规则 patch-endpoint-parameter-schema 的更多详情](./src/rules/patch-endpoint-parameter-schema/README-zh.md) <a name="custom_anchor_rule_patch-endpoint-request-body-schema"></a>
+[关于规则 patch-endpoint-parameter-schema 的更多详情](./src/rules/patch-endpoint-parameter-schema/README-zh.md) ----------------------
+<a name="custom_anchor_rule_patch-endpoint-request-body-schema"></a>
 
 ### patch-endpoint-request-body-schema
 
@@ -762,7 +768,8 @@ module.exports = {
 }
 ```
 
-[关于规则 patch-endpoint-request-body-schema 的更多详情](./src/rules/patch-endpoint-request-body-schema/README-zh.md) <a name="custom_anchor_rule_patch-endpoint-response-schema"></a>
+[关于规则 patch-endpoint-request-body-schema 的更多详情](./src/rules/patch-endpoint-request-body-schema/README-zh.md) ----------------------
+<a name="custom_anchor_rule_patch-endpoint-response-schema"></a>
 
 ### patch-endpoint-response-schema
 
@@ -824,7 +831,8 @@ module.exports = {
 }
 ```
 
-[关于规则 patch-endpoint-response-schema 的更多详情](./src/rules/patch-endpoint-response-schema/README-zh.md) <a name="custom_anchor_rule_patch-endpoint-schema"></a>
+[关于规则 patch-endpoint-response-schema 的更多详情](./src/rules/patch-endpoint-response-schema/README-zh.md) ----------------------
+<a name="custom_anchor_rule_patch-endpoint-schema"></a>
 
 ### patch-endpoint-schema
 
@@ -881,7 +889,8 @@ module.exports = {
     ]
 }
 
-[关于规则 patch-endpoint-schema 的更多详情](./src/rules/patch-endpoint-schema/README-zh.md) <a name="custom_anchor_rule_remove-deprecated"></a>
+[关于规则 patch-endpoint-schema 的更多详情](./src/rules/patch-endpoint-schema/README-zh.md) ----------------------
+<a name="custom_anchor_rule_remove-deprecated"></a>
 
 ### remove-deprecated
 
@@ -936,7 +945,8 @@ module.exports = {
 }
 ```
 
-[关于规则 remove-deprecated 的更多详情](./src/rules/remove-deprecated/README-zh.md) <a name="custom_anchor_rule_remove-max-items"></a>
+[关于规则 remove-deprecated 的更多详情](./src/rules/remove-deprecated/README-zh.md) ----------------------
+<a name="custom_anchor_rule_remove-max-items"></a>
 
 ### remove-max-items
 
@@ -980,7 +990,8 @@ module.exports = {
 }
 ```
 
-[关于规则 remove-max-items 的更多详情](./src/rules/remove-max-items/README-zh.md) <a name="custom_anchor_rule_remove-min-items"></a>
+[关于规则 remove-max-items 的更多详情](./src/rules/remove-max-items/README-zh.md) ----------------------
+<a name="custom_anchor_rule_remove-min-items"></a>
 
 ### remove-min-items
 
@@ -1024,7 +1035,8 @@ module.exports = {
 }
 ```
 
-[关于规则 remove-min-items 的更多详情](./src/rules/remove-min-items/README-zh.md) <a name="custom_anchor_rule_remove-operation-id"></a>
+[关于规则 remove-min-items 的更多详情](./src/rules/remove-min-items/README-zh.md) ----------------------
+<a name="custom_anchor_rule_remove-operation-id"></a>
 
 ### remove-operation-id
 
@@ -1067,7 +1079,8 @@ module.exports = {
     ]
 }
 
-[关于规则 remove-operation-id 的更多详情](./src/rules/remove-operation-id/README-zh.md) <a name="custom_anchor_rule_remove-parameter"></a>
+[关于规则 remove-operation-id 的更多详情](./src/rules/remove-operation-id/README-zh.md) ----------------------
+<a name="custom_anchor_rule_remove-parameter"></a>
 
 ### remove-parameter
 
@@ -1101,7 +1114,8 @@ module.exports = {
 }
 ```
 
-[关于规则 remove-parameter 的更多详情](./src/rules/remove-parameter/README-zh.md) <a name="custom_anchor_rule_remove-unused-components"></a>
+[关于规则 remove-parameter 的更多详情](./src/rules/remove-parameter/README-zh.md) ----------------------
+<a name="custom_anchor_rule_remove-unused-components"></a>
 
 ### remove-unused-components
 
