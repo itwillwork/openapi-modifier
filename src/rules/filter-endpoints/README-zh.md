@@ -13,9 +13,9 @@
 
 | 参数                  | 描述                                                                                                                                                                               | 示例                | 类型            | 默认值          |
 |----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|-----------------|-----------------|
-| `enabled`            | 要保留的端点列表 | `[{"method": "GET", "path": "/pets"}]` | `Array<EndpointDescriptorConfig>` | - |
+| `enabled`            | 要保留的端点列表 | `[{"method": "GET", "path": "/pets"}]` | `Array<string \ { path: string; method: string }>` | - |
 | `enabledPathRegExp`  | 要保留的路径的正则表达式列表 | `[/^\/api\/v1/]` | `Array<RegExp>` | - |
-| `disabled`           | 要排除的端点列表 | `[{"method": "POST", "path": "/pets"}]` | `Array<EndpointDescriptorConfig>` | - |
+| `disabled`           | 要排除的端点列表 | `[{"method": "POST", "path": "/pets"}]` | `Array<string \ { path: string; method: string }>` | - |
 | `disabledPathRegExp` | 要排除的路径的正则表达式列表 | `[/^\/internal/]` | `Array<RegExp>` | - |
 | `printIgnoredEndpoints` | 是否在日志中输出有关已排除端点的信息 | `true` | `boolean` | `false` |
 

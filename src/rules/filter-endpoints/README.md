@@ -13,9 +13,9 @@ The rule allows filtering endpoints in the OpenAPI specification based on their 
 
 | Parameter             | Description                                                                                                                                                                               | Example                | Typing          | Default         |
 |----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|-----------------|-----------------|
-| `enabled`            | List of endpoints to keep | `[{"method": "GET", "path": "/pets"}]` | `Array<EndpointDescriptorConfig>` | - |
+| `enabled`            | List of endpoints to keep | `[{"method": "GET", "path": "/pets"}]` | `Array<string \ { path: string; method: string }>` | - |
 | `enabledPathRegExp`  | List of regular expressions for paths to keep | `[/^\/api\/v1/]` | `Array<RegExp>` | - |
-| `disabled`           | List of endpoints to exclude | `[{"method": "POST", "path": "/pets"}]` | `Array<EndpointDescriptorConfig>` | - |
+| `disabled`           | List of endpoints to exclude | `[{"method": "POST", "path": "/pets"}]` | `Array<string \ { path: string; method: string }>` | - |
 | `disabledPathRegExp` | List of regular expressions for paths to exclude | `[/^\/internal/]` | `Array<RegExp>` | - |
 | `printIgnoredEndpoints` | Whether to output information about excluded endpoints to the log | `true` | `boolean` | `false` |
 

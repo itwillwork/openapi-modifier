@@ -12,9 +12,9 @@ The rule allows removing deprecated elements from the OpenAPI specification. It 
 
 | Parameter | Description                                                                                                                | Example                                                                | Type | Default |
 |----------|-------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|-----------|-----------|
-| `ignoreComponents` | [**optional**] List of components that should not be removed, even if they are marked as deprecated            | `[{"componentName": "Pet"}]`                                           | `Array<ComponentDescriptorConfig>` | `[]` |
-| `ignoreEndpoints` | [**optional**] List of endpoints that should not be removed, even if they are marked as deprecated             | `["GET /pets"]`                                                        | `Array<EndpointDescriptorConfig>` | `[]` |
-| `ignoreEndpointParameters` | [**optional**] List of endpoint parameters that should not be removed, even if they are marked as deprecated  | `[{"path": "/pets", "method": "get", "name": "limit", "in": "query"}]` | `Array<ParameterDescriptorConfig>` | `[]` |
+| `ignoreComponents` | [**optional**] List of components that should not be removed, even if they are marked as deprecated            | `[{"componentName": "Pet"}]`                                           | `Array<{ componentName: string }>` | `[]` |
+| `ignoreEndpoints` | [**optional**] List of endpoints that should not be removed, even if they are marked as deprecated             | `["GET /pets"]`                                                        | `Array<string \ { path: string; method: string }>` | `[]` |
+| `ignoreEndpointParameters` | [**optional**] List of endpoint parameters that should not be removed, even if they are marked as deprecated  | `[{"path": "/pets", "method": "get", "name": "limit", "in": "query"}]` | `Array<{ path: string; method: string; name: string; in: "query" \ "path" \ "header" \ "cookie" }>` | `[]` |
 | `showDeprecatedDescriptions` | [**optional**] Whether to show descriptions of removed deprecated elements in logs, useful for explaining what should be used instead | `true`                                                                 | `boolean` | `false` |
 
 > [!IMPORTANT]  

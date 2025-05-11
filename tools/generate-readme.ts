@@ -29,6 +29,17 @@ const getTemplate = (
     return fs.readFileSync(path).toString().trim();
 }
 
+const replaceConfigTypeNames = (
+    text: string
+): string => {
+    return text
+        .replace(/EndpointDescriptorConfig/g, `string \\ { path: string; method: string }`)
+        .replace(/ComponentDescriptorConfig/g, `{ componentName: string }`)
+        .replace(/EndpointParameterDescriptorConfig/g, `{ name: string; in: "query" \\ "path" \\ "header" \\ "cookie" }`)
+        .replace(/ParameterDescriptorConfig/g, `{ path: string; method: string; name: string; in: "query" \\ "path" \\ "header" \\ "cookie" }`)
+        .replace(/ComponentWithCorrectionDescriptorConfig/g, `string \\ { componentName: string; correction: string }`)
+}
+
 LANGS.forEach((lang) => {
     const langPostfix = lang === "en" ? '' : `-${lang}`;
 
@@ -54,7 +65,7 @@ LANGS.forEach((lang) => {
             ruleListReadme += '\n\n----------------------\n\n';
         }
 
-        const configTemplate = getTemplate(`src/rules/${ruleName}/docs/${lang}/_config.md`);
+        const configTemplate = replaceConfigTypeNames(getTemplate(`src/rules/${ruleName}/docs/${lang}/_config.md`));
         const descriptionTemplate = getTemplate(`src/rules/${ruleName}/docs/${lang}/_description.md`);
 
         const ruleListItem = ruleListItemTemplate

@@ -422,9 +422,9 @@ module.exports = {
 
 | 参数                  | 描述                                                                                                                                                                               | 示例                | 类型            | 默认值          |
 |----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|-----------------|-----------------|
-| `enabled`            | 要保留的端点列表 | `[{"method": "GET", "path": "/pets"}]` | `Array<EndpointDescriptor>` | - |
+| `enabled`            | 要保留的端点列表 | `[{"method": "GET", "path": "/pets"}]` | `Array<string \ { path: string; method: string }>` | - |
 | `enabledPathRegExp`  | 要保留的路径的正则表达式列表 | `[/^\/api\/v1/]` | `Array<RegExp>` | - |
-| `disabled`           | 要排除的端点列表 | `[{"method": "POST", "path": "/pets"}]` | `Array<EndpointDescriptor>` | - |
+| `disabled`           | 要排除的端点列表 | `[{"method": "POST", "path": "/pets"}]` | `Array<string \ { path: string; method: string }>` | - |
 | `disabledPathRegExp` | 要排除的路径的正则表达式列表 | `[/^\/internal/]` | `Array<RegExp>` | - |
 | `printIgnoredEndpoints` | 是否在日志中输出有关已排除端点的信息 | `true` | `boolean` | `false` |
 
@@ -574,7 +574,7 @@ module.exports = {
 
 | 参数 | 描述 | 示例 | 类型 | 默认值 |
 | -------- |------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|--------------------------------------------------|------------------------------------------|
-| `descriptor` | [**必填**] 要修改的组件的描述。 [了解简单组件描述符和带校正的对象组件描述符之间的区别](./docs/descriptor-zh.md) | `"Pet.name"` 或 `{"componentName": "Pet", "correction": "properties.name"}` | `string` | `ComponentWithCorrectionDescriptorConfig` | - |
+| `descriptor` | [**必填**] 要修改的组件的描述。 [了解简单组件描述符和带校正的对象组件描述符之间的区别](./docs/descriptor-zh.md) | `"Pet.name"` 或 `{"componentName": "Pet", "correction": "properties.name"}` | `string \ { componentName: string; correction: string }` | - |
 | `patchMethod` | 补丁应用方法。 [了解 merge 和 deepmerge 方法之间的区别](./docs/merge-vs-deepmerge-zh.md) | `"merge"` | `"merge" \ "deepmerge"` | `"merge"` |
 | `schemaDiff` | [**必填**] 用于补丁的模式。 [OpenAPI 规范的详细示例](./docs/schema-diff-zh.md) | `{"type": "string", "description": "New description"}` | `OpenAPISchema` | - |
 
@@ -639,11 +639,11 @@ module.exports = {
 
 | 参数                  | 描述                                                                                                               | 示例                                                                                                                                                                 | 类型                                                                                | 默认值        |
 |-----------------------|------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|--------------|
-| `endpointDescriptor`  | [**必填**] 指定需要更改请求参数架构的端点。                                   | `'GET /api/list'`                                                                                                                                                     | `string`                                                                            |              |
-| `parameterDescriptor` | [**必填**] 指定由 `endpointDescriptor` 引用的需要更改的请求参数。         | `TestSchemaDTO`, `TestSchemaDTO.test`, `TestSchemaDTO[].testField`,  `TestObjectDTO.oneOf[1]`, `TestObjectDTO.allOf[1]` 或  `TestObjectDTO.anyOf[1].testField`        | `string`                                                                            |              |
+| `endpointDescriptor`  | [**必填**] 指定需要更改请求参数架构的端点。                                   | `'GET /api/list'`                                                                                                                                                     | `string \ { path: string; method: string }`                                                                            |              |
+| `parameterDescriptor` | [**必填**] 指定由 `endpointDescriptor` 引用的需要更改的请求参数。         | `'TestSchemaDTO'`, `'TestSchemaDTO.test'`, `'TestSchemaDTO[].testField'`,  `'TestObjectDTO.oneOf[1]'`, `'TestObjectDTO.allOf[1]'` 或  `'TestObjectDTO.anyOf[1].testField'`        | `string`                                                                            |              |
 | `schemaDiff`          | 参数架构的更改 [OpenAPI 规范详细示例](./docs/schema-diff-zh.md)                                                              | `{type: "number"}`                                                                                                   | `OpenAPISchema`                                                                     |              |
 | `objectDiff`          | 参数本身的更改                                                                                         | `{ required: true }`                                                                                                    | `{name?: string; in?: 'query' / 'header' / 'path' / 'cookie'; required?: boolean;}` |              |
-| `patchMethod`         | 应用 `objectDiff` 和 `schemaDiff` 中指定更改的方法。 [更多关于 merge 和 deepmerge 方法的区别](./docs/merge-vs-deepmerge-zh.md) | `'merge' /                                                                                                                                                  'deepmerge'` | `enum`                                                                              |  `merge` |
+| `patchMethod`         | 应用 `objectDiff` 和 `schemaDiff` 中指定更改的方法。 [更多关于 merge 和 deepmerge 方法的区别](./docs/merge-vs-deepmerge-zh.md) | `"merge"` | `"merge" \ "deepmerge"` | `"merge"` |
 
 配置示例：
 
@@ -714,11 +714,11 @@ module.exports = {
 
 | 参数                    | 描述                                                                                                                                                | 示例                                                                                                                                                                | 类型      | 默认值 |
 |-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------|-----------|
-| `endpointDescriptor`        | [**必填**] 指定需要修改请求参数模式的端点。                                                                    | `'GET /api/list'`                                                                                                                                                     | `string`       |           |
+| `endpointDescriptor`        | [**必填**] 指定需要修改请求参数模式的端点。                                                                    | `'GET /api/list'`                                                                                                                                                     | `string \ { path: string; method: string }`       |           |
 | `contentType`               | 指定需要修改的端点请求类型（content-type）。如果未指定，将修改所有请求类型。 | `'application/json'`                                                                                                                                                  | `string`       |  |
 | `correction`                | 模式中需要修改的字段路径                                                                                                                     | `"name"` | `string` | - |
 | `schemaDiff`                | [**必填**] 要应用于模式的更改。 [OpenAPI 规范详细示例](./docs/schema-diff-zh.md)                                                                                                                          | `{type: "number"}` 或查看更多 OpenAPISchema 示例 TODO 链接                                                                                                  | `OpenAPISchema` |           |
-| `patchMethod`               | 应用更改的方法 [了解更多关于 merge 和 deepmerge 方法的区别](./docs/merge-vs-deepmerge-zh.md) | `'merge' / 'deepmerge'` | `enum`                                                                              |  `merge` |
+| `patchMethod`               | 应用更改的方法 [了解更多关于 merge 和 deepmerge 方法的区别](./docs/merge-vs-deepmerge-zh.md) | `"merge"` | `"merge" \ "deepmerge"` | `"merge"` |
 
 配置示例：
 
@@ -803,12 +803,12 @@ module.exports = {
 
 | 参数                  | 描述                                                                                                                                                 | 示例                                                                                                                                                                     | 类型            | 默认值    |
 |----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------|-----------|
-| `endpointDescriptor` | [**必填**] 指定需要修改响应模式的端点。                                                                                                              | `'GET /api/list'`                                                                                                                                                        | `string`        |           |
+| `endpointDescriptor` | [**必填**] 指定需要修改响应模式的端点。                                                                                                              | `'GET /api/list'`                                                                                                                                                        | `string \ { path: string; method: string }`        |           |
 | `correction`         | 要修改的模式属性的路径                                                                                                                               | `"status"`                                                                                                                                                               | `string`        | -         |
 | `code`               | 指定要应用更改的响应状态码。如果未指定，将应用于第一个 2xx 响应。                                                                                     | `200`                                                                                                                                                                    | `number`        |           |
 | `contentType`        | 指定要应用更改的端点响应类型（content-type）。如果未指定，将修改所有响应类型。                                                                        | `'application/json'`                                                                                                                                                     | `string`        |           |
 | `schemaDiff`         | [**必填**] OpenAPI 格式所需的更改。[详细的 OpenAPI 规范示例](./docs/schema-diff-zh.md)                                    | `{type: "number"}`                                                                                         | `OpenAPISchema` |           |
-| `patchMethod`        | 应用更改的方法 [了解更多关于 merge 和 deepmerge 方法的区别](./docs/merge-vs-deepmerge-zh.md)                             | `'merge' / 'deepmerge'`                                                                                    | `enum`          | `merge`   |
+| `patchMethod`        | 应用更改的方法 [了解更多关于 merge 和 deepmerge 方法的区别](./docs/merge-vs-deepmerge-zh.md)                             | `"merge"` | `"merge" \ "deepmerge"` | `"merge"` |
 
 配置示例：
 
@@ -930,9 +930,9 @@ module.exports = {
 
 | 参数 | 描述                                                                                                                | 示例 | 类型 | 默认值 |
 |----------|-------------------------------------------------------------------------------------------------------------------------|---------|-----------|-----------|
-| `ignoreComponents` | [**可选**] 即使标记为已弃用也不应删除的组件列表            | `[{"componentName": "Pet"}]` | `Array<ComponentDescriptorConfig>` | `[]` |
-| `ignoreEndpoints` | [**可选**] 即使标记为已弃用也不应删除的端点列表             | `[{"path": "/pets", "method": "get"}]` | `Array<EndpointDescriptorConfig>` | `[]` |
-| `ignoreEndpointParameters` | [**可选**] 即使标记为已弃用也不应删除的端点参数列表  | `[{"path": "/pets", "method": "get", "name": "limit", "in": "query"}]` | `Array<ParameterDescriptorConfig>` | `[]` |
+| `ignoreComponents` | [**可选**] 即使标记为已弃用也不应删除的组件列表            | `[{"componentName": "Pet"}]` | `Array<{ componentName: string }>` | `[]` |
+| `ignoreEndpoints` | [**可选**] 即使标记为已弃用也不应删除的端点列表             | `["GET /pets"]` | `Array<string \ { path: string; method: string }>` | `[]` |
+| `ignoreEndpointParameters` | [**可选**] 即使标记为已弃用也不应删除的端点参数列表  | `[{"path": "/pets", "method": "get", "name": "limit", "in": "query"}]` | `Array<{ path: string; method: string; name: string; in: "query" \ "path" \ "header" \ "cookie" }>` | `[]` |
 | `showDeprecatedDescriptions` | [**可选**] 是否在日志中显示已删除的已弃用元素的描述，对于解释应该使用什么替代很有用 | `true` | `boolean` | `false` |
 
 > [!IMPORTANT]  
@@ -1132,8 +1132,8 @@ module.exports = {
 
 | 参数 | 描述 | 示例 | 类型 | 默认值 |
 | -------- |-------------------------------------------------------------------------------------------------------------------------------------------|----------------------------|------------------------|-----------|
-| `endpointDescriptor`  | [**必填**] 要从中删除参数的端点描述 | `{"path": "/pets", "method": "get"}` | `EndpointDescriptorConfig` | - |
-| `parameterDescriptor`  | [**必填**] 要删除的参数描述。在 `in` 参数中，可以指定：`"query"`、`"path"`、`"header"`、`"cookie"`。 | `{"name": "petId", "in": "path"}` | `EndpointParameterDescriptorConfig` | - |
+| `endpointDescriptor`  | [**必填**] 要从中删除参数的端点描述 | `"GET /pets"` | `string \ { path: string; method: string }` | - |
+| `parameterDescriptor`  | [**必填**] 要删除的参数描述。在 `in` 参数中，可以指定：`"query"`、`"path"`、`"header"`、`"cookie"`。 | `{"name": "petId", "in": "path"}` | `{ name: string; in: "query" \ "path" \ "header" \ "cookie" }` | - |
 
 配置示例：
 

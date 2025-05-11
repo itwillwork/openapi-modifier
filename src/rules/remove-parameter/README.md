@@ -10,8 +10,8 @@ Removes a parameter from an endpoint in the OpenAPI specification
 
 | Parameter | Description | Example                           | Typing | Default |
 | -------- |-------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------|------------------------|-----------|
-| `endpointDescriptor`  | [**required**] Description of the endpoint from which to remove the parameter | `"GET /pets"`   | `EndpointDescriptorConfig` | - |
-| `parameterDescriptor`  | [**required**] Description of the parameter to remove. In the `in` parameter, you can specify: `"query"`, `"path"`, `"header"`, `"cookie"`. | `{"name": "petId", "in": "path"}` | `EndpointParameterDescriptorConfig` | - |
+| `endpointDescriptor`  | [**required**] Description of the endpoint from which to remove the parameter | `"GET /pets"`   | `string \ { path: string; method: string }` | - |
+| `parameterDescriptor`  | [**required**] Description of the parameter to remove. In the `in` parameter, you can specify: `"query"`, `"path"`, `"header"`, `"cookie"`. | `{"name": "petId", "in": "path"}` | `{ name: string; in: "query" \ "path" \ "header" \ "cookie" }` | - |
 
 Configuration example:
 

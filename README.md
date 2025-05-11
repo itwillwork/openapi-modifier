@@ -422,9 +422,9 @@ The rule allows filtering endpoints in the OpenAPI specification based on their 
 
 | Parameter             | Description                                                                                                                                                                               | Example                | Typing          | Default         |
 |----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|-----------------|-----------------|
-| `enabled`            | List of endpoints to keep | `[{"method": "GET", "path": "/pets"}]` | `Array<EndpointDescriptor>` | - |
+| `enabled`            | List of endpoints to keep | `[{"method": "GET", "path": "/pets"}]` | `Array<string \ { path: string; method: string }>` | - |
 | `enabledPathRegExp`  | List of regular expressions for paths to keep | `[/^\/api\/v1/]` | `Array<RegExp>` | - |
-| `disabled`           | List of endpoints to exclude | `[{"method": "POST", "path": "/pets"}]` | `Array<EndpointDescriptor>` | - |
+| `disabled`           | List of endpoints to exclude | `[{"method": "POST", "path": "/pets"}]` | `Array<string \ { path: string; method: string }>` | - |
 | `disabledPathRegExp` | List of regular expressions for paths to exclude | `[/^\/internal/]` | `Array<RegExp>` | - |
 | `printIgnoredEndpoints` | Whether to output information about excluded endpoints to the log | `true` | `boolean` | `false` |
 
@@ -573,8 +573,8 @@ This rule allows modifying the component schema in the OpenAPI specification.
 #### Config
 
 | Parameter | Description | Example | Typing | Default |
-| -------- |------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|--------------------------------------------|------------------------------------------|
-| `descriptor` | [**required**] Description of the component to modify. [Learn more about the differences between simple and object component descriptors with correction](./docs/descriptor.md) | `"Pet.name"` or `{"componentName": "Pet", "correction": "properties.name"}` | `string` | `ComponentWithCorrectionDescriptorConfig` | - |
+| -------- |------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|-------------------------------------------|-----------------------------------------|
+| `descriptor` | [**required**] Description of the component to modify. [Learn more about the differences between simple and object component descriptors with correction](./docs/descriptor.md) | `"Pet.name"` or `{"componentName": "Pet", "correction": "properties.name"}` | `string \ { componentName: string; correction: string }` | - |
 | `patchMethod` | Patch application method. [Learn more about the differences between merge and deepmerge methods](./docs/merge-vs-deepmerge.md) | `"merge"` | `"merge" \ "deepmerge"` | `"merge"` |
 | `schemaDiff` | [**required**] Schema for patching. [Detailed examples of OpenAPI specifications](./docs/schema-diff.md) | `{"type": "string", "description": "New description"}` | `OpenAPISchema` | - |
 
@@ -637,13 +637,13 @@ The rule allows modifying the schema of endpoint parameters in the OpenAPI speci
 
 #### Config
 
-| Parameter             | Description                                                                                                               | Example                                                                                                                                                                 | Typing                                                                              | Default      |
+| Parameter             | Description                                                                                                               | Example                                                                                                                                                                | Typing                                                                              | Default      |
 |-----------------------|------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|--------------|
-| `endpointDescriptor`  | [**required**] Specifies which endpoint's request parameter schema needs to be changed.                                   | `'GET /api/list'`                                                                                                                                                     | `string`                                                                            |              |
-| `parameterDescriptor` | [**required**] Specifies which request parameter, referenced by `endpointDescriptor`, needs to be changed.         | `TestSchemaDTO`, `TestSchemaDTO.test`, `TestSchemaDTO[].testField`,  `TestObjectDTO.oneOf[1]`, `TestObjectDTO.allOf[1]` or  `TestObjectDTO.anyOf[1].testField`        | `string`                                                                            |              |
-| `schemaDiff`          | Changes for the parameter schema [Detailed OpenAPI Specification Examples](./docs/schema-diff.md)                                                              | `{type: "number"}`                                                                                                   | `OpenAPISchema`                                                                     |              |
-| `objectDiff`          | Changes for the parameter itself                                                                                         | `{ required: true }`                                                                                                    | `{name?: string; in?: 'query' / 'header' / 'path' / 'cookie'; required?: boolean;}` |              |
-| `patchMethod`         | Method for applying changes specified in `objectDiff` and `schemaDiff`. [More about differences between merge and deepmerge methods](./docs/merge-vs-deepmerge.md) | `'merge' /                                                                                                                                                  'deepmerge'` | `enum`                                                                              |  `merge` |
+| `endpointDescriptor`  | [**required**] Specifies which endpoint's request parameter schema needs to be changed.                                   | `'GET /api/list'`                                                                                                                                                      | `string \ { path: string; method: string }`                                                                            |              |
+| `parameterDescriptor` | [**required**] Specifies which request parameter, referenced by `endpointDescriptor`, needs to be changed.         | `'TestSchemaDTO'`, `'TestSchemaDTO.test'`, `'TestSchemaDTO[].testField'`,  `'TestObjectDTO.oneOf[1]'`, `'TestObjectDTO.allOf[1]'` or  `'TestObjectDTO.anyOf[1].testField'` | `string`                                                                            |              |
+| `schemaDiff`          | Changes for the parameter schema [Detailed OpenAPI Specification Examples](./docs/schema-diff.md)                                                              | `{type: "number"}`                                                                                                                                                     | `OpenAPISchema`                                                                     |              |
+| `objectDiff`          | Changes for the parameter itself                                                                                         | `{ required: true }`                                                                                                                                                   | `{name?: string; in?: 'query' / 'header' / 'path' / 'cookie'; required?: boolean;}` |              |
+| `patchMethod`         | Method for applying changes specified in `objectDiff` and `schemaDiff`. [More about differences between merge and deepmerge methods](./docs/merge-vs-deepmerge.md) | `"merge"` | `"merge" \ "deepmerge"` | `"merge"` |
 
 Configuration example:
 
@@ -713,11 +713,11 @@ Rule for modifying the request body schema in OpenAPI specification. Allows to m
 
 | Parameter                    | Description                                                                                                                                                | Example                                                                                                                                                                | Type      | Default |
 |-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------|-----------|
-| `endpointDescriptor`        | [**required**] Specifies which endpoint's request parameter schema should be modified.                                                                    | `'GET /api/list'`                                                                                                                                                     | `string`       |           |
+| `endpointDescriptor`        | [**required**] Specifies which endpoint's request parameter schema should be modified.                                                                    | `'GET /api/list'`                                                                                                                                                     | `string \ { path: string; method: string }`       |           |
 | `contentType`               | Specifies which request type (content-type) of the endpoint should be modified. If not specified, all request types will be modified. | `'application/json'`                                                                                                                                                  | `string`       |  |
 | `correction`                | Path to the field in the schema for modification                                                                                                                     | `"name"` | `string` | - |
 | `schemaDiff`                | [**required**] Changes to apply to the schema. [Detailed examples of OpenAPI specifications](./docs/schema-diff.md)                                                                                                                          | `{type: "number"}` or see more OpenAPISchema examples TODO link                                                                                                  | `OpenAPISchema` |           |
-| `patchMethod`               | Method for applying changes [Learn more about differences between merge and deepmerge methods](./docs/merge-vs-deepmerge.md) | `'merge' / 'deepmerge'` | `enum`                                                                              |  `merge` |
+| `patchMethod`               | Method for applying changes [Learn more about differences between merge and deepmerge methods](./docs/merge-vs-deepmerge.md) | `"merge"` | `"merge" \ "deepmerge"` | `"merge"` |
 
 Configuration examples:
 
@@ -802,12 +802,12 @@ The rule allows modifying the response schema for endpoints in the OpenAPI speci
 
 | Parameter             | Description                                                                                                                                         | Example                                                                                                                                                                  | Type            | Default   |
 |----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------|-----------|
-| `endpointDescriptor` | [**required**] Specifies which endpoint's response schema should be modified.                                                                       | `'GET /api/list'`                                                                                                                                                        | `string`        |           |
+| `endpointDescriptor` | [**required**] Specifies which endpoint's response schema should be modified.                                                                       | `'GET /api/list'`                                                                                                                                                        | `string \ { path: string; method: string }`        |           |
 | `correction`         | Path to the schema property for modification                                                                                                        | `"status"`                                                                                                                                                               | `string`        | -         |
 | `code`               | Specifies which response status code to apply the change to. If not specified, will be applied to the first 2xx response.                          | `200`                                                                                                                                                                    | `number`        |           |
 | `contentType`        | Specifies which response type (content-type) of the endpoint to apply the change to. If not specified, all response types will be modified.        | `'application/json'`                                                                                                                                                     | `string`        |           |
 | `schemaDiff`         | [**required**] Required changes in OpenAPI format. [Detailed OpenAPI specification examples](./docs/schema-diff.md)    | `{type: "number"}`                                                                                         | `OpenAPISchema` |           |
-| `patchMethod`        | Method for applying changes [Learn more about differences between merge and deepmerge methods](./docs/merge-vs-deepmerge.md) | `'merge' / 'deepmerge'`                                                                                    | `enum`          | `merge`   |
+| `patchMethod`        | Method for applying changes [Learn more about differences between merge and deepmerge methods](./docs/merge-vs-deepmerge.md) | `"merge"` | `"merge" \ "deepmerge"` | `"merge"` |
 
 Configuration example:
 
@@ -870,7 +870,7 @@ The rule allows modifying the entire endpoint schema in the OpenAPI specificatio
 | `endpointDescriptor`           | [**required**] Endpoint description for patching       | `{ path: "/pets", method: "get" }` | `{ path: string, method: string }` | -             |
 | `endpointDescriptorCorrection` | Path to a specific field in the endpoint schema for patching | `"responses.200.content.application/json.schema"` | `string` | -             |
 | `schemaDiff`                   | [**required**] Required changes in OpenAPI format. [Detailed OpenAPI specification examples](./docs/schema-diff.md)              | `{ type: "object", properties: { ... } }` | `OpenAPISchema` | -             |
-| `patchMethod`                  | Method for applying changes [Learn more about differences between merge and deepmerge methods](./docs/merge-vs-deepmerge.md)                                                                        | `'merge' / 'deepmerge'` | `enum`                                                                              |  `merge` |
+| `patchMethod`                  | Method for applying changes [Learn more about differences between merge and deepmerge methods](./docs/merge-vs-deepmerge.md)                                                                        | `"merge"` | `"merge" \ "deepmerge"` | `"merge"` |
 
 Configuration example:
 
@@ -926,12 +926,12 @@ The rule allows removing deprecated elements from the OpenAPI specification. It 
 
 #### Config
 
-| Parameter | Description                                                                                                                | Example | Type | Default |
-|----------|-------------------------------------------------------------------------------------------------------------------------|---------|-----------|-----------|
-| `ignoreComponents` | [**optional**] List of components that should not be removed, even if they are marked as deprecated            | `[{"componentName": "Pet"}]` | `Array<ComponentDescriptorConfig>` | `[]` |
-| `ignoreEndpoints` | [**optional**] List of endpoints that should not be removed, even if they are marked as deprecated             | `[{"path": "/pets", "method": "get"}]` | `Array<EndpointDescriptorConfig>` | `[]` |
-| `ignoreEndpointParameters` | [**optional**] List of endpoint parameters that should not be removed, even if they are marked as deprecated  | `[{"path": "/pets", "method": "get", "name": "limit", "in": "query"}]` | `Array<ParameterDescriptorConfig>` | `[]` |
-| `showDeprecatedDescriptions` | [**optional**] Whether to show descriptions of removed deprecated elements in logs, useful for explaining what should be used instead | `true` | `boolean` | `false` |
+| Parameter | Description                                                                                                                | Example                                                                | Type | Default |
+|----------|-------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|-----------|-----------|
+| `ignoreComponents` | [**optional**] List of components that should not be removed, even if they are marked as deprecated            | `[{"componentName": "Pet"}]`                                           | `Array<{ componentName: string }>` | `[]` |
+| `ignoreEndpoints` | [**optional**] List of endpoints that should not be removed, even if they are marked as deprecated             | `["GET /pets"]`                                                        | `Array<string \ { path: string; method: string }>` | `[]` |
+| `ignoreEndpointParameters` | [**optional**] List of endpoint parameters that should not be removed, even if they are marked as deprecated  | `[{"path": "/pets", "method": "get", "name": "limit", "in": "query"}]` | `Array<{ path: string; method: string; name: string; in: "query" \ "path" \ "header" \ "cookie" }>` | `[]` |
+| `showDeprecatedDescriptions` | [**optional**] Whether to show descriptions of removed deprecated elements in logs, useful for explaining what should be used instead | `true`                                                                 | `boolean` | `false` |
 
 > [!IMPORTANT]  
 > Only local $refs of the file are considered, in the format: `#/...`
@@ -1127,10 +1127,10 @@ Removes a parameter from an endpoint in the OpenAPI specification
 
 #### Config
 
-| Parameter | Description | Example | Typing | Default |
-| -------- |-------------------------------------------------------------------------------------------------------------------------------------------|----------------------------|------------------------|-----------|
-| `endpointDescriptor`  | [**required**] Description of the endpoint from which to remove the parameter | `{"path": "/pets", "method": "get"}` | `EndpointDescriptorConfig` | - |
-| `parameterDescriptor`  | [**required**] Description of the parameter to remove. In the `in` parameter, you can specify: `"query"`, `"path"`, `"header"`, `"cookie"`. | `{"name": "petId", "in": "path"}` | `EndpointParameterDescriptorConfig` | - |
+| Parameter | Description | Example                           | Typing | Default |
+| -------- |-------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------|------------------------|-----------|
+| `endpointDescriptor`  | [**required**] Description of the endpoint from which to remove the parameter | `"GET /pets"`   | `string \ { path: string; method: string }` | - |
+| `parameterDescriptor`  | [**required**] Description of the parameter to remove. In the `in` parameter, you can specify: `"query"`, `"path"`, `"header"`, `"cookie"`. | `{"name": "petId", "in": "path"}` | `{ name: string; in: "query" \ "path" \ "header" \ "cookie" }` | - |
 
 Configuration example:
 
