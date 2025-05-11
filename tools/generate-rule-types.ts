@@ -25,7 +25,11 @@ export type AnyPipelineRule =
 const importRules: Array<string> = [];
 const ruleTypes: Array<string> = [];
 
-const IGNORE_ENTIRY_NAME = ['common', 'generated-types.ts'];
+const IGNORE_ENTIRY_NAME = [
+  'common',
+  '.DS_Store',
+  'generated-types.ts',
+];
 
 fs.readdirSync('src/rules').forEach((entityName, index) => {
   if (IGNORE_ENTIRY_NAME.includes(entityName)) {
