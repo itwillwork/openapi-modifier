@@ -503,7 +503,8 @@ module.exports = {
         }
         // ... other rules
     ]
-}
+} 
+```
 
 [关于规则 filter-endpoints 的更多详情](./src/rules/filter-endpoints/README-zh.md) 
 
@@ -559,7 +560,8 @@ module.exports = {
         }
         // ... other rules
     ]
-}
+} 
+```
 
 [关于规则 merge-openapi-spec 的更多详情](./src/rules/merge-openapi-spec/README-zh.md) 
 
@@ -624,7 +626,8 @@ module.exports = {
         }
         // ... other rules
     ]
-}
+} 
+```
 
 [关于规则 patch-component-schema 的更多详情](./src/rules/patch-component-schema/README-zh.md) 
 
@@ -915,7 +918,8 @@ module.exports = {
             }
         }
     ]
-}
+} 
+```
 
 [关于规则 patch-endpoint-schema 的更多详情](./src/rules/patch-endpoint-schema/README-zh.md) 
 
@@ -1117,7 +1121,8 @@ module.exports = {
         }
         // ... 其他规则
     ]
-}
+} 
+```
 
 [关于规则 remove-operation-id 的更多详情](./src/rules/remove-operation-id/README-zh.md) 
 

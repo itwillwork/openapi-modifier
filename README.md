@@ -503,7 +503,8 @@ module.exports = {
         }
         // ... other rules
     ]
-}
+} 
+```
 
 [More details about rule filter-endpoints](./src/rules/filter-endpoints/README.md) 
 
@@ -559,7 +560,8 @@ module.exports = {
         }
         // ... other rules
     ]
-}
+} 
+```
 
 [More details about rule merge-openapi-spec](./src/rules/merge-openapi-spec/README.md) 
 
@@ -624,7 +626,8 @@ module.exports = {
         }
         // ... other rules
     ]
-}
+} 
+```
 
 [More details about rule patch-component-schema](./src/rules/patch-component-schema/README.md) 
 
@@ -698,7 +701,8 @@ module.exports = {
         }
         // ... other rules
     ]
-}
+} 
+```
 
 [More details about rule patch-endpoint-parameter-schema](./src/rules/patch-endpoint-parameter-schema/README.md) 
 
@@ -852,7 +856,8 @@ module.exports = {
         }
         // ... other rules
     ]
-}
+} 
+```
 
 [More details about rule patch-endpoint-response-schema](./src/rules/patch-endpoint-response-schema/README.md) 
 
@@ -913,7 +918,8 @@ module.exports = {
             }
         }
     ]
-}
+} 
+```
 
 [More details about rule patch-endpoint-schema](./src/rules/patch-endpoint-schema/README.md) 
 
@@ -971,7 +977,8 @@ module.exports = {
             },
         }
     ]
-}
+} 
+```
 
 [More details about rule remove-deprecated](./src/rules/remove-deprecated/README.md) 
 
@@ -1114,7 +1121,8 @@ module.exports = {
         }
         // ... other rules
     ]
-}
+} 
+```
 
 [More details about rule remove-operation-id](./src/rules/remove-operation-id/README.md) 
 
@@ -1201,7 +1209,8 @@ module.exports = {
         }
         // ... other rules
     ]
-}
+} 
+```
 
 [More details about rule remove-unused-components](./src/rules/remove-unused-components/README.md) 
 

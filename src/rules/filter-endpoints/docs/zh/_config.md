@@ -84,3 +84,4 @@ module.exports = {
         // ... other rules
     ]
 } 
+```

@@ -54,7 +54,8 @@ module.exports = {
             },
         }
     ]
-}
+} 
+```
 
 **If you need to modify multiple specifications**, you can use this rule multiple times in the overall configuration pipeline.
 

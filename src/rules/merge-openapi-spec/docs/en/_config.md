@@ -41,3 +41,4 @@ module.exports = {
         // ... other rules
     ]
 } 
+```
