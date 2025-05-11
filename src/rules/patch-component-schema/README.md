@@ -9,8 +9,8 @@ This rule allows modifying the component schema in the OpenAPI specification.
 ## Configuration
 
 | Parameter | Description | Example | Typing | Default |
-| -------- |------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|--------------------------------------------|------------------------------------------|
-| `descriptor` | [**required**] Description of the component to modify. [Learn more about the differences between simple and object component descriptors with correction](../../../docs/descriptor.md) | `"Pet.name"` or `{"componentName": "Pet", "correction": "properties.name"}` | `string` | `ComponentWithCorrectionDescriptorConfig` | - |
+| -------- |------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|-------------------------------------------|-----------------------------------------|
+| `descriptor` | [**required**] Description of the component to modify. [Learn more about the differences between simple and object component descriptors with correction](../../../docs/descriptor.md) | `"Pet.name"` or `{"componentName": "Pet", "correction": "properties.name"}` | `ComponentWithCorrectionDescriptorConfig` | - |
 | `patchMethod` | Patch application method. [Learn more about the differences between merge and deepmerge methods](../../../docs/merge-vs-deepmerge.md) | `"merge"` | `"merge" \ "deepmerge"` | `"merge"` |
 | `schemaDiff` | [**required**] Schema for patching. [Detailed examples of OpenAPI specifications](../../../docs/schema-diff.md) | `{"type": "string", "description": "New description"}` | `OpenAPISchema` | - |
 
