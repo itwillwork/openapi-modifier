@@ -269,6 +269,7 @@ module.exports = {
 
 ## Краткие описания правил
 
+----------------------
 <a name="custom_anchor_rule_change-content-type"></a>
 
 ### change-content-type

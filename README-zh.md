@@ -266,6 +266,7 @@ module.exports = {
 
 ## 规则简要说明
 
+----------------------
 <a name="custom_anchor_rule_change-content-type"></a>
 
 ### change-content-type
