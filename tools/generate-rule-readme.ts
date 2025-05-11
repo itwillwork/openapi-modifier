@@ -48,13 +48,13 @@ LANGS.forEach((lang) => {
             return;
         }
 
-        console.log(`Generate docs for rule ${entityName}...`);
+        console.log(`Generate ${lang} docs for rule ${entityName}...`);
 
         const configReadmeContent = getReadmeContent(`src/rules/${entityName}/docs/${lang}/_config.md`);
         const descriptionReadmeContent = getReadmeContent(`src/rules/${entityName}/docs/${lang}/_description.md`);
         const motivationReadmeContent = getReadmeContent(`src/rules/${entityName}/docs/${lang}/_motivation.md`);
 
-        const notesReadmeContent = getReadmeContentIfExist(`src/rules/${entityName}/docs/${lang}/_notes.md`, '-');
+        const notesReadmeContent = getReadmeContentIfExist(`src/rules/${entityName}/docs/${lang}/_notes.md`, '');
         const linksReadmeContent = getReadmeContentIfExist(`src/rules/${entityName}/docs/${lang}/_links.md`, '');
         const afterDescriptorReadmeContent = getReadmeContentIfExist(`src/rules/${entityName}/docs/${lang}/_after-descriptor.md`, '');
 

@@ -43,24 +43,24 @@ LANGS.forEach((lang) => {
     let ruleTableReadme = ruleTableHeader;
     let ruleListReadme = '';
 
-    fs.readdirSync('src/rules').forEach((entityName, index) => {
-        if (IGNORE_ENTIRY_NAME.includes(entityName)) {
+    fs.readdirSync('src/rules').forEach((ruleName, index) => {
+        if (IGNORE_ENTIRY_NAME.includes(ruleName)) {
             return;
         }
 
-        console.log(`Generate entity name ${entityName}`);
+        console.log(`Generate ${lang} rule name ${ruleName}`);
 
-        const configTemplate = getTemplate(`src/rules/${entityName}/docs/${lang}/_config.md`);
-        const descriptionTemplate = getTemplate(`src/rules/${entityName}/docs/${lang}/_description.md`);
+        const configTemplate = getTemplate(`src/rules/${ruleName}/docs/${lang}/_config.md`);
+        const descriptionTemplate = getTemplate(`src/rules/${ruleName}/docs/${lang}/_description.md`);
 
         const ruleListItem = ruleListItemTemplate
-            .replace(createPlaceholderRegExp("name"), entityName)
+            .replace(createPlaceholderRegExp("name"), ruleName)
             .replace(createPlaceholderRegExp("config"), configTemplate)
             .replace(createPlaceholderRegExp("description"), descriptionTemplate)
             .replace(createPlaceholderRegExp("rootPath"), './');
 
         const ruleTableRow = RULE_TABLE_ROW_TEMPLATE
-            .replace(createPlaceholderRegExp("name"), entityName)
+            .replace(createPlaceholderRegExp("name"), ruleName)
             .replace(createPlaceholderRegExp("config"), configTemplate)
             .replace(createPlaceholderRegExp("description"), descriptionTemplate)
             .replace(createPlaceholderRegExp("rootPath"), './')
