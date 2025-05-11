@@ -21,7 +21,7 @@ const createPlaceholderRegExp = (placeholder: string) => {
 
 const LANG_SWITCHER_MD = '[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)';
 
-const RULE_TABLE_ROW_TEMPLATE = `| [{{{name}}}](./src/rules/{{{name}}}/README.md) | {{{description}}} |\n`
+const RULE_TABLE_ROW_TEMPLATE = `| [{{{name}}}](./src/rules/{{{name}}}/README{{{langPostfix}}}.md) | {{{description}}} |\n`
 
 const getTemplate = (
     path: string,
@@ -63,7 +63,8 @@ LANGS.forEach((lang) => {
             .replace(createPlaceholderRegExp("name"), entityName)
             .replace(createPlaceholderRegExp("config"), configTemplate)
             .replace(createPlaceholderRegExp("description"), descriptionTemplate)
-            .replace(createPlaceholderRegExp("rootPath"), './');
+            .replace(createPlaceholderRegExp("rootPath"), './')
+            .replace(createPlaceholderRegExp("langPostfix"), langPostfix);
 
         ruleTableReadme += ruleTableRow;
         ruleListReadme += ruleListItem;

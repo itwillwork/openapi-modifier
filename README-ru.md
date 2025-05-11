@@ -247,22 +247,22 @@ module.exports = {
 
 | Правило | Краткое описание |
 |------------------------------------------------------------------| ---- |
-| [change-content-type](./src/rules/change-content-type/README.md) | Изменяет типы контента (content-type) в OpenAPI спецификации в соответствии со словарем замен |
-| [change-endpoints-basepath](./src/rules/change-endpoints-basepath/README.md) | Изменяет базовые пути (basepath) эндпоинтов в соответствии со словарем замен |
-| [filter-by-content-type](./src/rules/filter-by-content-type/README.md) | Правило позволяет фильтровать типы содержимого (content-type) в OpenAPI спецификации. С его помощью можно явно указать, какие типы содержимого должны быть сохранены или удалены из спецификации. Правило применяется ко всем компонентам API, включая запросы, ответы и общие компоненты. |
-| [filter-endpoints](./src/rules/filter-endpoints/README.md) | Правило позволяет фильтровать эндпоинты в OpenAPI спецификации на основе их путей и методов. С его помощью можно явно указать, какие эндпоинты должны быть сохранены или удалены из спецификации. Правило поддерживает как точное соответствие, так и фильтрацию по регулярным выражениям. |
-| [merge-openapi-spec](./src/rules/merge-openapi-spec/README.md) | Объединяет два OpenAPI спецификации в одну. Позволяет объединить текущую спецификацию с дополнительной спецификацией из указанного файла. Поддерживает работу с файлами в форматах JSON и YAML. |
-| [patch-component-schema](./src/rules/patch-component-schema/README.md) | Правило позволяет модифицировать схему компонента в OpenAPI спецификации. |
-| [patch-endpoint-parameter-schema](./src/rules/patch-endpoint-parameter-schema/README.md) | Правило позволяет модифицировать схему параметров эндпоинтов в OpenAPI спецификации. |
-| [patch-endpoint-request-body-schema](./src/rules/patch-endpoint-request-body-schema/README.md) | Правило для изменения схемы request body в OpenAPI спецификации. Позволяет модифицировать схему запроса для указанного эндпоинта. |
-| [patch-endpoint-response-schema](./src/rules/patch-endpoint-response-schema/README.md) | Правило позволяет модифицировать схему ответа (response schema) для эндпоинтов в OpenAPI спецификации. |
-| [patch-endpoint-schema](./src/rules/patch-endpoint-schema/README.md) | Правило позволяет модифицировать схему эндпоинта целиком в OpenAPI спецификации. В отличие от других правил патчинга, которые работают с отдельными частями эндпоинта (параметры, тело запроса, ответы), это правило может изменять всю структуру эндпоинта, включая все его компоненты. |
-| [remove-deprecated](./src/rules/remove-deprecated/README.md) | Правило позволяет удалить устаревшие (deprecated) элементы из OpenAPI спецификации. Оно может удалять устаревшие компоненты, эндпоинты, параметры и свойства, при этом предоставляя возможность игнорировать определенные элементы и показывать описания удаляемых элементов. |
-| [remove-max-items](./src/rules/remove-max-items/README.md) | Удаляет свойство `maxItems` из всех схем в OpenAPI спецификации. |
-| [remove-min-items](./src/rules/remove-min-items/README.md) | Удаляет свойство `minItems` из всех схем в OpenAPI спецификации. |
-| [remove-operation-id](./src/rules/remove-operation-id/README.md) | Удаляет operationId из всех операций в OpenAPI спецификации, кроме тех, что указаны в списке игнорирования |
-| [remove-parameter](./src/rules/remove-parameter/README.md) | Удаляет параметр из эндпоинта в OpenAPI спецификации |
-| [remove-unused-components](./src/rules/remove-unused-components/README.md) | Удаляет неиспользуемые компоненты из OpenAPI спецификации. Правило анализирует все ссылки на компоненты в документе и удаляет те, которые нигде не используются. |
+| [change-content-type](./src/rules/change-content-type/README-ru.md) | Изменяет типы контента (content-type) в OpenAPI спецификации в соответствии со словарем замен |
+| [change-endpoints-basepath](./src/rules/change-endpoints-basepath/README-ru.md) | Изменяет базовые пути (basepath) эндпоинтов в соответствии со словарем замен |
+| [filter-by-content-type](./src/rules/filter-by-content-type/README-ru.md) | Правило позволяет фильтровать типы содержимого (content-type) в OpenAPI спецификации. С его помощью можно явно указать, какие типы содержимого должны быть сохранены или удалены из спецификации. Правило применяется ко всем компонентам API, включая запросы, ответы и общие компоненты. |
+| [filter-endpoints](./src/rules/filter-endpoints/README-ru.md) | Правило позволяет фильтровать эндпоинты в OpenAPI спецификации на основе их путей и методов. С его помощью можно явно указать, какие эндпоинты должны быть сохранены или удалены из спецификации. Правило поддерживает как точное соответствие, так и фильтрацию по регулярным выражениям. |
+| [merge-openapi-spec](./src/rules/merge-openapi-spec/README-ru.md) | Объединяет два OpenAPI спецификации в одну. Позволяет объединить текущую спецификацию с дополнительной спецификацией из указанного файла. Поддерживает работу с файлами в форматах JSON и YAML. |
+| [patch-component-schema](./src/rules/patch-component-schema/README-ru.md) | Правило позволяет модифицировать схему компонента в OpenAPI спецификации. |
+| [patch-endpoint-parameter-schema](./src/rules/patch-endpoint-parameter-schema/README-ru.md) | Правило позволяет модифицировать схему параметров эндпоинтов в OpenAPI спецификации. |
+| [patch-endpoint-request-body-schema](./src/rules/patch-endpoint-request-body-schema/README-ru.md) | Правило для изменения схемы request body в OpenAPI спецификации. Позволяет модифицировать схему запроса для указанного эндпоинта. |
+| [patch-endpoint-response-schema](./src/rules/patch-endpoint-response-schema/README-ru.md) | Правило позволяет модифицировать схему ответа (response schema) для эндпоинтов в OpenAPI спецификации. |
+| [patch-endpoint-schema](./src/rules/patch-endpoint-schema/README-ru.md) | Правило позволяет модифицировать схему эндпоинта целиком в OpenAPI спецификации. В отличие от других правил патчинга, которые работают с отдельными частями эндпоинта (параметры, тело запроса, ответы), это правило может изменять всю структуру эндпоинта, включая все его компоненты. |
+| [remove-deprecated](./src/rules/remove-deprecated/README-ru.md) | Правило позволяет удалить устаревшие (deprecated) элементы из OpenAPI спецификации. Оно может удалять устаревшие компоненты, эндпоинты, параметры и свойства, при этом предоставляя возможность игнорировать определенные элементы и показывать описания удаляемых элементов. |
+| [remove-max-items](./src/rules/remove-max-items/README-ru.md) | Удаляет свойство `maxItems` из всех схем в OpenAPI спецификации. |
+| [remove-min-items](./src/rules/remove-min-items/README-ru.md) | Удаляет свойство `minItems` из всех схем в OpenAPI спецификации. |
+| [remove-operation-id](./src/rules/remove-operation-id/README-ru.md) | Удаляет operationId из всех операций в OpenAPI спецификации, кроме тех, что указаны в списке игнорирования |
+| [remove-parameter](./src/rules/remove-parameter/README-ru.md) | Удаляет параметр из эндпоинта в OpenAPI спецификации |
+| [remove-unused-components](./src/rules/remove-unused-components/README-ru.md) | Удаляет неиспользуемые компоненты из OpenAPI спецификации. Правило анализирует все ссылки на компоненты в документе и удаляет те, которые нигде не используются. |
 
 
 <a name="custom_anchor_rules_description"></a>
