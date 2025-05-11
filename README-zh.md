@@ -244,7 +244,8 @@ module.exports = {
 ## 可用规则
 
 | 规则 | 简短描述 |
-|------------------------------------------------------------------| ---- | | [change-content-type](./src/rules/change-content-type/README-zh.md) | 根据替换字典修改 OpenAPI 规范中的内容类型 |
+|------------------------------------------------------------------| ---- |
+| [change-content-type](./src/rules/change-content-type/README-zh.md) | 根据替换字典修改 OpenAPI 规范中的内容类型 |
 | [change-endpoints-basepath](./src/rules/change-endpoints-basepath/README-zh.md) | 根据替换字典更改 OpenAPI 规范中的端点基本路径 |
 | [filter-by-content-type](./src/rules/filter-by-content-type/README-zh.md) | 该规则允许在 OpenAPI 规范中过滤内容类型。它使您能够明确指定哪些内容类型应该保留或从规范中删除。该规则适用于所有 API 组件，包括请求、响应和通用组件。 |
 | [filter-endpoints](./src/rules/filter-endpoints/README-zh.md) | 该规则允许根据路径和方法过滤 OpenAPI 规范中的端点。它能够明确指定哪些端点应该保留或从规范中删除。该规则支持精确匹配和基于正则表达式的过滤。 |

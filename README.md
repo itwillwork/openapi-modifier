@@ -244,7 +244,8 @@ module.exports = {
 ## Available Rules
 
 | Rule | Short Description |
-|------------------------------------------------------------------| ---- | | [change-content-type](./src/rules/change-content-type/README.md) | Changes content types in the OpenAPI specification according to the replacement dictionary |
+|------------------------------------------------------------------| ---- |
+| [change-content-type](./src/rules/change-content-type/README.md) | Changes content types in the OpenAPI specification according to the replacement dictionary |
 | [change-endpoints-basepath](./src/rules/change-endpoints-basepath/README.md) | Changes basepaths of endpoints according to the replacement dictionary |
 | [filter-by-content-type](./src/rules/filter-by-content-type/README.md) | The rule allows filtering content types in the OpenAPI specification. It enables explicit specification of which content types should be kept or removed from the specification. The rule applies to all API components, including requests, responses, and common components. |
 | [filter-endpoints](./src/rules/filter-endpoints/README.md) | The rule allows filtering endpoints in the OpenAPI specification based on their paths and methods. It enables explicit specification of which endpoints should be kept or removed from the specification. The rule supports both exact matching and regular expression-based filtering. |
