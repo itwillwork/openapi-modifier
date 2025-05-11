@@ -10,9 +10,9 @@
 
 | Параметр    | Описание                                                                                 | Пример                                                                       | Типизация                                        | Дефолтное                                |
 | -------- |------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|--------------------------------------------------|------------------------------------------|
-| `descriptor`  | [**обязательный**] Описание компонента для модификации. [Подробнее про различия между простым и объектным дескриптором компонента с коррекцией](../../../docs/descriptor-ru.md) | `"Pet.name"` или `{"componentName": "Pet", "correction": "properties.name"}` | `string | ComponentWithCorrectionDescriptorConfig` | - |
-| `patchMethod`  | Метод применения патча. [Подробнее про различия между методами merge и deepmerge](../../../docs/merge-vs-deepmerge-ru.md)  | `"merge"`                                                                    | `"merge" \                                       | "deepmerge"`                             | `"merge"` |
-| `schemaDiff`  | [**обязательный**] Схема для патча. [Подробные примеры спецификаций для OpenAPI](../../../docs/schema-diff-ru.md)                          | `{"type": "string", "description": "New description"}`                       | `OpenAPISchemaConfig`                            | -                                        |
+| `descriptor`  | [**обязательный**] Описание компонента для модификации. [Подробнее про различия между простым и объектным дескриптором компонента с коррекцией](../../../docs/descriptor-ru.md) | `"Pet.name"` или `{"componentName": "Pet", "correction": "properties.name"}` | `string` | `ComponentWithCorrectionDescriptorConfig` | - |
+| `patchMethod`  | Метод применения патча. [Подробнее про различия между методами merge и deepmerge](../../../docs/merge-vs-deepmerge-ru.md)  | `"merge"`                                                                    | `"merge" \ "deepmerge"`                            | `"merge"` |
+| `schemaDiff`  | [**обязательный**] Схема для патча. [Подробные примеры спецификаций для OpenAPI](../../../docs/schema-diff-ru.md)                          | `{"type": "string", "description": "New description"}`                       | `OpenAPISchema`                            | -                                        |
 
 > [!IMPORTANT]
 > Тонкости задачния параметра `descriptor`:

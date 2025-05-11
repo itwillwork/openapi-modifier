@@ -574,9 +574,9 @@ module.exports = {
 
 | 参数 | 描述 | 示例 | 类型 | 默认值 |
 | -------- |------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|--------------------------------------------------|------------------------------------------|
-| `descriptor` | [**必填**] 要修改的组件的描述。 [了解简单组件描述符和带校正的对象组件描述符之间的区别](./docs/descriptor-zh.md) | `"Pet.name"` 或 `{"componentName": "Pet", "correction": "properties.name"}` | `string | ComponentWithCorrectionDescriptorConfig` | - |
-| `patchMethod` | 补丁应用方法。 [了解 merge 和 deepmerge 方法之间的区别](./docs/merge-vs-deepmerge-zh.md) | `"merge"` | `"merge" \| "deepmerge"` | `"merge"` |
-| `schemaDiff` | [**必填**] 用于补丁的模式。 [OpenAPI 规范的详细示例](./docs/schema-diff-zh.md) | `{"type": "string", "description": "New description"}` | `OpenAPISchemaConfig` | - |
+| `descriptor` | [**必填**] 要修改的组件的描述。 [了解简单组件描述符和带校正的对象组件描述符之间的区别](./docs/descriptor-zh.md) | `"Pet.name"` 或 `{"componentName": "Pet", "correction": "properties.name"}` | `string` | `ComponentWithCorrectionDescriptorConfig` | - |
+| `patchMethod` | 补丁应用方法。 [了解 merge 和 deepmerge 方法之间的区别](./docs/merge-vs-deepmerge-zh.md) | `"merge"` | `"merge" \ "deepmerge"` | `"merge"` |
+| `schemaDiff` | [**必填**] 用于补丁的模式。 [OpenAPI 规范的详细示例](./docs/schema-diff-zh.md) | `{"type": "string", "description": "New description"}` | `OpenAPISchema` | - |
 
 > [!IMPORTANT]
 > 设置 `descriptor` 参数的注意事项：

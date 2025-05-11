@@ -1,8 +1,8 @@
 | Parameter | Description | Example | Typing | Default |
-| -------- |------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|--------------------------------------------------|------------------------------------------|
-| `descriptor` | [**required**] Description of the component to modify. [Learn more about the differences between simple and object component descriptors with correction]({{{rootPath}}}docs/descriptor{{{langPostfix}}}.md) | `"Pet.name"` or `{"componentName": "Pet", "correction": "properties.name"}` | `string | ComponentWithCorrectionDescriptorConfig` | - |
-| `patchMethod` | Patch application method. [Learn more about the differences between merge and deepmerge methods]({{{rootPath}}}docs/merge-vs-deepmerge{{{langPostfix}}}.md) | `"merge"` | `"merge" \| "deepmerge"` | `"merge"` |
-| `schemaDiff` | [**required**] Schema for patching. [Detailed examples of OpenAPI specifications]({{{rootPath}}}docs/schema-diff{{{langPostfix}}}.md) | `{"type": "string", "description": "New description"}` | `OpenAPISchemaConfig` | - |
+| -------- |------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|--------------------------------------------|------------------------------------------|
+| `descriptor` | [**required**] Description of the component to modify. [Learn more about the differences between simple and object component descriptors with correction]({{{rootPath}}}docs/descriptor{{{langPostfix}}}.md) | `"Pet.name"` or `{"componentName": "Pet", "correction": "properties.name"}` | `string` | `ComponentWithCorrectionDescriptorConfig` | - |
+| `patchMethod` | Patch application method. [Learn more about the differences between merge and deepmerge methods]({{{rootPath}}}docs/merge-vs-deepmerge{{{langPostfix}}}.md) | `"merge"` | `"merge" \ "deepmerge"` | `"merge"` |
+| `schemaDiff` | [**required**] Schema for patching. [Detailed examples of OpenAPI specifications]({{{rootPath}}}docs/schema-diff{{{langPostfix}}}.md) | `{"type": "string", "description": "New description"}` | `OpenAPISchema` | - |
 
 > [!IMPORTANT]
 > Nuances of setting the `descriptor` parameter:
