@@ -29,7 +29,7 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 enabled: [
-                    'GET /foo/ping'
+                    'GET /foo/ping' // 只保留 GET /foo/ping 端点，其他所有端点将被删除
                 ],
             },
         }
@@ -48,7 +48,7 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 enabledPathRegExp: [
-                    /\/public/
+                    /\/public/ // 保留所有路径包含 /public 的端点
                 ],
             },
         }
@@ -67,7 +67,7 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 disabled: [
-                    'GET /foo/ping'
+                    'GET /foo/ping' // 删除 GET /foo/ping 端点，其他端点保持不变
                 ],
             },
         }
@@ -86,9 +86,9 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 disabledPathRegExp: [
-                    /\/internal/
+                    /\/internal/ // 删除所有路径包含 /internal 的端点
                 ],
-                printIgnoredEndpoints: true,
+                printIgnoredEndpoints: true, // 在控制台打印已删除端点的信息
             },
         }
         // ... other rules

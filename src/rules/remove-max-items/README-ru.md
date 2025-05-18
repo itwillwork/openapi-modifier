@@ -20,7 +20,7 @@ module.exports = {
         // ... other rules
         {
             rule: "remove-max-items",
-            config: {},
+            config: {} // удалить свойство maxItems из всех схем, не показывать предупреждения
         }
         // ... other rules
     ]
@@ -36,8 +36,8 @@ module.exports = {
         {
             rule: "remove-max-items",
             config: {
-                showUnusedWarning: true
-            },
+                showUnusedWarning: true // показать предупреждение, если в спецификации не найдены схемы с maxItems
+            }
         }
         // ... other rules
     ]

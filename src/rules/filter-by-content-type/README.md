@@ -22,8 +22,8 @@ module.exports = {
         {
             rule: "filter-by-content-type",
             config: {
-                enabled: ['application/json'],
-            },
+                enabled: ['application/json'], // keep only application/json content type, remove all others
+            }
         }
         // ... other rules
     ]
@@ -39,13 +39,17 @@ module.exports = {
         {
             rule: "filter-by-content-type",
             config: {
-                disabled: ['multipart/form-data'],
-            },
+                disabled: ['multipart/form-data'], // remove multipart/form-data content type, keep all others
+            }
         }
         // ... other rules
     ]
 }
-```
+``` 
+
+> [!IMPORTANT]
+> 1. If both `enabled` and `disabled` parameters are specified, the `enabled` filter is applied first, followed by `disabled`
+> 2. The rule outputs warnings for content types specified in the configuration but not found in the specification
 
 **If you need to modify multiple specifications**, you can use this rule multiple times in the overall configuration pipeline.
 

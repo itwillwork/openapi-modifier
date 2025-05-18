@@ -20,7 +20,7 @@ module.exports = {
         // ... 其他规则
         {
             rule: "remove-min-items",
-            config: {},
+            config: {} // 删除所有模式中的 minItems 属性，不显示警告
         }
         // ... 其他规则
     ]
@@ -36,8 +36,8 @@ module.exports = {
         {
             rule: "remove-min-items",
             config: {
-                showUnusedWarning: true
-            },
+                showUnusedWarning: true // 如果在规范中未找到带有 minItems 的模式，则显示警告
+            }
         }
         // ... 其他规则
     ]

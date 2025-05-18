@@ -23,10 +23,10 @@ module.exports = {
         {
             rule: "change-endpoints-basepath",
             config: {
-               map: { 
-                   '/public/api': '',
-               },
-            },
+                map: {
+                    "/public/api": "" // 从所有路径中删除 '/public/api' 前缀
+                }
+            }
         }
         // ... 其他规则
     ]
@@ -42,11 +42,11 @@ module.exports = {
         {
             rule: "change-endpoints-basepath",
             config: {
-               map: { 
-                   '/public/v1/service/api': '/api',
-               }, 
-               ignoreOperationCollisions: false,
-            },
+                map: {
+                    "/public/v1/service/api": "/api" // 将 '/public/v1/service/api' 前缀替换为 '/api'
+                },
+                ignoreOperationCollisions: false // 在路径替换时不允许操作冲突
+            }
         }
         // ... 其他规则
     ]

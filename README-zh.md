@@ -289,10 +289,31 @@ module.exports = {
             rule: "change-content-type",
             config: {
                 map: {
-                    "*/*": "application/json"
+                    "*/*": "application/json" // 将所有内容类型替换为 application/json
                 }
-            },
+            }
         }
+        // ... 其他规则
+    ]
+}
+```
+
+更详细的配置示例：
+
+```js
+module.exports = {
+    pipeline: [
+        // ... 其他规则
+        {
+            rule: "change-content-type",
+            config: {
+                map: {
+                    "application/xml": "application/json", // 将 XML 内容类型替换为 JSON
+                    "text/plain": "application/json", // 将纯文本内容类型替换为 JSON
+                    "*/*": "application/json" // 将所有其他内容类型替换为 JSON
+                }
+            }
+        },
         // ... 其他规则
     ]
 }
@@ -325,10 +346,10 @@ module.exports = {
         {
             rule: "change-endpoints-basepath",
             config: {
-               map: { 
-                   '/public/api': '',
-               },
-            },
+                map: {
+                    "/public/api": "" // 从所有路径中删除 '/public/api' 前缀
+                }
+            }
         }
         // ... 其他规则
     ]
@@ -344,11 +365,11 @@ module.exports = {
         {
             rule: "change-endpoints-basepath",
             config: {
-               map: { 
-                   '/public/v1/service/api': '/api',
-               }, 
-               ignoreOperationCollisions: false,
-            },
+                map: {
+                    "/public/v1/service/api": "/api" // 将 '/public/v1/service/api' 前缀替换为 '/api'
+                },
+                ignoreOperationCollisions: false // 在路径替换时不允许操作冲突
+            }
         }
         // ... 其他规则
     ]
@@ -381,8 +402,8 @@ module.exports = {
         {
             rule: "filter-by-content-type",
             config: {
-                enabled: ['application/json'],
-            },
+                enabled: ['application/json'], // 只保留 application/json 内容类型，删除其他所有类型
+            }
         }
         // ... 其他规则
     ]
@@ -398,13 +419,17 @@ module.exports = {
         {
             rule: "filter-by-content-type",
             config: {
-                disabled: ['multipart/form-data'],
-            },
+                disabled: ['multipart/form-data'], // 删除 multipart/form-data 内容类型，保留其他所有类型
+            }
         }
         // ... 其他规则
     ]
 }
-```
+``` 
+
+> [!IMPORTANT]
+> 1. 如果同时指定了 `enabled` 和 `disabled` 参数，则先应用 `enabled` 过滤器，然后再应用 `disabled`
+> 2. 规则会为配置中指定但在规范中未找到的内容类型输出警告
 
 [关于规则 filter-by-content-type 的更多详情](./src/rules/filter-by-content-type/README-zh.md) 
 
@@ -439,7 +464,7 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 enabled: [
-                    'GET /foo/ping'
+                    'GET /foo/ping' // 只保留 GET /foo/ping 端点，其他所有端点将被删除
                 ],
             },
         }
@@ -458,7 +483,7 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 enabledPathRegExp: [
-                    /\/public/
+                    /\/public/ // 保留所有路径包含 /public 的端点
                 ],
             },
         }
@@ -477,7 +502,7 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 disabled: [
-                    'GET /foo/ping'
+                    'GET /foo/ping' // 删除 GET /foo/ping 端点，其他端点保持不变
                 ],
             },
         }
@@ -496,9 +521,9 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 disabledPathRegExp: [
-                    /\/internal/
+                    /\/internal/ // 删除所有路径包含 /internal 的端点
                 ],
-                printIgnoredEndpoints: true,
+                printIgnoredEndpoints: true, // 在控制台打印已删除端点的信息
             },
         }
         // ... other rules
@@ -536,7 +561,7 @@ module.exports = {
         {
             rule: "merge-openapi-spec",
             config: {
-                path: 'temp-openapi-specs/new-list-endpoints.yaml',
+                path: 'temp-openapi-specs/new-list-endpoints.yaml', // 指定要合并的规范文件路径（相对路径）
             },
         }
         // ... other rules
@@ -544,7 +569,7 @@ module.exports = {
 }
 ```
 
-或
+更详细的配置示例：
 
 ```js
 module.exports = {
@@ -553,9 +578,9 @@ module.exports = {
         {
             rule: "merge-openapi-spec",
             config: {
-                path: __dirname + '../temp-openapi-specs/new-list-endpoints.json',
-                ignoreOperationCollisions: true,
-                ignoreComponentCollisions: true,
+                path: __dirname + '../temp-openapi-specs/new-list-endpoints.json', // 指定要合并的规范文件路径（绝对路径）
+                ignoreOperationCollisions: true, // 忽略操作冲突（同名端点）
+                ignoreComponentCollisions: true, // 忽略组件冲突（同名组件）
             },
         }
         // ... other rules
@@ -886,10 +911,10 @@ module.exports = {
         {
             rule: "patch-endpoint-schema",
             config: {
-                endpointDescriptor: "GET /pets",
-                patchMethod: "merge",
+                endpointDescriptor: "GET /pets", // 指定要修改的端点
+                patchMethod: "merge", // 使用 merge 方法应用更改
                 schemaDiff: {
-                    "security": [
+                    "security": [ // 向模式添加 security 部分
                         {
                             "bearerAuth": []
                         }
@@ -965,15 +990,15 @@ module.exports = {
             rule: "remove-deprecated",
             config: {
                 ignoreComponents: [
-                    { componentName: "Pet" }
+                    { componentName: "Pet" } // 即使标记为已弃用也保留 Pet 组件
                 ],
                 ignoreEndpoints: [
-                    { path: "/pets", method: "get" }
+                    { path: "/pets", method: "get" } // 即使标记为已弃用也保留 GET /pets 端点
                 ],
                 ignoreEndpointParameters: [
-                    { path: "/pets", method: "get", name: "limit", in: "query" }
+                    { path: "/pets", method: "get", name: "limit", in: "query" } // 即使标记为已弃用也保留 GET /pets 中的 limit 参数
                 ],
-                showDeprecatedDescriptions: true
+                showDeprecatedDescriptions: true // 在控制台打印已删除的已弃用元素的描述
             },
         }
     ]
@@ -1004,7 +1029,7 @@ module.exports = {
         // ... 其他规则
         {
             rule: "remove-max-items",
-            config: {},
+            config: {} // 删除所有模式中的 maxItems 属性，不显示警告
         }
         // ... 其他规则
     ]
@@ -1020,8 +1045,8 @@ module.exports = {
         {
             rule: "remove-max-items",
             config: {
-                showUnusedWarning: true
-            },
+                showUnusedWarning: true // 如果在规范中未找到带有 maxItems 的模式，则显示警告
+            }
         }
         // ... 其他规则
     ]
@@ -1052,7 +1077,7 @@ module.exports = {
         // ... 其他规则
         {
             rule: "remove-min-items",
-            config: {},
+            config: {} // 删除所有模式中的 minItems 属性，不显示警告
         }
         // ... 其他规则
     ]
@@ -1068,8 +1093,8 @@ module.exports = {
         {
             rule: "remove-min-items",
             config: {
-                showUnusedWarning: true
-            },
+                showUnusedWarning: true // 如果在规范中未找到带有 minItems 的模式，则显示警告
+            }
         }
         // ... 其他规则
     ]
@@ -1100,7 +1125,7 @@ module.exports = {
         // ... 其他规则
         {
             rule: "remove-operation-id",
-            config: {},
+            config: {} // 删除所有端点的 operationId，不保留任何例外
         }
         // ... 其他规则
     ]
@@ -1116,8 +1141,8 @@ module.exports = {
         {
             rule: "remove-operation-id",
             config: {
-                ignore: ["getPets", "createPet"]
-            },
+                ignore: ["getPets", "createPet"] // 保留指定端点的 operationId，删除其他所有端点的 operationId
+            }
         }
         // ... 其他规则
     ]
@@ -1150,10 +1175,10 @@ module.exports = {
         {
             rule: "remove-parameter",
             config: {
-                endpointDescriptor: "GET /pets/{petId}",
+                endpointDescriptor: "GET /pets/{petId}", // 指定要从中删除参数的端点
                 parameterDescriptor: {
-                    name: "version",
-                    in: "query"
+                    name: "version", // 指定要删除的参数名称
+                    in: "query" // 指定参数位置（查询参数）
                 }
             },
         }
@@ -1174,9 +1199,10 @@ module.exports = {
 
 #### 配置
 
-| 参数 | 描述                          | 示例            | 类型              | 默认值 |
+| 参数    | 描述                          | 示例            | 类型              | 默认值 |
 | -------- |-----------------------------------|-------------------|------------------------|-----------|
-| `ignore`  | [**可选**] 删除时要忽略的组件列表 | `["NotFoundDTO"]` | `Array<string>` | `[]` |
+| `ignore`  | [**可选**] 删除时要忽略的组件或正则表达式列表 | `["NotFoundDTO", "/^Error.*/"]` | `Array<string \| RegExp>` | `[]` |
+| `printDeletedComponents` | [**可选**] 如果为true，则在控制台打印已删除组件的列表 | `true` | `boolean` | `false` |
 
 配置示例：
 
@@ -1203,8 +1229,11 @@ module.exports = {
             rule: "remove-unused-components",
             config: {
                 ignore: [
-                    "NotFoundDTO"
-                ]
+                    "NotFoundDTO",
+                    /^Error.*/, // 忽略所有以Error开头的组件
+                    /.*Response$/ // 忽略所有以Response结尾的组件
+                ],
+                printDeletedComponents: true // 在控制台打印已删除组件的列表
             },
         }
         // ... 其他规则

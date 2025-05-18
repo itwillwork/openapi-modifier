@@ -8,9 +8,10 @@
 
 ## 配置
 
-| 参数 | 描述                          | 示例            | 类型              | 默认值 |
+| 参数    | 描述                          | 示例            | 类型              | 默认值 |
 | -------- |-----------------------------------|-------------------|------------------------|-----------|
-| `ignore`  | [**可选**] 删除时要忽略的组件列表 | `["NotFoundDTO"]` | `Array<string>` | `[]` |
+| `ignore`  | [**可选**] 删除时要忽略的组件或正则表达式列表 | `["NotFoundDTO", "/^Error.*/"]` | `Array<string \| RegExp>` | `[]` |
+| `printDeletedComponents` | [**可选**] 如果为true，则在控制台打印已删除组件的列表 | `true` | `boolean` | `false` |
 
 配置示例：
 
@@ -37,8 +38,11 @@ module.exports = {
             rule: "remove-unused-components",
             config: {
                 ignore: [
-                    "NotFoundDTO"
-                ]
+                    "NotFoundDTO",
+                    /^Error.*/, // 忽略所有以Error开头的组件
+                    /.*Response$/ // 忽略所有以Response结尾的组件
+                ],
+                printDeletedComponents: true // 在控制台打印已删除组件的列表
             },
         }
         // ... 其他规则

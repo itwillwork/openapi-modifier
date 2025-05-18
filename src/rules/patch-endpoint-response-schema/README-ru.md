@@ -26,10 +26,10 @@ module.exports = {
         {
             rule: "patch-endpoint-response-schema",
             config: {
-                endpointDescriptor: 'GET /api/list',
-                correction: '[].status',
+                endpointDescriptor: 'GET /api/list', // указываем эндпоинт, который нужно изменить
+                correction: '[].status', // указываем путь к полю status в массиве ответа
                 schemaDiff: {
-                    enum: ['foo', 'bar'],
+                    enum: ['foo', 'bar'], // добавляем enum к полю status
                 },
             },
         }
@@ -47,14 +47,14 @@ module.exports = {
         {
             rule: "patch-endpoint-response-schema",
             config: {
-                endpointDescriptor: 'GET /api/list',
-                correction: '[].status',
-                code: 200,
-                contentType: 'application/json',
+                endpointDescriptor: 'GET /api/list', // указываем эндпоинт, который нужно изменить
+                correction: '[].status', // указываем путь к полю status в массиве ответа
+                code: 200, // указываем код ответа, для которого применяем изменения
+                contentType: 'application/json', // указываем тип контента, для которого применяем изменения
                 schemaDiff: {
-                    enum: ['foo', 'bar'],
+                    enum: ['foo', 'bar'], // добавляем enum к полю status
                 },
-                patchMethod: 'deepmerge'
+                patchMethod: 'deepmerge' // используем метод deepmerge для глубокого слияния изменений
             },
         }
         // ... other rules

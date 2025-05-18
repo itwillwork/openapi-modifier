@@ -42,15 +42,15 @@ module.exports = {
             rule: "remove-deprecated",
             config: {
                 ignoreComponents: [
-                    { componentName: "Pet" }
+                    { componentName: "Pet" } // 即使标记为已弃用也保留 Pet 组件
                 ],
                 ignoreEndpoints: [
-                    { path: "/pets", method: "get" }
+                    { path: "/pets", method: "get" } // 即使标记为已弃用也保留 GET /pets 端点
                 ],
                 ignoreEndpointParameters: [
-                    { path: "/pets", method: "get", name: "limit", in: "query" }
+                    { path: "/pets", method: "get", name: "limit", in: "query" } // 即使标记为已弃用也保留 GET /pets 中的 limit 参数
                 ],
-                showDeprecatedDescriptions: true
+                showDeprecatedDescriptions: true // 在控制台打印已删除的已弃用元素的描述
             },
         }
     ]

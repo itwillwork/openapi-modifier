@@ -29,9 +29,9 @@ module.exports = {
         {
             rule: "patch-component-schema",
             config: {
-                descriptor: 'TestDTO',
+                descriptor: 'TestDTO', // specify the component to modify
                 schemaDiff: {
-                    type: 'string',
+                    type: 'string', // change component type to string
                 },
             },
         }
@@ -49,12 +49,12 @@ module.exports = {
         {
             rule: "patch-component-schema",
             config: {
-                descriptor: 'TestObjectDTO.oneOf[0].TestArraySchemaDTO[]',
+                descriptor: 'TestObjectDTO.oneOf[0].TestArraySchemaDTO[]', // specify path to component in complex structure
                 schemaDiff: {
-                    type: 'string',
-                    enum: ['foo', 'bar'],
+                    type: 'string', // change component type to string
+                    enum: ['foo', 'bar'], // add enum to component
                 },
-                patchMethod: 'deepmerge',
+                patchMethod: 'deepmerge', // use deepmerge method for deep merging changes
             },
         }
         // ... other rules

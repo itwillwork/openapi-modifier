@@ -26,7 +26,7 @@ module.exports = {
         {
             rule: "merge-openapi-spec",
             config: {
-                path: 'temp-openapi-specs/new-list-endpoints.yaml',
+                path: 'temp-openapi-specs/new-list-endpoints.yaml', // указываем путь к файлу спецификации для слияния
             },
         }
         // ... other rules
@@ -43,9 +43,9 @@ module.exports = {
         {
             rule: "merge-openapi-spec",
             config: {
-                path: __dirname + '../temp-openapi-specs/new-list-endpoints.json',
-                ignoreOperationCollisions: true,
-                ignoreComponentCollisions: true,
+                path: __dirname + '../temp-openapi-specs/new-list-endpoints.json', // указываем абсолютный путь к файлу спецификации
+                ignoreOperationCollisions: true, // игнорируем конфликты операций при слиянии
+                ignoreComponentCollisions: true, // игнорируем конфликты компонентов при слиянии
             },
         }
         // ... other rules

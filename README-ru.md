@@ -291,7 +291,28 @@ module.exports = {
             rule: "change-content-type",
             config: {
                 map: {
-                    "*/*": "application/json"
+                    "*/*": "application/json" // заменяем все типы контента на application/json
+                }
+            },
+        }
+        // ... other rules
+    ]
+}
+```
+
+Пример более детальной конфигурации:
+
+```js
+module.exports = {
+    pipeline: [
+        // ... other rules
+        {
+            rule: "change-content-type",
+            config: {
+                map: {
+                    "application/xml": "application/json", // заменяем application/xml на application/json
+                    "text/plain": "application/json", // заменяем text/plain на application/json
+                    "*/*": "application/json" // заменяем все остальные типы контента на application/json
                 }
             },
         }
@@ -328,7 +349,7 @@ module.exports = {
             rule: "change-endpoints-basepath",
             config: {
                map: { 
-                   '/public/api': '',
+                   '/public/api': '', // удаляем префикс /public/api из всех путей
                },
             },
         }
@@ -347,9 +368,9 @@ module.exports = {
             rule: "change-endpoints-basepath",
             config: {
                map: { 
-                   '/public/v1/service/api': '/api',
+                   '/public/v1/service/api': '/api', // заменяем префикс /public/v1/service/api на /api
                }, 
-               ignoreOperationCollisions: false,
+               ignoreOperationCollisions: false, // не игнорируем конфликты операций при замене путей
             },
         }
         // ... other rules
@@ -383,8 +404,8 @@ module.exports = {
         {
             rule: "filter-by-content-type",
             config: {
-                enabled: ['application/json'],
-            },
+                enabled: ['application/json'], // оставить только content-type application/json, удалить все остальные
+            }
         }
         // ... other rules
     ]
@@ -400,13 +421,17 @@ module.exports = {
         {
             rule: "filter-by-content-type",
             config: {
-                disabled: ['multipart/form-data'],
-            },
+                disabled: ['multipart/form-data'], // удалить content-type multipart/form-data, оставить все остальные
+            }
         }
         // ... other rules
     ]
 }
 ```
+
+> [!IMPORTANT]
+> 1. Если указаны оба параметра `enabled` и `disabled`, сначала применяется фильтр `enabled`, затем `disabled`
+> 2. Правило выводит предупреждения для content-type, указанных в конфигурации, но не найденных в спецификации
 
 [Подрбонее про правило filter-by-content-type](./src/rules/filter-by-content-type/README-ru.md)
 
@@ -441,7 +466,7 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 enabled: [
-                    'GET /foo/ping'
+                    'GET /foo/ping' // оставляем только эндпоинт GET /foo/ping, все остальные будут удалены
                 ],
             },
         }
@@ -460,7 +485,7 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 enabledPathRegExp: [
-                    /\/public/
+                    /\/public/ // оставляем все эндпоинты, путь которых содержит /public
                 ],
             },
         }
@@ -479,7 +504,7 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 disabled: [
-                    'GET /foo/ping'
+                    'GET /foo/ping' // удаляем эндпоинт GET /foo/ping, все остальные остаются
                 ],
             },
         }
@@ -498,9 +523,9 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 disabledPathRegExp: [
-                    /\/internal/
+                    /\/internal/ // удаляем все эндпоинты, путь которых содержит /internal
                 ],
-                printIgnoredEndpoints: true,
+                printIgnoredEndpoints: true, // выводим в консоль информацию об удаленных эндпоинтах
             },
         }
         // ... other rules
@@ -538,7 +563,7 @@ module.exports = {
         {
             rule: "merge-openapi-spec",
             config: {
-                path: 'temp-openapi-specs/new-list-endpoints.yaml',
+                path: 'temp-openapi-specs/new-list-endpoints.yaml', // указываем путь к файлу спецификации для слияния
             },
         }
         // ... other rules
@@ -555,9 +580,9 @@ module.exports = {
         {
             rule: "merge-openapi-spec",
             config: {
-                path: __dirname + '../temp-openapi-specs/new-list-endpoints.json',
-                ignoreOperationCollisions: true,
-                ignoreComponentCollisions: true,
+                path: __dirname + '../temp-openapi-specs/new-list-endpoints.json', // указываем абсолютный путь к файлу спецификации
+                ignoreOperationCollisions: true, // игнорируем конфликты операций при слиянии
+                ignoreComponentCollisions: true, // игнорируем конфликты компонентов при слиянии
             },
         }
         // ... other rules
@@ -598,9 +623,9 @@ module.exports = {
         {
             rule: "patch-component-schema",
             config: {
-                descriptor: 'TestDTO',
+                descriptor: 'TestDTO', // указываем компонент, который нужно изменить
                 schemaDiff: {
-                    type: 'string',
+                    type: 'string', // меняем тип компонента на string
                 },
             },
         }
@@ -618,12 +643,12 @@ module.exports = {
         {
             rule: "patch-component-schema",
             config: {
-                descriptor: 'TestObjectDTO.oneOf[0].TestArraySchemaDTO[]',
+                descriptor: 'TestObjectDTO.oneOf[0].TestArraySchemaDTO[]', // указываем путь к компоненту в сложной структуре
                 schemaDiff: {
-                    type: 'string',
-                    enum: ['foo', 'bar'],
+                    type: 'string', // меняем тип компонента на string
+                    enum: ['foo', 'bar'], // добавляем enum к компоненту
                 },
-                patchMethod: 'deepmerge',
+                patchMethod: 'deepmerge', // используем метод deepmerge для глубокого слияния изменений
             },
         }
         // ... other rules
@@ -660,13 +685,13 @@ module.exports = {
         {
             rule: "patch-endpoint-parameter-schema",
             config: {
-                endpointDescriptor: 'GET /api/list',
+                endpointDescriptor: 'GET /api/list', // указываем эндпоинт, который нужно изменить
                 parameterDescriptor: {
-                    name: 'test',
-                    in: 'query',
+                    name: 'test', // указываем имя параметра
+                    in: 'query', // указываем, что параметр находится в query
                 },
                 schemaDiff: {
-                    enum: ['foo', 'bar'],
+                    enum: ['foo', 'bar'], // добавляем enum к параметру
                 }
             },
         }
@@ -684,21 +709,21 @@ module.exports = {
         {
             rule: "patch-endpoint-parameter-schema",
             config: {
-                endpointDescriptor: 'GET /api/list',
+                endpointDescriptor: 'GET /api/list', // указываем эндпоинт, который нужно изменить
                 parameterDescriptor: {
-                    name: 'test',
-                    in: 'path',
+                    name: 'test', // указываем имя параметра
+                    in: 'query', // указываем, что параметр находится в query
                 },
                 schemaDiff: {
-                    type: 'string',
-                    enum: ['foo', 'bar'],
+                    type: 'string', // меняем тип параметра на string
+                    enum: ['foo', 'bar'], // добавляем enum к параметру
                 },
                 objectDiff: {
                     name: 'newTest',
                     in: 'query',
-                    required: true,
+                    required: true, // делаем параметр обязательным
                 },
-                patchMethod: 'deepmerge',
+                patchMethod: 'deepmerge' // используем метод deepmerge для глубокого слияния изменений
             },
         }
         // ... other rules
@@ -726,7 +751,7 @@ module.exports = {
 | `schemaDiff`                | [**обязательный**] Изменения для применения к схеме. [Подробные примеры спецификаций для OpenAPI](./docs/schema-diff-ru.md)                                                                                                                          | `{type: "number"}`                                                                                                 | `OpenAPISchema` |           |
 | `patchMethod`               | Метод применения изменений [Подробнее про различия между методами merge и deepmerge](./docs/merge-vs-deepmerge-ru.md) | `"merge"` | `"merge" \ "deepmerge"` | `"merge"` |
 
-Примеры конфигурации:
+Примеры конфигураций:
 
 ```js
 module.exports = {
@@ -735,10 +760,10 @@ module.exports = {
         {
             rule: "patch-endpoint-request-body-schema",
             config: {
-                endpointDescriptor: 'POST /api/order',
-                correction: "status",
+                endpointDescriptor: 'POST /api/order', // указываем эндпоинт, который нужно изменить
+                correction: "status", // указываем путь к полю status в теле запроса
                 schemaDiff: {
-                    enum: ['foo', 'bar'],
+                    enum: ['foo', 'bar'], // добавляем enum к полю status
                 },
             },
         }
@@ -756,16 +781,16 @@ module.exports = {
         {
             rule: "patch-endpoint-request-body-schema",
             config: {
-                endpointDescriptor: 'POST /api/order',
-                contentType: "application/json",
+                endpointDescriptor: 'POST /api/order', // указываем эндпоинт, который нужно изменить
+                contentType: "application/json", // указываем тип контента, для которого применяем изменения
                 schemaDiff: {
                     properties: {
                         testField: {
-                            type: 'number',
+                            type: 'number', // меняем тип поля testField на number
                         },
                     },
                 },
-                patchMethod: "deepmerge"
+                patchMethod: "deepmerge" // используем метод deepmerge для глубокого слияния изменений
             },
         }
         // ... other rules
@@ -825,10 +850,10 @@ module.exports = {
         {
             rule: "patch-endpoint-response-schema",
             config: {
-                endpointDescriptor: 'GET /api/list',
-                correction: '[].status',
+                endpointDescriptor: 'GET /api/list', // указываем эндпоинт, который нужно изменить
+                correction: '[].status', // указываем путь к полю status в массиве ответа
                 schemaDiff: {
-                    enum: ['foo', 'bar'],
+                    enum: ['foo', 'bar'], // добавляем enum к полю status
                 },
             },
         }
@@ -846,14 +871,14 @@ module.exports = {
         {
             rule: "patch-endpoint-response-schema",
             config: {
-                endpointDescriptor: 'GET /api/list',
-                correction: '[].status',
-                code: 200,
-                contentType: 'application/json',
+                endpointDescriptor: 'GET /api/list', // указываем эндпоинт, который нужно изменить
+                correction: '[].status', // указываем путь к полю status в массиве ответа
+                code: 200, // указываем код ответа, для которого применяем изменения
+                contentType: 'application/json', // указываем тип контента, для которого применяем изменения
                 schemaDiff: {
-                    enum: ['foo', 'bar'],
+                    enum: ['foo', 'bar'], // добавляем enum к полю status
                 },
-                patchMethod: 'deepmerge'
+                patchMethod: 'deepmerge' // используем метод deepmerge для глубокого слияния изменений
             },
         }
         // ... other rules
@@ -888,10 +913,10 @@ module.exports = {
         {
             rule: "patch-endpoint-schema",
             config: {
-                endpointDescriptor: "GET /pets",
-                patchMethod: "merge",
+                endpointDescriptor: "GET /pets", // указываем эндпоинт, который нужно изменить
+                patchMethod: "merge", // используем метод merge для применения изменений
                 schemaDiff: {
-                    "security": [
+                    "security": [ // добавляем секцию security к схеме
                         {
                             "bearerAuth": []
                         }
@@ -967,15 +992,15 @@ module.exports = {
             rule: "remove-deprecated",
             config: {
                 ignoreComponents: [
-                    { componentName: "Pet" }
+                    { componentName: "Pet" } // сохраняем компонент Pet даже если он помечен как устаревший
                 ],
                 ignoreEndpoints: [
-                    { path: "/pets", method: "get" }
+                    { path: "/pets", method: "get" } // сохраняем GET /pets даже если он помечен как устаревший
                 ],
                 ignoreEndpointParameters: [
-                    { path: "/pets", method: "get", name: "limit", in: "query" }
+                    { path: "/pets", method: "get", name: "limit", in: "query" } // сохраняем параметр limit в GET /pets даже если он помечен как устаревший
                 ],
-                showDeprecatedDescriptions: true
+                showDeprecatedDescriptions: true // выводим в консоль описания удаленных устаревших элементов
             },
         }
     ]
@@ -1006,7 +1031,7 @@ module.exports = {
         // ... other rules
         {
             rule: "remove-max-items",
-            config: {},
+            config: {} // удалить свойство maxItems из всех схем, не показывать предупреждения
         }
         // ... other rules
     ]
@@ -1022,8 +1047,8 @@ module.exports = {
         {
             rule: "remove-max-items",
             config: {
-                showUnusedWarning: true
-            },
+                showUnusedWarning: true // показать предупреждение, если в спецификации не найдены схемы с maxItems
+            }
         }
         // ... other rules
     ]
@@ -1054,7 +1079,7 @@ module.exports = {
         // ... other rules
         {
             rule: "remove-min-items",
-            config: {},
+            config: {} // удалить свойство minItems из всех схем, не показывать предупреждения
         }
         // ... other rules
     ]
@@ -1070,8 +1095,8 @@ module.exports = {
         {
             rule: "remove-min-items",
             config: {
-                showUnusedWarning: true
-            },
+                showUnusedWarning: true // показать предупреждение, если в спецификации не найдены схемы с minItems
+            }
         }
         // ... other rules
     ]
@@ -1102,7 +1127,7 @@ module.exports = {
         // ... other rules
         {
             rule: "remove-operation-id",
-            config: {},
+            config: {} // удалить все атрибуты operationId из эндпоинтов
         }
         // ... other rules
     ]
@@ -1118,7 +1143,7 @@ module.exports = {
         {
             rule: "remove-operation-id",
             config: {
-                ignore: ["getPets", "createPet"]
+                ignore: ["getPets", "createPet"], // сохранить operationId для этого эндпоинта
             },
         }
         // ... other rules
@@ -1152,10 +1177,10 @@ module.exports = {
         {
             rule: "remove-parameter",
             config: {
-                endpointDescriptor: "GET /pets/{petId}",
+                endpointDescriptor: "GET /pets/{petId}", // указать конечную точку, из которой нужно удалить параметр
                 parameterDescriptor: {
-                    name: "version",
-                    in: "query"
+                    name: "version", // указать имя удаляемого параметра
+                    in: "query" // указать местоположение параметра (параметр запроса)
                 }
             },
         }
@@ -1178,7 +1203,8 @@ module.exports = {
 
 | Параметр    | Описание                          | Пример            | Типизация              | Дефолтное |
 | -------- |-----------------------------------|-------------------|------------------------|-----------|
-| `ignore`  | [**опциональный**] Список компонентов, которые нужно игнорировать при удалении | `["NotFoundDTO"]` | `Array<string>` | `[]` |
+| `ignore`  | [**опциональный**] Список компонентов или регулярных выражений, которые нужно игнорировать при удалении | `["NotFoundDTO", "/^Error.*/"]` | `Array<string \| RegExp>` | `[]` |
+| `printDeletedComponents` | [**опциональный**] Если true, то в консоль будет выведен список удаленных компонентов | `true` | `boolean` | `false` |
 
 Пример конфигурации:
 
@@ -1205,8 +1231,11 @@ module.exports = {
             rule: "remove-unused-components",
             config: {
                 ignore: [
-                    "NotFoundDTO"
-                ]
+                    "NotFoundDTO",
+                    /^Error.*/, // игнорировать все компоненты, начинающиеся с Error
+                    /.*Response$/ // игнорировать все компоненты, заканчивающиеся на Response
+                ],
+                printDeletedComponents: true // выводить список удаленных компонентов в консоль
             },
         }
         // ... other rules

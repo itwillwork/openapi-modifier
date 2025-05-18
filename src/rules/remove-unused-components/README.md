@@ -8,9 +8,10 @@ Removes unused components from the OpenAPI specification. The rule analyzes all 
 
 ## Configuration
 
-| Parameter | Description                          | Example            | Type              | Default |
+| Parameter    | Description                          | Example            | Type              | Default |
 | -------- |-----------------------------------|-------------------|------------------------|-----------|
-| `ignore`  | [**optional**] List of components to ignore during removal | `["NotFoundDTO"]` | `Array<string>` | `[]` |
+| `ignore`  | [**optional**] List of components or regular expressions to ignore during removal | `["NotFoundDTO", "/^Error.*/"]` | `Array<string \| RegExp>` | `[]` |
+| `printDeletedComponents` | [**optional**] If true, prints the list of deleted components to console | `true` | `boolean` | `false` |
 
 Configuration example:
 
@@ -27,7 +28,7 @@ module.exports = {
 }
 ```
 
-Example of a more detailed configuration:
+More detailed configuration example:
 
 ```js
 module.exports = {
@@ -37,8 +38,11 @@ module.exports = {
             rule: "remove-unused-components",
             config: {
                 ignore: [
-                    "NotFoundDTO"
-                ]
+                    "NotFoundDTO",
+                    /^Error.*/, // ignore all components starting with Error
+                    /.*Response$/ // ignore all components ending with Response
+                ],
+                printDeletedComponents: true // print list of deleted components to console
             },
         }
         // ... other rules

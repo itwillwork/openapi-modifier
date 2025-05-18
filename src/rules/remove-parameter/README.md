@@ -22,10 +22,10 @@ module.exports = {
         {
             rule: "remove-parameter",
             config: {
-                endpointDescriptor: "GET /pets/{petId}",
+                endpointDescriptor: "GET /pets/{petId}", // specify the endpoint from which to remove the parameter
                 parameterDescriptor: {
-                    name: "version",
-                    in: "query"
+                    name: "version", // specify the name of the parameter to be deleted
+                    in: "query" // specify the parameter location (query parameter)
                 }
             },
         }

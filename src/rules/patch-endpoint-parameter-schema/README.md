@@ -25,13 +25,13 @@ module.exports = {
         {
             rule: "patch-endpoint-parameter-schema",
             config: {
-                endpointDescriptor: 'GET /api/list',
+                endpointDescriptor: 'GET /api/list', // specify the endpoint to modify
                 parameterDescriptor: {
-                    name: 'test',
-                    in: 'query',
+                    name: 'test', // specify parameter name
+                    in: 'query', // specify that parameter is in query
                 },
                 schemaDiff: {
-                    enum: ['foo', 'bar'],
+                    enum: ['foo', 'bar'], // add enum to parameter
                 }
             },
         }
@@ -49,21 +49,21 @@ module.exports = {
         {
             rule: "patch-endpoint-parameter-schema",
             config: {
-                endpointDescriptor: 'GET /api/list',
+                endpointDescriptor: 'GET /api/list', // specify the endpoint to modify
                 parameterDescriptor: {
-                    name: 'test',
-                    in: 'path',
+                    name: 'test', // specify parameter name
+                    in: 'query', // specify that parameter is in query
                 },
                 schemaDiff: {
-                    type: 'string',
-                    enum: ['foo', 'bar'],
+                    type: 'string', // change parameter type to string
+                    enum: ['foo', 'bar'], // add enum to parameter
                 },
                 objectDiff: {
                     name: 'newTest',
                     in: 'query',
-                    required: true,
+                    required: true, // make parameter required
                 },
-                patchMethod: 'deepmerge',
+                patchMethod: 'deepmerge' // use deepmerge method for deep merging changes
             },
         }
         // ... other rules

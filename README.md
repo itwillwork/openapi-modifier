@@ -6,7 +6,7 @@ A tool for modifying OpenAPI specifications using customizable rules.
 
 This package allows you to automate the process of modifying OpenAPI specifications by applying a set of predefined rules.
 
-## Key Features
+## Main features
 
 - Modification of OpenAPI specifications in YAML and JSON formats
 - Flexible rule system for specification changes
@@ -15,7 +15,7 @@ This package allows you to automate the process of modifying OpenAPI specificati
 > [!IMPORTANT]  
 > Supports OpenAPI 3.1, 3.0. We haven't tested OpenAPI 2 support as the format is deprecated and we recommend migrating your documentation to OpenAPI 3.0.
 
-## Motivation and Use Cases
+## Motivation and use cases
 
 OpenAPI describing backend API is not always perfect: it may contain errors, inaccuracies, or certain features that break other tools, such as code generation or type generation.
 
@@ -39,11 +39,11 @@ Storing information about changes in a declarative format to maintain context an
 </details>
 
 <details>
-  <summary><b>Usage Demonstration</b></summary>
+  <summary><b>Demonstration of use</b></summary>
 
 <a name="custom_anchor_demo"></a>
 
-### Usage Demonstration
+### Demonstration of use
 
 For example, we have an [input specification/documentation file](./examples/example-cli-generate-api-types/input/openapi.yaml) from backend developers. For example, [downloaded via curl cli from github](./examples/example-cli-generate-api-types/package.json#L11).
 
@@ -265,7 +265,7 @@ module.exports = {
 
 <a name="custom_anchor_rules_description"></a>
 
-## Brief Rule Descriptions
+## Short descriptions of the rules
 
 <a name="custom_anchor_rule_change-content-type"></a>
 
@@ -289,7 +289,28 @@ module.exports = {
             rule: "change-content-type",
             config: {
                 map: {
-                    "*/*": "application/json"
+                    "*/*": "application/json" // replace all content types with application/json
+                }
+            },
+        }
+        // ... other rules
+    ]
+}
+```
+
+More detailed configuration example:
+
+```js
+module.exports = {
+    pipeline: [
+        // ... other rules
+        {
+            rule: "change-content-type",
+            config: {
+                map: {
+                    "application/xml": "application/json", // replace application/xml with application/json
+                    "text/plain": "application/json", // replace text/plain with application/json
+                    "*/*": "application/json" // replace all other content types with application/json
                 }
             },
         }
@@ -312,8 +333,8 @@ Changes basepaths of endpoints according to the replacement dictionary
 
 | Parameter                    | Description                                                              | Example               | Typing                | Default |
 |-----------------------------|-----------------------------------------------------------------------|----------------------|--------------------------|-----------|
-| `map`                       | [**required**] Path replacement dictionary                                     | `{"/api/v1": "/v1"}` | `Record<string, string>` | `{}`      |
-| `ignoreOperationCollisions` | Ignore endpoint collisions that occur after applying replacements | `true`               | `boolean`                | `false`        |
+| `map`                       | [**required**] Map of path prefixes to replace                                     | `{"/api/v1": "/v1"}` | `Record<string, string>` | `{}`      |
+| `ignoreOperationCollisions` | [**optional**] Whether to ignore operation collisions during path replacement | `true`               | `boolean`                | `false`        |
 
 
 Configuration example:
@@ -326,7 +347,7 @@ module.exports = {
             rule: "change-endpoints-basepath",
             config: {
                map: { 
-                   '/public/api': '',
+                   '/public/api': '', // remove the /public/api prefix from all paths
                },
             },
         }
@@ -345,9 +366,9 @@ module.exports = {
             rule: "change-endpoints-basepath",
             config: {
                map: { 
-                   '/public/v1/service/api': '/api',
+                   '/public/v1/service/api': '/api', // replace the prefix /public/v1/service/api with /api
                }, 
-               ignoreOperationCollisions: false,
+               ignoreOperationCollisions: false, // do not ignore operation conflicts when replacing paths
             },
         }
         // ... other rules
@@ -381,8 +402,8 @@ module.exports = {
         {
             rule: "filter-by-content-type",
             config: {
-                enabled: ['application/json'],
-            },
+                enabled: ['application/json'], // keep only application/json content type, remove all others
+            }
         }
         // ... other rules
     ]
@@ -398,13 +419,17 @@ module.exports = {
         {
             rule: "filter-by-content-type",
             config: {
-                disabled: ['multipart/form-data'],
-            },
+                disabled: ['multipart/form-data'], // remove multipart/form-data content type, keep all others
+            }
         }
         // ... other rules
     ]
 }
-```
+``` 
+
+> [!IMPORTANT]
+> 1. If both `enabled` and `disabled` parameters are specified, the `enabled` filter is applied first, followed by `disabled`
+> 2. The rule outputs warnings for content types specified in the configuration but not found in the specification
 
 [More details about rule filter-by-content-type](./src/rules/filter-by-content-type/README.md) 
 
@@ -439,7 +464,7 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 enabled: [
-                    'GET /foo/ping'
+                    'GET /foo/ping' // keep only GET /foo/ping endpoint, all others will be removed
                 ],
             },
         }
@@ -458,7 +483,7 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 enabledPathRegExp: [
-                    /\/public/
+                    /\/public/ // keep all endpoints whose path contains /public
                 ],
             },
         }
@@ -477,7 +502,7 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 disabled: [
-                    'GET /foo/ping'
+                    'GET /foo/ping' // remove GET /foo/ping endpoint, all others will remain
                 ],
             },
         }
@@ -496,9 +521,9 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 disabledPathRegExp: [
-                    /\/internal/
+                    /\/internal/ // remove all endpoints whose path contains /internal
                 ],
-                printIgnoredEndpoints: true,
+                printIgnoredEndpoints: true, // print information about removed endpoints to console
             },
         }
         // ... other rules
@@ -536,7 +561,7 @@ module.exports = {
         {
             rule: "merge-openapi-spec",
             config: {
-                path: 'temp-openapi-specs/new-list-endpoints.yaml',
+                path: 'temp-openapi-specs/new-list-endpoints.yaml', // specify path to specification file to merge
             },
         }
         // ... other rules
@@ -553,9 +578,9 @@ module.exports = {
         {
             rule: "merge-openapi-spec",
             config: {
-                path: __dirname + '../temp-openapi-specs/new-list-endpoints.json',
-                ignoreOperationCollisions: true,
-                ignoreComponentCollisions: true,
+                path: __dirname + '../temp-openapi-specs/new-list-endpoints.json', // specify absolute path to specification file
+                ignoreOperationCollisions: true, // ignore operation conflicts during merge
+                ignoreComponentCollisions: true, // ignore component conflicts during merge
             },
         }
         // ... other rules
@@ -596,9 +621,9 @@ module.exports = {
         {
             rule: "patch-component-schema",
             config: {
-                descriptor: 'TestDTO',
+                descriptor: 'TestDTO', // specify the component to modify
                 schemaDiff: {
-                    type: 'string',
+                    type: 'string', // change component type to string
                 },
             },
         }
@@ -616,12 +641,12 @@ module.exports = {
         {
             rule: "patch-component-schema",
             config: {
-                descriptor: 'TestObjectDTO.oneOf[0].TestArraySchemaDTO[]',
+                descriptor: 'TestObjectDTO.oneOf[0].TestArraySchemaDTO[]', // specify path to component in complex structure
                 schemaDiff: {
-                    type: 'string',
-                    enum: ['foo', 'bar'],
+                    type: 'string', // change component type to string
+                    enum: ['foo', 'bar'], // add enum to component
                 },
-                patchMethod: 'deepmerge',
+                patchMethod: 'deepmerge', // use deepmerge method for deep merging changes
             },
         }
         // ... other rules
@@ -658,13 +683,13 @@ module.exports = {
         {
             rule: "patch-endpoint-parameter-schema",
             config: {
-                endpointDescriptor: 'GET /api/list',
+                endpointDescriptor: 'GET /api/list', // specify the endpoint to modify
                 parameterDescriptor: {
-                    name: 'test',
-                    in: 'query',
+                    name: 'test', // specify parameter name
+                    in: 'query', // specify that parameter is in query
                 },
                 schemaDiff: {
-                    enum: ['foo', 'bar'],
+                    enum: ['foo', 'bar'], // add enum to parameter
                 }
             },
         }
@@ -682,21 +707,21 @@ module.exports = {
         {
             rule: "patch-endpoint-parameter-schema",
             config: {
-                endpointDescriptor: 'GET /api/list',
+                endpointDescriptor: 'GET /api/list', // specify the endpoint to modify
                 parameterDescriptor: {
-                    name: 'test',
-                    in: 'path',
+                    name: 'test', // specify parameter name
+                    in: 'query', // specify that parameter is in query
                 },
                 schemaDiff: {
-                    type: 'string',
-                    enum: ['foo', 'bar'],
+                    type: 'string', // change parameter type to string
+                    enum: ['foo', 'bar'], // add enum to parameter
                 },
                 objectDiff: {
                     name: 'newTest',
                     in: 'query',
-                    required: true,
+                    required: true, // make parameter required
                 },
-                patchMethod: 'deepmerge',
+                patchMethod: 'deepmerge' // use deepmerge method for deep merging changes
             },
         }
         // ... other rules
@@ -733,10 +758,10 @@ module.exports = {
         {
             rule: "patch-endpoint-request-body-schema",
             config: {
-                endpointDescriptor: 'POST /api/order',
-                correction: "status",
+                endpointDescriptor: 'POST /api/order', // specify the endpoint to modify
+                correction: "status", // specify path to status field in request body
                 schemaDiff: {
-                    enum: ['foo', 'bar'],
+                    enum: ['foo', 'bar'], // add enum to status field
                 },
             },
         }
@@ -754,16 +779,16 @@ module.exports = {
         {
             rule: "patch-endpoint-request-body-schema",
             config: {
-                endpointDescriptor: 'POST /api/order',
-                contentType: "application/json",
+                endpointDescriptor: 'POST /api/order', // specify the endpoint to modify
+                contentType: "application/json", // specify content type to apply changes to
                 schemaDiff: {
                     properties: {
                         testField: {
-                            type: 'number',
+                            type: 'number', // change testField type to number
                         },
                     },
                 },
-                patchMethod: "deepmerge"
+                patchMethod: "deepmerge" // use deepmerge method for deep merging changes
             },
         }
         // ... other rules
@@ -823,10 +848,10 @@ module.exports = {
         {
             rule: "patch-endpoint-response-schema",
             config: {
-                endpointDescriptor: 'GET /api/list',
-                correction: '[].status',
+                endpointDescriptor: 'GET /api/list', // specify the endpoint to modify
+                correction: '[].status', // specify path to status field in response array
                 schemaDiff: {
-                    enum: ['foo', 'bar'],
+                    enum: ['foo', 'bar'], // add enum to status field
                 },
             },
         }
@@ -835,7 +860,7 @@ module.exports = {
 }
 ```
 
-Example of a more detailed configuration:
+More detailed configuration example:
 
 ```js
 module.exports = {
@@ -844,14 +869,14 @@ module.exports = {
         {
             rule: "patch-endpoint-response-schema",
             config: {
-                endpointDescriptor: 'GET /api/list',
-                correction: '[].status',
-                code: 200,
-                contentType: 'application/json',
+                endpointDescriptor: 'GET /api/list', // specify the endpoint to modify
+                correction: '[].status', // specify path to status field in response array
+                code: 200, // specify response code to apply changes to
+                contentType: 'application/json', // specify content type to apply changes to
                 schemaDiff: {
-                    enum: ['foo', 'bar'],
+                    enum: ['foo', 'bar'], // add enum to status field
                 },
-                patchMethod: 'deepmerge'
+                patchMethod: 'deepmerge' // use deepmerge method for deep merging changes
             },
         }
         // ... other rules
@@ -886,10 +911,10 @@ module.exports = {
         {
             rule: "patch-endpoint-schema",
             config: {
-                endpointDescriptor: "GET /pets",
-                patchMethod: "merge",
+                endpointDescriptor: "GET /pets", // specify the endpoint to modify
+                patchMethod: "merge", // use merge method to apply changes
                 schemaDiff: {
-                    "security": [
+                    "security": [ // add security section to the schema
                         {
                             "bearerAuth": []
                         }
@@ -965,19 +990,19 @@ module.exports = {
             rule: "remove-deprecated",
             config: {
                 ignoreComponents: [
-                    { componentName: "Pet" }
+                    { componentName: "Pet" } // save the Pet component even if it is marked as deprecated
                 ],
                 ignoreEndpoints: [
-                    { path: "/pets", method: "get" }
+                    { path: "/pets", method: "get" } // save GET /pets even if it is marked as deprecated
                 ],
                 ignoreEndpointParameters: [
-                    { path: "/pets", method: "get", name: "limit", in: "query" }
+                    { path: "/pets", method: "get", name: "limit", in: "query" } // keep the limit parameter in GET /pets even if it is marked as deprecated
                 ],
-                showDeprecatedDescriptions: true
+                showDeprecatedDescriptions: true //  output descriptions of deleted deprecated items to the console
             },
         }
     ]
-} 
+}
 ```
 
 [More details about rule remove-deprecated](./src/rules/remove-deprecated/README.md) 
@@ -1004,7 +1029,7 @@ module.exports = {
         // ... other rules
         {
             rule: "remove-max-items",
-            config: {},
+            config: {} // remove maxItems property from all schemas, don't show warnings
         }
         // ... other rules
     ]
@@ -1020,8 +1045,8 @@ module.exports = {
         {
             rule: "remove-max-items",
             config: {
-                showUnusedWarning: true
-            },
+                showUnusedWarning: true // show warning if no schemas with maxItems are found in the specification
+            }
         }
         // ... other rules
     ]
@@ -1052,7 +1077,7 @@ module.exports = {
         // ... other rules
         {
             rule: "remove-min-items",
-            config: {},
+            config: {} // remove minItems property from all schemas, don't show warnings
         }
         // ... other rules
     ]
@@ -1068,8 +1093,8 @@ module.exports = {
         {
             rule: "remove-min-items",
             config: {
-                showUnusedWarning: true
-            },
+                showUnusedWarning: true // show warning if no schemas with minItems are found in the specification
+            }
         }
         // ... other rules
     ]
@@ -1100,14 +1125,14 @@ module.exports = {
         // ... other rules
         {
             rule: "remove-operation-id",
-            config: {},
+            config: {} // remove all operationId attributes from endpoints
         }
         // ... other rules
     ]
 }
 ```
 
-Example of a more detailed configuration:
+Example of more detailed configuration:
 
 ```js
 module.exports = {
@@ -1116,7 +1141,7 @@ module.exports = {
         {
             rule: "remove-operation-id",
             config: {
-                ignore: ["getPets", "createPet"]
+                ignore: ["getPets", "createPet"], // keep operationId for this endpoint
             },
         }
         // ... other rules
@@ -1150,10 +1175,10 @@ module.exports = {
         {
             rule: "remove-parameter",
             config: {
-                endpointDescriptor: "GET /pets/{petId}",
+                endpointDescriptor: "GET /pets/{petId}", // specify the endpoint from which to remove the parameter
                 parameterDescriptor: {
-                    name: "version",
-                    in: "query"
+                    name: "version", // specify the name of the parameter to be deleted
+                    in: "query" // specify the parameter location (query parameter)
                 }
             },
         }
@@ -1174,9 +1199,10 @@ Removes unused components from the OpenAPI specification. The rule analyzes all 
 
 #### Config
 
-| Parameter | Description                          | Example            | Type              | Default |
+| Parameter    | Description                          | Example            | Type              | Default |
 | -------- |-----------------------------------|-------------------|------------------------|-----------|
-| `ignore`  | [**optional**] List of components to ignore during removal | `["NotFoundDTO"]` | `Array<string>` | `[]` |
+| `ignore`  | [**optional**] List of components or regular expressions to ignore during removal | `["NotFoundDTO", "/^Error.*/"]` | `Array<string \| RegExp>` | `[]` |
+| `printDeletedComponents` | [**optional**] If true, prints the list of deleted components to console | `true` | `boolean` | `false` |
 
 Configuration example:
 
@@ -1193,7 +1219,7 @@ module.exports = {
 }
 ```
 
-Example of a more detailed configuration:
+More detailed configuration example:
 
 ```js
 module.exports = {
@@ -1203,8 +1229,11 @@ module.exports = {
             rule: "remove-unused-components",
             config: {
                 ignore: [
-                    "NotFoundDTO"
-                ]
+                    "NotFoundDTO",
+                    /^Error.*/, // ignore all components starting with Error
+                    /.*Response$/ // ignore all components ending with Response
+                ],
+                printDeletedComponents: true // print list of deleted components to console
             },
         }
         // ... other rules

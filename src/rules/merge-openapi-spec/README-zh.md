@@ -26,7 +26,7 @@ module.exports = {
         {
             rule: "merge-openapi-spec",
             config: {
-                path: 'temp-openapi-specs/new-list-endpoints.yaml',
+                path: 'temp-openapi-specs/new-list-endpoints.yaml', // 指定要合并的规范文件路径（相对路径）
             },
         }
         // ... other rules
@@ -34,7 +34,7 @@ module.exports = {
 }
 ```
 
-或
+更详细的配置示例：
 
 ```js
 module.exports = {
@@ -43,9 +43,9 @@ module.exports = {
         {
             rule: "merge-openapi-spec",
             config: {
-                path: __dirname + '../temp-openapi-specs/new-list-endpoints.json',
-                ignoreOperationCollisions: true,
-                ignoreComponentCollisions: true,
+                path: __dirname + '../temp-openapi-specs/new-list-endpoints.json', // 指定要合并的规范文件路径（绝对路径）
+                ignoreOperationCollisions: true, // 忽略操作冲突（同名端点）
+                ignoreComponentCollisions: true, // 忽略组件冲突（同名组件）
             },
         }
         // ... other rules
