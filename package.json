@@ -1,6 +1,6 @@
 {
   "name": "openapi-modifier",
-  "version": "0.0.39",
+  "version": "0.0.40",
   "description": "",
   "files": [
     "dist-types",
