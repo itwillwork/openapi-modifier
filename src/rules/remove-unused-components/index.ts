@@ -13,6 +13,7 @@ const configSchema = z
     ignore: z.array(
         anyComponentDescriptorConfigSchema,
     ).optional(),
+    printDeletedComponents: z.boolean().optional(),
   })
   .strict();
 
@@ -26,7 +27,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: {},
   processDocument: (openAPIFile, config, logger) => {
-    const { ignore } = config;
+    const { ignore, printDeletedComponents } = config;
 
     const ignoredComponentNames = (ignore || []).map(item => {
       return parseAnyComponentDescriptor(item, logger);
@@ -87,6 +88,10 @@ const processor: RuleProcessorT<typeof configSchema> = {
           const [, , component, key] = ref.split(REF_SEPARATOR);
           const componentsObj = openAPIFile.document.components?.[component as keyof ComponentsObject];
           if (componentsObj) {
+            if (printDeletedComponents) {
+              logger.info(`Deleted the "${key}" component ("${component}") as not used`);
+            }
+
             delete componentsObj[key];
           }
         }
