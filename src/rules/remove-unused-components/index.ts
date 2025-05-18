@@ -2,7 +2,11 @@ import { RuleProcessorT } from '../../core/rules/processor-models';
 import { z } from 'zod';
 import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
 import { forEachSchema } from '../common/utils/iterators/each-schema';
-import {anyComponentDescriptorConfigSchema} from "../common/config";
+import {
+  anyComponentDescriptorConfigSchema,
+  componentDescriptorConfigSchema,
+  simpleComponentDescriptorConfigSchema
+} from "../common/config";
 import {parseAnyComponentDescriptor} from "../common/utils/config/parse-component-descriptor";
 import {isNonNil} from "../common/utils/empty";
 
@@ -11,7 +15,11 @@ type ComponentsObject = OpenAPIV3.ComponentsObject | OpenAPIV3_1.ComponentsObjec
 const configSchema = z
   .object({
     ignore: z.array(
-        anyComponentDescriptorConfigSchema,
+        z.union([
+          simpleComponentDescriptorConfigSchema,
+          componentDescriptorConfigSchema,
+          z.instanceof(RegExp),
+        ]),
     ).optional(),
     printDeletedComponents: z.boolean().optional(),
   })
@@ -29,7 +37,19 @@ const processor: RuleProcessorT<typeof configSchema> = {
   processDocument: (openAPIFile, config, logger) => {
     const { ignore, printDeletedComponents } = config;
 
+    const ignoredComponentRegExps = (ignore || []).map(item => {
+      if (item instanceof RegExp) {
+        return item;
+      }
+
+      return null;
+    }).filter(isNonNil);
+
     const ignoredComponentNames = (ignore || []).map(item => {
+      if (item instanceof RegExp) {
+        return null;
+      }
+
       return parseAnyComponentDescriptor(item, logger);
     }).map(componentDescriptor => componentDescriptor?.componentName).filter(isNonNil);
 
@@ -51,7 +71,11 @@ const processor: RuleProcessorT<typeof configSchema> = {
 
       Object.keys(components).forEach((component) => {
         Object.keys(components[component as keyof ComponentsObject] || {}).forEach((key) => {
-          if (ignoredComponentNamesSet?.has(key)) {
+          const isIgnored = ignoredComponentNamesSet?.has(key) || ignoredComponentRegExps.some((ignoredComponentRegExp) => {
+            return ignoredComponentRegExp.test(key);
+          });
+
+          if (isIgnored) {
             if (!usageIgnoredComponentNames[key]) {
               usageIgnoredComponentNames[key] = 0
             }

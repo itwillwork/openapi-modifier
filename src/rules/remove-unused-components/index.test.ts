@@ -510,4 +510,72 @@ describe('remove-unused-components rule', () => {
 
     expect(fakeLogger.info).toBeCalledLoggerMethod(/Deleted/, 1);
   });
+
+  test('regular, show delete info', () => {
+    const fakeLogger = global.createFakeLogger();
+    const fakeOpenAPIFile = global.createFakeOpenAPIFile({
+      components: {
+        schemas: {
+          AttributesDTO: {
+            type: 'string',
+          },
+          EventNotificationDto: {
+            type: 'string',
+          },
+          Pet: {
+            type: 'string',
+          },
+        },
+      },
+      paths: {
+        '/pets': {
+          get: {
+            summary: 'Get all pets',
+            responses: {
+              '200': {
+                description: '',
+                content: {
+                  '*/*': {
+                    schema: {
+                      type: 'array',
+                      items: {
+                        $ref: '#/components/schemas/Pet',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(
+        processor.processDocument(
+            fakeOpenAPIFile,
+            {
+              ignore: [/NotificationDto/]
+            },
+            fakeLogger,
+            {ruleName: ''}
+        )
+    ).toEqual({
+      ...fakeOpenAPIFile,
+      document: {
+        ...fakeOpenAPIFile.document,
+        components: {
+          ...fakeOpenAPIFile.document.components,
+          schemas: {
+            EventNotificationDto: {
+              type: 'string',
+            },
+            Pet: {
+              type: 'string',
+            },
+          },
+        },
+      },
+    });
+  });
 });
