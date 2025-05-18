@@ -10,14 +10,14 @@ module.exports = {
         // ... other rules
         {
             rule: "remove-operation-id",
-            config: {},
+            config: {} // remove all operationId attributes from endpoints
         }
         // ... other rules
     ]
 }
 ```
 
-Example of a more detailed configuration:
+Example of more detailed configuration:
 
 ```js
 module.exports = {
@@ -26,7 +26,7 @@ module.exports = {
         {
             rule: "remove-operation-id",
             config: {
-                ignore: ["getPets", "createPet"]
+                ignore: ["getPets", "createPet"], // keep operationId for this endpoint
             },
         }
         // ... other rules

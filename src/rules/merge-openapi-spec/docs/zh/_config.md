@@ -1,7 +1,7 @@
 | 参数                        | 描述                                                                                                                                                                                                                                                                                                                                              | 示例                                         | 类型     | 默认值    |
 |----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------|----------|-----------|
 | `path`                     | [**必填**] 需要合并到当前规范的 OpenAPI 配置文件的路径。路径可以是相对路径（相对于 package.json 的位置）或绝对路径（例如，通过 `__dirname` 相对于配置文件位置获取）。支持的格式：`*.json`、`*.yml`、`*.yaml`。                                                                                                                                    | `temp-openapi-specs/new-list-endpoints.yaml` | `string` |           |
-| `ignoreOperarionCollisions`| 合并多个规范时，当存在相同的端点时可能会发生冲突。默认情况下，工具会禁止合并以防止源规范发生意外更改。此设置允许您忽略冲突并仍然合并规范。                                                                                                                                                                                                        | `true`                                       | `boolean` | `false`   |
+| `ignoreOperationCollisions`| 合并多个规范时，当存在相同的端点时可能会发生冲突。默认情况下，工具会禁止合并以防止源规范发生意外更改。此设置允许您忽略冲突并仍然合并规范。                                                                                                                                                                                                        | `true`                                       | `boolean` | `false`   |
 | `ignoreComponentCollisions`| 合并多个规范时，当存在相同的公共组件时可能会发生冲突。默认情况下，工具会禁止合并以防止源规范发生意外更改。此设置允许您忽略冲突并仍然合并规范。                                                                                                                                                                                                        | `true`                                       | `boolean` | `false`   |
 
 > [!IMPORTANT]
@@ -16,7 +16,7 @@ module.exports = {
         {
             rule: "merge-openapi-spec",
             config: {
-                path: 'temp-openapi-specs/new-list-endpoints.yaml',
+                path: 'temp-openapi-specs/new-list-endpoints.yaml', // 指定要合并的规范文件路径（相对路径）
             },
         }
         // ... other rules
@@ -24,7 +24,7 @@ module.exports = {
 }
 ```
 
-或
+更详细的配置示例：
 
 ```js
 module.exports = {
@@ -33,9 +33,9 @@ module.exports = {
         {
             rule: "merge-openapi-spec",
             config: {
-                path: __dirname + '../temp-openapi-specs/new-list-endpoints.json',
-                ignoreOperarionCollisions: true,
-                ignoreComponentCollisions: true,
+                path: __dirname + '../temp-openapi-specs/new-list-endpoints.json', // 指定要合并的规范文件路径（绝对路径）
+                ignoreOperationCollisions: true, // 忽略操作冲突（同名端点）
+                ignoreComponentCollisions: true, // 忽略组件冲突（同名组件）
             },
         }
         // ... other rules

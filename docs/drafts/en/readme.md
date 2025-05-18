@@ -6,7 +6,7 @@ A tool for modifying OpenAPI specifications using customizable rules.
 
 This package allows you to automate the process of modifying OpenAPI specifications by applying a set of predefined rules.
 
-## Key Features
+## Main features
 
 - Modification of OpenAPI specifications in YAML and JSON formats
 - Flexible rule system for specification changes
@@ -15,7 +15,7 @@ This package allows you to automate the process of modifying OpenAPI specificati
 > [!IMPORTANT]  
 > Supports OpenAPI 3.1, 3.0. We haven't tested OpenAPI 2 support as the format is deprecated and we recommend migrating your documentation to OpenAPI 3.0.
 
-## Motivation and Use Cases
+## Motivation and use cases
 
 OpenAPI describing backend API is not always perfect: it may contain errors, inaccuracies, or certain features that break other tools, such as code generation or type generation.
 
@@ -39,11 +39,11 @@ Storing information about changes in a declarative format to maintain context an
 </details>
 
 <details>
-  <summary><b>Usage Demonstration</b></summary>
+  <summary><b>Demonstration of use</b></summary>
 
 <a name="custom_anchor_demo"></a>
 
-### Usage Demonstration
+### Demonstration of use
 
 For example, we have an [input specification/documentation file](./examples/example-cli-generate-api-types/input/openapi.yaml) from backend developers. For example, [downloaded via curl cli from github](./examples/example-cli-generate-api-types/package.json#L11).
 
@@ -227,7 +227,7 @@ module.exports = {
 
 <a name="custom_anchor_rules_description"></a>
 
-## Brief Rule Descriptions
+## Short descriptions of the rules
 
 {{{rulesDescription}}}
 

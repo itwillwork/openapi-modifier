@@ -143,7 +143,7 @@ describe('merge-openapi-spec rule', () => {
     expect(fakeLogger.errorMessage).toBeCalledLoggerMethod(/operaion conflicts/, 1);
   });
 
-  test('collision operations/paths, usage config.ignoreOperarionCollisions', () => {
+  test('collision operations/paths, usage config.ignoreOperationCollisions', () => {
     const fakeLogger = global.createFakeLogger();
     const fakeOpenAPIFile = global.createFakeOpenAPIFile({
       paths: {
@@ -172,7 +172,7 @@ describe('merge-openapi-spec rule', () => {
         fakeOpenAPIFile,
         {
           path: __dirname + '/__mocks__/collision/paths.yaml',
-          ignoreOperarionCollisions: true,
+          ignoreOperationCollisions: true,
         },
         fakeLogger,
           {ruleName: ''}

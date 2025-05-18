@@ -10,7 +10,7 @@ module.exports = {
         // ... other rules
         {
             rule: "remove-max-items",
-            config: {},
+            config: {} // remove maxItems property from all schemas, don't show warnings
         }
         // ... other rules
     ]
@@ -26,8 +26,8 @@ module.exports = {
         {
             rule: "remove-max-items",
             config: {
-                showUnusedWarning: true
-            },
+                showUnusedWarning: true // show warning if no schemas with maxItems are found in the specification
+            }
         }
         // ... other rules
     ]

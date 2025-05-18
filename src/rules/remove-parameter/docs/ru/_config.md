@@ -12,10 +12,10 @@ module.exports = {
         {
             rule: "remove-parameter",
             config: {
-                endpointDescriptor: "GET /pets/{petId}",
+                endpointDescriptor: "GET /pets/{petId}", // указать конечную точку, из которой нужно удалить параметр
                 parameterDescriptor: {
-                    name: "version",
-                    in: "query"
+                    name: "version", // указать имя удаляемого параметра
+                    in: "query" // указать местоположение параметра (параметр запроса)
                 }
             },
         }

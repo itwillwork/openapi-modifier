@@ -30,17 +30,17 @@ module.exports = {
             rule: "remove-deprecated",
             config: {
                 ignoreComponents: [
-                    { componentName: "Pet" }
+                    { componentName: "Pet" } // save the Pet component even if it is marked as deprecated
                 ],
                 ignoreEndpoints: [
-                    { path: "/pets", method: "get" }
+                    { path: "/pets", method: "get" } // save GET /pets even if it is marked as deprecated
                 ],
                 ignoreEndpointParameters: [
-                    { path: "/pets", method: "get", name: "limit", in: "query" }
+                    { path: "/pets", method: "get", name: "limit", in: "query" } // keep the limit parameter in GET /pets even if it is marked as deprecated
                 ],
-                showDeprecatedDescriptions: true
+                showDeprecatedDescriptions: true //  output descriptions of deleted deprecated items to the console
             },
         }
     ]
-} 
+}
 ```

@@ -1,7 +1,7 @@
 | Parameter                    | Description                                                              | Example               | Typing                | Default |
 |-----------------------------|-----------------------------------------------------------------------|----------------------|--------------------------|-----------|
-| `map`                       | [**required**] Path replacement dictionary                                     | `{"/api/v1": "/v1"}` | `Record<string, string>` | `{}`      |
-| `ignoreOperarionCollisions` | Ignore endpoint collisions that occur after applying replacements | `true`               | `boolean`                | `false`        |
+| `map`                       | [**required**] Map of path prefixes to replace                                     | `{"/api/v1": "/v1"}` | `Record<string, string>` | `{}`      |
+| `ignoreOperationCollisions` | [**optional**] Whether to ignore operation collisions during path replacement | `true`               | `boolean`                | `false`        |
 
 
 Configuration example:
@@ -14,7 +14,7 @@ module.exports = {
             rule: "change-endpoints-basepath",
             config: {
                map: { 
-                   '/public/api': '',
+                   '/public/api': '', // remove the /public/api prefix from all paths
                },
             },
         }
@@ -33,9 +33,9 @@ module.exports = {
             rule: "change-endpoints-basepath",
             config: {
                map: { 
-                   '/public/v1/service/api': '/api',
+                   '/public/v1/service/api': '/api', // replace the prefix /public/v1/service/api with /api
                }, 
-               ignoreOperarionCollisions: false,
+               ignoreOperationCollisions: false, // do not ignore operation conflicts when replacing paths
             },
         }
         // ... other rules

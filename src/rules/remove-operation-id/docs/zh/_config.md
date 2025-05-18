@@ -10,7 +10,7 @@ module.exports = {
         // ... 其他规则
         {
             rule: "remove-operation-id",
-            config: {},
+            config: {} // 删除所有端点的 operationId，不保留任何例外
         }
         // ... 其他规则
     ]
@@ -26,8 +26,8 @@ module.exports = {
         {
             rule: "remove-operation-id",
             config: {
-                ignore: ["getPets", "createPet"]
-            },
+                ignore: ["getPets", "createPet"] // 保留指定端点的 operationId，删除其他所有端点的 operationId
+            }
         }
         // ... 其他规则
     ]

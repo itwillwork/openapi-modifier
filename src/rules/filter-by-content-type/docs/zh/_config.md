@@ -12,8 +12,8 @@ module.exports = {
         {
             rule: "filter-by-content-type",
             config: {
-                enabled: ['application/json'],
-            },
+                enabled: ['application/json'], // 只保留 application/json 内容类型，删除其他所有类型
+            }
         }
         // ... 其他规则
     ]
@@ -29,10 +29,14 @@ module.exports = {
         {
             rule: "filter-by-content-type",
             config: {
-                disabled: ['multipart/form-data'],
-            },
+                disabled: ['multipart/form-data'], // 删除 multipart/form-data 内容类型，保留其他所有类型
+            }
         }
         // ... 其他规则
     ]
 }
 ``` 
+
+> [!IMPORTANT]
+> 1. 如果同时指定了 `enabled` 和 `disabled` 参数，则先应用 `enabled` 过滤器，然后再应用 `disabled`
+> 2. 规则会为配置中指定但在规范中未找到的内容类型输出警告 

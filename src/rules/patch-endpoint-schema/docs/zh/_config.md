@@ -13,10 +13,10 @@ module.exports = {
         {
             rule: "patch-endpoint-schema",
             config: {
-                endpointDescriptor: "GET /pets",
-                patchMethod: "merge",
+                endpointDescriptor: "GET /pets", // 指定要修改的端点
+                patchMethod: "merge", // 使用 merge 方法应用更改
                 schemaDiff: {
-                    "security": [
+                    "security": [ // 向模式添加 security 部分
                         {
                             "bearerAuth": []
                         }

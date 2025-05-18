@@ -10,7 +10,7 @@ module.exports = {
         // ... 其他规则
         {
             rule: "remove-max-items",
-            config: {},
+            config: {} // 删除所有模式中的 maxItems 属性，不显示警告
         }
         // ... 其他规则
     ]
@@ -26,8 +26,8 @@ module.exports = {
         {
             rule: "remove-max-items",
             config: {
-                showUnusedWarning: true
-            },
+                showUnusedWarning: true // 如果在规范中未找到带有 maxItems 的模式，则显示警告
+            }
         }
         // ... 其他规则
     ]

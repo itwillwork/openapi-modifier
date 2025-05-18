@@ -1,7 +1,7 @@
 | Параметр                    | Описание                                                              | Пример               | Типизация                | Дефолтное |
 |-----------------------------|-----------------------------------------------------------------------|----------------------|--------------------------|-----------|
 | `map`                       | [**обязательный**] Словарь замены путей                                     | `{"/api/v1": "/v1"}` | `Record<string, string>` | `{}`      |
-| `ignoreOperarionCollisions` | Игнорировать возникающие коллизии endpoint'ов после применения замены | `true`               | `boolean`                | `false`        |
+| `ignoreOperationCollisions` | Игнорировать возникающие коллизии endpoint'ов после применения замены | `true`               | `boolean`                | `false`        |
 
 
 Пример конфигурации:
@@ -14,7 +14,7 @@ module.exports = {
             rule: "change-endpoints-basepath",
             config: {
                map: { 
-                   '/public/api': '',
+                   '/public/api': '', // удаляем префикс /public/api из всех путей
                },
             },
         }
@@ -33,9 +33,9 @@ module.exports = {
             rule: "change-endpoints-basepath",
             config: {
                map: { 
-                   '/public/v1/service/api': '/api',
+                   '/public/v1/service/api': '/api', // заменяем префикс /public/v1/service/api на /api
                }, 
-               ignoreOperarionCollisions: false,
+               ignoreOperationCollisions: false, // не игнорируем конфликты операций при замене путей
             },
         }
         // ... other rules

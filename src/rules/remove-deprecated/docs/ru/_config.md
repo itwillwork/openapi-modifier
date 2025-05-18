@@ -30,15 +30,15 @@ module.exports = {
             rule: "remove-deprecated",
             config: {
                 ignoreComponents: [
-                    { componentName: "Pet" }
+                    { componentName: "Pet" } // сохраняем компонент Pet даже если он помечен как устаревший
                 ],
                 ignoreEndpoints: [
-                    { path: "/pets", method: "get" }
+                    { path: "/pets", method: "get" } // сохраняем GET /pets даже если он помечен как устаревший
                 ],
                 ignoreEndpointParameters: [
-                    { path: "/pets", method: "get", name: "limit", in: "query" }
+                    { path: "/pets", method: "get", name: "limit", in: "query" } // сохраняем параметр limit в GET /pets даже если он помечен как устаревший
                 ],
-                showDeprecatedDescriptions: true
+                showDeprecatedDescriptions: true // выводим в консоль описания удаленных устаревших элементов
             },
         }
     ]

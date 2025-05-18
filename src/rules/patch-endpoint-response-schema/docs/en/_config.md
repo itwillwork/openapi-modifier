@@ -16,10 +16,10 @@ module.exports = {
         {
             rule: "patch-endpoint-response-schema",
             config: {
-                endpointDescriptor: 'GET /api/list',
-                correction: '[].status',
+                endpointDescriptor: 'GET /api/list', // specify the endpoint to modify
+                correction: '[].status', // specify path to status field in response array
                 schemaDiff: {
-                    enum: ['foo', 'bar'],
+                    enum: ['foo', 'bar'], // add enum to status field
                 },
             },
         }
@@ -28,7 +28,7 @@ module.exports = {
 }
 ```
 
-Example of a more detailed configuration:
+More detailed configuration example:
 
 ```js
 module.exports = {
@@ -37,14 +37,14 @@ module.exports = {
         {
             rule: "patch-endpoint-response-schema",
             config: {
-                endpointDescriptor: 'GET /api/list',
-                correction: '[].status',
-                code: 200,
-                contentType: 'application/json',
+                endpointDescriptor: 'GET /api/list', // specify the endpoint to modify
+                correction: '[].status', // specify path to status field in response array
+                code: 200, // specify response code to apply changes to
+                contentType: 'application/json', // specify content type to apply changes to
                 schemaDiff: {
-                    enum: ['foo', 'bar'],
+                    enum: ['foo', 'bar'], // add enum to status field
                 },
-                patchMethod: 'deepmerge'
+                patchMethod: 'deepmerge' // use deepmerge method for deep merging changes
             },
         }
         // ... other rules

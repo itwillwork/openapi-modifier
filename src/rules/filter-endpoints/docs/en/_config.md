@@ -19,7 +19,7 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 enabled: [
-                    'GET /foo/ping'
+                    'GET /foo/ping' // keep only GET /foo/ping endpoint, all others will be removed
                 ],
             },
         }
@@ -38,7 +38,7 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 enabledPathRegExp: [
-                    /\/public/
+                    /\/public/ // keep all endpoints whose path contains /public
                 ],
             },
         }
@@ -57,7 +57,7 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 disabled: [
-                    'GET /foo/ping'
+                    'GET /foo/ping' // remove GET /foo/ping endpoint, all others will remain
                 ],
             },
         }
@@ -76,9 +76,9 @@ module.exports = {
             rule: "filter-endpoints",
             config: {
                 disabledPathRegExp: [
-                    /\/internal/
+                    /\/internal/ // remove all endpoints whose path contains /internal
                 ],
-                printIgnoredEndpoints: true,
+                printIgnoredEndpoints: true, // print information about removed endpoints to console
             },
         }
         // ... other rules

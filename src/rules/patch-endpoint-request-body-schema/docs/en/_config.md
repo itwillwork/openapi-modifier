@@ -15,10 +15,10 @@ module.exports = {
         {
             rule: "patch-endpoint-request-body-schema",
             config: {
-                endpointDescriptor: 'POST /api/order',
-                correction: "status",
+                endpointDescriptor: 'POST /api/order', // specify the endpoint to modify
+                correction: "status", // specify path to status field in request body
                 schemaDiff: {
-                    enum: ['foo', 'bar'],
+                    enum: ['foo', 'bar'], // add enum to status field
                 },
             },
         }
@@ -36,16 +36,16 @@ module.exports = {
         {
             rule: "patch-endpoint-request-body-schema",
             config: {
-                endpointDescriptor: 'POST /api/order',
-                contentType: "application/json",
+                endpointDescriptor: 'POST /api/order', // specify the endpoint to modify
+                contentType: "application/json", // specify content type to apply changes to
                 schemaDiff: {
                     properties: {
                         testField: {
-                            type: 'number',
+                            type: 'number', // change testField type to number
                         },
                     },
                 },
-                patchMethod: "deepmerge"
+                patchMethod: "deepmerge" // use deepmerge method for deep merging changes
             },
         }
         // ... other rules

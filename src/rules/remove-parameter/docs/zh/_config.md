@@ -12,10 +12,10 @@ module.exports = {
         {
             rule: "remove-parameter",
             config: {
-                endpointDescriptor: "GET /pets/{petId}",
+                endpointDescriptor: "GET /pets/{petId}", // 指定要从中删除参数的端点
                 parameterDescriptor: {
-                    name: "version",
-                    in: "query"
+                    name: "version", // 指定要删除的参数名称
+                    in: "query" // 指定参数位置（查询参数）
                 }
             },
         }

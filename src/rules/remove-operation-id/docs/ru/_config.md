@@ -10,7 +10,7 @@ module.exports = {
         // ... other rules
         {
             rule: "remove-operation-id",
-            config: {},
+            config: {} // удалить все атрибуты operationId из эндпоинтов
         }
         // ... other rules
     ]
@@ -26,7 +26,7 @@ module.exports = {
         {
             rule: "remove-operation-id",
             config: {
-                ignore: ["getPets", "createPet"]
+                ignore: ["getPets", "createPet"], // сохранить operationId для этого эндпоинта
             },
         }
         // ... other rules

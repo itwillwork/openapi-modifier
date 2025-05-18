@@ -13,7 +13,7 @@ import { forEachComponent } from '../common/utils/iterators/each-component';
 const configSchema = z
   .object({
     path: z.string().optional(),
-    ignoreOperarionCollisions: z.boolean().optional(),
+    ignoreOperationCollisions: z.boolean().optional(),
     ignoreComponentCollisions: z.boolean().optional(),
   })
   .strict();
@@ -30,7 +30,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: {},
   processDocument: (openAPIFile, config, logger) => {
-    const { path: openAPIFilePath, ignoreOperarionCollisions, ignoreComponentCollisions } = config;
+    const { path: openAPIFilePath, ignoreOperationCollisions, ignoreComponentCollisions } = config;
 
     if (!openAPIFilePath) {
       logger.warning(`Empty path: ${path}`);
@@ -79,7 +79,7 @@ const processor: RuleProcessorT<typeof configSchema> = {
       return openAPIFile;
     }
 
-    if (!ignoreOperarionCollisions) {
+    if (!ignoreOperationCollisions) {
       const sourceFileOperationsHashes: Array<OperationHashT> = [];
 
       forEachOperation(openAPIFile, ({ method, path }) => {

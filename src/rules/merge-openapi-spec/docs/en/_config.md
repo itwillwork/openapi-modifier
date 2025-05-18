@@ -1,7 +1,7 @@
 | Parameter                   | Description                                                                                                                                                                                                                                                                                                                                       | Example                                      | Type     | Default   |
 |----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------|----------|-----------|
 | `path`                     | [**required**] Path to the OpenAPI configuration that needs to be merged into the current specification. The path can be relative (relative to package.json location) or absolute (e.g., obtained via `__dirname` relative to config location). Supported formats: `*.json`, `*.yml`, `*.yaml`.                                                    | `temp-openapi-specs/new-list-endpoints.yaml` | `string` |           |
-| `ignoreOperarionCollisions`| When merging multiple specifications, conflicts may occur when there are identical endpoints. By default, the tool prohibits merging if collisions are found to prevent unexpected changes in the source specification. This setting allows you to ignore conflicts and merge specifications anyway.                                                | `true`                                       | `boolean` | `false`   |
+| `ignoreOperationCollisions`| When merging multiple specifications, conflicts may occur when there are identical endpoints. By default, the tool prohibits merging if collisions are found to prevent unexpected changes in the source specification. This setting allows you to ignore conflicts and merge specifications anyway.                                                | `true`                                       | `boolean` | `false`   |
 | `ignoreComponentCollisions`| When merging multiple specifications, conflicts may occur when there are identical common components. By default, the tool prohibits merging if collisions are found to prevent unexpected changes in the source specification. This setting allows you to ignore conflicts and merge specifications anyway.                                         | `true`                                       | `boolean` | `false`   |
 
 > [!IMPORTANT]
@@ -16,7 +16,7 @@ module.exports = {
         {
             rule: "merge-openapi-spec",
             config: {
-                path: 'temp-openapi-specs/new-list-endpoints.yaml',
+                path: 'temp-openapi-specs/new-list-endpoints.yaml', // specify path to specification file to merge
             },
         }
         // ... other rules
@@ -33,9 +33,9 @@ module.exports = {
         {
             rule: "merge-openapi-spec",
             config: {
-                path: __dirname + '../temp-openapi-specs/new-list-endpoints.json',
-                ignoreOperarionCollisions: true,
-                ignoreComponentCollisions: true,
+                path: __dirname + '../temp-openapi-specs/new-list-endpoints.json', // specify absolute path to specification file
+                ignoreOperationCollisions: true, // ignore operation conflicts during merge
+                ignoreComponentCollisions: true, // ignore component conflicts during merge
             },
         }
         // ... other rules

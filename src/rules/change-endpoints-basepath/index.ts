@@ -8,7 +8,7 @@ import {messagesFactory} from "../../logger/messages/factory";
 const configSchema = z
   .object({
     map: z.record(z.string(), z.string()),
-    ignoreOperarionCollisions: z.boolean().optional(),
+    ignoreOperationCollisions: z.boolean().optional(),
   })
   .strict();
 
@@ -24,14 +24,14 @@ const processor: RuleProcessorT<typeof configSchema> = {
   configSchema,
   defaultConfig: {
     map: {},
-    ignoreOperarionCollisions: false,
+    ignoreOperationCollisions: false,
   },
   processDocument: (openAPIFile, config, logger) => {
-    const { map, ignoreOperarionCollisions } = config;
+    const { map, ignoreOperationCollisions } = config;
 
     logger.trace(`Check paths ..`);
 
-    if (!ignoreOperarionCollisions) {
+    if (!ignoreOperationCollisions) {
       const sourceOperationHashes: Array<OperationHashT> = [];
       const collisionOperationHashes: Array<OperationHashT> = [];
 

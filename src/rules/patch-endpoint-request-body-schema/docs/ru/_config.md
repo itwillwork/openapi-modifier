@@ -6,7 +6,7 @@
 | `schemaDiff`                | [**обязательный**] Изменения для применения к схеме. [Подробные примеры спецификаций для OpenAPI]({{{rootPath}}}docs/schema-diff{{{langPostfix}}}.md)                                                                                                                          | `{type: "number"}`                                                                                                 | `OpenAPISchema` |           |
 | `patchMethod`               | Метод применения изменений [Подробнее про различия между методами merge и deepmerge]({{{rootPath}}}docs/merge-vs-deepmerge{{{langPostfix}}}.md) | `"merge"` | `"merge" \ "deepmerge"` | `"merge"` |
 
-Примеры конфигурации:
+Примеры конфигураций:
 
 ```js
 module.exports = {
@@ -15,10 +15,10 @@ module.exports = {
         {
             rule: "patch-endpoint-request-body-schema",
             config: {
-                endpointDescriptor: 'POST /api/order',
-                correction: "status",
+                endpointDescriptor: 'POST /api/order', // указываем эндпоинт, который нужно изменить
+                correction: "status", // указываем путь к полю status в теле запроса
                 schemaDiff: {
-                    enum: ['foo', 'bar'],
+                    enum: ['foo', 'bar'], // добавляем enum к полю status
                 },
             },
         }
@@ -36,16 +36,16 @@ module.exports = {
         {
             rule: "patch-endpoint-request-body-schema",
             config: {
-                endpointDescriptor: 'POST /api/order',
-                contentType: "application/json",
+                endpointDescriptor: 'POST /api/order', // указываем эндпоинт, который нужно изменить
+                contentType: "application/json", // указываем тип контента, для которого применяем изменения
                 schemaDiff: {
                     properties: {
                         testField: {
-                            type: 'number',
+                            type: 'number', // меняем тип поля testField на number
                         },
                     },
                 },
-                patchMethod: "deepmerge"
+                patchMethod: "deepmerge" // используем метод deepmerge для глубокого слияния изменений
             },
         }
         // ... other rules

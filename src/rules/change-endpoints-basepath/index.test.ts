@@ -156,7 +156,7 @@ describe('change-endpoints-basepath rule', () => {
     expect(fakeLogger.errorMessage).toBeCalledLoggerMethod(/operaion conflicts/, 1);
   });
 
-  test('operations collision, usage config.ignoreOperarionCollisions', () => {
+  test('operations collision, usage config.ignoreOperationCollisions', () => {
     const fakeLogger = global.createFakeLogger();
     const fakeOpenAPIFile = global.createFakeOpenAPIFile({
       paths: {
@@ -182,7 +182,7 @@ describe('change-endpoints-basepath rule', () => {
         fakeOpenAPIFile,
         {
           map: { '/api/v1': '/proxy' },
-          ignoreOperarionCollisions: true,
+          ignoreOperationCollisions: true,
         },
         fakeLogger,
           {ruleName: ''}

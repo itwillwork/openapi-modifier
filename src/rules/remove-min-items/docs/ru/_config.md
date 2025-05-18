@@ -10,7 +10,7 @@ module.exports = {
         // ... other rules
         {
             rule: "remove-min-items",
-            config: {},
+            config: {} // удалить свойство minItems из всех схем, не показывать предупреждения
         }
         // ... other rules
     ]
@@ -26,8 +26,8 @@ module.exports = {
         {
             rule: "remove-min-items",
             config: {
-                showUnusedWarning: true
-            },
+                showUnusedWarning: true // показать предупреждение, если в спецификации не найдены схемы с minItems
+            }
         }
         // ... other rules
     ]

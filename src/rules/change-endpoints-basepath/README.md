@@ -11,7 +11,7 @@ Changes basepaths of endpoints according to the replacement dictionary
 | Parameter                    | Description                                                              | Example               | Typing                | Default |
 |-----------------------------|-----------------------------------------------------------------------|----------------------|--------------------------|-----------|
 | `map`                       | [**required**] Path replacement dictionary                                     | `{"/api/v1": "/v1"}` | `Record<string, string>` | `{}`      |
-| `ignoreOperarionCollisions` | Ignore endpoint collisions that occur after applying replacements | `true`               | `boolean`                | `false`        |
+| `ignoreOperationCollisions` | Ignore endpoint collisions that occur after applying replacements | `true`               | `boolean`                | `false`        |
 
 
 Configuration example:
@@ -45,7 +45,7 @@ module.exports = {
                map: { 
                    '/public/v1/service/api': '/api',
                }, 
-               ignoreOperarionCollisions: false,
+               ignoreOperationCollisions: false,
             },
         }
         // ... other rules
@@ -98,7 +98,7 @@ paths:
 
 ## Important Notes
 
-### About operation collision handling and the ignoreOperarionCollisions parameter
+### About operation collision handling and the ignoreOperationCollisions parameter
 
 The rule checks for operation collisions when changing paths. If a conflict occurs after path replacement (for example, two different endpoints become the same), the rule will throw an error.
 
@@ -117,7 +117,7 @@ paths:
 When trying to replace `/api/v1` with `/v1`, a conflict will occur as both endpoints will become `/v1/pets`.
 
 In this case, you can:
-1. Use `ignoreOperarionCollisions: true` to ignore conflicts
+1. Use `ignoreOperationCollisions: true` to ignore conflicts
 2. Change the path replacement configuration to avoid conflicts
 3. Modify conflicting endpoints beforehand
 
