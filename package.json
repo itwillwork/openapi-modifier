@@ -1,7 +1,31 @@
 {
   "name": "openapi-modifier",
-  "version": "0.0.40",
-  "description": "",
+  "version": "0.0.41",  
+  "description": "This package allows you to automate the process of modifying OpenAPI specifications by applying a set of predefined rules",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/itwillwork/openapi-modifier.git"
+  },
+  "bugs": {
+    "url": "https://github.com/itwillwork/openapi-modifier/issues"
+  },
+  "keywords": [
+    "openapi",
+    "openapi3",
+    "modify",
+    "change",
+    "format",
+    "automate",
+    "automatization",
+    "patch",
+    "merge",
+    "deepmerge",
+    "filter",
+    "convert",
+    "rename",
+    "cli"
+  ],
+  "homepage": "https://github.com/itwillwork/openapi-modifier",
   "files": [
     "dist-types",
     "dist",
