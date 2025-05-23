@@ -1,3 +1,5 @@
+[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)
+
 # OpenAPI + RTK Query Type Generation Example
 
 This example demonstrates how to use OpenAPI specifications to generate TypeScript types and integrate them with RTK Query in a React application.

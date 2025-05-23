@@ -1,3 +1,5 @@
+[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)
+
 # OpenAPI + RTK Query 类型生成示例
 
 本示例演示了如何在 React 应用程序中使用 OpenAPI 规范生成 TypeScript 类型并将其与 RTK Query 集成。
