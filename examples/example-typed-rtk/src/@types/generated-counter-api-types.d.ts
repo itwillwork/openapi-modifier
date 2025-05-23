@@ -1,4 +1,4 @@
-export declare namespace Components {
+declare namespace Components {
     namespace Responses {
         export type ServerError = Schemas.Error;
     }
@@ -29,8 +29,17 @@ export declare namespace Components {
         }
     }
 }
-export declare namespace Paths {
+declare namespace Paths {
     namespace GetCounter {
+        namespace Parameters {
+            /**
+             * API version identifier
+             */
+            export type Version = string;
+        }
+        export interface QueryParameters {
+            version?: /* API version identifier */ Parameters.Version;
+        }
         namespace Responses {
             export type $200 = Components.Schemas.CounterResponse;
             export type $500 = Components.Responses.ServerError;
@@ -45,3 +54,5 @@ export declare namespace Paths {
         }
     }
 }
+
+export {};

@@ -23,6 +23,13 @@ paths:
       summary: Get current counter value
       description: Returns the current counter value for state initialization
       operationId: getCounter
+      parameters:
+        - name: version
+          in: query
+          required: false
+          schema:
+            type: string
+            description: API version identifier
       responses:
         '200':
           description: Successfully retrieved counter value

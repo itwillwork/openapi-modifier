@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from './store';
 import { increment, decrement, incrementByAmount, setValue } from './features/counter/counterSlice';
@@ -7,7 +7,8 @@ import { useGetCounterQuery, useSaveCounterMutation } from './features/counter/c
 function App() {
   const count = useSelector((state: RootState) => state.counter.value);
   const dispatch = useDispatch();
-  const { data, isLoading, error } = useGetCounterQuery();
+  const [version] = useState(() => Math.random().toString(36).substring(7));
+  const { data, isLoading, error } = useGetCounterQuery({ version });
   const [saveCounter] = useSaveCounterMutation();
 
   useEffect(() => {
