@@ -36,11 +36,11 @@ function App() {
   };
 
   if (isLoading) {
-    return <div>Загрузка...</div>;
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>Ошибка при загрузке данных</div>;
+    return <div>Error loading data</div>;
   }
 
   return (
@@ -66,7 +66,7 @@ function App() {
           onClick={() => handleIncrementByAmount(5)}
           style={{ padding: '8px 16px' }}
         >
-          Увеличить на 5
+          Increase by 5
         </button>
       </div>
     </div>
