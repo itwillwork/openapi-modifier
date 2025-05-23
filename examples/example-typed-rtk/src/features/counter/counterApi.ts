@@ -1,3 +1,5 @@
+/// <reference path="../../api/types/generated-counter-api-types.d.ts" />
+
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const counterApi = createApi({

@@ -25,7 +25,7 @@
     "eject": "react-scripts eject",
     "mock-api": "prism mock specs/counter-api.yaml --port 4010",
     "dev": "concurrently \"npm run mock-api\" \"npm run start\"",
-    "generate-types": "dtsgen --out src/@types/generated-counter-api-types.d.ts specs/counter-api.yaml"
+    "generate-types": "dtsgen --out src/api/types/generated-counter-api-types.d.ts specs/counter-api.yaml"
   },
   "eslintConfig": {
     "extends": [
