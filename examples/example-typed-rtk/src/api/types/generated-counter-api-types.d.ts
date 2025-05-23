@@ -1,3 +1,7 @@
+/**
+* WARNING! This file was auto-generated
+**/
+
 declare namespace Components {
     namespace Responses {
         export type ServerError = Schemas.Error;

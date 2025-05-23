@@ -16,7 +16,8 @@
   "devDependencies": {
     "@stoplight/prism-cli": "^5.8.0",
     "concurrently": "^8.2.2",
-    "dtsgenerator": "^3.19.2"
+    "dtsgenerator": "^3.19.2",
+    "openapi-modifier": "file:../../"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -25,7 +26,8 @@
     "eject": "react-scripts eject",
     "mock-api": "prism mock specs/counter-api.yaml --port 4010",
     "dev": "concurrently \"npm run mock-api\" \"npm run start\"",
-    "generate-types": "dtsgen --out src/api/types/generated-counter-api-types.d.ts specs/counter-api.yaml"
+    "generate-types": "dtsgen --out src/api/types/generated-counter-api-types.d.ts specs/counter-api.yaml && npm run prepare-generated-types",
+    "prepare-generated-types": "simple-text-file-modifier --input=src/api/types/generated-counter-api-types.d.ts --output=src/api/types/generated-counter-api-types.d.ts --config=simple-text-file-modifier.config.ts"
   },
   "eslintConfig": {
     "extends": [
