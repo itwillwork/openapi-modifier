@@ -24,9 +24,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "mock-api": "prism mock specs/counter-api.yaml --port 4010",
+    "mock-api": "prism mock specs/prepared-counter-api.yaml --port 4010",
     "dev": "concurrently \"npm run mock-api\" \"npm run start\"",
-    "generate-types": "dtsgen --out src/api/types/generated-counter-api-types.d.ts specs/counter-api.yaml && npm run prepare-generated-types",
+    "prepare-openapi-types": "openapi-modifier --input=specs/counter-api.yaml --output=specs/prepared-counter-api.yaml --config=openapi-modifier.config.ts",
+    "generate-types": "dtsgen --out src/api/types/generated-counter-api-types.d.ts specs/prepared-counter-api.yaml && npm run prepare-generated-types",
     "prepare-generated-types": "simple-text-file-modifier --input=src/api/types/generated-counter-api-types.d.ts --output=src/api/types/generated-counter-api-types.d.ts --config=simple-text-file-modifier.config.ts"
   },
   "eslintConfig": {
