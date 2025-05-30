@@ -244,4 +244,6 @@ paths:
 
 - [Rule usage examples in tests](./index.test.ts)  
 - [Differences between merge and deepmerge methods](../../../docs/merge-vs-deepmerge.md)
-- [OpenAPI Specification Examples](../../../docs/schema-diff.md) 
+- [OpenAPI Specification Examples](../../../docs/schema-diff.md)
+- [DeepWiki Documentation](https://deepwiki.com/itwillwork/openapi-modifier)
+- [Context7 documentation for LLMs and AI code editors](https://context7.com/itwillwork/openapi-modifier)

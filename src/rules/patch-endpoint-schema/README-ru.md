@@ -139,3 +139,5 @@ paths:
 - [Примеры применения правила в тестах](./index.test.ts)  
 - [Различия между методами merge и deepmerge](../../../docs/merge-vs-deepmerge-ru.md)
 - [Примеры спецификаций для OpenAPI](../../../docs/schema-diff-ru.md)
+- [DeepWiki документация](https://deepwiki.com/itwillwork/openapi-modifier)
+- [Context7 документация для LLM моделей и AI редакторов кода](https://context7.com/itwillwork/openapi-modifier)

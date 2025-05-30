@@ -158,3 +158,5 @@ paths:
 
 - [测试中的规则使用示例](./index.test.ts)  
  
+- DeepWiki 文档](https://deepwiki.com/itwillwork/openapi-modifier)
+- 用于 LLM 和 AI 代码编辑器的 Context7 文档](https://context7.com/itwillwork/openapi-modifier)
