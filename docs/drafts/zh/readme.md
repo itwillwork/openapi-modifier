@@ -235,6 +235,11 @@ module.exports = {
 
 - **为什么 $ref 修改很危险？** 因为它意味着 $ref 引用了模式的公共部分，其修改可能导致规范中重用 $ref 的另一部分发生隐式更改，这种错误将极难捕获。
 
+## 人工智能工具
+
+- DeepWiki 文档](https://deepwiki.com/itwillwork/openapi-modifier)
+- 用于 LLM 和 AI 代码编辑器的 Context7 文档](https://context7.com/itwillwork/openapi-modifier)
+
 ## 使用示例
 
 在 `examples` 目录中，您可以找到各种使用包的示例：

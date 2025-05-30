@@ -235,6 +235,11 @@ module.exports = {
 
 - **Why are $ref modifications dangerous?** Because it means that $ref refers to a common part of the schema, and its modification may lead to implicit changes in another part of the specification where $ref is reused, and such a bug will be extremely difficult to catch.
 
+## AI tools
+
+- [DeepWiki Documentation](https://deepwiki.com/itwillwork/openapi-modifier)
+- [Context7 documentation for LLMs and AI code editors](https://context7.com/itwillwork/openapi-modifier)
+
 ## Usage Examples
 
 In the `examples` directory, you can find various examples of using the package:
