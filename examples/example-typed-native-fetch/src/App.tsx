@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { fetchPetById } from './api/fetchPetById';
 import { ApiPet, ApiTag } from './api/types/models';
+import { ApiClient, ApiError } from './api/client';
 
 function PetCard({ pet }: { pet: ApiPet }) {
   if (!pet) return null;
@@ -26,18 +26,22 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const apiClient = new ApiClient('http://localhost:4010');
+
   useEffect(() => {
-    setIsLoading(true);
-    setError(null);
-    fetchPetById(petId)
-      .then((pet) => {
-        setData(pet);
-        setIsLoading(false);
-      })
-      .catch((err) => {
+    const fetchPet = async () => {
+      setIsLoading(true);
+      setError(null);
+      const [err, pet] = await apiClient.fetchPetByIdSafe(petId);
+      if (err) {
         setError(err.message);
-        setIsLoading(false);
-      });
+      } else {
+        setData(pet);
+      }
+      setIsLoading(false);
+    };
+
+    fetchPet();
   }, [petId]);
 
   return (

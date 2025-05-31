@@ -1,4 +1,3 @@
-import { fetchPetById } from './fetchPetById';
 /// <reference path="./types/generated-api-types.d.ts" />
 
 // Universal error type
