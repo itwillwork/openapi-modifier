@@ -1,0 +1,200 @@
+{
+    "openapi": "3.0.4",
+    "servers": [
+        {
+            "url": "/api/v3"
+        }
+    ],
+    "tags": [
+        {
+            "description": "Everything about your Pets",
+            "name": "pet",
+            "externalDocs": {
+                "description": "Find out more",
+                "url": "https://swagger.io"
+            }
+        },
+        {
+            "description": "Access to Petstore orders",
+            "name": "store",
+            "externalDocs": {
+                "description": "Find out more about our store",
+                "url": "https://swagger.io"
+            }
+        },
+        {
+            "description": "Operations about user",
+            "name": "user"
+        }
+    ],
+    "components": {
+        "requestBodies": {},
+        "schemas": {
+            "Category": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "example": 1,
+                        "format": "int64",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "example": "Dogs",
+                        "type": "string"
+                    }
+                },
+                "xml": {
+                    "name": "category"
+                }
+            },
+            "Pet": {
+                "required": [
+                    "name",
+                    "photoUrls"
+                ],
+                "type": "object",
+                "properties": {
+                    "category": {
+                        "$ref": "#/components/schemas/Category"
+                    },
+                    "id": {
+                        "example": 10,
+                        "format": "int64",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "example": "doggie",
+                        "type": "string"
+                    },
+                    "photoUrls": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "xml": {
+                                "name": "photoUrl"
+                            }
+                        },
+                        "xml": {
+                            "wrapped": true
+                        }
+                    },
+                    "status": {
+                        "description": "pet status in the store",
+                        "enum": [
+                            "available",
+                            "pending",
+                            "sold"
+                        ],
+                        "type": "string"
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Tag"
+                        },
+                        "xml": {
+                            "wrapped": true
+                        }
+                    }
+                },
+                "xml": {
+                    "name": "pet"
+                }
+            },
+            "Tag": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "format": "int64",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "xml": {
+                    "name": "tag"
+                }
+            }
+        },
+        "securitySchemes": {}
+    },
+    "externalDocs": {
+        "description": "Find out more about Swagger",
+        "url": "https://swagger.io"
+    },
+    "info": {
+        "description": "This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about\nSwagger at [https://swagger.io](https://swagger.io). In the third iteration of the pet store, we've switched to the design first approach!\nYou can now help us improve the API whether it's by making changes to the definition itself or to the code.\nThat way, with time, we can improve the API in general, and expose some of the new features in OAS3.\n\nSome useful links:\n- [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)\n- [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)",
+        "termsOfService": "https://swagger.io/terms/",
+        "title": "Swagger Petstore - OpenAPI 3.0",
+        "version": "1.0.26",
+        "contact": {
+            "email": "apiteam@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "paths": {
+        "/api/v3/pet/{petId}": {
+            "get": {
+                "description": "Returns a single pet.",
+                "operationId": "getPetById",
+                "parameters": [
+                    {
+                        "description": "ID of pet to return",
+                        "in": "path",
+                        "name": "petId",
+                        "required": true,
+                        "schema": {
+                            "format": "int64",
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "api_key": []
+                    },
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets"
+                        ]
+                    }
+                ],
+                "summary": "Find pet by ID.",
+                "tags": [
+                    "pet"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pet"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pet"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Pet not found"
+                    },
+                    "default": {
+                        "description": "Unexpected error"
+                    }
+                }
+            }
+        }
+    }
+}

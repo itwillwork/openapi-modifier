@@ -2,10 +2,9 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { fetchPetById } from './api/fetchPetById';
-import { Paths } from './api/types/generated-api-types';
-import { Components } from './api/types/generated-api-types';
+import { ApiPet, ApiTag } from './api/types/models';
 
-function PetCard({ pet }: { pet: Paths.GetPetById.Responses.$200 }) {
+function PetCard({ pet }: { pet: ApiPet }) {
   if (!pet) return null;
   return (
     <div style={{ border: '1px solid #ccc', borderRadius: 8, padding: 16, maxWidth: 400, margin: '24px auto', boxShadow: '0 2px 8px #eee' }}>
@@ -17,7 +16,7 @@ function PetCard({ pet }: { pet: Paths.GetPetById.Responses.$200 }) {
       <p><b>Status:</b> {pet.status}</p>
       {pet.category && <p><b>Category:</b> {pet.category.name}</p>}
       {pet.tags && pet.tags.length > 0 && (
-        <p><b>Tags:</b> {pet.tags.map((tag: Components.Schemas.Tag) => tag?.name).filter(Boolean).join(', ')}</p>
+        <p><b>Tags:</b> {pet.tags.map((tag: ApiTag) => tag?.name).filter(Boolean).join(', ')}</p>
       )}
     </div>
   );

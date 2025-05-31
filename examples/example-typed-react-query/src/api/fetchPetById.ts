@@ -1,4 +1,4 @@
-import { Paths } from './types/generated-api-types';
+/// <reference path="./types/generated-api-types.d.ts" />
 
 export async function fetchPetById(petId: number): Promise<Paths.GetPetById.Responses.$200> {
   const res = await fetch(`/api/v3/pet/${petId}`);
