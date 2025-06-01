@@ -50,6 +50,7 @@ app.get('/pet/:petId', async (request: Request, response: Response) => {
   response.json(mock);
 });
 
+// Define the route type for getting an order by ID, including request params and possible responses
 type GetOrderByIdRoute = {
   request: {
     params: {
@@ -64,25 +65,33 @@ type GetOrderByIdRoute = {
   };
 }
 
+// Typed controller for the GetOrderById route
 const getOrderByIdRouteTypedController: TypedController<GetOrderByIdRoute> = async (request, response, next) => {
-    const orderId = request.params.orderId;
+    const orderId = request.params.orderId; // Extract orderId from request parameters
 
+    // Example 1: not valid response body
+    // Intentionally assign an invalid object to demonstrate TypeScript error checking
     // @ts-expect-error: TS2322: Type '{ foo: string; }' is not assignable to type 'Order'. Object literal may only specify known properties, and 'foo' does not exist in type 'Order'.
     response.result = { foo: 'bar'};
 
-
+    // Example 2: valid response body
+    // Generate a mock response for a successful 200 response using OpenAPI types
     const responseMock = await getMockFromOpenApi<PetstorePaths.StoreOrder$OrderId.Get.Responses.$200>('get', '/store/order/{orderId}', '200');
     response.result = responseMock;
-    next();
+    next(); // Call next middleware
 
+    // Example 3: not valid error body
+    // Intentionally trigger a TypeScript error by passing an invalid error body
     next(
         // @ts-expect-error: TS2345: Argument of type 'ServiceResponseError<number>' is not assignable to parameter of type 'ServiceResponseError<$400 | $404>'. Type 'number' is not assignable to type '$400 | $404'.
-  new ServiceResponseError({
+          new ServiceResponseError({
             statusCode: 400,
             body: 123
            }),
     );
 
+    // Example 4: valid error body
+    // Generate a mock error response for a 400 error using OpenAPI types
     const responseErrorMock = await getMockFromOpenApi<PetstorePaths.StoreOrder$OrderId.Get.Responses.$400>('get', '/store/order/{orderId}', '400');
     next(
         new ServiceResponseError({
@@ -92,9 +101,10 @@ const getOrderByIdRouteTypedController: TypedController<GetOrderByIdRoute> = asy
     );
 }
 
+// Register the GET /store/order/{orderId} route with the typed controller
 app.get('/store/order/{orderId}', getOrderByIdRouteTypedController);
 
-
+// Define the route type for placing an order, including request body and possible responses
 type PlaceOrderRoute = {
     request: {
         body: PetstorePaths.StoreOrder.Post.RequestBody;
@@ -107,17 +117,20 @@ type PlaceOrderRoute = {
     };
 }
 
+// Typed controller for the PlaceOrder route
 const placeOrderRouteTypedController: TypedController<PlaceOrderRoute> = async (request, response, next) => {
-    const order = request.body;
+    const order = request.body; // order is typed as PetstoreComponents.Schemas.Order
 
-
+    // Generate a mock response for a successful 200 response using OpenAPI types
     const responseMock = await getMockFromOpenApi<PetstorePaths.StoreOrder.Post.Responses.$200>('post', '/store/order', '200');
     response.result = responseMock;
-    next();
+    next(); // Call next middleware
 }
 
+// Register the POST /store/order route with the typed controller
 app.post('/store/order', placeOrderRouteTypedController);
 
+// Define the route type for user login, including query parameters and possible responses
 type LoginUserRoute = {
     request: {
         query: PetstorePaths.UserLogin.Get.QueryParameters;
@@ -128,13 +141,15 @@ type LoginUserRoute = {
     };
 }
 
+// Typed controller for the LoginUser route
 const loginUserRouteTypedController: TypedController<LoginUserRoute> = async (request, response, next) => {
-    const username = request.query.username;
-    const password = request.query.password;
+    const username = request.query.username; // username is typed as string
+    const password = request.query.password; // password is typed as string
 
+    // Generate a mock response for a successful 200 response using OpenAPI types
     const responseMock = await getMockFromOpenApi<PetstorePaths.UserLogin.Get.Responses.$200>('get', '/user/login', '200');
     response.result = responseMock;
-    next();
+    next(); // Call next middleware
 }
 
 // why does endpoint /user/login have a get method? Because that's how it was in the openapi petstore example.
