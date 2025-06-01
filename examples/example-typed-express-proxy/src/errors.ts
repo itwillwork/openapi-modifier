@@ -11,6 +11,37 @@ export abstract class BaseHttpRequestError extends Error {
     abstract readonly httpStatusCode: number;
 }
 
+export class BadRequestError extends BaseHttpRequestError {
+    httpStatusCode = 400;
+
+    constructor(additionalMessage: string) {
+        const message = `Bad response: ${additionalMessage}`;
+        super(message);
+    }
+}
+
+export class NotFoundRequestError extends BaseHttpRequestError {
+    httpStatusCode = 404;
+
+    constructor() {
+        const message = `Not found`;
+        super(message);
+    }
+}
+
+export class UnauthorizedRequestError extends BaseHttpRequestError {
+    httpStatusCode = 401;
+
+    data: { code: string };
+
+    constructor(code: string) {
+        super(`Unauthorized: ${code || ''}`);
+
+        this.data = { code };
+    }
+}
+
+
 export class ServiceResponseError<T = unknown> extends BaseHttpRequestError {
     httpStatusCode: number;
 

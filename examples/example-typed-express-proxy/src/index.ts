@@ -7,12 +7,16 @@ import openapiSchemaToJsonSchema from '@openapi-contrib/openapi-schema-to-json-s
 import jsf from 'json-schema-faker';
 import RefParser from '@apidevtools/json-schema-ref-parser';
 import {ServiceResponseError} from "./errors";
+import {setupLoggerMiddleware} from "./middlewares/setup-logger";
+import {responseHandlerMiddleware,errorResponseHandlerMiddleware } from "./middlewares/response-handler";
 
 const app = express();
 const PORT = 3001;
 
 // Enable JSON body parsing for POST
 app.use(express.json());
+
+app.use(setupLoggerMiddleware);
 
 // Utility to generate mock data from OpenAPI
 async function getMockFromOpenApi<T>(method: string, endpointPath: string, statusCode: string): Promise<T> {
@@ -133,7 +137,11 @@ const loginUserRouteTypedController: TypedController<LoginUserRoute> = async (re
     next();
 }
 
+// why does endpoint /user/login have a get method? Because that's how it was in the openapi petstore example.
 app.get('/user/login', loginUserRouteTypedController);
+
+app.use(responseHandlerMiddleware);
+app.use(errorResponseHandlerMiddleware);
 
 // Ping route
 app.get('/ping', (req: Request, res: Response) => {
