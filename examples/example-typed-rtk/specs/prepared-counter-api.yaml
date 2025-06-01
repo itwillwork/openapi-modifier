@@ -1,0 +1,103 @@
+components:
+  responses:
+    ServerError:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Internal server error
+  schemas:
+    CounterRequest:
+      properties:
+        value:
+          description: Counter value to save
+          example: 42
+          format: int32
+          type: integer
+      required:
+        - value
+      type: object
+    CounterResponse:
+      properties:
+        value:
+          description: Current counter value
+          example: 42
+          format: int32
+          type: integer
+      required:
+        - value
+      type: object
+    Error:
+      properties:
+        message:
+          description: Error message
+          example: Invalid request format
+          type: string
+      required:
+        - message
+      type: object
+info:
+  contact:
+    email: support@example.com
+    name: API Support
+  description: API for counter state management
+  title: Counter API
+  version: 1.0.0
+openapi: 3.0.3
+paths:
+  /api/counter:
+    get:
+      description: Returns the current counter value for state initialization
+      operationId: getCounter
+      parameters:
+        - in: query
+          name: version
+          required: false
+          schema:
+            description: API version identifier
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CounterResponse"
+          description: Successfully retrieved counter value
+        "500":
+          $ref: "#/components/responses/ServerError"
+      summary: Get current counter value
+      tags:
+        - counter
+    post:
+      description: Saves the current counter value on the server
+      operationId: saveCounter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CounterRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CounterResponse"
+          description: Counter value successfully saved
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Invalid request format
+        "500":
+          $ref: "#/components/responses/ServerError"
+      summary: Save counter value
+      tags:
+        - counter
+servers:
+  - description: Local development server
+    url: http://localhost:3001
+tags:
+  - description: Counter operations
+    name: counter

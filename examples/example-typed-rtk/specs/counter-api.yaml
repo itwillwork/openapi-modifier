@@ -1,0 +1,111 @@
+openapi: 3.0.3
+info:
+  title: Counter API
+  description: API for counter state management
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+
+servers:
+  - url: http://localhost:3001
+    description: Local development server
+
+tags:
+  - name: counter
+    description: Counter operations
+
+paths:
+  /counter:
+    get:
+      tags:
+        - counter
+      summary: Get current counter value
+      description: Returns the current counter value for state initialization
+      operationId: getCounter
+      parameters:
+        - name: version
+          in: query
+          required: false
+          schema:
+            type: string
+            description: API version identifier
+      responses:
+        '200':
+          description: Successfully retrieved counter value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CounterResponse'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    post:
+      tags:
+        - counter
+      summary: Save counter value
+      description: Saves the current counter value on the server
+      operationId: saveCounter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CounterRequest'
+      responses:
+        '200':
+          description: Counter value successfully saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CounterResponse'
+        '400':
+          description: Invalid request format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+components:
+  schemas:
+    CounterResponse:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: integer
+          format: int32
+          description: Current counter value
+          example: 42
+
+    CounterRequest:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: integer
+          format: int32
+          description: Counter value to save
+          example: 42
+
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: Error message
+          example: "Invalid request format"
+
+  responses:
+    ServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error' 
