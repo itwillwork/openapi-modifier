@@ -48,10 +48,4 @@ declare global {
         response: TypedResponse<T>,
         next: TypedNext<T>,
     ) => Promise<void> | void;
-
-    export type ExpressMiddlewareShape = (
-        request: Request,
-        response: Response,
-        next: NextFunction,
-    ) => void;
 }
