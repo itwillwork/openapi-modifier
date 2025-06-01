@@ -7,7 +7,7 @@ declare global {
         [key: string]: any;
     }
 
-    export type ExpressRouteT = {
+    export type ExpressRouteShape = {
         request: {
             query?: QueryI;
             headers?: any;
@@ -22,8 +22,8 @@ declare global {
         };
     };
 
-    interface TypedRequest<T extends ExpressRouteT> extends Request {
-        query: InterfaceToTypeT<T['request']['query']>;
+    interface TypedRequest<T extends ExpressRouteShape> extends Request {
+        query: InterfaceToType<T['request']['query']>;
         headers: T['request']['headers'];
         body: T['request']['body'];
         params: T['request']['params'];
@@ -35,21 +35,21 @@ declare global {
             : string | undefined;
     }
 
-    interface TypedResponse<T extends ExpressRouteT> extends Response {
+    interface TypedResponse<T extends ExpressRouteShape> extends Response {
         result: T['responses']['success'];
     }
 
-    type TypedNext<T extends ExpressRouteT> = (
+    type TypedNext<T extends ExpressRouteShape> = (
         error?: ServiceResponseError<T['responses']['error']>,
     ) => void;
 
-    export type TypedController<T extends ExpressRouteT> = (
+    export type TypedController<T extends ExpressRouteShape> = (
         request: TypedRequest<T>,
         response: TypedResponse<T>,
         next: TypedNext<T>,
     ) => Promise<void> | void;
 
-    export type ExpressMiddlewareT = (
+    export type ExpressMiddlewareShape = (
         request: Request,
         response: Response,
         next: NextFunction,

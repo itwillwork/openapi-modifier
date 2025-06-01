@@ -12,7 +12,7 @@ declare global {
         }
     }
 
-    export type ExpressMiddlewareT = (
+    export type ExpressMiddlewareShape = (
         request: Request,
         response: Response,
         next: NextFunction,

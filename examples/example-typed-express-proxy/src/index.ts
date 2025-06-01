@@ -114,6 +114,27 @@ const placeOrderRouteTypedController: TypedController<PlaceOrderRoute> = async (
 
 app.post('/store/order', placeOrderRouteTypedController);
 
+type LoginUserRoute = {
+    request: {
+        query: Paths.LoginUser.QueryParameters;
+    };
+    responses: {
+        success: Paths.LoginUser.Responses.$200;
+        error: Paths.LoginUser.Responses.$400;
+    };
+}
+
+const loginUserRouteTypedController: TypedController<LoginUserRoute> = async (request, response, next) => {
+    const username = request.query.username;
+    const password = request.query.password;
+
+    const responseMock = await getMockFromOpenApi<Paths.LoginUser.Responses.$200>('get', '/user/login', '200');
+    response.result = responseMock;
+    next();
+}
+
+app.get('/user/login', loginUserRouteTypedController);
+
 // Ping route
 app.get('/ping', (req: Request, res: Response) => {
   res.send('OK');
