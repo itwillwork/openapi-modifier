@@ -252,8 +252,14 @@ declare namespace Paths {
         namespace Responses {
             export type $200 = Components.Schemas.Order;
             export interface $400 {
+                /**
+                 * example:
+                 * 10
+                 */
+                id?: number; // int64
             }
             export interface $404 {
+                message?: string;
             }
             export interface Default {
             }
