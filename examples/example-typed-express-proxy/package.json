@@ -4,7 +4,8 @@
   "description": "Example of an express proxy with TypeScript typing.",
   "scripts": {
     "start": "ts-node --files src/index.ts",
-    "generate-types": "dtsgen --out src/services/petstore/generated-api-types.d.ts specs/petstore.json && npm run prepare-generated-types",
+    "prepare-openapi-spec": "openapi-modifier --input=specs/petstore.json --output=specs/prepared-petstore.json --config=openapi-modifier.config.ts",
+    "generate-types": "dtsgen --out src/services/petstore/generated-api-types.d.ts specs/prepared-petstore.json && npm run prepare-generated-types",
     "prepare-generated-types": "simple-text-file-modifier --input=src/services/petstore/generated-api-types.d.ts --output=src/services/petstore/generated-api-types.d.ts --config=simple-text-file-modifier.config.ts",
     "test": "jest"
   },

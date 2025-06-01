@@ -46,21 +46,21 @@ async function getMockFromOpenApi<T>(method: string, endpointPath: string, statu
 
 // Mock route for GET /pet/:petId
 app.get('/pet/:petId', async (request: Request, response: Response) => {
-  const mock = await getMockFromOpenApi<Paths.GetPetById.Responses.$200>('get', '/pet/{petId}', '200');
+  const mock = await getMockFromOpenApi<PetstorePaths.Pet$PetId.Get.Responses.$200>('get', '/pet/{petId}', '200');
   response.json(mock);
 });
 
 type GetOrderByIdRoute = {
   request: {
     params: {
-      orderId: Paths.GetOrderById.Parameters.OrderId;
+      orderId: PetstorePaths.StoreOrder$OrderId.Get.Parameters.OrderId;
     };
   };
   responses: {
-    success: Paths.GetOrderById.Responses.$200;
+    success: PetstorePaths.StoreOrder$OrderId.Get.Responses.$200;
     error:
-        | Paths.GetOrderById.Responses.$400
-        | Paths.GetOrderById.Responses.$404;
+        | PetstorePaths.StoreOrder$OrderId.Get.Responses.$400
+        | PetstorePaths.StoreOrder$OrderId.Get.Responses.$404; 
   };
 }
 
@@ -71,7 +71,7 @@ const getOrderByIdRouteTypedController: TypedController<GetOrderByIdRoute> = asy
     response.result = { foo: 'bar'};
 
 
-    const responseMock = await getMockFromOpenApi<Paths.GetOrderById.Responses.$200>('get', '/store/order/{orderId}', '200');
+    const responseMock = await getMockFromOpenApi<PetstorePaths.StoreOrder$OrderId.Get.Responses.$200>('get', '/store/order/{orderId}', '200');
     response.result = responseMock;
     next();
 
@@ -83,7 +83,7 @@ const getOrderByIdRouteTypedController: TypedController<GetOrderByIdRoute> = asy
            }),
     );
 
-    const responseErrorMock = await getMockFromOpenApi<Paths.GetOrderById.Responses.$400>('get', '/store/order/{orderId}', '400');
+    const responseErrorMock = await getMockFromOpenApi<PetstorePaths.StoreOrder$OrderId.Get.Responses.$400>('get', '/store/order/{orderId}', '400');
     next(
         new ServiceResponseError({
             statusCode: 400,
@@ -97,13 +97,13 @@ app.get('/store/order/{orderId}', getOrderByIdRouteTypedController);
 
 type PlaceOrderRoute = {
     request: {
-        body: Paths.PlaceOrder.RequestBody;
+        body: PetstorePaths.StoreOrder.Post.RequestBody;
     };
     responses: {
-        success: Paths.PlaceOrder.Responses.$200;
+        success: PetstorePaths.StoreOrder.Post.Responses.$200;
         error:
-            | Paths.PlaceOrder.Responses.$400
-            | Paths.PlaceOrder.Responses.$422;
+            | PetstorePaths.StoreOrder.Post.Responses.$400
+            | PetstorePaths.StoreOrder.Post.Responses.$422;
     };
 }
 
@@ -111,7 +111,7 @@ const placeOrderRouteTypedController: TypedController<PlaceOrderRoute> = async (
     const order = request.body;
 
 
-    const responseMock = await getMockFromOpenApi<Paths.PlaceOrder.Responses.$200>('post', '/store/order', '200');
+    const responseMock = await getMockFromOpenApi<PetstorePaths.StoreOrder.Post.Responses.$200>('post', '/store/order', '200');
     response.result = responseMock;
     next();
 }
@@ -120,11 +120,11 @@ app.post('/store/order', placeOrderRouteTypedController);
 
 type LoginUserRoute = {
     request: {
-        query: Paths.LoginUser.QueryParameters;
+        query: PetstorePaths.UserLogin.Get.QueryParameters;
     };
     responses: {
-        success: Paths.LoginUser.Responses.$200;
-        error: Paths.LoginUser.Responses.$400;
+        success: PetstorePaths.UserLogin.Get.Responses.$200;
+        error: PetstorePaths.UserLogin.Get.Responses.$400;
     };
 }
 
@@ -132,7 +132,7 @@ const loginUserRouteTypedController: TypedController<LoginUserRoute> = async (re
     const username = request.query.username;
     const password = request.query.password;
 
-    const responseMock = await getMockFromOpenApi<Paths.LoginUser.Responses.$200>('get', '/user/login', '200');
+    const responseMock = await getMockFromOpenApi<PetstorePaths.UserLogin.Get.Responses.$200>('get', '/user/login', '200');
     response.result = responseMock;
     next();
 }
