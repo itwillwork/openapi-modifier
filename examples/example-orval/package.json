@@ -1,0 +1,56 @@
+{
+  "name": "example-orval",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.126",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.5",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-scripts": "5.0.1",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "@stoplight/prism-cli": "^5.14.2",
+    "concurrently": "^9.1.2",
+    "orval": "^7.4.0",
+    "openapi-modifier": "file:../../"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "postinstall": "npm run prepare-openapi && npm run generate-types",
+    "generate-types": "orval",
+    "prepare-openapi": "openapi-modifier --input=specs/openapi.json --output=specs/prepared-openapi.json --config=openapi-modifier.config.ts",
+    "mock:api": "prism mock specs/prepared-openapi.json -h 0.0.0.0 -p 4010 --cors",
+    "dev": "concurrently \"npm run mock:api\" \"npm run start\"",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+
