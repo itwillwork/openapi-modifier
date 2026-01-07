@@ -42,7 +42,8 @@
     "build:types": "tsc --declaration --declarationDir dist-types",
     "tools:generate-readme": "ts-node tools/generate-readme.ts",
     "tools:generate-rule-types": "ts-node tools/generate-rule-types.ts",
-    "tools:generate-rule-readme": "ts-node tools/generate-rule-readme.ts"
+    "tools:generate-rule-readme": "ts-node tools/generate-rule-readme.ts",
+    "tools:generate-mcp-docs": "ts-node tools/generate-mcp-docs.ts"
   },
   "bin": {
     "openapi-modifier": "./bin/openapi-modifier.js",
