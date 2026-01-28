@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
+const RAW_GITHUB_MAIN_BRANCH_BASE_URL = 'https://raw.githubusercontent.com/itwillwork/openapi-modifier/refs/heads/main';
+
 const IGNORE_ENTIRY_NAME = [
     'common',
     '.DS_Store',
@@ -8,8 +10,6 @@ const IGNORE_ENTIRY_NAME = [
 ];
 
 const LANGS = ['en', 'ru', 'zh'];
-
-const GITHUB_BASE_URL = 'https://raw.githubusercontent.com/itwillwork/openapi-modifier/refs/heads/main';
 
 const createPlaceholderRegExp = (placeholder: string) => {
     return new RegExp(`{{{${placeholder}}}}`, 'g');
@@ -19,7 +19,7 @@ const getTemplate = (templatePath: string): string => {
     return fs.readFileSync(templatePath).toString().trim();
 };
 
-const RULE_TABLE_ROW_TEMPLATE = `| [{{{name}}}](${GITHUB_BASE_URL}/src/rules/{{{name}}}/README{{{langPostfix}}}.md) | {{{description}}} |\n`;
+const RULE_TABLE_ROW_TEMPLATE = `| [{{{name}}}](${RAW_GITHUB_MAIN_BRANCH_BASE_URL}/src/rules/{{{name}}}/README{{{langPostfix}}}.md) | {{{description}}} |\n`;
 
 const outDir = 'mcp/docs';
 
