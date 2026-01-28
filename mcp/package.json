@@ -1,11 +1,41 @@
 {
   "name": "openapi-modifier-mcp",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "openapi-modifier-mcp": "./dist/index.js"
   },
-  "author": "",
+  "files": [
+    "dist",
+    "docs",
+    "README-ru.md",
+    "README-zh.md",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "@itwillwork",
   "license": "ISC",
-  "description": ""
+  "description": "MCP server for working with OpenAPI Modifier rules",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "openapi",
+    "openapi-modifier",
+    "openapi",
+    "openapi3"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
