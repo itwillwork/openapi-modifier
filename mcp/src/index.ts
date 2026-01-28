@@ -4,6 +4,22 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
+const SUPPORTED_LANGS = ["en", "ru", "zh"] as const;
+const langSchema = z.enum(SUPPORTED_LANGS);
+
+type Lang = typeof SUPPORTED_LANGS[number];
+
+// Get default language from LANG environment variable or use "en"
+const getDefaultLang = (): Lang => {
+  const envLang = process.env.LANG;
+  if (envLang && SUPPORTED_LANGS.includes(envLang as any)) {
+    return envLang as Lang;
+  }
+  return "en";
+};
+
+const defaultLang = getDefaultLang();
+
 class GithubUrlFactory {
   constructor(
     private readonly lang: string,
@@ -14,18 +30,21 @@ class GithubUrlFactory {
     return lang === "en" ? "" : `-${lang}`;
   }
 
-  getRulesDocUrl(): string {
-    const langSuffix = this.getLangSuffix(this.lang);
+  getRulesDocUrl(lang?: string): string {
+    const langToUse = lang ?? this.lang;
+    const langSuffix = this.getLangSuffix(langToUse);
     return `${this.baseUrl}/mcp/docs/rules${langSuffix}.md`;
   }
 
-  getRuleConfigUrl(ruleName: string): string {
-    const langSuffix = this.getLangSuffix(this.lang);
+  getRuleConfigUrl(ruleName: string, lang?: string): string {
+    const langToUse = lang ?? this.lang;
+    const langSuffix = this.getLangSuffix(langToUse);
     return `${this.baseUrl}/src/rules/${ruleName}/README${langSuffix}.md`;
   }
 
-  getSimpleTextFileModifierDocUrl(lang: string = "en"): string {
-    const langSuffix = this.getLangSuffix(lang);
+  getSimpleTextFileModifierDocUrl(lang?: string): string {
+    const langToUse = lang ?? this.lang;
+    const langSuffix = this.getLangSuffix(langToUse);
     return `${this.baseUrl}/docs/simple-text-file-modifier${langSuffix}.md`;
   }
 
@@ -36,7 +55,7 @@ class GithubUrlFactory {
 
 const MAIN_BRANCH_BASE_URL = "https://raw.githubusercontent.com/itwillwork/openapi-modifier/main";
 
-const githubUrlFactory = new GithubUrlFactory("en", MAIN_BRANCH_BASE_URL);
+const githubUrlFactory = new GithubUrlFactory(defaultLang, MAIN_BRANCH_BASE_URL);
 
 async function fetchGitHubFileRawContent(url: string): Promise<string> {
   const response = await fetch(url);
@@ -54,8 +73,10 @@ async function fetchGitHubFileJSON<T>(url: string): Promise<T> {
 class OpenAPIModifierMCPServer {
   private server: McpServer;
   private rules: string[] = [];
+  private defaultLang: Lang;
 
   constructor() {
+    this.defaultLang = defaultLang;
     this.server = new McpServer(
       {
         name: "openapi-modifier-mcp",
@@ -77,11 +98,11 @@ class OpenAPIModifierMCPServer {
         githubUrlFactory.getRulesJsonUrl()
       );
     } catch (error) {
-      console.error("Ошибка при загрузке списка правил из GitHub:", error);
-      // Используем пустой массив, если не удалось загрузить
+      console.error("Error loading rules list from GitHub:", error);
+      // Use empty array if failed to load
       this.rules = [];
     }
-    // Регистрируем инструменты после загрузки правил
+    // Register tools after loading rules
     this.setupToolHandlers();
   }
 
@@ -91,11 +112,18 @@ class OpenAPIModifierMCPServer {
       {
         description:
           "Возвращает список всех доступных правил openapi-modifier с их краткими описаниями",
-        inputSchema: {},
+        inputSchema: {
+          lang: langSchema
+            .optional()
+            .describe(
+              `Язык документации. Поддерживаемые языки: ${SUPPORTED_LANGS.join(", ")}. По умолчанию используется значение из переменной окружения LANG или "en"`
+            ),
+        },
       },
-      async () => {
+      async (args) => {
         try {
-          const text = await fetchGitHubFileRawContent(githubUrlFactory.getRulesDocUrl());
+          const lang = args.lang ?? this.defaultLang;
+          const text = await fetchGitHubFileRawContent(githubUrlFactory.getRulesDocUrl(lang));
           return {
             content: [
               {
@@ -109,7 +137,7 @@ class OpenAPIModifierMCPServer {
             content: [
               {
                 type: "text",
-                text: `Ошибка при получении списка правил: ${
+                text: `Error getting rules list: ${
                   error instanceof Error ? error.message : String(error)
                 }`,
               },
@@ -136,17 +164,23 @@ class OpenAPIModifierMCPServer {
               "Имя правила (например, 'change-content-type', 'filter-endpoints')"
             );
           })(),
+          lang: langSchema
+            .optional()
+            .describe(
+              `Язык документации. Поддерживаемые языки: ${SUPPORTED_LANGS.join(", ")}. По умолчанию используется значение из переменной окружения LANG или "en"`
+            ),
         },
       },
       async (args) => {
         try {
           const ruleName = args.rule_name;
           if (!ruleName) {
-            throw new Error("Имя правила не указано");
+            throw new Error("Rule name not specified");
           }
 
+          const lang = args.lang ?? this.defaultLang;
           const content = await fetchGitHubFileRawContent(
-            githubUrlFactory.getRuleConfigUrl(ruleName)
+            githubUrlFactory.getRuleConfigUrl(ruleName, lang)
           );
           return {
             content: [
@@ -161,7 +195,7 @@ class OpenAPIModifierMCPServer {
             content: [
               {
                 type: "text",
-                text: `Ошибка при получении конфигурации правила: ${
+                text: `Error getting rule configuration: ${
                   error instanceof Error ? error.message : String(error)
                 }`,
               },
@@ -178,17 +212,16 @@ class OpenAPIModifierMCPServer {
         description:
           "Получает документацию Simple Text File Modifier cli (добавление текста в начало/конец файла, замена по регулярным выражениям)",
         inputSchema: {
-          lang: z
-            .string()
+          lang: langSchema
             .optional()
             .describe(
-              "Язык документации: 'en' (по умолчанию), 'ru', 'zh'"
+              `Язык документации. Поддерживаемые языки: ${SUPPORTED_LANGS.join(", ")}. По умолчанию используется значение из переменной окружения LANG или "en"`
             ),
         },
       },
       async (args) => {
         try {
-          const lang = args.lang ?? "en";
+          const lang = args.lang ?? this.defaultLang;
           const content = await fetchGitHubFileRawContent(
             githubUrlFactory.getSimpleTextFileModifierDocUrl(lang)
           );
@@ -205,7 +238,7 @@ class OpenAPIModifierMCPServer {
             content: [
               {
                 type: "text",
-                text: `Ошибка при получении документации Simple Text File Modifier: ${
+                text: `Error getting Simple Text File Modifier documentation: ${
                   error instanceof Error ? error.message : String(error)
                 }`,
               },
