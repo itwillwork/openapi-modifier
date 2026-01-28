@@ -9,6 +9,11 @@ const langSchema = z.enum(SUPPORTED_LANGS);
 
 type Lang = typeof SUPPORTED_LANGS[number];
 
+const DOC_TYPES = ["descriptor", "merge-vs-deepmerge", "schema-diff"] as const;
+const docTypeSchema = z.enum(DOC_TYPES);
+
+type DocType = typeof DOC_TYPES[number];
+
 // Get default language from LANG environment variable or use "en"
 const getDefaultLang = (): Lang => {
   const envLang = process.env.LANG;
@@ -51,6 +56,12 @@ class GithubUrlFactory {
   getRulesJsonUrl(): string {
     return `${this.baseUrl}/mcp/resources/rules.json`;
   }
+
+  getAdditionalDocUrl(docType: DocType, lang?: string): string {
+    const langToUse = lang ?? this.lang;
+    const langSuffix = this.getLangSuffix(langToUse);
+    return `${this.baseUrl}/docs/${docType}${langSuffix}.md`;
+  }
 }
 
 const MAIN_BRANCH_BASE_URL = "https://raw.githubusercontent.com/itwillwork/openapi-modifier/main";
@@ -75,6 +86,11 @@ const toolTranslations = {
       description: "Gets Simple Text File Modifier cli documentation (adding text to the beginning/end of a file, replacement by regular expressions)",
       lang: `Documentation language. Supported languages: ${SUPPORTED_LANGS.join(", ")}. Defaults to the value from LANG environment variable or "en"`,
     },
+    get_additional_doc: {
+      description: "Gets additional documentation: descriptor (component descriptor differences), merge-vs-deepmerge (patch method differences), or schema-diff (OpenAPI schema specification examples)",
+      doc_type: `Documentation type. Available types: ${DOC_TYPES.join(", ")}`,
+      lang: `Documentation language. Supported languages: ${SUPPORTED_LANGS.join(", ")}. Defaults to the value from LANG environment variable or "en"`,
+    },
   },
   ru: {
     list_rules: {
@@ -92,6 +108,11 @@ const toolTranslations = {
       description: "Получает документацию Simple Text File Modifier cli (добавление текста в начало/конец файла, замена по регулярным выражениям)",
       lang: `Язык документации. Поддерживаемые языки: ${SUPPORTED_LANGS.join(", ")}. По умолчанию используется значение из переменной окружения LANG или "en"`,
     },
+    get_additional_doc: {
+      description: "Получает дополнительную документацию: descriptor (различия между простым и объектным дескриптором компонента), merge-vs-deepmerge (различия между методами merge и deepmerge), или schema-diff (примеры спецификаций для OpenAPI)",
+      doc_type: `Тип документации. Доступные типы: ${DOC_TYPES.join(", ")}`,
+      lang: `Язык документации. Поддерживаемые языки: ${SUPPORTED_LANGS.join(", ")}. По умолчанию используется значение из переменной окружения LANG или "en"`,
+    },
   },
   zh: {
     list_rules: {
@@ -107,6 +128,11 @@ const toolTranslations = {
     },
     get_simple_text_file_modifier_doc: {
       description: "获取 Simple Text File Modifier cli 文档（在文件开头/结尾添加文本，通过正则表达式替换）",
+      lang: `文档语言。支持的语言：${SUPPORTED_LANGS.join(", ")}。默认为 LANG 环境变量的值或 "en"`,
+    },
+    get_additional_doc: {
+      description: "获取附加文档：descriptor（组件描述符差异）、merge-vs-deepmerge（补丁方法差异）或 schema-diff（OpenAPI 模式规范示例）",
+      doc_type: `文档类型。可用类型：${DOC_TYPES.join(", ")}`,
       lang: `文档语言。支持的语言：${SUPPORTED_LANGS.join(", ")}。默认为 LANG 环境变量的值或 "en"`,
     },
   },
@@ -287,6 +313,52 @@ class OpenAPIModifierMCPServer {
               {
                 type: "text",
                 text: `Error getting Simple Text File Modifier documentation: ${
+                  error instanceof Error ? error.message : String(error)
+                }`,
+              },
+            ],
+            isError: true,
+          };
+        }
+      }
+    );
+
+    this.server.registerTool(
+      "get_additional_doc",
+      {
+        description: t.get_additional_doc.description,
+        inputSchema: {
+          doc_type: docTypeSchema.describe(t.get_additional_doc.doc_type),
+          lang: langSchema
+            .optional()
+            .describe(t.get_additional_doc.lang),
+        },
+      },
+      async (args) => {
+        try {
+          const docType = args.doc_type;
+          if (!docType) {
+            throw new Error("Documentation type not specified");
+          }
+
+          const lang = args.lang ?? this.defaultLang;
+          const content = await fetchGitHubFileRawContent(
+            githubUrlFactory.getAdditionalDocUrl(docType, lang)
+          );
+          return {
+            content: [
+              {
+                type: "text",
+                text: content,
+              },
+            ],
+          };
+        } catch (error) {
+          return {
+            content: [
+              {
+                type: "text",
+                text: `Error getting additional documentation: ${
                   error instanceof Error ? error.message : String(error)
                 }`,
               },

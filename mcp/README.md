@@ -19,7 +19,10 @@ npm run build
   "mcpServers": {
     "openapi-modifier": {
       "command": "node",
-      "args": ["/путь/к/openapi-modifier/mcp/dist/index.js"]
+      "args": ["/путь/к/openapi-modifier/mcp/dist/index.js"],
+      "env": {
+        "LANG": "ru"
+      }
     }
   }
 }
@@ -33,11 +36,16 @@ npm run build
     "openapi-modifier": {
       "command": "npm",
       "args": ["start"],
-      "cwd": "/путь/к/openapi-modifier/mcp"
+      "cwd": "/путь/к/openapi-modifier/mcp",
+      "env": {
+        "LANG": "ru"
+      }
     }
   }
 }
 ```
+
+> **Примечание:** Переменная окружения `LANG` определяет язык документации по умолчанию (`en`, `ru`, `zh`). Если не указана, используется `en`.
 
 ## Инструменты
 
