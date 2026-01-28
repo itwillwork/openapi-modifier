@@ -10,20 +10,33 @@ class GithubUrlFactory {
     private readonly baseUrl: string
   ) {}
 
+  private getLangSuffix(lang: string = "en"): string {
+    return lang === "en" ? "" : `-${lang}`;
+  }
+
   getRulesDocUrl(): string {
-    const suffix = this.lang === "en" ? "" : `-${this.lang}`;
-    return `${this.baseUrl}/mcp/docs/rules${suffix}.md`;
+    const langSuffix = this.getLangSuffix(this.lang);
+    return `${this.baseUrl}/mcp/docs/rules${langSuffix}.md`;
   }
 
   getRuleConfigUrl(ruleName: string): string {
-    return `${this.baseUrl}/src/rules/${ruleName}/docs/${this.lang}/_config.md`;
+    const langSuffix = this.getLangSuffix(this.lang);
+    return `${this.baseUrl}/src/rules/${ruleName}/README${langSuffix}.md`;
+  }
+
+  getSimpleTextFileModifierDocUrl(lang: string = "en"): string {
+    const langSuffix = this.getLangSuffix(lang);
+    return `${this.baseUrl}/docs/simple-text-file-modifier${langSuffix}.md`;
+  }
+
+  getRulesJsonUrl(): string {
+    return `${this.baseUrl}/mcp/resources/rules.json`;
   }
 }
 
-const MAIN_BRANCH_BASE_URL =
-  "https://raw.githubusercontent.com/itwillwork/openapi-modifier/main";
+const MAIN_BRANCH_BASE_URL = "https://raw.githubusercontent.com/itwillwork/openapi-modifier/main";
 
-const githubUrls = new GithubUrlFactory("en", MAIN_BRANCH_BASE_URL);
+const githubUrlFactory = new GithubUrlFactory("en", MAIN_BRANCH_BASE_URL);
 
 async function fetchGitHubFileRawContent(url: string): Promise<string> {
   const response = await fetch(url);
@@ -33,8 +46,14 @@ async function fetchGitHubFileRawContent(url: string): Promise<string> {
   return response.text();
 }
 
+async function fetchGitHubFileJSON<T>(url: string): Promise<T> {
+  const text = await fetchGitHubFileRawContent(url);
+  return JSON.parse(text) as T;
+}
+
 class OpenAPIModifierMCPServer {
   private server: McpServer;
+  private rules: string[] = [];
 
   constructor() {
     this.server = new McpServer(
@@ -49,8 +68,21 @@ class OpenAPIModifierMCPServer {
       }
     );
 
-    this.setupToolHandlers();
     this.setupErrorHandling();
+  }
+
+  async initialize() {
+    try {
+      this.rules = await fetchGitHubFileJSON<string[]>(
+        githubUrlFactory.getRulesJsonUrl()
+      );
+    } catch (error) {
+      console.error("Ошибка при загрузке списка правил из GitHub:", error);
+      // Используем пустой массив, если не удалось загрузить
+      this.rules = [];
+    }
+    // Регистрируем инструменты после загрузки правил
+    this.setupToolHandlers();
   }
 
   private setupToolHandlers() {
@@ -63,7 +95,7 @@ class OpenAPIModifierMCPServer {
       },
       async () => {
         try {
-          const text = await fetchGitHubFileRawContent(githubUrls.getRulesDocUrl());
+          const text = await fetchGitHubFileRawContent(githubUrlFactory.getRulesDocUrl());
           return {
             content: [
               {
@@ -94,9 +126,16 @@ class OpenAPIModifierMCPServer {
         description:
           "Получает описание конфигурации конкретного правила",
         inputSchema: {
-          rule_name: z.string().describe(
-            "Имя правила (например, 'change-content-type', 'filter-endpoints')"
-          ),
+          rule_name: (() => {
+            if (this.rules.length > 0) {
+              return z.enum(this.rules as [string, ...string[]]).describe(
+                `Имя правила. Доступные правила: ${this.rules.join(", ")}`
+              );
+            }
+            return z.string().describe(
+              "Имя правила (например, 'change-content-type', 'filter-endpoints')"
+            );
+          })(),
         },
       },
       async (args) => {
@@ -107,7 +146,7 @@ class OpenAPIModifierMCPServer {
           }
 
           const content = await fetchGitHubFileRawContent(
-            githubUrls.getRuleConfigUrl(ruleName)
+            githubUrlFactory.getRuleConfigUrl(ruleName)
           );
           return {
             content: [
@@ -123,6 +162,50 @@ class OpenAPIModifierMCPServer {
               {
                 type: "text",
                 text: `Ошибка при получении конфигурации правила: ${
+                  error instanceof Error ? error.message : String(error)
+                }`,
+              },
+            ],
+            isError: true,
+          };
+        }
+      }
+    );
+
+    this.server.registerTool(
+      "get_simple_text_file_modifier_doc",
+      {
+        description:
+          "Получает документацию Simple Text File Modifier cli (добавление текста в начало/конец файла, замена по регулярным выражениям)",
+        inputSchema: {
+          lang: z
+            .string()
+            .optional()
+            .describe(
+              "Язык документации: 'en' (по умолчанию), 'ru', 'zh'"
+            ),
+        },
+      },
+      async (args) => {
+        try {
+          const lang = args.lang ?? "en";
+          const content = await fetchGitHubFileRawContent(
+            githubUrlFactory.getSimpleTextFileModifierDocUrl(lang)
+          );
+          return {
+            content: [
+              {
+                type: "text",
+                text: content,
+              },
+            ],
+          };
+        } catch (error) {
+          return {
+            content: [
+              {
+                type: "text",
+                text: `Ошибка при получении документации Simple Text File Modifier: ${
                   error instanceof Error ? error.message : String(error)
                 }`,
               },
@@ -153,4 +236,7 @@ class OpenAPIModifierMCPServer {
 }
 
 const server = new OpenAPIModifierMCPServer();
-server.run().catch(console.error);
+
+server.initialize().then(() => {
+  server.run().catch(console.error);
+}).catch(console.error);

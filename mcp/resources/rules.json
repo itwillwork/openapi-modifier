@@ -1,0 +1,18 @@
+[
+    "change-content-type",
+    "change-endpoints-basepath",
+    "filter-by-content-type",
+    "filter-endpoints",
+    "merge-openapi-spec",
+    "patch-component-schema",
+    "patch-endpoint-parameter-schema",
+    "patch-endpoint-request-body-schema",
+    "patch-endpoint-response-schema",
+    "patch-endpoint-schema",
+    "remove-deprecated",
+    "remove-max-items",
+    "remove-min-items",
+    "remove-operation-id",
+    "remove-parameter",
+    "remove-unused-components"
+]
