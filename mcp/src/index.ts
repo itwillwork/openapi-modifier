@@ -190,6 +190,7 @@ class OpenAPIModifierMCPServer {
   private setupToolHandlers() {
     const t = toolTranslations[this.defaultLang];
     
+    // @ts-expect-error - registerTool is not typed
     this.server.registerTool(
       "list_rules",
       {
@@ -228,6 +229,7 @@ class OpenAPIModifierMCPServer {
       }
     );
 
+    // @ts-expect-error - registerTool is not typed
     this.server.registerTool(
       "get_rule_config",
       {
@@ -323,6 +325,7 @@ class OpenAPIModifierMCPServer {
       }
     );
 
+    // @ts-expect-error - registerTool is not typed
     this.server.registerTool(
       "get_additional_doc",
       {
