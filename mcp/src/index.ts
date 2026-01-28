@@ -3,13 +3,9 @@
 import { readFileSync, existsSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-  Tool,
-} from "@modelcontextprotocol/sdk/types.js";
+import { z } from "zod";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -57,10 +53,10 @@ function getLocalConfigPath(ruleName: string): string {
 }
 
 class OpenAPIModifierMCPServer {
-  private server: Server;
+  private server: McpServer;
 
   constructor() {
-    this.server = new Server(
+    this.server = new McpServer(
       {
         name: "openapi-modifier-mcp",
         version: "1.0.0",
@@ -77,43 +73,14 @@ class OpenAPIModifierMCPServer {
   }
 
   private setupToolHandlers() {
-    this.server.setRequestHandler(ListToolsRequestSchema, async () => {
-      return {
-        tools: [
-          {
-            name: "list_rules",
-            description:
-              "Возвращает список всех доступных правил openapi-modifier с их краткими описаниями (из mcp/docs/rules.md)",
-            inputSchema: {
-              type: "object",
-              properties: {},
-              required: [],
-            },
-          } as Tool,
-          {
-            name: "get_rule_config",
-            description:
-              "Получает описание конфигурации конкретного правила (локально или из репозитория openapi-modifier на GitHub)",
-            inputSchema: {
-              type: "object",
-              properties: {
-                rule_name: {
-                  type: "string",
-                  description:
-                    "Имя правила (например, 'change-content-type', 'filter-endpoints')",
-                },
-              },
-              required: ["rule_name"],
-            },
-          } as Tool,
-        ],
-      };
-    });
-
-    this.server.setRequestHandler(CallToolRequestSchema, async (request: { params: { name: string; arguments?: { rule_name?: string } } }) => {
-      const { name, arguments: args } = request.params;
-
-      if (name === "list_rules") {
+    this.server.registerTool(
+      "list_rules",
+      {
+        description:
+          "Возвращает список всех доступных правил openapi-modifier с их краткими описаниями (из mcp/docs/rules.md)",
+        inputSchema: {},
+      },
+      async () => {
         try {
           const rules = loadRules();
           const header = "| Rule | Short Description |\n|------|-------------------|\n";
@@ -143,10 +110,22 @@ class OpenAPIModifierMCPServer {
           };
         }
       }
+    );
 
-      if (name === "get_rule_config") {
+    this.server.registerTool(
+      "get_rule_config",
+      {
+        description:
+          "Получает описание конфигурации конкретного правила (локально или из репозитория openapi-modifier на GitHub)",
+        inputSchema: {
+          rule_name: z.string().describe(
+            "Имя правила (например, 'change-content-type', 'filter-endpoints')"
+          ),
+        },
+      },
+      async (args) => {
         try {
-          const ruleName = args?.rule_name as string;
+          const ruleName = args.rule_name;
           if (!ruleName) {
             throw new Error("Имя правила не указано");
           }
@@ -202,13 +181,11 @@ class OpenAPIModifierMCPServer {
           };
         }
       }
-
-      throw new Error(`Unknown tool: ${name}`);
-    });
+    );
   }
 
   private setupErrorHandling() {
-    this.server.onerror = (error: unknown) => {
+    this.server.server.onerror = (error: unknown) => {
       console.error("[MCP Error]", error);
     };
 
