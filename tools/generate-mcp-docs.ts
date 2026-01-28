@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 
 const IGNORE_ENTIRY_NAME = [
     'common',
@@ -6,78 +7,67 @@ const IGNORE_ENTIRY_NAME = [
     'generated-types.ts',
 ];
 
-const LANGS = [
-    'ru',
-    'en',
-    'zh'
-];
+const LANGS = ['en', 'ru', 'zh'];
+
+const GITHUB_BASE_URL = 'https://raw.githubusercontent.com/itwillwork/openapi-modifier/refs/heads/main';
 
 const createPlaceholderRegExp = (placeholder: string) => {
-    return new RegExp(`{{{${placeholder}}}}`, "g");
-}
+    return new RegExp(`{{{${placeholder}}}}`, 'g');
+};
 
-const LANG_SWITCHER_MD = '[🇺🇸 English](./README.md) | [🇷🇺 Русский](./README-ru.md)  | [🇨🇳 中文](./README-zh.md)';
+const getTemplate = (templatePath: string): string => {
+    return fs.readFileSync(templatePath).toString().trim();
+};
 
-const getReadmeContent = (
-    path: string,
-): string => {
-    return fs.readFileSync(path).toString().trim();
-}
+const RULE_TABLE_ROW_TEMPLATE = `| [{{{name}}}](${GITHUB_BASE_URL}/src/rules/{{{name}}}/README{{{langPostfix}}}.md) | {{{description}}} |\n`;
 
-const getReadmeContentIfExist = (
-    path: string,
-    placeholder: string
-): string => {
-    if (fs.existsSync(path)) {
-        return getReadmeContent(path);
-    }
+const outDir = 'mcp/docs';
 
-    return placeholder;
-}
-
-const replaceConfigTypeNames = (
-    text: string
-): string => {
-    return text
-        .replace(/EndpointDescriptorConfig/g, `string \\ { path: string; method: string }`)
-        .replace(/ComponentDescriptorConfig/g, `{ componentName: string }`)
-        .replace(/EndpointParameterDescriptorConfig/g, `{ name: string; in: "query" \\ "path" \\ "header" \\ "cookie" }`)
-        .replace(/ParameterDescriptorConfig/g, `{ path: string; method: string; name: string; in: "query" \\ "path" \\ "header" \\ "cookie" }`)
-        .replace(/ComponentWithCorrectionDescriptorConfig/g, `string \\ { componentName: string; correction: string }`)
+if (!fs.existsSync(outDir)) {
+    fs.mkdirSync(outDir, { recursive: true });
 }
 
 LANGS.forEach((lang) => {
-    const langPostfix = lang === "en" ? '' : `-${lang}`;
+    const langPostfix = lang === 'en' ? '' : `-${lang}`;
 
-    const ruleTemplate = fs.readFileSync(`docs/drafts/${lang}/rule-details.md`).toString();
+    const ruleTableHeader = getTemplate(`docs/drafts/${lang}/sections/rule-table-head.md`);
 
-    fs.readdirSync('src/rules').forEach((entityName, index) => {
-        if (IGNORE_ENTIRY_NAME.includes(entityName)) {
+    let ruleTableContent = ruleTableHeader + '\n';
+
+    const ruleNames = fs.readdirSync('src/rules');
+
+    ruleNames.forEach((ruleName) => {
+        if (IGNORE_ENTIRY_NAME.includes(ruleName)) {
             return;
         }
 
-        console.log(`Generate ${lang} docs for rule ${entityName}...`);
+        const descriptionPath = path.join('src/rules', ruleName, 'docs', lang, '_description.md');
 
-        const configReadmeContent = replaceConfigTypeNames(getReadmeContent(`src/rules/${entityName}/docs/${lang}/_config.md`));
-        const descriptionReadmeContent = getReadmeContent(`src/rules/${entityName}/docs/${lang}/_description.md`);
-        const motivationReadmeContent = getReadmeContent(`src/rules/${entityName}/docs/${lang}/_motivation.md`);
+        if (!fs.existsSync(descriptionPath)) {
+            return;
+        }
 
-        const notesReadmeContent = getReadmeContentIfExist(`src/rules/${entityName}/docs/${lang}/_notes.md`, '');
-        const linksReadmeContent = getReadmeContentIfExist(`src/rules/${entityName}/docs/${lang}/_links.md`, '');
-        const afterDescriptorReadmeContent = getReadmeContentIfExist(`src/rules/${entityName}/docs/${lang}/_after-descriptor.md`, '');
+        console.log(`Add rule ${ruleName} to MCP docs table`);
 
-        const ruleReadme = ruleTemplate
-            .replace(createPlaceholderRegExp("langSwitcher"), LANG_SWITCHER_MD)
-            .replace(createPlaceholderRegExp("name"), entityName)
-            .replace(createPlaceholderRegExp("config"), configReadmeContent)
-            .replace(createPlaceholderRegExp("description"), descriptionReadmeContent)
-            .replace(createPlaceholderRegExp("afterDescription"), afterDescriptorReadmeContent)
-            .replace(createPlaceholderRegExp("motivation"), motivationReadmeContent)
-            .replace(createPlaceholderRegExp("notes"), notesReadmeContent)
-            .replace(createPlaceholderRegExp("links"), linksReadmeContent)
-            .replace(createPlaceholderRegExp("rootPath"), '../../../')
-            .replace(createPlaceholderRegExp("langPostfix"), langPostfix)
+        const descriptionTemplate = getTemplate(descriptionPath);
 
-        fs.writeFileSync(`src/rules/${entityName}/README${langPostfix}.md`, ruleReadme);
+        const ruleTableRow = RULE_TABLE_ROW_TEMPLATE
+            .replace(createPlaceholderRegExp('name'), ruleName)
+            .replace(createPlaceholderRegExp('description'), descriptionTemplate)
+            .replace(createPlaceholderRegExp('langPostfix'), langPostfix);
+
+        ruleTableContent += ruleTableRow;
     });
+
+    const content = [
+        ruleTableContent,
+    ].join('\n');
+
+    const outFile = path.join(outDir, lang === 'en' ? 'rules.md' : `rules-${lang}.md`);
+    fs.writeFileSync(outFile, content);
+
+    console.log(`MCP rules docs table written to ${outFile}`);
 });
+
+
+console.log(`MCP docs generated successfully`);
