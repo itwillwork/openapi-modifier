@@ -20,25 +20,10 @@ npm run build
 {
   "mcpServers": {
     "openapi-modifier": {
-      "command": "node",
-      "args": ["/путь/к/openapi-modifier/mcp/dist/index.js"],
-      "env": {
-        "LANG": "ru"
-      }
-    }
-  }
-}
-```
-
-Или из корня репозитория через npm:
-
-```json
-{
-  "mcpServers": {
-    "openapi-modifier": {
-      "command": "npm",
-      "args": ["start"],
-      "cwd": "/путь/к/openapi-modifier/mcp",
+      "command": "npx",
+      "args": [
+        "openapi-modifier-mcp"
+      ],
       "env": {
         "LANG": "ru"
       }
@@ -74,25 +59,10 @@ npm run build
 {
   "mcpServers": {
     "openapi-modifier": {
-      "command": "node",
-      "args": ["/путь/к/openapi-modifier/mcp/dist/index.js"],
-      "env": {
-        "LANG": "ru"
-      }
-    }
-  }
-}
-```
-
-Или из корня репозитория через npm:
-
-```json
-{
-  "mcpServers": {
-    "openapi-modifier": {
-      "command": "npm",
-      "args": ["start"],
-      "cwd": "/путь/к/openapi-modifier/mcp",
+      "command": "npx",
+      "args": [
+        "openapi-modifier-mcp"
+      ],
       "env": {
         "LANG": "ru"
       }
@@ -130,25 +100,10 @@ npm run build
 {
   "mcpServers": {
     "openapi-modifier": {
-      "command": "node",
-      "args": ["/путь/к/openapi-modifier/mcp/dist/index.js"],
-      "env": {
-        "LANG": "ru"
-      }
-    }
-  }
-}
-```
-
-Или из корня репозитория через npm:
-
-```json
-{
-  "mcpServers": {
-    "openapi-modifier": {
-      "command": "npm",
-      "args": ["start"],
-      "cwd": "/путь/к/openapi-modifier/mcp",
+      "command": "npx",
+      "args": [
+        "openapi-modifier-mcp"
+      ],
       "env": {
         "LANG": "ru"
       }
@@ -174,6 +129,24 @@ npm run build   # сборка TypeScript в JavaScript
 ```
 
 После сборки сервер готов к использованию. Для запуска используйте путь к `dist/index.js` в конфигурации MCP.
+
+### Настройка для разработки
+
+Для разработки можно использовать локальную сборку:
+
+```json
+{
+  "mcpServers": {
+    "openapi-modifier": {
+      "command": "node",
+      "args": ["/путь/к/openapi-modifier/mcp/dist/index.js"],
+      "env": {
+        "LANG": "ru"
+      }
+    }
+  }
+}
+```
 
 ## Структура
 

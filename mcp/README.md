@@ -20,25 +20,10 @@ Add to `.cursor/mcp.json` (or MCP settings):
 {
   "mcpServers": {
     "openapi-modifier": {
-      "command": "node",
-      "args": ["/path/to/openapi-modifier/mcp/dist/index.js"],
-      "env": {
-        "LANG": "en"
-      }
-    }
-  }
-}
-```
-
-Or from the repository root via npm:
-
-```json
-{
-  "mcpServers": {
-    "openapi-modifier": {
-      "command": "npm",
-      "args": ["start"],
-      "cwd": "/path/to/openapi-modifier/mcp",
+      "command": "npx",
+      "args": [
+        "openapi-modifier-mcp"
+      ],
       "env": {
         "LANG": "en"
       }
@@ -74,25 +59,10 @@ Configuration:
 {
   "mcpServers": {
     "openapi-modifier": {
-      "command": "node",
-      "args": ["/path/to/openapi-modifier/mcp/dist/index.js"],
-      "env": {
-        "LANG": "en"
-      }
-    }
-  }
-}
-```
-
-Or from the repository root via npm:
-
-```json
-{
-  "mcpServers": {
-    "openapi-modifier": {
-      "command": "npm",
-      "args": ["start"],
-      "cwd": "/path/to/openapi-modifier/mcp",
+      "command": "npx",
+      "args": [
+        "openapi-modifier-mcp"
+      ],
       "env": {
         "LANG": "en"
       }
@@ -130,25 +100,10 @@ Configuration:
 {
   "mcpServers": {
     "openapi-modifier": {
-      "command": "node",
-      "args": ["/path/to/openapi-modifier/mcp/dist/index.js"],
-      "env": {
-        "LANG": "en"
-      }
-    }
-  }
-}
-```
-
-Or from the repository root via npm:
-
-```json
-{
-  "mcpServers": {
-    "openapi-modifier": {
-      "command": "npm",
-      "args": ["start"],
-      "cwd": "/path/to/openapi-modifier/mcp",
+      "command": "npx",
+      "args": [
+        "openapi-modifier-mcp"
+      ],
       "env": {
         "LANG": "en"
       }
@@ -174,6 +129,24 @@ npm run build   # build TypeScript to JavaScript
 ```
 
 After building, the server is ready to use. Use the path to `dist/index.js` in the MCP configuration to run it.
+
+### Development Setup
+
+For development, you can use the local build:
+
+```json
+{
+  "mcpServers": {
+    "openapi-modifier": {
+      "command": "node",
+      "args": ["/path/to/openapi-modifier/mcp/dist/index.js"],
+      "env": {
+        "LANG": "en"
+      }
+    }
+  }
+}
+```
 
 ## Structure
 

@@ -20,25 +20,10 @@ npm run build
 {
   "mcpServers": {
     "openapi-modifier": {
-      "command": "node",
-      "args": ["/path/to/openapi-modifier/mcp/dist/index.js"],
-      "env": {
-        "LANG": "zh"
-      }
-    }
-  }
-}
-```
-
-或通过 npm 从仓库根目录：
-
-```json
-{
-  "mcpServers": {
-    "openapi-modifier": {
-      "command": "npm",
-      "args": ["start"],
-      "cwd": "/path/to/openapi-modifier/mcp",
+      "command": "npx",
+      "args": [
+        "openapi-modifier-mcp"
+      ],
       "env": {
         "LANG": "zh"
       }
@@ -74,25 +59,10 @@ npm run build
 {
   "mcpServers": {
     "openapi-modifier": {
-      "command": "node",
-      "args": ["/path/to/openapi-modifier/mcp/dist/index.js"],
-      "env": {
-        "LANG": "zh"
-      }
-    }
-  }
-}
-```
-
-或通过 npm 从仓库根目录：
-
-```json
-{
-  "mcpServers": {
-    "openapi-modifier": {
-      "command": "npm",
-      "args": ["start"],
-      "cwd": "/path/to/openapi-modifier/mcp",
+      "command": "npx",
+      "args": [
+        "openapi-modifier-mcp"
+      ],
       "env": {
         "LANG": "zh"
       }
@@ -130,25 +100,10 @@ npm run build
 {
   "mcpServers": {
     "openapi-modifier": {
-      "command": "node",
-      "args": ["/path/to/openapi-modifier/mcp/dist/index.js"],
-      "env": {
-        "LANG": "zh"
-      }
-    }
-  }
-}
-```
-
-或通过 npm 从仓库根目录：
-
-```json
-{
-  "mcpServers": {
-    "openapi-modifier": {
-      "command": "npm",
-      "args": ["start"],
-      "cwd": "/path/to/openapi-modifier/mcp",
+      "command": "npx",
+      "args": [
+        "openapi-modifier-mcp"
+      ],
       "env": {
         "LANG": "zh"
       }
@@ -174,6 +129,24 @@ npm run build   # 将 TypeScript 构建为 JavaScript
 ```
 
 构建后，服务器即可使用。在 MCP 配置中使用 `dist/index.js` 的路径来运行它。
+
+### 开发设置
+
+对于开发，您可以使用本地构建：
+
+```json
+{
+  "mcpServers": {
+    "openapi-modifier": {
+      "command": "node",
+      "args": ["/path/to/openapi-modifier/mcp/dist/index.js"],
+      "env": {
+        "LANG": "zh"
+      }
+    }
+  }
+}
+```
 
 ## 结构
 
