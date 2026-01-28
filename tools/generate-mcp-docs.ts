@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const RAW_GITHUB_MAIN_BRANCH_BASE_URL = 'https://raw.githubusercontent.com/itwillwork/openapi-modifier/refs/heads/main';
+const RAW_GITHUB_MAIN_BRANCH_BASE_URL = "https://raw.githubusercontent.com/itwillwork/openapi-modifier/refs/heads/main";
 
 const IGNORE_ENTIRY_NAME = [
     'common',

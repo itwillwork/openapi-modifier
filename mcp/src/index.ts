@@ -64,7 +64,7 @@ class GithubUrlFactory {
   }
 }
 
-const MAIN_BRANCH_BASE_URL = "https://raw.githubusercontent.com/itwillwork/openapi-modifier/main";
+const MAIN_BRANCH_BASE_URL = "https://raw.githubusercontent.com/itwillwork/openapi-modifier/refs/heads/main";
 
 const githubUrlFactory = new GithubUrlFactory(defaultLang, MAIN_BRANCH_BASE_URL);
 
