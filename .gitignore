@@ -136,3 +136,6 @@ dist
 dist-types
 
 .DS_Store
+
+.idea
+junk

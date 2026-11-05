@@ -64,24 +64,19 @@ const config: ConfigT = {
 
         // JIRA-10212 - wrong docs, waiting JIRABACKEND-8752
         {
-            rule: 'patch-schemas',
-            config: [
-                {
-                    descriptor: {
-                        type: 'component-schema',
-                        componentName: 'Pet',
-                    },
-                    patchMethod: 'merge',
-                    schemaDiff: {
-                        properties: {
-                            id: {
-                                type: 'string',
-                                format: 'uuid',
-                            },
+            rule: 'patch-component-schema',
+            config: {
+                descriptor: { componentName: 'Pet' },
+                patchMethod: 'deepmerge',
+                schemaDiff: {
+                    properties: {
+                        id: {
+                            type: 'string',
+                            format: 'uuid',
                         },
                     },
                 },
-            ],
+            },
         },
 
         // ...
@@ -100,7 +95,8 @@ const config: ConfigT = {
         },
 
         // ...
-}
+    ],
+};
 ```
 
 Далее [при помощи этого файла конфигурации и cli openapi-modifier](./examples/example-cli-generate-api-types/package.json#L7), изменяем исходный файл спецификации/документации и получается [модифицированная спецификация/документация](./examples/example-cli-generate-api-types/output/openapi.yaml).

@@ -64,24 +64,19 @@ const config: ConfigT = {
 
         // JIRA-10212 - wrong docs, waiting JIRABACKEND-8752
         {
-            rule: 'patch-schemas',
-            config: [
-                {
-                    descriptor: {
-                        type: 'component-schema',
-                        componentName: 'Pet',
-                    },
-                    patchMethod: 'merge',
-                    schemaDiff: {
-                        properties: {
-                            id: {
-                                type: 'string',
-                                format: 'uuid',
-                            },
+            rule: 'patch-component-schema',
+            config: {
+                descriptor: { componentName: 'Pet' },
+                patchMethod: 'deepmerge',
+                schemaDiff: {
+                    properties: {
+                        id: {
+                            type: 'string',
+                            format: 'uuid',
                         },
                     },
                 },
-            ],
+            },
         },
 
         // ...
@@ -100,7 +95,8 @@ const config: ConfigT = {
         },
 
         // ...
-}
+    ],
+};
 ```
 
 然后[使用此配置文件和 openapi-modifier cli](./examples/example-cli-generate-api-types/package.json#L7)，我们修改原始规范/文档文件并获得[修改后的规范/文档](./examples/example-cli-generate-api-types/output/openapi.yaml)。
