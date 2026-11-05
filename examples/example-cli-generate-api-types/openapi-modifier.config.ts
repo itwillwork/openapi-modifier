@@ -41,7 +41,7 @@ const config: ConfigT = {
     },
     // JIRA-10211 - wrong docs, waiting JIRABACKEND-3434
     {
-      rule: 'patch-parameter',
+      rule: 'patch-endpoint-parameter-schema',
       config: {
         endpointDescriptor: {
           method: 'get',
@@ -63,46 +63,26 @@ const config: ConfigT = {
     },
     // JIRA-2319 - wrong body, waiting JIRABACKEND-12323
     {
-      rule: 'patch-schemas',
-      config: [
-        {
-          patchMethod: 'merge',
-          descriptor: {
-            type: 'endpoint-request-body',
-            path: '/v1/tags',
-            method: 'post',
-            contentType: 'application/json',
-          },
-          schemaDiff: {
-            properties: {
-              color: {
-                type: 'string',
-              },
-            },
-          },
+      rule: 'patch-endpoint-request-body-schema',
+      config: {
+        endpointDescriptor: { path: '/v1/tags', method: 'post' },
+        contentType: 'application/json',
+        patchMethod: 'deepmerge',
+        schemaDiff: {
+          properties: { color: { type: 'string' } },
         },
-      ],
+      },
     },
     // JIRA-10212 - wrong docs, waiting JIRABACKEND-8752
     {
-      rule: 'patch-schemas',
-      config: [
-        {
-          descriptor: {
-            type: 'component-schema',
-            componentName: 'Pet',
-          },
-          patchMethod: 'merge',
-          schemaDiff: {
-            properties: {
-              id: {
-                type: 'string',
-                format: 'uuid',
-              },
-            },
-          },
+      rule: 'patch-component-schema',
+      config: {
+        descriptor: { componentName: 'Pet' },
+        patchMethod: 'deepmerge',
+        schemaDiff: {
+          properties: { id: { type: 'string', format: 'uuid' } },
         },
-      ],
+      },
     },
     // JIRA-11236 - removed deprecated endpoint, waiting JIRABACKEND-3641
     {
