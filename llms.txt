@@ -1,0 +1,79 @@
+# OpenAPI Modifier
+
+> Configure a pipeline of rules to modify an OpenAPI 3.0 or 3.1 document.
+> All paths below are relative to the installed openapi-modifier package.
+
+## Before writing a configuration
+
+1. Inspect the existing configuration and the input OpenAPI document. Identify
+   the exact operation (HTTP method and path), parameter location, and any $ref.
+2. Read the relevant rule guide below and the shared guides it references.
+3. Use `pipeline` entries with `rule` and `config`; preserve existing steps and
+   their order. Do not use the legacy `rules`/`name` or `patch-schemas` examples
+   that still appear in parts of README.md.
+4. Check `dist-types/src/rules/generated-types.d.ts` for available rule names
+   and the referenced declaration files for configuration fields. Use the
+   installed implementation in `dist/src/rules/` to resolve documentation gaps.
+   Do not invent configuration fields or assume that patch rules create targets.
+5. Apply the configuration to a separate output file and inspect the actual diff.
+   Check warnings: a completed command does not prove the intended target changed.
+
+## Configuration
+
+- [Overview and CLI usage](README.md)
+- [Configuration types](dist-types/src/config.d.ts)
+- [Available rules and their types](dist-types/src/rules/generated-types.d.ts)
+- [Target descriptors](docs/descriptor.md)
+- [Schema changes](docs/schema-diff.md)
+- [Shallow merge versus deep merge](docs/merge-vs-deepmerge.md)
+
+Minimal CommonJS configuration:
+
+```js
+module.exports = {
+  pipeline: [
+    // { rule: 'rule-name', config: { ... } }
+  ],
+};
+```
+
+Run the installed CLI from the consuming project:
+
+```sh
+./node_modules/.bin/openapi-modifier --input=input.yaml --output=output.yaml --config=openapi-modifier.config.js
+```
+
+## Choose a rule
+
+- [Modify an existing parameter](src/rules/patch-endpoint-parameter-schema/README.md)
+- [Modify a request body schema](src/rules/patch-endpoint-request-body-schema/README.md)
+- [Modify a response schema](src/rules/patch-endpoint-response-schema/README.md)
+- [Modify a component schema](src/rules/patch-component-schema/README.md)
+- [Modify an operation](src/rules/patch-endpoint-schema/README.md)
+- [Merge another specification](src/rules/merge-openapi-spec/README.md)
+- [Remove a parameter](src/rules/remove-parameter/README.md)
+- [Filter endpoints](src/rules/filter-endpoints/README.md)
+- [Remove deprecated elements](src/rules/remove-deprecated/README.md)
+- [Remove unused components](src/rules/remove-unused-components/README.md)
+- [Change content types](src/rules/change-content-type/README.md)
+- [Filter by content type](src/rules/filter-by-content-type/README.md)
+- [Change endpoint base paths](src/rules/change-endpoints-basepath/README.md)
+- [Remove operation IDs](src/rules/remove-operation-id/README.md)
+- [Remove minimum item constraints](src/rules/remove-min-items/README.md)
+- [Remove maximum item constraints](src/rules/remove-max-items/README.md)
+
+## Important distinctions
+
+- Adding a query/header/path/cookie parameter differs from adding a property
+  to a request body schema. Inspect the document before choosing a rule.
+- `patch-endpoint-parameter-schema` patches an existing parameter; it does not
+  add a missing parameter. For additions, inspect the operation patch or merge
+  rule and its array behavior before constructing the configuration.
+- `merge` is shallow. `deepmerge` recursively merges and uses the underlying
+  library's default array behavior. Inspect existing arrays to avoid replacing
+  unrelated parameters or introducing duplicates.
+- Changing a shared component may affect multiple operations. Inspect its
+  references and confirm that this scope matches the user's request.
+- Some rule guides link to source tests or external resources that are not
+  shipped in the npm package. Use the packaged types and implementation when
+  those sources are unavailable; report any remaining uncertainty explicitly.
