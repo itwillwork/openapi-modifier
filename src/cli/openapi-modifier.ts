@@ -1,5 +1,5 @@
 import argv, {Arguments} from 'yargs-parser';
-import {LoggerFactory} from '../logger/factory';
+import {LoggerFactory, LoggerFactoryTypeLevel} from '../logger/factory';
 import {ConfigT, findConfigFile, getAbsoluteConfigPath, mergeConfigs} from '../config';
 import {openapiModifier} from '../index';
 import fs from 'fs';
@@ -69,10 +69,11 @@ const cli = async (params: ParamsT) => {
         return;
     }
 
-    const logger = LoggerFactory.createLogger({
+    const verbose = !!params?.verbose;
+    let logger = LoggerFactory.createLogger({
         name: 'openapi-modifier-cli',
-        minLevel: LoggerFactory.typeLevelMap["not-important-warning"],
-        verbose: !!params?.verbose,
+        minLevel: verbose ? LoggerFactory.typeLevelMap.trace : LoggerFactory.typeLevelMap['not-important-warning'],
+        verbose,
     });
 
     try {
@@ -113,14 +114,13 @@ const cli = async (params: ParamsT) => {
 
         const loggerConfig: ConfigT['logger'] = {};
 
-        const verbose = params?.verbose || null;
+        const minLevel = params?.minLevel;
+        if (minLevel !== undefined) {
+            loggerConfig.minLevel = Number(minLevel);
+        }
         if (verbose) {
             loggerConfig.verbose = true;
-        }
-
-        const minLevel = params?.minLevel || null;
-        if (minLevel) {
-            loggerConfig.minLevel = parseInt(minLevel, 10);
+            loggerConfig.minLevel = LoggerFactory.typeLevelMap.trace;
         }
 
         logger.trace('Merging config with cli params...');
@@ -129,6 +129,14 @@ const cli = async (params: ParamsT) => {
             output: outputPath,
             logger: loggerConfig
         });
+
+        if (!verbose) {
+            logger = LoggerFactory.createLogger({
+                name: 'openapi-modifier-cli',
+                minLevel: (finalConfig.logger?.minLevel ?? LoggerFactory.typeLevelMap['not-important-warning']) as LoggerFactoryTypeLevel,
+                verbose: finalConfig.logger?.verbose,
+            });
+        }
 
         logger.trace(`Final CLI config`, finalConfig);
         logger.trace('Trying run openapi modifier...');

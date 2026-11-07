@@ -3,6 +3,7 @@ import { LoggerI } from '../logger/interface';
 import { OpenAPIFileT } from '../openapi';
 import { RuleRunner } from './rules/rule-runner';
 import {messagesFactory} from "../logger/messages/factory";
+import { OpenAPIDiffer } from '../logger/differ';
 
 export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, baseLogger: LoggerI): Promise<OpenAPIFileT> => {
   const logger = baseLogger.clone('runner');
@@ -10,6 +11,7 @@ export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, b
   let openAPIFile = sourceOpenAPIFile;
 
   const pipeline = config.pipeline || [];
+  const shouldTraceStepDiff = config.logger?.minLevel === 0;
   if (!pipeline?.length) {
     logger.warning(messagesFactory.failedRun.emptyPipeline);
   }
@@ -29,7 +31,23 @@ export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, b
       await ruleRunner.applyConfig(pipelineItem.config || {});
 
       if (!pipelineItem.disabled) {
+        const differ = shouldTraceStepDiff ? new OpenAPIDiffer(openAPIFile.document) : undefined;
         openAPIFile = await ruleRunner.processDocument(openAPIFile);
+
+        if (differ) {
+          logger.trace(messagesFactory.pipeline.ruleDiff({
+            ruleName: rulePath,
+            step: index + 1,
+            total: pipeline.length,
+            result: differ.getDiff(openAPIFile.document),
+          }));
+        }
+      } else if (shouldTraceStepDiff) {
+        logger.trace(messagesFactory.pipeline.ruleSkipped({
+          ruleName: rulePath,
+          step: index + 1,
+          total: pipeline.length,
+        }));
       }
     } catch (error) {
       if (error instanceof Error) {

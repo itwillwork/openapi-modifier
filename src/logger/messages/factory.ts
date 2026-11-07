@@ -1,5 +1,6 @@
 import {RuleMetaT} from "../../core/rules/processor-models";
 import {tryExtractRefLastPath} from "../../rules/common/utils/refs";
+import { OpenAPIDiffResult } from '../differ';
 
 const getGitHubRuleConfigReadMeLink = (ruleName: string) => {
     return `https://github.com/itwillwork/openapi-modifier/blob/main/src/rules/${ruleName}/README.md#config`
@@ -30,6 +31,29 @@ const getGitHubDescriptorWithRefReadMeLink = () => {
 }
 
 export const messagesFactory = {
+    pipeline: {
+        ruleDiff: ({ ruleName, step, total, result }: {
+            ruleName: string;
+            step: number;
+            total: number;
+            result: OpenAPIDiffResult;
+        }) => {
+            const heading = `OpenAPI diff after rule [${step}/${total}] ${ruleName}`;
+            if (result.error !== undefined) {
+                return `${heading}: Diff unavailable (${result.error})`;
+            }
+            return result.diff === undefined
+                ? `${heading}: No changes`
+                : `${heading}:\n${result.diff}`;
+        },
+        ruleSkipped: ({ ruleName, step, total }: {
+            ruleName: string;
+            step: number;
+            total: number;
+        }) => {
+            return `Rule [${step}/${total}] ${ruleName}: Skipped (disabled)`;
+        },
+    },
     failedRun: {
         emptyPipeline: `Empty pipeline! See config docs: ${getGitHubConfigReadMeLink()}`,
         failedRunPipelineItem: (item: any) => {
