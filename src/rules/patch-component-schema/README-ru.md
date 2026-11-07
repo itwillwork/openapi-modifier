@@ -196,7 +196,7 @@ components:
 
 ## Полезные ссылки
 
-- [Примеры применения правила в тестах](./index.test.ts)  
+- [Примеры применения правила в тестах](https://github.com/itwillwork/openapi-modifier/blob/main/src/rules/patch-component-schema/index.test.ts)
 - [Различия между простым и объектным дескриптором компонента с коррекцией](../../../docs/descriptor-ru.md)
 - [Различия между методами merge и deepmerge](../../../docs/merge-vs-deepmerge-ru.md)
 - [Примеры спецификаций для OpenAPI](../../../docs/schema-diff-ru.md)

@@ -38,15 +38,16 @@
   "types": "dist-types/src/index.d.ts",
   "scripts": {
     "test": "jest",
-    "clear": "rm -rf dist dist-types dist-docs src/rules/generated-types.ts",
-    "prebuild": "npm run clear && npm run tools:generate-rule-types && npm run tools:generate-skills",
+    "clear": "rm -rf dist dist-types dist-docs src/rules/generated-types.ts llms.txt",
+    "prebuild": "npm run clear && npm run tools:generate-rule-types && npm run tools:generate-skills && npm run tools:generate-llms-txt",
     "build": "npm run build:types && npm run build:transpile",
     "build:transpile": "tsc",
     "build:types": "tsc --declaration --declarationDir dist-types",
     "tools:generate-readme": "ts-node tools/generate-readme.ts",
     "tools:generate-rule-types": "ts-node tools/generate-rule-types.ts",
     "tools:generate-rule-readme": "ts-node tools/generate-rule-readme.ts",
-    "tools:generate-skills": "ts-node tools/generate-skills.ts"
+    "tools:generate-skills": "ts-node tools/generate-skills.ts",
+    "tools:generate-llms-txt": "ts-node tools/generate-llms-txt.ts"
   },
   "bin": {
     "openapi-modifier": "./bin/openapi-modifier.js",

@@ -136,7 +136,7 @@ paths:
 
 ## Полезные ссылки
 
-- [Примеры применения правила в тестах](./index.test.ts)  
+- [Примеры применения правила в тестах](https://github.com/itwillwork/openapi-modifier/blob/main/src/rules/patch-endpoint-schema/index.test.ts)
 - [Различия между методами merge и deepmerge](../../../docs/merge-vs-deepmerge-ru.md)
 - [Примеры спецификаций для OpenAPI](../../../docs/schema-diff-ru.md)
 - [DeepWiki документация](https://deepwiki.com/itwillwork/openapi-modifier)

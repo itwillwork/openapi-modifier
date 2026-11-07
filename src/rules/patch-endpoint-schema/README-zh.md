@@ -136,7 +136,7 @@ paths:
 
 ## 有用的链接
 
-- [测试中的规则使用示例](./index.test.ts)  
+- [测试中的规则使用示例](https://github.com/itwillwork/openapi-modifier/blob/main/src/rules/patch-endpoint-schema/index.test.ts)
 - [merge 和 deepmerge 方法的区别](../../../docs/merge-vs-deepmerge-zh.md)
 - [OpenAPI 规范示例](../../../docs/schema-diff-zh.md) 
 - DeepWiki 文档](https://deepwiki.com/itwillwork/openapi-modifier)

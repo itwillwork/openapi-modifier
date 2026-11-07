@@ -196,7 +196,7 @@ components:
 
 ## 有用的链接
 
-- [测试中的规则使用示例](./index.test.ts)  
+- [测试中的规则使用示例](https://github.com/itwillwork/openapi-modifier/blob/main/src/rules/patch-component-schema/index.test.ts)
 - [简单组件描述符和带校正的对象组件描述符之间的区别](../../../docs/descriptor-zh.md)
 - [merge 和 deepmerge 方法之间的区别](../../../docs/merge-vs-deepmerge-zh.md)
 - [OpenAPI 规范示例](../../../docs/schema-diff-zh.md) 

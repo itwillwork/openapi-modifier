@@ -148,7 +148,7 @@ paths:
 
 ## Полезные ссылки
 
-- [Примеры применения правила в тестах](./index.test.ts)  
+- [Примеры применения правила в тестах](https://github.com/itwillwork/openapi-modifier/blob/main/src/rules/merge-openapi-spec/index.test.ts)
 
 - [DeepWiki документация](https://deepwiki.com/itwillwork/openapi-modifier)
 - [Context7 документация для LLM моделей и AI редакторов кода](https://context7.com/itwillwork/openapi-modifier)

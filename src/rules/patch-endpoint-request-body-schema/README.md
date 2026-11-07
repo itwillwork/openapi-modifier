@@ -226,7 +226,7 @@ paths:
 
 ## Useful Links
 
-- [Rule usage examples in tests](./index.test.ts)  
+- [Rule usage examples in tests](https://github.com/itwillwork/openapi-modifier/blob/main/src/rules/patch-endpoint-request-body-schema/index.test.ts)
 - [Differences between merge and deepmerge methods](../../../docs/merge-vs-deepmerge.md)
 - [OpenAPI Specification Examples](../../../docs/schema-diff.md)
 - [DeepWiki Documentation](https://deepwiki.com/itwillwork/openapi-modifier)

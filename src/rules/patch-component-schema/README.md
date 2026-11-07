@@ -196,7 +196,7 @@ components:
 
 ## Useful Links
 
-- [Rule usage examples in tests](./index.test.ts)  
+- [Rule usage examples in tests](https://github.com/itwillwork/openapi-modifier/blob/main/src/rules/patch-component-schema/index.test.ts)
 - [Differences between simple and object component descriptors with correction](../../../docs/descriptor.md)
 - [Differences between merge and deepmerge methods](../../../docs/merge-vs-deepmerge.md)
 - [OpenAPI specification examples](../../../docs/schema-diff.md)

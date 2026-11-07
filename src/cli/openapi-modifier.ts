@@ -48,7 +48,7 @@ const printSkills = (args: string[]): boolean => {
     if (!fs.existsSync(file)) {
         throw new Error(ruleName
             ? `Unknown rule: ${ruleName}. Run "openapi-modifier skill" to list rules.`
-            : 'Missing llms.txt. Run "npm run tools:generate-skills" when building from source.');
+            : 'Missing llms.txt. Run "npm run tools:generate-llms-txt" when building from source.');
     }
     process.stdout.write(fs.readFileSync(file, 'utf8'));
     return true;

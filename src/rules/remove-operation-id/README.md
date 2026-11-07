@@ -107,7 +107,7 @@ paths:
 
 ## Useful Links
 
-- [Rule usage examples in tests](./index.test.ts)  
+- [Rule usage examples in tests](https://github.com/itwillwork/openapi-modifier/blob/main/src/rules/remove-operation-id/index.test.ts)
 
 - [DeepWiki Documentation](https://deepwiki.com/itwillwork/openapi-modifier)
 - [Context7 documentation for LLMs and AI code editors](https://context7.com/itwillwork/openapi-modifier)
