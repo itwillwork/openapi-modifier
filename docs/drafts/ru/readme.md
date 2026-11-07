@@ -173,6 +173,8 @@ openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=
 
 ## FAQ
 
+<a name="custom_anchor_faq_ref"></a>
+
 {{{faq}}}
 
 ## AI инструменты
