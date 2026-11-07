@@ -149,31 +149,7 @@ openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=
 
 ### Programmatic Usage
 
-```typescript
-import { openapiModifier } from 'openapi-modifier';
-
-(async () => {
-    try {
-        await openapiModifier({
-            input: 'input/openapi.yml',
-            output: 'output/openapi.yml',
-            pipeline: [
-                {
-                    rule: 'remove-operation-id',
-                    config: {
-                        ignore: [],
-                    },
-                },
-            ],
-        });
-
-        process.exit(0);
-    } catch (error) {
-        console.error(error);
-        process.exit(1);
-    }
-})();
-```
+{{{programmaticUsage}}}
 
 [Example of programmatic usage](./examples/example-package-openapi-yaml/generate.ts)
 
@@ -181,39 +157,7 @@ import { openapiModifier } from 'openapi-modifier';
 
 ## Configuration
 
-Create a configuration file (e.g., `openapi-modifier.config.js` or `openapi-modifier.config.ts`) with the following structure:
-
-```javascript
-module.exports = {
-    // (optional) Logger settings
-    logger: {
-        verbose: true, // Enable detailed logging
-        minLevel: 0    // Minimum logging level: 0 - trace, 1 - debug, 2 - info, 3 - warn, 4 - error
-    },
-    // Path to input OpenAPI specification file
-    input: './openapi.yaml',
-    // Path to output file
-    output: './modified-openapi.yaml',
-    // Pipeline of rules to apply (see below for all available rules with configuration examples)
-    pipeline: [
-        {
-            rule: "change-content-type",
-            disabled: false, // (optional) Disable rule
-            config: {
-                map: {
-                    "*/*": "application/json"
-                }
-            }
-        }
-        // Other rules...
-    ]
-}
-```
-
-> [!IMPORTANT]  
-> Thanks to the pipeline structure of rules, you can:
-> - edit the result of the previous stage with the next stage, thus building a sequence of necessary changes;
-> - use rules as many times as needed and in the required sequence;
+{{{configuration}}}
 
 <a name="custom_anchor_rule_table"></a>
 
@@ -229,7 +173,7 @@ module.exports = {
 
 ## FAQ
 
-- **Why are $ref modifications dangerous?** Because it means that $ref refers to a common part of the schema, and its modification may lead to implicit changes in another part of the specification where $ref is reused, and such a bug will be extremely difficult to catch.
+{{{faq}}}
 
 ## AI tools
 

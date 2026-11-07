@@ -1,6 +1,6 @@
 {
   "name": "openapi-modifier",
-  "version": "0.0.41",  
+  "version": "0.0.41",
   "description": "This package allows you to automate the process of modifying OpenAPI specifications by applying a set of predefined rules",
   "repository": {
     "type": "git",
@@ -29,22 +29,24 @@
   "files": [
     "dist-types",
     "dist",
-    "bin"
+    "bin",
+    "AGENTS.md",
+    "llms.txt",
+    "dist-docs"
   ],
   "main": "dist/src/index.js",
   "types": "dist-types/src/index.d.ts",
   "scripts": {
     "test": "jest",
     "clear": "rm -rf dist && rm -rf dist-types",
-    "prebuild": "npm run clear && npm run tools:generate-rule-types",
+    "prebuild": "npm run clear && npm run tools:generate-rule-types && npm run tools:generate-skills",
     "build": "npm run build:types && npm run build:transpile",
     "build:transpile": "tsc",
     "build:types": "tsc --declaration --declarationDir dist-types",
     "tools:generate-readme": "ts-node tools/generate-readme.ts",
     "tools:generate-rule-types": "ts-node tools/generate-rule-types.ts",
     "tools:generate-rule-readme": "ts-node tools/generate-rule-readme.ts",
-    "tools:generate-mcp-docs": "ts-node tools/generate-mcp-docs.ts",
-    "tools:generate-mcp-resources": "ts-node tools/generate-mcp-resources.ts"
+    "tools:generate-skills": "ts-node tools/generate-skills.ts"
   },
   "bin": {
     "openapi-modifier": "./bin/openapi-modifier.js",

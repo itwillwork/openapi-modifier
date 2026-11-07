@@ -149,31 +149,7 @@ openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=
 
 ### Программное использование
 
-```typescript
-import { openapiModifier } from 'openapi-modifier';
-
-(async () => {
-    try {
-        await openapiModifier({
-            input: 'input/openapi.yml',
-            output: 'output/openapi.yml',
-            pipeline: [
-                {
-                    rule: 'remove-operation-id',
-                    config: {
-                        ignore: [],
-                    },
-                },
-            ],
-        });
-
-        process.exit(0);
-    } catch (error) {
-        console.error(error);
-        process.exit(1);
-    }
-})();
-```
+{{{programmaticUsage}}}
 
 [Пример программного использования](./examples/example-package-openapi-yaml/generate.ts)
 
@@ -181,39 +157,7 @@ import { openapiModifier } from 'openapi-modifier';
 
 ## Конфигурация
 
-Создайте файл конфигурации (например, `openapi-modifier.config.js` или `openapi-modifier.config.ts`) со следующей структурой:
-
-```javascript
-module.exports = {
-    // (опционально) Настройки логгера
-    logger: {
-        verbose: true, // Включить подробное логирование
-        minLevel: 0    // Минимальный уровень логирования: 0 - trace, 1 - debug, 2 - info, 3 - warn, 4 - error
-    },
-    // Путь к входному файлу OpenAPI спецификации
-    input: './openapi.yaml',
-    // Путь к выходному файлу
-    output: './modified-openapi.yaml',
-    // Конвейер правил для применения (см. далее все доступные правила с примерами конфигураций)
-    pipeline: [
-        {
-            rule: "change-content-type",
-            disabled: false, // (опционально) Отключить правило
-            config: {
-                map: {
-                    "*/*": "application/json"
-                }
-            }
-        }
-        // Другие правила...
-    ]
-}
-```
-
-> [!IMPORTANT]  
-> Благодаря тому что правила выстраиваются в конвейер, вы можете:
-> - редактировать следующим этапом результат предыдущего этапа, таким образом выстраивая последовательность необходимых изменений;
-> - использовать правила необходимое число раз и в нужной последовательности;
+{{{configuration}}}
 
 <a name="custom_anchor_rule_table"></a>
 
@@ -229,7 +173,7 @@ module.exports = {
 
 ## FAQ
 
-- **Чем опасны модификации по ссылкам $ref?** Потому что значит что $ref ссылается на общую часть схемы, и ее модификация, возможно, приведет к неявному изменению в другом месте спецификации, где переиспользуется $ref, и такую багу будет крайне сложно отловить.
+{{{faq}}}
 
 ## AI инструменты
 

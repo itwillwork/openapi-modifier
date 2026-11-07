@@ -85,7 +85,16 @@ LANGS.forEach((lang) => {
         ruleListReadme += ruleListItem;
     });
 
+    const faqTemplate = getTemplate(`docs/drafts/${lang}/sections/faq.md`);
+
+    const configurationTemplate = getTemplate(`docs/drafts/${lang}/sections/configuration.md`);
+
+    const programmaticUsageTemplate = getTemplate('docs/drafts/shared/programmatic-usage.md');
+
     const readme =  readmeTemplate
+        .replace(createPlaceholderRegExp("programmaticUsage"), () => programmaticUsageTemplate)
+        .replace(createPlaceholderRegExp("configuration"), () => configurationTemplate)
+        .replace(createPlaceholderRegExp("faq"), () => faqTemplate)
         .replace(createPlaceholderRegExp("langSwitcher"), LANG_SWITCHER_MD)
         .replace(createPlaceholderRegExp("cliParams"), cliParamsTemplate)
         .replace(createPlaceholderRegExp("cliConfigWarning"), cliConfigWarningTemplate)

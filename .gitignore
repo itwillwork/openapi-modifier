@@ -139,3 +139,4 @@ dist-types
 
 .idea
 junk
+/dist-docs/

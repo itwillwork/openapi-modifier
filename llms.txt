@@ -1,79 +1,188 @@
 # OpenAPI Modifier
 
-> Configure a pipeline of rules to modify an OpenAPI 3.0 or 3.1 document.
-> All paths below are relative to the installed openapi-modifier package.
+> Supports OpenAPI 3.0 and 3.1. OpenAPI 2.0 (Swagger) support has not been tested.
 
-## Before writing a configuration
+## Usage
 
-1. Inspect the existing configuration and the input OpenAPI document. Identify
-   the exact operation (HTTP method and path), parameter location, and any $ref.
-2. Read the relevant rule guide below and the shared guides it references.
-3. Use `pipeline` entries with `rule` and `config`; preserve existing steps and
-   their order. Do not use the legacy `rules`/`name` or `patch-schemas` examples
-   that still appear in parts of README.md.
-4. Check `dist-types/src/rules/generated-types.d.ts` for available rule names
-   and the referenced declaration files for configuration fields. Use the
-   installed implementation in `dist/src/rules/` to resolve documentation gaps.
-   Do not invent configuration fields or assume that patch rules create targets.
-5. Apply the configuration to a separate output file and inspect the actual diff.
-   Check warnings: a completed command does not prove the intended target changed.
+### CLI via NPX
+
+```shell
+npx openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=openapi-modifier.config.js
+```
+
+CLI parameters:
+
+| Option   | Description                                                                                              | Example                      | Default                                      |
+| -------- | -------------------------------------------------------------------------------------------------------- | ---------------------------- |----------------------------------------------|
+| `input`  | [**required**] input file, openapi specification/documentation                                          | `input/openapi.yml`          |                                              |
+| `output` | [**required**] output file, openapi specification/documentation                                         | `output/openapi.yml`         |                                              |
+| `config` | path to the configuration file. For detailed configuration description [see below](#configuration) | `openapi-modifier.config.js` | `openapi-modifier.config.(js\ts\json\yaml\yml)` |
+
+For more details about the configuration file, [see below](#configuration)
+
+If the configuration path is not specified, the default configuration is taken from the `openapi-modifier.config.js` file relative to the launch directory.
+
+You can use configs with the following extensions: `.ts`, `.js`, `.yaml`, `.yml`, `.json`.
+
+### CLI
+
+```shell
+npm i --save-dev openapi-modifier
+
+openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=openapi-modifier.config.js
+```
+
+CLI parameters:
+
+| Option   | Description                                                                                              | Example                      | Default                                      |
+| -------- | -------------------------------------------------------------------------------------------------------- | ---------------------------- |----------------------------------------------|
+| `input`  | [**required**] input file, openapi specification/documentation                                          | `input/openapi.yml`          |                                              |
+| `output` | [**required**] output file, openapi specification/documentation                                         | `output/openapi.yml`         |                                              |
+| `config` | path to the configuration file. For detailed configuration description [see below](#configuration) | `openapi-modifier.config.js` | `openapi-modifier.config.(js\ts\json\yaml\yml)` |
+
+For more details about the configuration file, [see below](#configuration)
+
+If the configuration path is not specified, the default configuration is taken from the `openapi-modifier.config.js` file relative to the launch directory.
+
+You can use configs with the following extensions: `.ts`, `.js`, `.yaml`, `.yml`, `.json`.
+
+### Programmatic Usage
+
+```typescript
+import { openapiModifier } from 'openapi-modifier';
+
+(async () => {
+    try {
+        await openapiModifier({
+            input: 'input/openapi.yml',
+            output: 'output/openapi.yml',
+            pipeline: [
+                {
+                    rule: 'remove-operation-id',
+                    config: {
+                        ignore: [],
+                    },
+                },
+            ],
+        });
+
+        process.exit(0);
+    } catch (error) {
+        console.error(error);
+        process.exit(1);
+    }
+})();
+```
 
 ## Configuration
 
-- [Overview and CLI usage](README.md)
-- [Configuration types](dist-types/src/config.d.ts)
-- [Available rules and their types](dist-types/src/rules/generated-types.d.ts)
-- [Target descriptors](docs/descriptor.md)
-- [Schema changes](docs/schema-diff.md)
-- [Shallow merge versus deep merge](docs/merge-vs-deepmerge.md)
+Create a configuration file (e.g., `openapi-modifier.config.js` or `openapi-modifier.config.ts`) with the following structure:
 
-Minimal CommonJS configuration:
-
-```js
+```javascript
 module.exports = {
-  pipeline: [
-    // { rule: 'rule-name', config: { ... } }
-  ],
-};
+    // (optional) Logger settings
+    logger: {
+        verbose: true, // Enable detailed logging
+        minLevel: 0    // Minimum logging level: 0 - trace, 1 - debug, 2 - info, 3 - warn, 4 - error
+    },
+    // Path to input OpenAPI specification file
+    input: './openapi.yaml',
+    // Path to output file
+    output: './modified-openapi.yaml',
+    // Pipeline of rules to apply (see below for all available rules with configuration examples)
+    pipeline: [
+        {
+            rule: "change-content-type",
+            disabled: false, // (optional) Disable rule
+            config: {
+                map: {
+                    "*/*": "application/json"
+                }
+            }
+        }
+        // Other rules...
+    ]
+}
 ```
 
-Run the installed CLI from the consuming project:
-
-```sh
-./node_modules/.bin/openapi-modifier --input=input.yaml --output=output.yaml --config=openapi-modifier.config.js
-```
+> [!IMPORTANT]  
+> Thanks to the pipeline structure of rules, you can:
+> - edit the result of the previous stage with the next stage, thus building a sequence of necessary changes;
+> - use rules as many times as needed and in the required sequence;
 
 ## Choose a rule
 
-- [Modify an existing parameter](src/rules/patch-endpoint-parameter-schema/README.md)
-- [Modify a request body schema](src/rules/patch-endpoint-request-body-schema/README.md)
-- [Modify a response schema](src/rules/patch-endpoint-response-schema/README.md)
-- [Modify a component schema](src/rules/patch-component-schema/README.md)
-- [Modify an operation](src/rules/patch-endpoint-schema/README.md)
-- [Merge another specification](src/rules/merge-openapi-spec/README.md)
-- [Remove a parameter](src/rules/remove-parameter/README.md)
-- [Filter endpoints](src/rules/filter-endpoints/README.md)
-- [Remove deprecated elements](src/rules/remove-deprecated/README.md)
-- [Remove unused components](src/rules/remove-unused-components/README.md)
-- [Change content types](src/rules/change-content-type/README.md)
-- [Filter by content type](src/rules/filter-by-content-type/README.md)
-- [Change endpoint base paths](src/rules/change-endpoints-basepath/README.md)
-- [Remove operation IDs](src/rules/remove-operation-id/README.md)
-- [Remove minimum item constraints](src/rules/remove-min-items/README.md)
-- [Remove maximum item constraints](src/rules/remove-max-items/README.md)
+Run `openapi-modifier skill` to read these instructions from the installed CLI.
+The following commands return the instructions for each available rule:
 
-## Important distinctions
+- `openapi-modifier skill change-content-type`
+- `openapi-modifier skill change-endpoints-basepath`
+- `openapi-modifier skill filter-by-content-type`
+- `openapi-modifier skill filter-endpoints`
+- `openapi-modifier skill merge-openapi-spec`
+- `openapi-modifier skill patch-component-schema`
+- `openapi-modifier skill patch-endpoint-parameter-schema`
+- `openapi-modifier skill patch-endpoint-request-body-schema`
+- `openapi-modifier skill patch-endpoint-response-schema`
+- `openapi-modifier skill patch-endpoint-schema`
+- `openapi-modifier skill remove-deprecated`
+- `openapi-modifier skill remove-max-items`
+- `openapi-modifier skill remove-min-items`
+- `openapi-modifier skill remove-operation-id`
+- `openapi-modifier skill remove-parameter`
+- `openapi-modifier skill remove-unused-components`
 
-- Adding a query/header/path/cookie parameter differs from adding a property
-  to a request body schema. Inspect the document before choosing a rule.
-- `patch-endpoint-parameter-schema` patches an existing parameter; it does not
-  add a missing parameter. For additions, inspect the operation patch or merge
-  rule and its array behavior before constructing the configuration.
-- `merge` is shallow. `deepmerge` recursively merges and uses the underlying
-  library's default array behavior. Inspect existing arrays to avoid replacing
-  unrelated parameters or introducing duplicates.
-- Changing a shared component may affect multiple operations. Inspect its
-  references and confirm that this scope matches the user's request.
-- Some rule guides link to source tests or external resources that are not
-  shipped in the npm package. Use the packaged types and implementation when
-  those sources are unavailable; report any remaining uncertainty explicitly.
+## Available Rules
+
+The relative links below point to files inside the installed `openapi-modifier`
+package, for example `node_modules/openapi-modifier/dist-docs/skills/`.
+When reading this documentation from CLI stdout, run
+`openapi-modifier skill <rule-name>` to view a rule's documentation directly.
+
+| Rule | Short Description |
+|------------------------------------------------------------------| ---- |
+| [change-content-type](dist-docs/skills/change-content-type.md) | Changes content types in the OpenAPI specification according to the replacement dictionary |
+| [change-endpoints-basepath](dist-docs/skills/change-endpoints-basepath.md) | Changes basepaths of endpoints according to the replacement dictionary |
+| [filter-by-content-type](dist-docs/skills/filter-by-content-type.md) | The rule allows filtering content types in the OpenAPI specification. It enables explicit specification of which content types should be kept or removed from the specification. The rule applies to all API components, including requests, responses, and common components. |
+| [filter-endpoints](dist-docs/skills/filter-endpoints.md) | The rule allows filtering endpoints in the OpenAPI specification based on their paths and methods. It enables explicit specification of which endpoints should be kept or removed from the specification. The rule supports both exact matching and regular expression-based filtering. |
+| [merge-openapi-spec](dist-docs/skills/merge-openapi-spec.md) | Merges two OpenAPI specifications into one. Allows merging the current specification with an additional specification from a specified file. Supports working with files in JSON and YAML formats. |
+| [patch-component-schema](dist-docs/skills/patch-component-schema.md) | This rule allows modifying the component schema in the OpenAPI specification. |
+| [patch-endpoint-parameter-schema](dist-docs/skills/patch-endpoint-parameter-schema.md) | The rule allows modifying the schema of endpoint parameters in the OpenAPI specification. |
+| [patch-endpoint-request-body-schema](dist-docs/skills/patch-endpoint-request-body-schema.md) | Rule for modifying the request body schema in OpenAPI specification. Allows to modify the request schema for a specified endpoint. |
+| [patch-endpoint-response-schema](dist-docs/skills/patch-endpoint-response-schema.md) | The rule allows modifying the response schema for endpoints in the OpenAPI specification. |
+| [patch-endpoint-schema](dist-docs/skills/patch-endpoint-schema.md) | The rule allows modifying the entire endpoint schema in the OpenAPI specification. Unlike other patching rules that work with individual parts of the endpoint (parameters, request body, responses), this rule can modify the entire endpoint structure, including all its components. |
+| [remove-deprecated](dist-docs/skills/remove-deprecated.md) | The rule allows removing deprecated elements from the OpenAPI specification. It can remove deprecated components, endpoints, parameters, and properties, while providing the ability to ignore specific elements and display descriptions of removed elements. |
+| [remove-max-items](dist-docs/skills/remove-max-items.md) | Removes the `maxItems` property from all schemas in the OpenAPI specification. |
+| [remove-min-items](dist-docs/skills/remove-min-items.md) | Removes the `minItems` property from all schemas in the OpenAPI specification. |
+| [remove-operation-id](dist-docs/skills/remove-operation-id.md) | Removes operationId from all operations in the OpenAPI specification, except those specified in the ignore list |
+| [remove-parameter](dist-docs/skills/remove-parameter.md) | Removes a parameter from an endpoint in the OpenAPI specification |
+| [remove-unused-components](dist-docs/skills/remove-unused-components.md) | Removes unused components from the OpenAPI specification. The rule analyzes all component references in the document and removes those that are not used anywhere. |
+
+## Get more information
+
+Run `openapi-modifier skill` to get general configuration instructions and the
+list of available rules.
+
+Run `openapi-modifier skill <rule-name>` to get configuration options, examples,
+and documentation for a specific rule.
+
+- [Target descriptors](https://raw.githubusercontent.com/itwillwork/openapi-modifier/refs/heads/main/docs/descriptor.md)
+- [Differences between merge and deepmerge](https://raw.githubusercontent.com/itwillwork/openapi-modifier/refs/heads/main/docs/merge-vs-deepmerge.md)
+- [simple-text-file-modifier](https://raw.githubusercontent.com/itwillwork/openapi-modifier/refs/heads/main/docs/simple-text-file-modifier.md): CLI for modifying text files.
+
+## Usage examples
+
+Browse the [examples directory](https://github.com/itwillwork/openapi-modifier/tree/main/examples)
+and open the relevant example to inspect its configuration, scripts, input, and output.
+
+- [CLI via NPX](https://github.com/itwillwork/openapi-modifier/tree/main/examples/example-cli-simple-npx): run the CLI without installing the package locally.
+- [CLI with YAML](https://github.com/itwillwork/openapi-modifier/tree/main/examples/example-cli-openapi-yaml): modify a YAML specification from the command line.
+- [CLI with JSON](https://github.com/itwillwork/openapi-modifier/tree/main/examples/example-cli-openapi-json): modify a JSON specification from the command line.
+- [YAML to JSON](https://github.com/itwillwork/openapi-modifier/tree/main/examples/example-cli-openapi-yaml-to-json): read YAML and write JSON.
+- [JSON configuration](https://github.com/itwillwork/openapi-modifier/tree/main/examples/example-cli-simple-json-config): configure the pipeline using a JSON file.
+- [API type generation](https://github.com/itwillwork/openapi-modifier/tree/main/examples/example-cli-generate-api-types): modify a specification before generating API types.
+- [Programmatic usage](https://github.com/itwillwork/openapi-modifier/tree/main/examples/example-package-openapi-yaml): call the package from application code.
+
+## FAQ
+
+- **Why are $ref modifications dangerous?** Because it means that $ref refers to a common part of the schema, and its modification may lead to implicit changes in another part of the specification where $ref is reused, and such a bug will be extremely difficult to catch.
