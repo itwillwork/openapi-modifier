@@ -1,6 +1,6 @@
 {
   "name": "openapi-modifier",
-  "version": "0.0.43",
+  "version": "0.0.44",
   "description": "This package allows you to automate the process of modifying OpenAPI specifications by applying a set of predefined rules",
   "repository": {
     "type": "git",
