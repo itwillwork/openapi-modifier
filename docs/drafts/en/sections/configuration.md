@@ -4,7 +4,7 @@ Create a configuration file (e.g., `openapi-modifier.config.js` or `openapi-modi
 module.exports = {
     // (optional) Logger settings
     logger: {
-        verbose: true, // Write a complete log to a temporary file
+        verbose: true, // Show each rule and its diff; write a complete log to a temporary file
         minLevel: 0    // Minimum console log level: 0 - trace, 1 - info, 2 - not-important-warning, 3 - warning, 4 - error, 5 - success
     },
     // Path to input OpenAPI specification file

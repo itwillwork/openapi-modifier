@@ -11,7 +11,7 @@ export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, b
   let openAPIFile = sourceOpenAPIFile;
 
   const pipeline = config.pipeline || [];
-  const shouldTraceStepDiff = config.logger?.minLevel === 0;
+  const shouldShowStepDiff = !!config.logger?.verbose;
   if (!pipeline?.length) {
     logger.warning(messagesFactory.failedRun.emptyPipeline);
   }
@@ -21,7 +21,12 @@ export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, b
   for (let index = 0; index < pipeline.length; index++) {
     const pipelineItem = pipeline[index];
 
-    logger.info(`Pipeline item execution [${index + 1}/${pipeline.length}] - ${Math.round((index + 1) / pipeline.length * 100)}%`);
+    const progress = `Pipeline item execution [${index + 1}/${pipeline.length}] - ${Math.round((index + 1) / pipeline.length * 100)}%`;
+    if (shouldShowStepDiff) {
+      logger.helpInfo(progress);
+    } else {
+      logger.info(progress);
+    }
 
     try {
       const rulePath = pipelineItem.rule;
@@ -31,19 +36,19 @@ export const runner = async (config: ConfigT, sourceOpenAPIFile: OpenAPIFileT, b
       await ruleRunner.applyConfig(pipelineItem.config || {});
 
       if (!pipelineItem.disabled) {
-        const differ = shouldTraceStepDiff ? new OpenAPIDiffer(openAPIFile.document) : undefined;
+        const differ = shouldShowStepDiff ? new OpenAPIDiffer(openAPIFile.document) : undefined;
         openAPIFile = await ruleRunner.processDocument(openAPIFile);
 
         if (differ) {
-          logger.trace(messagesFactory.pipeline.ruleDiff({
+          logger.helpInfo(messagesFactory.pipeline.ruleDiff({
             ruleName: rulePath,
             step: index + 1,
             total: pipeline.length,
             result: differ.getDiff(openAPIFile.document),
           }));
         }
-      } else if (shouldTraceStepDiff) {
-        logger.trace(messagesFactory.pipeline.ruleSkipped({
+      } else if (shouldShowStepDiff) {
+        logger.helpInfo(messagesFactory.pipeline.ruleSkipped({
           ruleName: rulePath,
           step: index + 1,
           total: pipeline.length,

@@ -4,7 +4,7 @@
 module.exports = {
     // （可选）日志设置
     logger: {
-        verbose: true, // 将完整日志写入临时文件
+        verbose: true, // 显示每条规则及其差异；将完整日志写入临时文件
         minLevel: 0    // 最低控制台日志级别：0 - trace，1 - info，2 - not-important-warning，3 - warning，4 - error，5 - success
     },
     // 输入 OpenAPI 规范文件路径

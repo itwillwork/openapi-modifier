@@ -14,8 +14,8 @@ Options:
   --input <path>   Input OpenAPI document (required)
   --output <path>  Output OpenAPI document (required)
   --config <path> Configuration file (defaults to openapi-modifier.config.{js,ts,json,yaml,yml})
-  --verbose       Enable verbose logging
-  --minLevel <n>  Minimum log level
+  --verbose       Show each rule and its diff; save a complete log to a temporary file
+  --minLevel <n>  Minimum console log level
   -h, --help      Show this help
 
 AI agents:
@@ -72,7 +72,7 @@ const cli = async (params: ParamsT) => {
     const verbose = !!params?.verbose;
     let logger = LoggerFactory.createLogger({
         name: 'openapi-modifier-cli',
-        minLevel: verbose ? LoggerFactory.typeLevelMap.trace : LoggerFactory.typeLevelMap['not-important-warning'],
+        minLevel: (params.minLevel === undefined ? LoggerFactory.typeLevelMap['not-important-warning'] : Number(params.minLevel)) as LoggerFactoryTypeLevel,
         verbose,
     });
 
@@ -120,7 +120,6 @@ const cli = async (params: ParamsT) => {
         }
         if (verbose) {
             loggerConfig.verbose = true;
-            loggerConfig.minLevel = LoggerFactory.typeLevelMap.trace;
         }
 
         logger.trace('Merging config with cli params...');
@@ -130,10 +129,14 @@ const cli = async (params: ParamsT) => {
             logger: loggerConfig
         });
 
-        if (!verbose) {
+        const finalMinLevel = finalConfig.logger?.minLevel ?? LoggerFactory.typeLevelMap['not-important-warning'];
+        const initialMinLevel = params.minLevel === undefined
+            ? LoggerFactory.typeLevelMap['not-important-warning']
+            : Number(params.minLevel);
+        if (finalMinLevel !== initialMinLevel || finalConfig.logger?.verbose !== verbose) {
             logger = LoggerFactory.createLogger({
                 name: 'openapi-modifier-cli',
-                minLevel: (finalConfig.logger?.minLevel ?? LoggerFactory.typeLevelMap['not-important-warning']) as LoggerFactoryTypeLevel,
+                minLevel: finalMinLevel as LoggerFactoryTypeLevel,
                 verbose: finalConfig.logger?.verbose,
             });
         }

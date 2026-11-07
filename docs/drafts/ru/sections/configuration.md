@@ -4,7 +4,7 @@
 module.exports = {
     // (опционально) Настройки логгера
     logger: {
-        verbose: true, // Записать полный лог во временный файл
+        verbose: true, // Показать каждое правило и его diff; записать полный лог во временный файл
         minLevel: 0    // Минимальный уровень консольных логов: 0 - trace, 1 - info, 2 - not-important-warning, 3 - warning, 4 - error, 5 - success
     },
     // Путь к входному файлу OpenAPI спецификации
