@@ -179,6 +179,8 @@ openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=
 
 ## AI инструменты
 
+- `openapi-modifier skill` — Вывести общие инструкции для AI-агентов из [llms.txt](./llms.txt).
+- `openapi-modifier skill <rule-name>` — Вывести параметры конфигурации и примеры для конкретного правила.
 - [DeepWiki документация](https://deepwiki.com/itwillwork/openapi-modifier)
 - [Context7 документация для LLM моделей и AI редакторов кода](https://context7.com/itwillwork/openapi-modifier)
 

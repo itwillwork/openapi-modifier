@@ -1253,6 +1253,8 @@ module.exports = {
 
 ## AI tools
 
+- `openapi-modifier skill` — Print general instructions for AI agents from [llms.txt](./llms.txt).
+- `openapi-modifier skill <rule-name>` — Print configuration options and examples for a specific rule.
 - [DeepWiki Documentation](https://deepwiki.com/itwillwork/openapi-modifier)
 - [Context7 documentation for LLMs and AI code editors](https://context7.com/itwillwork/openapi-modifier)
 

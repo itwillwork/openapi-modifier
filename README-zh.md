@@ -1253,6 +1253,8 @@ module.exports = {
 
 ## 人工智能工具
 
+- `openapi-modifier skill` — 输出 [llms.txt](./llms.txt) 中的 AI 代理通用指南。
+- `openapi-modifier skill <rule-name>` — 输出指定规则的配置选项和示例。
 - DeepWiki 文档](https://deepwiki.com/itwillwork/openapi-modifier)
 - 用于 LLM 和 AI 代码编辑器的 Context7 文档](https://context7.com/itwillwork/openapi-modifier)
 
