@@ -38,7 +38,7 @@
   "types": "dist-types/src/index.d.ts",
   "scripts": {
     "test": "jest",
-    "clear": "rm -rf dist && rm -rf dist-types",
+    "clear": "rm -rf dist dist-types dist-docs src/rules/generated-types.ts",
     "prebuild": "npm run clear && npm run tools:generate-rule-types && npm run tools:generate-skills",
     "build": "npm run build:types && npm run build:transpile",
     "build:transpile": "tsc",
