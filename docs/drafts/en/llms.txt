@@ -58,6 +58,7 @@ list of available rules.
 Run `openapi-modifier skill <rule-name>` to get configuration options, examples,
 and documentation for a specific rule.
 
+- [Source repository](https://github.com/itwillwork/openapi-modifier)
 - [Target descriptors](https://raw.githubusercontent.com/itwillwork/openapi-modifier/refs/heads/main/docs/descriptor.md)
 - [Differences between merge and deepmerge](https://raw.githubusercontent.com/itwillwork/openapi-modifier/refs/heads/main/docs/merge-vs-deepmerge.md)
 - [simple-text-file-modifier](https://raw.githubusercontent.com/itwillwork/openapi-modifier/refs/heads/main/docs/simple-text-file-modifier.md): CLI for modifying text files.
