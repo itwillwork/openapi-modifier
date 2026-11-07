@@ -4,8 +4,8 @@ Create a configuration file (e.g., `openapi-modifier.config.js` or `openapi-modi
 module.exports = {
     // (optional) Logger settings
     logger: {
-        verbose: true, // Enable detailed logging
-        minLevel: 0    // Minimum logging level: 0 - trace, 1 - debug, 2 - info, 3 - warn, 4 - error
+        verbose: true, // Write a complete log to a temporary file
+        minLevel: 0    // Minimum console log level: 0 - trace, 1 - info, 2 - not-important-warning, 3 - warning, 4 - error, 5 - success
     },
     // Path to input OpenAPI specification file
     input: './openapi.yaml',

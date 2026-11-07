@@ -26,6 +26,8 @@ openapi-modifier --input=input/openapi.yml --output=output/openapi.yml --config=
 
 {{{cliConfigWarning}}}
 
+To investigate unexpected changes, run the CLI with `--verbose`. It prints a diff after each rule, comparing the OpenAPI document before and after that rule, so you can identify which pipeline step caused a change.
+
 ### Programmatic Usage
 
 {{{programmaticUsage}}}

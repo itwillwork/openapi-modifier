@@ -132,6 +132,8 @@ CLI параметры:
 | `input`  | [**обязательный**] входной файл, специфиакция/документация в формате openapi                             | `input/openapi.yml`          |                                              |
 | `output` | [**обязательный**] выходной файл, специфиакция/документация в формате opeanpi                            | `output/openapi.yml`         |                                              |
 | `config` | путь до файла конфигурации. Детальное описание конфигурации [см. ниже](#custom_anchor_config_parameters) | `openapi-modifier.config.js` | `openapi-modifier.config.(js\ts\json\yaml\yml)` |
+| `verbose` | Включить trace-логирование, diff после каждого правила и полный лог во временном файле. Имеет приоритет над `minLevel`. | `--verbose` | `false` |
+| `minLevel` | Минимальный уровень консольных логов: `0` trace, `1` info, `2` not-important-warning, `3` warning, `4` error, `5` success. Trace включает diff после каждого правила. | `--minLevel 0` | `2` (если не задан в конфигурации) |
 
 
 Подробнее про файл конфигурации [см. ниже](#custom_anchor_config_parameters)
@@ -159,6 +161,8 @@ CLI параметры:
 | `input`  | [**обязательный**] входной файл, специфиакция/документация в формате openapi                             | `input/openapi.yml`          |                                              |
 | `output` | [**обязательный**] выходной файл, специфиакция/документация в формате opeanpi                            | `output/openapi.yml`         |                                              |
 | `config` | путь до файла конфигурации. Детальное описание конфигурации [см. ниже](#custom_anchor_config_parameters) | `openapi-modifier.config.js` | `openapi-modifier.config.(js\ts\json\yaml\yml)` |
+| `verbose` | Включить trace-логирование, diff после каждого правила и полный лог во временном файле. Имеет приоритет над `minLevel`. | `--verbose` | `false` |
+| `minLevel` | Минимальный уровень консольных логов: `0` trace, `1` info, `2` not-important-warning, `3` warning, `4` error, `5` success. Trace включает diff после каждого правила. | `--minLevel 0` | `2` (если не задан в конфигурации) |
 
 
 Подробнее про файл конфигурации [см. ниже](#custom_anchor_config_parameters)
@@ -209,8 +213,8 @@ import { openapiModifier } from 'openapi-modifier';
 module.exports = {
     // (опционально) Настройки логгера
     logger: {
-        verbose: true, // Включить подробное логирование
-        minLevel: 0    // Минимальный уровень логирования: 0 - trace, 1 - debug, 2 - info, 3 - warn, 4 - error
+        verbose: true, // Записать полный лог во временный файл
+        minLevel: 0    // Минимальный уровень консольных логов: 0 - trace, 1 - info, 2 - not-important-warning, 3 - warning, 4 - error, 5 - success
     },
     // Путь к входному файлу OpenAPI спецификации
     input: './openapi.yaml',

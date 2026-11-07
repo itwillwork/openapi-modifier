@@ -4,8 +4,8 @@
 module.exports = {
     // （可选）日志设置
     logger: {
-        verbose: true, // 启用详细日志记录
-        minLevel: 0    // 最小日志级别：0 - trace，1 - debug，2 - info，3 - warn，4 - error
+        verbose: true, // 将完整日志写入临时文件
+        minLevel: 0    // 最低控制台日志级别：0 - trace，1 - info，2 - not-important-warning，3 - warning，4 - error，5 - success
     },
     // 输入 OpenAPI 规范文件路径
     input: './openapi.yaml',
